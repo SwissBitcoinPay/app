@@ -1,0 +1,14 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "ch.swissbitcoinpay.checkout",
+      "sha256_cert_fingerprints": [
+        "FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:66:75:91:03:3B:9C",
+        "17:D9:C0:BF:02:50:08:DA:16:D5:A1:46:E1:BE:AC:A6:DD:CF:E3:CB:0C:F0:63:DA:23:C8:47:D3:00:7E:B6:21",
+        "AC:E0:62:DF:00:99:5E:4A:45:D5:A5:93:67:AA:03:A2:EE:6F:E3:DA:4A:68:15:FE:6E:FD:0A:A2:B7:61:BA:FE"
+      ]
+    }
+  }
+]

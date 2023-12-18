@@ -1,0 +1,25 @@
+diff --git a/node_modules/react-native-biometrics/android/build.gradle b/node_modules/react-native-biometrics/android/build.gradle
+index 7e6d6ac..a2bef03 100644
+--- a/node_modules/react-native-biometrics/android/build.gradle
++++ b/node_modules/react-native-biometrics/android/build.gradle
+@@ -34,6 +34,8 @@ android {
+     lintOptions {
+         abortOnError false
+     }
++
++    namespace "com.rnbiometrics"
+ }
+ 
+ repositories {
+diff --git a/node_modules/react-native-biometrics/android/src/main/AndroidManifest.xml b/node_modules/react-native-biometrics/android/src/main/AndroidManifest.xml
+index ed3936c..f22174f 100644
+--- a/node_modules/react-native-biometrics/android/src/main/AndroidManifest.xml
++++ b/node_modules/react-native-biometrics/android/src/main/AndroidManifest.xml
+@@ -1,6 +1,5 @@
+ 
+-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-          package="com.rnbiometrics">
++<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+ </manifest>
