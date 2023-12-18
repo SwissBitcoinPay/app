@@ -1,0 +1,13 @@
+diff --git a/node_modules/js-crypto-env/dist/index.js b/node_modules/js-crypto-env/dist/index.js
+index bfc507d..8279c5a 100644
+--- a/node_modules/js-crypto-env/dist/index.js
++++ b/node_modules/js-crypto-env/dist/index.js
+@@ -16,7 +16,7 @@ var getNodeCrypto = function () {
+         return undefined;
+     }
+     else
+-        return require('crypto');
++        return require('crypto-browserify');
+ };
+ exports.getNodeCrypto = getNodeCrypto;
+ /**

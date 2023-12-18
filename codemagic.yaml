@@ -1,0 +1,109 @@
+workflows:
+  react-native-android:
+    triggering:
+      events:
+        - push
+    name: Android
+    max_build_duration: 120
+    instance_type: mac_mini_m1
+    environment:
+      android_signing:
+        - Swiss Bitcoin Pay Checkout
+      groups:
+        - google_credentials
+        - testfairy
+      vars:
+        PACKAGE_NAME: "ch.swissbitcoinpay.checkout"
+        SKIP_BUNDLING: 1
+      java: 20
+    scripts:
+      - name: Save DEV variable
+        script: |
+          echo "DEV=$(if [ "$CM_BRANCH" != "main" ]; then echo true; else echo false; fi)" >> $CM_ENV
+      - name: Set Android SDK location
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Install npm dependencies
+        script: |
+          npm install
+      - name: Build Android release
+        script: |
+          ./scripts/build-android.sh
+      - name: Publishing to Testfairy
+        script: |
+          if [[ "$DEV" == "true" ]]
+          then
+              zip -q -r android_symbols.zip android/app/build/intermediates/symbol_list_with_package_name/release/package-aware-r.txt
+              ./scripts/upload-to-testfairy.sh android/app/build/swiss-bitcoin-pay.apk android_symbols.zip
+          fi
+    artifacts:
+      - android/app/build/outputs/**/*.aab
+      - android/app/build/**/*.apk
+      - android/app/build/**/outputs/**/mapping.txt
+    publishing:
+      email:
+        recipients:
+          - hello@swiss-bitcoin-pay.ch
+        notify:
+          success: true
+          failure: true
+
+  react-native-ios:
+    name: iOS
+    triggering:
+      events:
+        - push
+    max_build_duration: 120
+    instance_type: mac_mini_m1
+    environment:
+      groups:
+        - testfairy
+        - appstore_credentials
+        - authkey
+      ios_signing:
+        provisioning_profiles:
+          - dev_provisioning
+          - prod_provisioning
+        certificates:
+          - dev_certificate
+          - prod_certificate
+      vars:
+        BUNDLE_ID: "ch.swissbitcoinpay.checkout"
+        XCODE_WORKSPACE: "SwissBitcoinPay.xcworkspace"
+        XCODE_PROJECT: "SwissBitcoinPay.xcodeproj"
+        XCODE_SCHEME: "SwissBitcoinPay"
+        APP_ID: 6444370155
+      java: 20
+    scripts:
+      - name: Save DEV variable
+        script: |
+          echo "DEV=$(if [ "$CM_BRANCH" != "main" ]; then echo true; else echo false; fi)" >> $CM_ENV
+      - name: Set Info.plist values
+        script: |
+          PLIST=$CM_BUILD_DIR/ios/$XCODE_SCHEME/Info.plist
+          PLIST_BUDDY=/usr/libexec/PlistBuddy
+          $PLIST_BUDDY -c "Add :ITSAppUsesNonExemptEncryption bool false" $PLIST
+      - name: Install npm dependencies
+        script: |
+          npm install
+      - name: Set versions
+        script: |
+          source .env
+          cd ios
+          agvtool new-marketing-version "$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION"
+          agvtool new-version -all $BUILD_NUMBER
+      - name: Build iOS release
+        script: |
+          keychain unlock
+          ./scripts/build-ios.sh
+      - name: Publishing to Testfairy
+        script: |
+          zip -r ios_symbols.zip ios/*.xcarchive/dSYMs/*.dSYM
+          ./scripts/upload-to-testfairy.sh ios/export/SwissBitcoinPay.ipa ios_symbols.zip
+    publishing:
+      email:
+        recipients:
+          - hello@swiss-bitcoin-pay.ch
+        notify:
+          success: true
+          failure: true

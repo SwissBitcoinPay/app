@@ -1,0 +1,23 @@
+diff --git a/node_modules/bcrypt-react-native/android/build.gradle b/node_modules/bcrypt-react-native/android/build.gradle
+index 20928cf..216f0b1 100644
+--- a/node_modules/bcrypt-react-native/android/build.gradle
++++ b/node_modules/bcrypt-react-native/android/build.gradle
+@@ -48,6 +48,8 @@ android {
+     sourceCompatibility JavaVersion.VERSION_1_8
+     targetCompatibility JavaVersion.VERSION_1_8
+   }
++
++  namespace "com.bcryptreactnative"
+ }
+ 
+ repositories {
+diff --git a/node_modules/bcrypt-react-native/android/src/main/AndroidManifest.xml b/node_modules/bcrypt-react-native/android/src/main/AndroidManifest.xml
+index 7226f6f..0a0938a 100644
+--- a/node_modules/bcrypt-react-native/android/src/main/AndroidManifest.xml
++++ b/node_modules/bcrypt-react-native/android/src/main/AndroidManifest.xml
+@@ -1,4 +1,3 @@
+-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-          package="com.bcryptreactnative">
++<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+ </manifest>

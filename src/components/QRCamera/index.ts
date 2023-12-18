@@ -1,0 +1,1 @@
+export { QRCamera } from "./QRCamera";

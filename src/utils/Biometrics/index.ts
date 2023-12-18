@@ -1,0 +1,1 @@
+export { Biometrics } from "./Biometrics";

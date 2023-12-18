@@ -1,0 +1,26 @@
+diff --git a/node_modules/react-native-securerandom/android/build.gradle b/node_modules/react-native-securerandom/android/build.gradle
+index 4e725c3..550ac7d 100644
+--- a/node_modules/react-native-securerandom/android/build.gradle
++++ b/node_modules/react-native-securerandom/android/build.gradle
+@@ -28,6 +28,11 @@ def DEFAULT_MIN_SDK_VERSION = 16
+ def DEFAULT_TARGET_SDK_VERSION = 28
+ 
+ android {
++  def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION
++  if (agpVersion.tokenize('.')[0].toInteger() >= 7) {
++    namespace "net.rhogan.rnsecurerandom"
++  }
++  
+   compileSdkVersion safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
+   buildToolsVersion safeExtGet('buildToolsVersion', DEFAULT_BUILD_TOOLS_VERSION)
+ 
+diff --git a/node_modules/react-native-securerandom/android/src/main/AndroidManifest.xml b/node_modules/react-native-securerandom/android/src/main/AndroidManifest.xml
+index 40622b2..0a0938a 100644
+--- a/node_modules/react-native-securerandom/android/src/main/AndroidManifest.xml
++++ b/node_modules/react-native-securerandom/android/src/main/AndroidManifest.xml
+@@ -1,4 +1,3 @@
+-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-          package="net.rhogan.rnsecurerandom">
++<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+ </manifest>

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cd $(dirname $0)
+cd ..
+
+source .env
+
+sed -i "s/BUILD_NUMBER=.*/BUILD_NUMBER=$((BUILD_NUMBER + 1))/" .env
+
+git add .env

@@ -1,0 +1,24 @@
+diff --git a/node_modules/react-native-nfc-manager/android/build.gradle b/node_modules/react-native-nfc-manager/android/build.gradle
+index 773eec8..8e114ea 100644
+--- a/node_modules/react-native-nfc-manager/android/build.gradle
++++ b/node_modules/react-native-nfc-manager/android/build.gradle
+@@ -23,6 +23,8 @@ android {
+ 	lintOptions {
+ 		abortOnError false
+ 	}
++
++	namespace "community.revteltech.nfc"
+ }
+ 
+ repositories {
+diff --git a/node_modules/react-native-nfc-manager/android/src/main/AndroidManifest.xml b/node_modules/react-native-nfc-manager/android/src/main/AndroidManifest.xml
+index b0e490f..d8e4259 100644
+--- a/node_modules/react-native-nfc-manager/android/src/main/AndroidManifest.xml
++++ b/node_modules/react-native-nfc-manager/android/src/main/AndroidManifest.xml
+@@ -1,5 +1,4 @@
+-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-		  package="community.revteltech.nfc">
++<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+     <uses-permission android:name="android.permission.NFC" />
+     <uses-feature android:name="android.hardware.nfc" android:required="false" />
+ </manifest>

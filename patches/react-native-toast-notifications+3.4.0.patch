@@ -1,0 +1,28 @@
+diff --git a/node_modules/react-native-toast-notifications/lib/module/toast-container.js b/node_modules/react-native-toast-notifications/lib/module/toast-container.js
+index 664e57f..722c839 100644
+--- a/node_modules/react-native-toast-notifications/lib/module/toast-container.js
++++ b/node_modules/react-native-toast-notifications/lib/module/toast-container.js
+@@ -84,7 +84,6 @@ class ToastContainer extends Component {
+     } = this.props;
+     let style = {
+       bottom: offsetBottom || offset,
+-      width: width,
+       justifyContent: "flex-end",
+       flexDirection: "column"
+     };
+@@ -107,7 +106,6 @@ class ToastContainer extends Component {
+     } = this.props;
+     let style = {
+       top: offsetTop || offset,
+-      width: width,
+       justifyContent: "flex-start",
+       flexDirection: "column-reverse"
+     };
+@@ -131,7 +129,6 @@ class ToastContainer extends Component {
+     let style = {
+       top: offsetTop || offset,
+       height: height,
+-      width: width,
+       justifyContent: "center",
+       flexDirection: "column-reverse"
+     };

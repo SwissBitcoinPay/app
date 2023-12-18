@@ -1,0 +1,11 @@
+--- a/node_modules/react-native-vision-camera/android/src/main/java/com/mrousavy/camera/core/CameraConfiguration.kt
++++ b/node_modules/react-native-vision-camera/android/src/main/java/com/mrousavy/camera/core/CameraConfiguration.kt
+@@ -39,7 +39,7 @@ data class CameraConfiguration(
+   var zoom: Float = 1f,
+ 
+   // isActive (Start/Stop)
+-  var isActive: Boolean = false,
++  var isActive: Boolean = true,
+ 
+   // Audio Session
+   var audio: Output<Audio> = Output.Disabled.create()

@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@components": ["components"],
+      "@components/*": ["components/*"],
+      "@screens": ["screens"],
+      "@screens/*": ["screens/*"],
+      "@config": ["config"],
+      "@config/*": ["config/*"],
+      "@assets": ["assets"],
+      "@assets/*": ["assets/*"],
+      "@hooks": ["hooks"],
+      "@hooks/*": ["hooks/*"],
+      "@utils": ["utils"],
+      "@utils/*": ["utils/*"],
+      "@types": ["types"],
+      "@types/*": ["types/*"]
+    },
+    "target": "ES2022",
+    "module": "esnext",
+    "lib": ["es2022", "dom"],
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "isolatedModules": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
+    "noEmit": false
+  },
+
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
+  ],
+  "include": ["src/**/*", "babel-plugins.js"]
+}

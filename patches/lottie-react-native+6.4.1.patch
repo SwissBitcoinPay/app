@@ -1,0 +1,33 @@
+diff --git a/node_modules/lottie-react-native/lib/module/LottieView/index.web.js b/node_modules/lottie-react-native/lib/module/LottieView/index.web.js
+index ddca08d..1c74088 100644
+--- a/node_modules/lottie-react-native/lib/module/LottieView/index.web.js
++++ b/node_modules/lottie-react-native/lib/module/LottieView/index.web.js
+@@ -13,7 +13,7 @@ const LottieView = /*#__PURE__*/forwardRef((_ref, ref) => {
+     source,
+     speed,
+     loop,
+-    webStyle,
++    style,
+     autoPlay,
+     hover,
+     direction,
+@@ -92,7 +92,8 @@ const LottieView = /*#__PURE__*/forwardRef((_ref, ref) => {
+       lottieRef: playerRef,
+       src: lottieSource,
+       onEvent: handleEvent,
+-      style: webStyle,
++      keepLastFrame: true,
++      style: style,
+       autoplay: autoPlay,
+       speed: speed,
+       loop: loop,
+@@ -108,7 +109,8 @@ const LottieView = /*#__PURE__*/forwardRef((_ref, ref) => {
+     ref: playerRef,
+     src: jsonSource,
+     onEvent: handleEvent,
+-    style: webStyle,
++    keepLastFrame: true,
++    style: style,
+     autoplay: autoPlay,
+     speed: speed,
+     loop: loop,

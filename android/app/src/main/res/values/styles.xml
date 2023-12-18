@@ -1,0 +1,24 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
+
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+    </style>
+
+    <!-- BootTheme should inherit from Theme.BootSplash or Theme.BootSplash.EdgeToEdge -->
+    <style name="BootTheme" parent="Theme.BootSplash">
+        <!-- Customize your theme here. -->
+        <item name="bootSplashBackground">@color/bootsplash_background</item>
+        <item name="bootSplashLogo">@drawable/bootsplash_logo</item>
+        <!-- <item name="bootSplashBrand">@drawable/bootsplash_brand</item> -->
+        <item name="postBootSplashTheme">@style/Theme.AppCompat.Light.NoActionBar</item>
+        
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+</resources>

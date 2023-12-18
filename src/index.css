@@ -1,0 +1,115 @@
+/* Poppins */
+@font-face {
+  font-family: "Poppins-Thin";
+  src: url("./assets/fonts/Poppins/Poppins-Thin.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-Light";
+  src: url("./assets/fonts/Poppins/Poppins-Light.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-Regular";
+  src: url("./assets/fonts/Poppins/Poppins-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-Medium";
+  src: url("./assets/fonts/Poppins/Poppins-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-SemiBold";
+  src: url("./assets/fonts/Poppins/Poppins-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-Bold";
+  src: url("./assets/fonts/Poppins/Poppins-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-Black";
+  src: url("./assets/fonts/Poppins/Poppins-Black.ttf");
+}
+
+/* Poppins Italic */
+@font-face {
+  font-family: "Poppins-ThinItalic";
+  src: url("./assets/fonts/Poppins/Poppins-ThinItalic.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-LightItalic";
+  src: url("./assets/fonts/Poppins/Poppins-LightItalic.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-Italic";
+  src: url("./assets/fonts/Poppins/Poppins-Italic.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-MediumItalic";
+  src: url("./assets/fonts/Poppins/Poppins-MediumItalic.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-SemiBoldItalic";
+  src: url("./assets/fonts/Poppins/Poppins-SemiBoldItalic.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-BoldItalic";
+  src: url("./assets/fonts/Poppins/Poppins-BoldItalic.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-BlackItalic";
+  src: url("./assets/fonts/Poppins/Poppins-BlackItalic.ttf");
+}
+
+@media print {
+    #no-print {
+       display: none;
+    }
+}
+
+/* These styles make the body full-height */
+html,
+body,
+#root {
+  height: 100dvh;
+}
+
+/* These styles disable body scrolling if you are using <ScrollView> */
+body {
+  font-family: "Poppins-Regular";
+  overflow: hidden;
+}
+
+/* These styles make the root element full-height */
+#root {
+  display: flex;
+}
+
+input, select, div {
+  &:focus,
+  &:active {
+    outline: none;
+  }
+}
+
+a {
+  text-decoration: none;
+}
+
+div[role="slider"] {
+  cursor: grab;
+
+  &:focus,
+  &:active {
+    cursor: grabbing;
+  }
+}

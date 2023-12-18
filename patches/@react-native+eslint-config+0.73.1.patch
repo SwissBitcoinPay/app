@@ -1,0 +1,13 @@
+diff --git a/node_modules/@react-native/eslint-config/index.js b/node_modules/@react-native/eslint-config/index.js
+index 8de0800..ecab074 100644
+--- a/node_modules/@react-native/eslint-config/index.js
++++ b/node_modules/@react-native/eslint-config/index.js
+@@ -19,8 +19,6 @@ module.exports = {
+     },
+   },
+ 
+-  extends: ['plugin:prettier/recommended'],
+-
+   plugins: [
+     'eslint-comments',
+     'react',
