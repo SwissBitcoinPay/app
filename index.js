@@ -2,10 +2,15 @@ import "node-libs-react-native/globals.js";
 import { AppRegistry, LogBox } from "react-native";
 import { Root } from "./src/Root";
 import { name as appName } from "./app.json";
+import TestFairy from "react-native-testfairy";
 import {
   isSslPinningAvailable,
   initializeSslPinning
 } from "react-native-ssl-public-key-pinning";
+
+if (process.env.NODE_ENV === "production") {
+  TestFairy.begin("SDK-HU2aT39S");
+}
 
 if (isSslPinningAvailable()) {
   void initializeSslPinning({
