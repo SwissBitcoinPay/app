@@ -14,6 +14,7 @@ import {
   SignatureLogin,
   Invoice
 } from "@screens";
+import { initialize } from "react-native-embrace";
 import {
   useAccountConfig,
   useBackHandler,
@@ -21,6 +22,7 @@ import {
   useRefCode,
   useSplashScreen
 } from "@hooks";
+import { useEffect } from "react";
 
 const App = () => {
   const { accountConfig } = useAccountConfig({ refresh: false });
@@ -29,6 +31,10 @@ const App = () => {
   useRefCode();
   useBackHandler();
   useSplashScreen();
+
+  useEffect(() => {
+    initialize();
+  }, []);
 
   return (
     <>
