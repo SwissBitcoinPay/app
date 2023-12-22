@@ -107,7 +107,7 @@
     "styled-components": "~6.0.8",
     "tiny-secp256k1": "^2.2.3",
     "varuint-bitcoin": "^1.1.2",
-    "vm-browserify": "^0.0.4",
+    "vm-browserify": "^1.1.2",
     "xpub-converter": "~1.0.2"
   },
   "browserslist": {
