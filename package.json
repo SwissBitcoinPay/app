@@ -131,7 +131,7 @@
     "@babel/plugin-transform-export-namespace-from": "^7.22.11",
     "@babel/preset-env": "~7.23.6",
     "@babel/runtime": "~7.23.1",
-    "@parvineyvazov/json-translator": "^1.10.0",
+    "@parvineyvazov/json-translator": "^2.0.1",
     "@pmmmwh/react-refresh-webpack-plugin": "~0.5.11",
     "@react-native-community/eslint-config": "~3.2.0",
     "@react-native/babel-preset": "~0.74.0",
