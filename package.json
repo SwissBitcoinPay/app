@@ -34,7 +34,7 @@
     "@react-spring/web": "^9.7.3",
     "@scure/btc-signer": "^1.1.1",
     "@yudiel/react-qr-scanner": "1.1.10",
-    "axios": "1.5.1",
+    "axios": "1.6.2",
     "bcrypt-react-native": "~1.1.1",
     "bcryptjs": "~2.4.3",
     "bech32": "~2.0.0",

@@ -68,9 +68,11 @@ export const Welcome = () => {
         </Pressable>
         <S.FirstPart>
           <S.TagLine h2 weight={700}>
-            {introTextParts[0]}{" "}
-            <Text style={{ color: theme.colors.bitcoin }}>Bitcoin</Text>
-            {introTextParts[1] ? ` ${introTextParts[1]}` : ""}.
+            {introTextParts[0]}
+            <Text style={{ color: theme.colors.bitcoin, margin: 0 }}>
+              Bitcoin
+            </Text>
+            {introTextParts[1]}.
           </S.TagLine>
 
           <S.SubTagLine>😎 {t("easily")}.</S.SubTagLine>
