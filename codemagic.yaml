@@ -1,9 +1,10 @@
 workflows:
   react-native-android:
+    name: Android
     triggering:
       events:
         - push
-    name: Android
+    cancel_previous_builds: true
     max_build_duration: 120
     instance_type: mac_mini_m1
     environment:
@@ -53,6 +54,7 @@ workflows:
     triggering:
       events:
         - push
+    cancel_previous_builds: true
     max_build_duration: 120
     instance_type: mac_mini_m1
     environment:
