@@ -29,7 +29,6 @@ export const platform = {
   getIsNfcSupported,
   initialWindowWidth,
   initialWindowHeight,
-  statusBarHeight: 0,
   bottomSafeAreaHeight: 0,
   deviceName: `${osName} | ${browserName}`,
   deviceLocale: navigator?.languages?.[0],
