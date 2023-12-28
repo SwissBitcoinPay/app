@@ -380,7 +380,7 @@ export const Invoice = () => {
                 }
               }
             : {}),
-          ...(!isFullScreenSuccess && !isExternalInvoice
+          ...(!isFullScreenSuccess
             ? {
                 left: {
                   onPress: -1,
