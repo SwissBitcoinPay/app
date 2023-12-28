@@ -15,7 +15,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v1/us
+        with:
+          node-version: 18
 
       - name: Install Node.js dependencies
         run: npm ci
