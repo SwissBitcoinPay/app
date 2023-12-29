@@ -13,6 +13,8 @@ import { AccountConfigType, UserType } from "@types";
 import { useTranslation } from "react-i18next";
 import { apiRootUrl, appRootUrl, SBPContext } from "@config";
 
+const oldAppRootUrl = "https://checkout.swiss-bitcoin-pay.ch";
+
 type UseAccountConfigParams = {
   refresh?: boolean;
 };
@@ -81,7 +83,7 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
   const onScan = useCallback(
     async (scannedValue: string) => {
       setIsLoading(true);
-      if (scannedValue.startsWith(`${appRootUrl}/connect/`)) {
+      if (scannedValue.startsWith(`${appRootUrl}/connect/`) || scannedValue.startsWith(`${oldAppRootUrl}/connect/`)) {
         const arr = scannedValue.split("/");
         const activationPart = arr.pop();
         const path = arr.pop();
