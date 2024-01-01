@@ -27,15 +27,15 @@ import {
 } from "@components";
 import axios from "axios";
 import { validate as isEmail } from "email-validator";
-import { useNavigate, useSearchParams } from "../../components/Router";
+import { useSearchParams } from "../../components/Router";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { keyStoreRefCode } from "@config/settingsKeys";
 import { PayoutConfigForm } from "@components/PayoutConfig/PayoutConfig";
 import { useToast } from "react-native-toast-notifications";
 import { useTheme } from "styled-components";
 import { AccountConfigType, UserType } from "@types";
-import * as S from "./styled";
 import { useAccountConfig } from "@hooks";
+import * as S from "./styled";
 
 const { deviceLocale } = platform;
 
@@ -62,7 +62,6 @@ export const Signup = () => {
   const { onAuthLogin } = useAccountConfig({ refresh: false });
   const { setUserType } = useContext(SBPContext);
   const { colors } = useTheme();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const isAtm = useMemo(
