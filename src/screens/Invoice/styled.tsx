@@ -124,6 +124,7 @@ const NFC_BUTTON_SIZE = 54;
 export const NFCWrapper = styled(View)`
   position: relative;
   width: 100%;
+  border: 2px solid red;
 `;
 
 export const AskButton = styled(Pressable)<{ isLightOpacity: boolean }>`
