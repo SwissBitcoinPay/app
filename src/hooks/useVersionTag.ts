@@ -8,7 +8,7 @@ export const useVersionTag = () => {
   const { t } = useTranslation(undefined, { keyPrefix: "common" });
 
   return `${t("version", {
-    tag: `${process.env.MAJOR_VERSION}.${process.env.PATCH_VERSION}.${process.env.MINOR_VERSION}`
+    tag: `${process.env.MAJOR_VERSION}.${process.env.MINOR_VERSION}.${process.env.PATCH_VERSION}`
   })} - ${
     COMMIT ? `Commit ${COMMIT.slice(0, SHORT_COMMIT_LENGTH)}` : "Dev mode"
   }`;
