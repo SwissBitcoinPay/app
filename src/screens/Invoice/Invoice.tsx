@@ -1,7 +1,6 @@
 import {
   useCallback,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useState,
   useRef,
@@ -11,7 +10,6 @@ import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, useLocation } from "@components/Router";
 import useWebSocket from "react-use-websocket";
-import NfcManager, { Ndef, NfcEvents, NfcTech } from "react-native-nfc-manager";
 import {
   Loader,
   BitcoinIcon,
@@ -63,7 +61,7 @@ const getTrue = () => true;
 const numberWithSpaces = (nb: number) =>
   nb.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
-const { isWeb, isIos, getIsNfcSupported } = platform;
+const { isWeb, isIos } = platform;
 
 export type InvoiceType = {
   isInit: boolean;
@@ -292,12 +290,12 @@ export const Invoice = () => {
     }
   }, [lastJsonMessage, isWithdraw]);
 
-  useLayoutEffect(() => {
-    void setupNfc();
+  useEffect(() => {
+    setupNfc();
   }, []);
 
   useEffect(() => {
-    if (isNfcAvailable && pr) {
+    if (isNfcAvailable && pr && !isNfcNeedsTap) {
       void readingNfcLoop(pr);
     }
   }, [isNfcAvailable, pr, readingNfcLoop]);
@@ -354,15 +352,6 @@ export const Invoice = () => {
 
   const onCloseQrModal = useCallback(() => {
     setIsQrModalOpen(false);
-  }, []);
-
-  const [isNfc, setIsNfc] = useState(false);
-  const [isNfcEnabled, setIsNfcEnabled] = useState(false);
-  useLayoutEffect(() => {
-    (async () => {
-      setIsNfc(await NfcManager.isSupported());
-      setIsNfcEnabled(await NfcManager.isEnabled());
-    })();
   }, []);
 
   return (
@@ -558,48 +547,24 @@ export const Invoice = () => {
                 </ComponentStack>
               )}
               <>
-                <Text color={colors.white}>isPr: {(!!pr).toString?.()}</Text>
-                <Text color={colors.white}>
-                  isNfcSupported: {isNfc.toString?.()}
-                </Text>
-                <Text color={colors.white}>
-                  isNfcEnabled: {isNfcEnabled.toString?.()}
-                </Text>
-                <Text color={colors.white}>
-                  isNfcAvailable: {isNfcAvailable.toString?.()}
-                </Text>
-                <Text color={colors.white}>
-                  isNfcNeedsTap: {isNfcNeedsTap.toString?.()}
-                </Text>
                 {(isNfcAvailable || isNfcNeedsTap) && isAlive && (
                   <S.NFCWrapper>
                     <S.AskButton
                       disabled={!isNfcNeedsTap}
                       isLightOpacity={isNfcNeedsPermission}
                       onPress={async () => {
-                        NfcManager.setEventListener(
-                          NfcEvents.DiscoverTag,
-                          async (tag) => {
-                            NfcManager.unregisterTagEvent();
-                            setIsNfcEnabled(
-                              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                              // @ts-ignore
-                              Ndef.uri.decodePayload(
-                                tag?.ndefMessage[0]
-                                  .payload as unknown as Uint8Array
-                              )
-                            );
-                            NfcManager.setEventListener(
-                              NfcEvents.DiscoverTag,
-                              null
-                            );
-                          }
-                        );
-                        await NfcManager.registerTagEvent();
+                        if (isWeb) {
+                          await setupNfc();
+                        } else if (isIos && pr) {
+                          await readingNfcLoop(pr);
+                        }
                       }}
                     >
                       {isNfcLoading ? (
-                        <ActivityIndicator size="large" color={colors.white} />
+                        <ActivityIndicator
+                          size="large"
+                          color={isNfcNeedsTap ? colors.primary : colors.white}
+                        />
                       ) : (
                         <S.NFCImage
                           source={

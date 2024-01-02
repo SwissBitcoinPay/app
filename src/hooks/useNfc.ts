@@ -17,7 +17,7 @@ export const useNfc = () => {
   const [isNfcNeedsPermission, setIsNfcNeedsPermission] = useState(false);
 
   const setupNfc = useCallback(async () => {
-    if (isIos || (await getIsNfcSupported())) {
+    if (await getIsNfcSupported()) {
       try {
         await NFC.init();
       } catch (e) {}
