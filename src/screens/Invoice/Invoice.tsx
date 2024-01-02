@@ -11,7 +11,7 @@ import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, useLocation } from "@components/Router";
 import useWebSocket from "react-use-websocket";
-import NfcManager, { Ndef } from "react-native-nfc-manager";
+import NfcManager, { Ndef, NfcTech } from "react-native-nfc-manager";
 import {
   Loader,
   BitcoinIcon,
@@ -577,22 +577,16 @@ export const Invoice = () => {
                       disabled={!isNfcNeedsTap}
                       isLightOpacity={isNfcNeedsPermission}
                       onPress={async () => {
-                        if (isWeb) {
-                          await setupNfc();
-                        } else if (isIos) {
-                          await readingNfcLoop(pr);
-                        } else {
-                          await NfcManager.requestTechnology([NfcTech.Ndef]);
-                          const tag = await NfcManager.getTag();
+                        await NfcManager.requestTechnology([NfcTech.Ndef]);
+                        const tag = await NfcManager.getTag();
 
-                          setIsNfcEnabled(
-                            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                            Ndef.uri.decodePayload(
-                              tag?.ndefMessage[0]
-                                .payload as unknown as Uint8Array
-                            )
-                          );
-                        }
+                        setIsNfcEnabled(
+                          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                          // @ts-ignore
+                          Ndef.uri.decodePayload(
+                            tag?.ndefMessage[0].payload as unknown as Uint8Array
+                          )
+                        );
                       }}
                     >
                       {isNfcLoading ? (
@@ -602,6 +596,8 @@ export const Invoice = () => {
                           source={
                             isNfcNeedsPermission
                               ? require("@assets/images/bolt-card-white.png")
+                              : isNfcNeedsTap
+                              ? require("@assets/images/bolt-card-black.png")
                               : require("@assets/images/bolt-card.png")
                           }
                         />
