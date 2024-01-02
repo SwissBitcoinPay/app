@@ -554,12 +554,18 @@ export const Invoice = () => {
                 </ComponentStack>
               )}
               <>
-                <Text color={colors.white}>isAlive: {isAlive}</Text>
-                <Text color={colors.white}>isNfcSupported: {isNfc}</Text>
                 <Text color={colors.white}>
-                  isNfcAvailable: {isNfcAvailable}
+                  isAlive: {isAlive.toString?.()}
                 </Text>
-                <Text color={colors.white}>isNfcNeedsTap: {isNfcNeedsTap}</Text>
+                <Text color={colors.white}>
+                  isNfcSupported: {isNfc.toString?.()}
+                </Text>
+                <Text color={colors.white}>
+                  isNfcAvailable: {isNfcAvailable.toString?.()}
+                </Text>
+                <Text color={colors.white}>
+                  isNfcNeedsTap: {isNfcNeedsTap.toString?.()}
+                </Text>
                 {(isNfcAvailable || isNfcNeedsTap) && isAlive && (
                   <S.NFCWrapper>
                     <S.AskButton
