@@ -187,8 +187,8 @@ export const Invoice = () => {
       invoiceId === "loading"
         ? t("creatingInvoice")
         : !isInit
-          ? t("fetchingInvoice")
-          : null,
+        ? t("fetchingInvoice")
+        : null,
     [invoiceId, t, isInit]
   );
 
@@ -295,7 +295,7 @@ export const Invoice = () => {
   }, []);
 
   useEffect(() => {
-    if (isNfcAvailable && pr) {
+    if (isNfcAvailable && pr && !isNfcNeedsTap) {
       void readingNfcLoop(pr);
     }
   }, [isNfcAvailable, pr, readingNfcLoop]);
@@ -561,12 +561,17 @@ export const Invoice = () => {
                       }}
                     >
                       {isNfcLoading ? (
-                        <ActivityIndicator size="large" color={colors.white} />
+                        <ActivityIndicator
+                          size="large"
+                          color={isNfcNeedsTap ? colors.primary : colors.white}
+                        />
                       ) : (
                         <S.NFCImage
                           source={
                             isNfcNeedsPermission
                               ? require("@assets/images/bolt-card-white.png")
+                              : isNfcNeedsTap
+                              ? require("@assets/images/bolt-card-black.png")
                               : require("@assets/images/bolt-card.png")
                           }
                         />

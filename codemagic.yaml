@@ -41,6 +41,10 @@ workflows:
       - android/app/build/outputs/**/*.aab
       - android/app/build/**/*.apk
       - android/app/build/**/outputs/**/mapping.txt
+    cache:
+      cache_paths:
+        - $CM_BUILD_DIR/node_modules
+        - $HOME/.gradle/caches
     publishing:
       email:
         recipients:
@@ -102,6 +106,10 @@ workflows:
         script: |
           zip -r ios_symbols.zip ios/*.xcarchive/dSYMs/*.dSYM
           ./scripts/upload-to-testfairy.sh ios/export/SwissBitcoinPay.ipa ios_symbols.zip
+    cache:
+      cache_paths:
+        - $CM_BUILD_DIR/node_modules
+        - $HOME/Library/Caches/CocoaPods
     publishing:
       email:
         recipients:

@@ -5,7 +5,8 @@ import NfcManager, {
 } from "react-native-nfc-manager";
 
 export const NFC = {
-  init: () => NfcManager.start(),
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  init: NfcManager.start,
   startRead: async (onRead: (message: string) => void) => {
     NfcManager.setEventListener(
       NfcEvents.DiscoverTag,
