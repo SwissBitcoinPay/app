@@ -11,7 +11,7 @@ import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, useLocation } from "@components/Router";
 import useWebSocket from "react-use-websocket";
-import NfcManager from "react-native-nfc-manager";
+import NfcManager, { Ndef } from "react-native-nfc-manager";
 import {
   Loader,
   BitcoinIcon,
@@ -558,13 +558,11 @@ export const Invoice = () => {
                 </ComponentStack>
               )}
               <>
-                <Text color={colors.white}>
-                  isAlive: {isAlive.toString?.()}
-                </Text>
+                <Text color={colors.white}>isPr: {(!!pr).toString?.()}</Text>
                 <Text color={colors.white}>
                   isNfcSupported: {isNfc.toString?.()}
                 </Text>
-                 <Text color={colors.white}>
+                <Text color={colors.white}>
                   isNfcEnabled: {isNfcEnabled.toString?.()}
                 </Text>
                 <Text color={colors.white}>
@@ -581,8 +579,19 @@ export const Invoice = () => {
                       onPress={async () => {
                         if (isWeb) {
                           await setupNfc();
-                        } else if (isIos && pr) {
+                        } else if (isIos) {
                           await readingNfcLoop(pr);
+                        } else {
+                          await NfcManager.requestTechnology([NfcTech.Ndef]);
+                          const tag = await NfcManager.getTag();
+
+                          setIsNfcEnabled(
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                            Ndef.uri.decodePayload(
+                              tag?.ndefMessage[0]
+                                .payload as unknown as Uint8Array
+                            )
+                          );
                         }
                       }}
                     >
