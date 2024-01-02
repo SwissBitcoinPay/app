@@ -61,7 +61,7 @@ const getTrue = () => true;
 const numberWithSpaces = (nb: number) =>
   nb.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
-const { isWeb, isIos } = platform;
+const { isWeb, isIos, getIsNfcSupported } = platform;
 
 export type InvoiceType = {
   isInit: boolean;
@@ -187,8 +187,8 @@ export const Invoice = () => {
       invoiceId === "loading"
         ? t("creatingInvoice")
         : !isInit
-          ? t("fetchingInvoice")
-          : null,
+        ? t("fetchingInvoice")
+        : null,
     [invoiceId, t, isInit]
   );
 
@@ -352,6 +352,13 @@ export const Invoice = () => {
 
   const onCloseQrModal = useCallback(() => {
     setIsQrModalOpen(false);
+  }, []);
+
+  const [isNfc, setIsNfc] = useState(false);
+  useEffect(() => {
+    (async () => {
+      setIsNfc(await getIsNfcSupported());
+    })();
   }, []);
 
   return (
@@ -548,6 +555,7 @@ export const Invoice = () => {
               )}
               <>
                 <Text color={colors.white}>isAlive: {isAlive}</Text>
+                <Text color={colors.white}>isNfcSupported: {isNfc}</Text>
                 <Text color={colors.white}>
                   isNfcAvailable: {isNfcAvailable}
                 </Text>
