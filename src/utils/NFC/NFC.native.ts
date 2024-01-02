@@ -4,8 +4,10 @@ import NfcManager, {
   TagEvent
 } from "react-native-nfc-manager";
 
+void NfcManager.start();
+
 export const NFC = {
-  init: () => NfcManager.start(),
+  init: () => {},
   startRead: async (onRead: (message: string) => void) => {
     NfcManager.setEventListener(
       NfcEvents.DiscoverTag,
