@@ -547,6 +547,11 @@ export const Invoice = () => {
                 </ComponentStack>
               )}
               <>
+                <Text color={colors.white}>isAlive: {isAlive}</Text>
+                <Text color={colors.white}>
+                  isNfcAvailable: {isNfcAvailable}
+                </Text>
+                <Text color={colors.white}>isNfcNeedsTap: {isNfcNeedsTap}</Text>
                 {(isNfcAvailable || isNfcNeedsTap) && isAlive && (
                   <S.NFCWrapper>
                     <S.AskButton
