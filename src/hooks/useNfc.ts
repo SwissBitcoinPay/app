@@ -41,7 +41,7 @@ export const useNfc = () => {
         }
       } else if (isNative) {
         setIsNfcAvailable(true);
-        setIsNfcNeedsTap(isIos);
+        setIsNfcNeedsTap(false);
       }
     }
   }, []);

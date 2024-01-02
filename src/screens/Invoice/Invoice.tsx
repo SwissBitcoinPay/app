@@ -357,9 +357,11 @@ export const Invoice = () => {
   }, []);
 
   const [isNfc, setIsNfc] = useState(false);
+  const [isNfcEnabled, setIsNfcEnabled] = useState(false);
   useLayoutEffect(() => {
     (async () => {
       setIsNfc(await NfcManager.isSupported());
+      setIsNfcEnabled(await NfcManager.isEnabled());
     })();
   }, []);
 
@@ -561,6 +563,9 @@ export const Invoice = () => {
                 </Text>
                 <Text color={colors.white}>
                   isNfcSupported: {isNfc.toString?.()}
+                </Text>
+                 <Text color={colors.white}>
+                  isNfcEnabled: {isNfcEnabled.toString?.()}
                 </Text>
                 <Text color={colors.white}>
                   isNfcAvailable: {isNfcAvailable.toString?.()}
