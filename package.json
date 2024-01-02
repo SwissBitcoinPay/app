@@ -103,7 +103,7 @@
     "react-timer-hook": "^3.0.7",
     "react-use-websocket": "~4.5.0",
     "readable-stream": "~4.4.2",
-    "stream-browserify": "^1.0.0",
+    "stream-browserify": "^3.0.0",
     "styled-components": "~6.0.8",
     "tiny-secp256k1": "^2.2.3",
     "varuint-bitcoin": "^1.1.2",
