@@ -10,6 +10,7 @@ import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, useLocation } from "@components/Router";
 import useWebSocket from "react-use-websocket";
+import NfcManager from "react-native-nfc-manager";
 import {
   Loader,
   BitcoinIcon,
@@ -357,7 +358,7 @@ export const Invoice = () => {
   const [isNfc, setIsNfc] = useState(false);
   useEffect(() => {
     (async () => {
-      setIsNfc(await getIsNfcSupported());
+      setIsNfc(await NfcManager.isSupported());
     })();
   }, []);
 
