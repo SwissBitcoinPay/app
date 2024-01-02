@@ -1,6 +1,7 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
   useRef,
@@ -291,8 +292,8 @@ export const Invoice = () => {
     }
   }, [lastJsonMessage, isWithdraw]);
 
-  useEffect(() => {
-    setupNfc();
+  useLayoutEffect(() => {
+    void setupNfc();
   }, []);
 
   useEffect(() => {
@@ -356,7 +357,7 @@ export const Invoice = () => {
   }, []);
 
   const [isNfc, setIsNfc] = useState(false);
-  useEffect(() => {
+  useLayoutEffect(() => {
     (async () => {
       setIsNfc(await NfcManager.isSupported());
     })();
