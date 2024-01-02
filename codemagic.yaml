@@ -41,6 +41,10 @@ workflows:
       - android/app/build/outputs/**/*.aab
       - android/app/build/**/*.apk
       - android/app/build/**/outputs/**/mapping.txt
+    cache:
+      cache_paths:
+        - $CM_BUILD_DIR/node_modules
+        - $HOME/.gradle/caches
     publishing:
       email:
         recipients:
