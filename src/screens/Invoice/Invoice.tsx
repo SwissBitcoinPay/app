@@ -11,7 +11,7 @@ import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, useLocation } from "@components/Router";
 import useWebSocket from "react-use-websocket";
-import NfcManager, { Ndef, NfcTech } from "react-native-nfc-manager";
+import NfcManager, { Ndef, NfcEvents, NfcTech } from "react-native-nfc-manager";
 import {
   Loader,
   BitcoinIcon,
@@ -577,16 +577,25 @@ export const Invoice = () => {
                       disabled={!isNfcNeedsTap}
                       isLightOpacity={isNfcNeedsPermission}
                       onPress={async () => {
-                        await NfcManager.requestTechnology([NfcTech.Ndef]);
-                        const tag = await NfcManager.getTag();
-
-                        setIsNfcEnabled(
-                          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                          // @ts-ignore
-                          Ndef.uri.decodePayload(
-                            tag?.ndefMessage[0].payload as unknown as Uint8Array
-                          )
+                        NfcManager.setEventListener(
+                          NfcEvents.DiscoverTag,
+                          async (tag) => {
+                            NfcManager.unregisterTagEvent();
+                            setIsNfcEnabled(
+                              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                              // @ts-ignore
+                              Ndef.uri.decodePayload(
+                                tag?.ndefMessage[0]
+                                  .payload as unknown as Uint8Array
+                              )
+                            );
+                            NfcManager.setEventListener(
+                              NfcEvents.DiscoverTag,
+                              null
+                            );
+                          }
                         );
+                        await NfcManager.registerTagEvent();
                       }}
                     >
                       {isNfcLoading ? (
