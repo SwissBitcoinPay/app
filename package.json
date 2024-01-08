@@ -126,7 +126,7 @@
     "@react-native/eslint-config": "0.73.1",
     "@react-native/typescript-config": "0.74.0",
     "@tsconfig/react-native": "3.0.2",
-    "@types/bcryptjs": "2.4.4",
+    "@types/bcryptjs": "2.4.6",
     "@types/encodeurl": "1.0.0",
     "@types/is-valid-zipcode": "1.0.0",
     "@types/jest": "29.5.5",
