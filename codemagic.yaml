@@ -16,7 +16,7 @@ workflows:
       vars:
         PACKAGE_NAME: "ch.swissbitcoinpay.checkout"
         SKIP_BUNDLING: 1
-      java: 20
+      java: 17.0.9
     scripts:
       - name: Save DEV variable
         script: |
@@ -79,7 +79,7 @@ workflows:
         XCODE_PROJECT: "SwissBitcoinPay.xcodeproj"
         XCODE_SCHEME: "SwissBitcoinPay"
         APP_ID: 6444370155
-      java: 20
+      java: 17.0.9
     scripts:
       - name: Save DEV variable
         script: |
