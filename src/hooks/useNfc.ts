@@ -4,9 +4,15 @@ import { useCallback, useEffect, useState } from "react";
 import { NFC, isApiError } from "@utils";
 import { useToast } from "react-native-toast-notifications";
 import { useTranslation } from "react-i18next";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const { isWeb, isNative, isIos, getIsNfcSupported } = platform;
+
+const getError = (message: string) =>
+  // @ts-ignore
+  new AxiosError(undefined, undefined, undefined, undefined, {
+    data: { reason: { detail: message } }
+  });
 
 export const useNfc = () => {
   const toast = useToast();
@@ -47,7 +53,11 @@ export const useNfc = () => {
   }, []);
 
   const readingNfcLoop = useCallback(
-    async (pr: string) => {
+    async (
+      pr:
+        | string
+        | { callback: string; k1: string; title: string; amount: number }
+    ) => {
       await NFC.stopRead();
 
       NFC.startRead(async (nfcMessage) => {
@@ -104,7 +114,7 @@ export const useNfc = () => {
         let debitCardData;
         let error;
         try {
-          if (true) {
+          if (typeof pr === "string") {
             const { data: cardDataResponse } = await axios.get<{
               tag: "withdrawRequest";
               callback: string;
@@ -123,58 +133,57 @@ export const useNfc = () => {
 
             debitCardData = callbackResponseData;
           } else {
-            // const { data: cardRequest } = await axios.get<{ payLink?: string }>(
-            //   lnHttpsRequest
-            // );
-            // if (!cardRequest.payLink) throw getError("Invalid tag. No payLink");
-            // let finalUrl = cardRequest.payLink;
-            // if (finalUrl.startsWith("lnurlp://")) {
-            //   finalUrl = finalUrl.replace("lnurlp", "https");
-            // }
-            // const { data: finalUrlRequest } = await axios.get<{
-            //   tag?: string;
-            //   callback?: string;
-            //   minSendable?: number;
-            //   maxSendable?: number;
-            //   commentAllowed?: number;
-            // }>(finalUrl);
-            // if (finalUrlRequest.tag !== "payRequest")
-            //   throw getError("Invalid tag. tag is not payRequest");
-            // if (!finalUrlRequest.callback)
-            //   throw getError("Invalid tag. No callback");
-            // if (
-            //   !finalUrlRequest.minSendable ||
-            //   finalUrlRequest.minSendable / 1000 > amount
-            // )
-            //   throw getError("Invalid tag. minSendable undefined or too high");
-            // if (
-            //   !finalUrlRequest.maxSendable ||
-            //   finalUrlRequest.maxSendable / 1000 < amount
-            // )
-            //   throw getError("Invalid tag. maxSendable undefined or too low");
-            // const fullTitle = `${title || ""}${
-            //   description ? `- ${description}` : ""
-            // }`;
-            // const { data: callbackRequest } = await axios.get<{ pr?: string }>(
-            //   `${finalUrlRequest.callback}?amount=${(amount || 0) * 1000}${
-            //     (finalUrlRequest.commentAllowed || 0) >= fullTitle.length
-            //       ? `&comment=${fullTitle}`
-            //       : ""
-            //   }`
-            // );
-            // if (!callbackRequest.pr) throw getError("Invalid tag. No pr defined");
-            // const { data: withdrawCallbackRequest } = await axios.get<{
-            //   status?: string;
-            // }>(withdrawCallbackData.callback, {
-            //   params: {
-            //     pr: callbackRequest.pr,
-            //     k1: withdrawCallbackData.k1
-            //   }
-            // });
-            // if (withdrawCallbackRequest.status !== "OK")
-            //   throw getError("Impossible to top-up card.");
-            // setIsPaid(true);
-            // debitCardData = withdrawCallbackRequest;
+            const { callback, k1, title, amount } = pr;
+            const { data: cardRequest } = await axios.get<{ payLink?: string }>(
+              cardData
+            );
+            if (!cardRequest.payLink) throw getError("Invalid tag. No payLink");
+            let finalUrl = cardRequest.payLink;
+            if (finalUrl.startsWith("lnurlp://")) {
+              finalUrl = finalUrl.replace("lnurlp", "https");
+            }
+            const { data: finalUrlRequest } = await axios.get<{
+              tag?: string;
+              callback?: string;
+              minSendable?: number;
+              maxSendable?: number;
+              commentAllowed?: number;
+            }>(finalUrl);
+            if (finalUrlRequest.tag !== "payRequest")
+              throw getError("Invalid tag. tag is not payRequest");
+            if (!finalUrlRequest.callback)
+              throw getError("Invalid tag. No callback");
+            if (
+              !finalUrlRequest.minSendable ||
+              finalUrlRequest.minSendable / 1000 > amount
+            )
+              throw getError("Invalid tag. minSendable undefined or too high");
+            if (
+              !finalUrlRequest.maxSendable ||
+              finalUrlRequest.maxSendable / 1000 < amount
+            )
+              throw getError("Invalid tag. maxSendable undefined or too low");
+
+            const { data: callbackRequest } = await axios.get<{ pr?: string }>(
+              `${finalUrlRequest.callback}?amount=${(amount || 0) * 1000}${
+                (finalUrlRequest.commentAllowed || 0) >= title.length
+                  ? `&comment=${title}`
+                  : ""
+              }`
+            );
+            if (!callbackRequest.pr)
+              throw getError("Invalid tag. No pr defined");
+            const { data: withdrawCallbackRequest } = await axios.get<{
+              status?: string;
+            }>(callback, {
+              params: {
+                pr: callbackRequest.pr,
+                k1: k1
+              }
+            });
+            if (withdrawCallbackRequest.status !== "OK")
+              throw getError("Impossible to top-up card.");
+            debitCardData = withdrawCallbackRequest;
           }
         } catch (e) {
           if (isApiError(e)) {

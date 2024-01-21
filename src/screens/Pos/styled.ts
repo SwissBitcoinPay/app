@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { View, Text, Icon, Loader, TextInput } from "@components";
+import { View, Icon, Loader, TextInput, Button } from "@components";
 
 export const InfosContainer = styled(View)`
   flex: 1;
@@ -11,24 +11,10 @@ export const InfosContainer = styled(View)`
   padding-top: 32px;
 `;
 
-export const ATMContainer = styled(View)`
+export const ATMButton = styled(Button)`
   position: absolute;
-  top: 2px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin-top: 6px;
-  background-color: #747d8c;
-  border-radius: 100px;
-  padding: 0px 10px;
-`;
-
-export const ATMIcon = styled(Icon)``;
-export const ATMText = styled(Text)`
-  margin-left: 6px;
-  margin-top: 3px;
-  font-size: 11px;
+  top: -16px;
+  background-color: ${({ theme }) => theme.colors.grey};
 `;
 
 export const PadContainer = styled(View)`

@@ -32,6 +32,8 @@ export const usePostInvoice = () => {
       deviceType
     }: PostInvoiceParams) => {
       try {
+        const isLocalInvoice = true;
+
         let finalUrl = "";
         let id = "";
         let additionnalHistoryProps = {};
@@ -39,7 +41,7 @@ export const usePostInvoice = () => {
         if (!isAtm) {
           navigate("/invoice", {
             state: {
-              isLocalInvoice: true
+              isLocalInvoice
             }
           });
           const { data: checkoutResponseData } = await axios.post<{
@@ -86,7 +88,7 @@ export const usePostInvoice = () => {
 
           if (ret.available) {
             const biometricsResponse = await Biometrics.simplePrompt({
-              promptMessage: t("allowWithdraw")
+              promptMessage: t("screens.pos.allowWithdraw")
             });
 
             if (!biometricsResponse.success) {
@@ -94,7 +96,11 @@ export const usePostInvoice = () => {
             }
           }
 
-          navigate("/invoice");
+          navigate("/invoice", {
+            state: {
+              isLocalInvoice
+            }
+          });
 
           const data = {
             amount,
@@ -122,7 +128,8 @@ export const usePostInvoice = () => {
 
           additionnalHistoryProps = {
             ...additionnalHistoryProps,
-            amount: withdrawResponseData.amount
+            amount: withdrawResponseData.amount,
+            customNote: description
           };
         }
 
@@ -133,7 +140,7 @@ export const usePostInvoice = () => {
         navigate(finalUrl, {
           replace: true,
           state: {
-            isLocalInvoice: true,
+            isLocalInvoice,
             unit: currency,
             decimalFiat: amount,
             customNote: description

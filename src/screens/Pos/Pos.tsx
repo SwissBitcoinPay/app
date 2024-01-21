@@ -12,7 +12,12 @@ import { getFormattedUnit, AsyncStorage } from "@utils";
 import { Keyboard, Text, Loader, TextField, PageContainer } from "@components";
 import { NumberInput } from "./components";
 import { useTranslation } from "react-i18next";
-import { faCog, faListCheck, faPen } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCog,
+  faListCheck,
+  faPen,
+  faShop
+} from "@fortawesome/free-solid-svg-icons";
 import {
   useSafeAreaInsets,
   useAccountConfig,
@@ -45,7 +50,7 @@ export const Pos = () => {
   const postInvoice = usePostInvoice();
 
   const { accountConfig, isLoading } = useAccountConfig();
-  const { currency, name } = accountConfig || {};
+  const { isAtm, currency, name } = accountConfig || {};
 
   const isBackgroundLoading = useMemo(
     () => !!accountConfig && isLoading,
@@ -215,6 +220,15 @@ export const Pos = () => {
     >
       {deviceNameModal}
       <S.InfosContainer>
+        {isAtm && (
+          <S.ATMButton
+            secondaryColor={colors.primary}
+            disabled
+            size="small"
+            title={t("atmAccount")}
+            icon={faShop}
+          />
+        )}
         {isBackgroundLoading && <S.BackgroundLoader size={20} />}
         <Text color={colors.white} h2 weight={700}>
           {getFormattedUnit(

@@ -1,6 +1,12 @@
 import axios from "axios";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { AsyncStorage, getFormattedUnit, isMinUserType } from "@utils";
+import {
+  AsyncStorage,
+  getFormattedUnit,
+  isApiError,
+  isMinUserType
+} from "@utils";
+import { bech32 } from "bech32";
 import {
   Loader,
   PageContainer,
@@ -53,6 +59,8 @@ type StoreTransactionType = {
   createdAt: number;
   fiatUnit: string;
   fiatAmount: number;
+  amount?: number;
+  customNote?: string;
 };
 
 type TransactionType = {
@@ -95,20 +103,74 @@ export const History = () => {
 
     setLocalIds(localTransactionsHistory.map((item) => item.id));
 
-    transactionsDetails = (
-      await Promise.all(
-        localTransactionsHistory.map((transaction) =>
-          !transaction.isExpired && !transaction.isPaid
-            ? axios.get(`${apiRootUrl}/checkout/${transaction.id}`)
-            : { data: transaction }
+    if (!accountConfig?.isAtm) {
+      transactionsDetails = (
+        await Promise.all(
+          localTransactionsHistory.map((transaction) =>
+            !transaction.isExpired && !transaction.isPaid
+              ? axios.get(`${apiRootUrl}/checkout/${transaction.id}`)
+              : { data: transaction }
+          )
         )
       )
-    )
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      .map(({ data: { id = null, hash = id, ...data } }) => ({
-        ...data,
-        id: hash
-      }));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        .map(({ data: { id = null, hash = id, ...data } }) => ({
+          ...data,
+          id: hash
+        }));
+    } else {
+      const lnurlList = localTransactionsHistory.map((v) => {
+        if (!v.isPaid) {
+          const { words: dataPart } = bech32.decode(v.id, 2000);
+          const requestByteArray = bech32.fromWords(dataPart);
+          return Buffer.from(requestByteArray).toString();
+        } else {
+          return { data: v };
+        }
+      });
+
+      transactionsDetails = (
+        await Promise.all(
+          lnurlList.map((lnurl, index) =>
+            typeof lnurl === "string"
+              ? axios.get(lnurl).catch((e) => {
+                  if (isApiError(e)) {
+                    return {
+                      data: {
+                        isPaid: e.response.status === 404,
+                        defaultDescription: t("withdrawSuccess"),
+                        minWithdrawable:
+                          localTransactionsHistory[index].amount || 0
+                      }
+                    };
+                  } else {
+                    return {};
+                  }
+                })
+              : lnurl
+          )
+        )
+      ).map(({ data = {} }, index) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return {
+          ...data,
+          title: data.defaultDescription,
+          isPending: data.tag === "withdrawRequest",
+          createdAt: localTransactionsHistory[index].createdAt || 0,
+          amount:
+            localTransactionsHistory[index].amount || data.minWithdrawable,
+          fiatAmount: localTransactionsHistory[index].fiatAmount || 0,
+          fiatUnit: localTransactionsHistory[index].fiatUnit,
+          isExpired: false,
+          id: localTransactionsHistory[index].id,
+          isWithdraw: true,
+          customNote: localTransactionsHistory[index].customNote,
+          extra: {
+            customNote: localTransactionsHistory[index].customNote
+          }
+        };
+      });
+    }
 
     AsyncStorage.setItem(
       settingsKeys.keyStoreTransactionsHistory,
@@ -162,7 +224,7 @@ export const History = () => {
 
     setTransactions([...transactionsDetails].reverse());
     setIsLoading(false);
-  }, [accountConfig?.apiKey, userType]);
+  }, [accountConfig?.apiKey, accountConfig?.isAtm, t, userType]);
 
   useEffect(() => {
     getTransactions();
@@ -271,9 +333,17 @@ export const History = () => {
                   title: `${timeFormatter.format(
                     transaction.createdAt * 1000
                   )}`,
+                  disabled: isPaid && transaction.isWithdraw,
                   onPress: [
                     `/invoice/${transaction.id}`,
-                    { state: { isLocalInvoice: !isPaid && !isExpired } }
+                    {
+                      state: {
+                        isLocalInvoice: !isPaid && !isExpired,
+                        unit: transaction.fiatUnit,
+                        decimalFiat: transaction.fiatAmount,
+                        customNote: transaction.extra?.customNote
+                      }
+                    }
                   ],
                   ...(isPaid
                     ? {
