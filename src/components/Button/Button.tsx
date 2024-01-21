@@ -15,6 +15,7 @@ type ButtonProps = {
   type?: "primary" | "success" | "error" | "bitcoin";
   isLoading?: boolean;
   disabled?: boolean;
+  secondaryColor?: string;
 } & MarkOptional<
   Omit<RootButtonProps, "onPress">,
   "mode" | "primaryColor" | "size" | "isRound"
@@ -34,6 +35,7 @@ export const Button = ({
   isLoading,
   disabled = isLoading,
   copyContent,
+  secondaryColor: propsSecondaryColor,
   icon = copyContent ? faCopy : undefined,
   ...props
 }: ButtonProps) => {
@@ -56,18 +58,27 @@ export const Button = ({
   }, [type, theme]);
 
   const secondaryColor = useMemo(() => {
+    if (propsSecondaryColor) {
+      return propsSecondaryColor;
+    }
+    if (disabled) {
+      return theme.colors.greyLight;
+    }
     if (mode === "normal") {
-      if (disabled) {
-        return theme.colors.greyLight;
-      }
       return type ? theme.colors.white : theme.colors.primary;
     } else {
-      if (disabled) {
-        return theme.colors.greyLight;
-      }
       return primaryColor;
     }
-  }, [mode, type, theme, primaryColor, disabled]);
+  }, [
+    propsSecondaryColor,
+    disabled,
+    mode,
+    theme.colors.greyLight,
+    theme.colors.white,
+    theme.colors.primary,
+    type,
+    primaryColor
+  ]);
 
   const loaderSize = useMemo(() => {
     switch (size) {

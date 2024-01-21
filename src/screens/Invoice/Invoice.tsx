@@ -6,6 +6,7 @@ import {
   useRef,
   useContext
 } from "react";
+import { bech32 } from "bech32";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, useLocation } from "@components/Router";
@@ -34,9 +35,10 @@ import {
   faQrcode,
   faWallet
 } from "@fortawesome/free-solid-svg-icons";
+import { useToast } from "react-native-toast-notifications";
 import { faBitcoin } from "@fortawesome/free-brands-svg-icons";
 import { platform } from "../../config/platform";
-import { Linking, getFormattedUnit } from "../../utils";
+import { Linking, getFormattedUnit, isApiError } from "../../utils";
 import { useIsScreenSizeMin, useNfc, useTimer, useVersionTag } from "@hooks";
 import {
   ActivityIndicator,
@@ -107,6 +109,7 @@ const FOOTER_VALUE_ITEMS_SIZE = 18;
 export const Invoice = () => {
   const navigate = useNavigate();
   const { colors, gridSize } = useTheme();
+  const toast = useToast();
   const versionTag = useVersionTag();
   const { t } = useTranslation(undefined, { keyPrefix: "screens.invoice" });
   const { t: tRoot } = useTranslation();
@@ -214,6 +217,74 @@ export const Invoice = () => {
     );
   }, [colors.success, isExternalInvoice, setBackgroundColor]);
 
+  useEffect(() => {
+    const fn = async () => {
+      if (isNfcAvailable && !isNfcNeedsTap && isWithdraw) {
+        try {
+          const { words: dataPart } = bech32.decode(invoiceId || "", 2000);
+          const requestByteArray = bech32.fromWords(dataPart);
+          const lnurl = Buffer.from(requestByteArray).toString();
+
+          const { data: lnurlData } = await axios.get<{
+            defaultDescription: string;
+            maxWithdrawable: number;
+            callback: string;
+            k1: string;
+          }>(lnurl);
+
+          const { unit, decimalFiat, customNote } = (location.state || {}) as {
+            unit: string;
+            decimalFiat: number;
+            customNote: string;
+          };
+
+          const withdrawAmount = lnurlData.maxWithdrawable / 1000;
+          setPr(invoiceId || "");
+          setTitle(lnurlData.defaultDescription);
+          setDescription(customNote);
+          setInvoiceFiatAmount(decimalFiat);
+          setInvoiceCurrency(unit);
+          setAmount(withdrawAmount);
+          setIsInit(true);
+          void readingNfcLoop({
+            callback: lnurlData.callback,
+            k1: lnurlData.k1,
+            title: `${lnurlData.defaultDescription || ""}${
+              customNote ? `- ${customNote}` : ""
+            }`,
+            amount: withdrawAmount
+          });
+
+          const intervalId = setInterval(async () => {
+            try {
+              await axios.get(lnurl);
+            } catch (e) {
+              if (isApiError(e)) {
+                if (e.response.status === 404) {
+                  clearInterval(intervalId);
+                  onPaid();
+                }
+              }
+            }
+          }, 2 * 1000);
+
+          return () => {
+            clearInterval(intervalId);
+          };
+        } catch (e) {
+          navigate("/");
+          if (isApiError(e)) {
+            toast.show(e?.response?.data?.detail || tRoot("errors.unknown"), {
+              type: "error"
+            });
+          }
+        }
+      }
+    };
+
+    void fn();
+  }, [isNfcAvailable, readingNfcLoop, invoiceId]);
+
   const updateInvoice = useCallback(
     async (getInvoiceData: InvoiceType, isInitialData?: boolean) => {
       try {
@@ -295,7 +366,7 @@ export const Invoice = () => {
   }, []);
 
   useEffect(() => {
-    if (isNfcAvailable && pr && !isNfcNeedsTap) {
+    if (isNfcAvailable && pr && !isNfcNeedsTap && !isWithdraw) {
       void readingNfcLoop(pr);
     }
   }, [isNfcAvailable, pr, readingNfcLoop]);
@@ -513,7 +584,9 @@ export const Invoice = () => {
                         ? t("pendingConfirmations")
                         : isExpired
                         ? t("invoiceExpired")
-                        : t("invoicePaid")}
+                        : !isWithdraw
+                        ? t("invoicePaid")
+                        : t("withdrawSuccess")}
                     </Text>
                   </ComponentStack>
                 )}
