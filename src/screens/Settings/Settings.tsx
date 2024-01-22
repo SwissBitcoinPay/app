@@ -199,7 +199,7 @@ export const Settings = () => {
             <S.QRPressable onPress={activationCodeData} disabled={!isWeb}>
               <S.QR
                 size={220}
-                data={activationCodeData}
+                value={activationCodeData}
                 image={{
                   source: require("@assets/images/logo-square-rounded.png")
                 }}

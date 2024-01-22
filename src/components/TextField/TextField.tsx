@@ -157,7 +157,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
             isOpen={isQrDisplayModalOpen}
             onClose={onToggleQrDisplayModal}
             qrProps={{
-              data: qrDisplayValue || value
+              value: qrDisplayValue || value || ""
             }}
           />
         )}

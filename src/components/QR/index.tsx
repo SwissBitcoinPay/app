@@ -1,26 +1,34 @@
-import { FlexStyle, ViewStyle } from "react-native";
-import {
-  LogoOptions,
-  SVGQRCodeStyledProps,
-  useQRCodeData
-} from "react-native-qrcode-styled";
+import { ImageURISource } from "react-native";
+import QRCode, { QRCodeProps } from "react-qr-code";
 import { useTheme } from "styled-components";
 import * as S from "./styled";
 
-type QRProps = Omit<SVGQRCodeStyledProps, "padding" | "logo"> & {
-  size: number;
+type QRProps = Omit<QRCodeProps, "ref"> & {
   image?: {
-    source: LogoOptions["href"];
+    source: ImageURISource;
     scale?: number;
     hidePieces?: boolean;
   };
 };
 
-const extractPaddingFromStyle = <T extends FlexStyle>(
+const extractPaddingFromStyle = <T extends React.CSSProperties>(
   style: T
-): { padding: number; restStyle: FlexStyle } => {
-  const { paddingTop, paddingRight, paddingLeft, paddingBottom, ...restStyle } =
-    style || {};
+): {
+  padding: number;
+  borderRadius: number;
+  restStyle: React.CSSProperties;
+} => {
+  const {
+    paddingTop,
+    paddingRight,
+    paddingLeft,
+    paddingBottom,
+    borderTopLeftRadius,
+    borderTopRightRadius,
+    borderBottomLeftRadius,
+    borderBottomRightRadius,
+    ...restStyle
+  } = style || {};
 
   let padding = 0;
   if (
@@ -31,31 +39,41 @@ const extractPaddingFromStyle = <T extends FlexStyle>(
   ) {
     padding = paddingTop;
   }
-  return { padding, restStyle };
+
+  let borderRadius = 0;
+  if (
+    typeof borderTopLeftRadius === "number" &&
+    borderTopLeftRadius === borderTopRightRadius &&
+    borderTopLeftRadius === borderBottomLeftRadius &&
+    borderTopLeftRadius === borderBottomRightRadius
+  ) {
+    borderRadius = borderTopLeftRadius;
+  }
+  return { padding, borderRadius, restStyle };
 };
 
-export const QR = ({ size, style, image, ...props }: QRProps) => {
+export const QR = ({ style, image, size, ...props }: QRProps) => {
   const theme = useTheme();
-  const data = useQRCodeData(props.data || "", props);
-  const { padding, restStyle } = extractPaddingFromStyle(style as ViewStyle);
+  const { padding, borderRadius, restStyle } = extractPaddingFromStyle(
+    style as React.CSSProperties
+  );
 
   return (
     <S.QRContainer
-      pieceSize={size / data.qrCodeSize}
-      pieceScale={1.05}
-      color={theme.colors.primary}
-      padding={padding}
-      style={restStyle}
-      {...props}
-      {...(image
-        ? {
-            logo: {
-              href: image.source,
-              scale: image.scale,
-              hidePieces: image.hidePieces || false
-            }
-          }
-        : {})}
-    />
+      style={{ padding, borderRadius, width: (size || 0) + padding * 2 }}
+    >
+      <QRCode
+        fgColor={theme.colors.primary}
+        style={restStyle}
+        size={size}
+        {...props}
+      />
+      {image && (
+        <S.QRImage
+          source={image.source}
+          style={{ transform: [{ scale: image.scale || 1 }] }}
+        />
+      )}
+    </S.QRContainer>
   );
 };

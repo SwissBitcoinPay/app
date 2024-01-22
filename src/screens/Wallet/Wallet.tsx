@@ -174,21 +174,23 @@ export const Wallet = () => {
 
   return (
     <>
-      <Modal
-        isOpen={isReceiveModalOpen}
-        title={t("receive")}
-        onClose={() => {
-          setIsReceiveModalOpen(false);
-        }}
-      >
-        <ComponentStack>
-          <S.ReceiveQR size={200} data={nextAddress} />
-          <Button title={nextAddress} copyContent={nextAddress} />
-          <Text h4 weight={600} color={colors.white}>
-            {t("receiveInfo")}
-          </Text>
-        </ComponentStack>
-      </Modal>
+      {nextAddress && (
+        <Modal
+          isOpen={isReceiveModalOpen}
+          title={t("receive")}
+          onClose={() => {
+            setIsReceiveModalOpen(false);
+          }}
+        >
+          <ComponentStack>
+            <S.ReceiveQR size={200} value={nextAddress} />
+            <Button title={nextAddress} copyContent={nextAddress} />
+            <Text h4 weight={600} color={colors.white}>
+              {t("receiveInfo")}
+            </Text>
+          </ComponentStack>
+        </Modal>
+      )}
       <PageContainer
         header={{ left: { onPress: -1, icon: faArrowLeft }, title: t("title") }}
       >

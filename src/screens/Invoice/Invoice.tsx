@@ -433,7 +433,10 @@ export const Invoice = () => {
         onClose={onCloseQrModal}
       >
         <ComponentStack>
-          <S.InvoiceQR data={`${appRootUrl}/invoice/${invoiceId}`} size={200} />
+          <S.InvoiceQR
+            value={`${appRootUrl}/invoice/${invoiceId}`}
+            size={200}
+          />
           <Text h4 weight={600} centered color={colors.white}>
             {t("invoiceQr")}
           </Text>
@@ -522,7 +525,7 @@ export const Invoice = () => {
                 {!isExpired &&
                   (isAlive ? (
                     <QR
-                      data={qrData}
+                      value={qrData}
                       size={qrCodeSize}
                       image={{
                         source: require("@assets/images/bitcoin-white-border.png")
