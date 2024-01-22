@@ -127,7 +127,7 @@
     "@react-native/typescript-config": "0.74.0",
     "@tsconfig/react-native": "3.0.2",
     "@types/bcryptjs": "2.4.6",
-    "@types/encodeurl": "1.0.0",
+    "@types/encodeurl": "1.0.2",
     "@types/is-valid-zipcode": "1.0.0",
     "@types/jest": "29.5.5",
     "@types/node": "20.11.0",
