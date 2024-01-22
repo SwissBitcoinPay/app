@@ -648,7 +648,7 @@ export const BitcoinSettings = ({
                         <S.PayInvoiceText>
                           {t("payInvoiceToCertify")}
                         </S.PayInvoiceText>
-                        <S.PayInvoiceQr size={300} data={prToPay} />
+                        <S.PayInvoiceQr size={300} value={prToPay} />
                         <Button
                           title={t("openWallet")}
                           icon={faWallet}

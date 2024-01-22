@@ -32,5 +32,6 @@ export const platform = {
   bottomSafeAreaHeight: 0,
   deviceName: `${osName} | ${browserName}`,
   deviceLocale: navigator?.languages?.[0],
-  isPrinterSupported: false
+  isPrinterSupported: false,
+  isLowEndDevice: false
 };

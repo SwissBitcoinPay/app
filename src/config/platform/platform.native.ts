@@ -19,6 +19,8 @@ const { height: initialWindowHeight, width: initialWindowWidth } =
 
 const isTablet = DeviceInfo.isTablet();
 
+const isLowEndDevice = DeviceInfo.getTotalMemorySync() < 3221225472; // 3 GB
+
 export const platform = {
   isWeb: false,
   isNative: true,
@@ -40,5 +42,6 @@ export const platform = {
       ? NativeModules.SettingsManager.settings.AppleLocale ||
         NativeModules.SettingsManager.settings.AppleLanguages[0]
       : NativeModules.I18nManager?.localeIdentifier,
-  isPrinterSupported: false
+  isPrinterSupported: false,
+  isLowEndDevice
 };

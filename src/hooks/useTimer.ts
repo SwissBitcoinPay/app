@@ -1,3 +1,4 @@
+import { platform } from "@config";
 import { useCallback, useDeferredValue, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -6,6 +7,8 @@ type UseTimerProps = {
   delay?: number;
   stop?: boolean;
 };
+
+const { isLowEndDevice } = platform;
 
 export const useTimer = ({ createdAt, delay, stop = false }: UseTimerProps) => {
   const [timer, setTimer] = useState("");
@@ -24,7 +27,6 @@ export const useTimer = ({ createdAt, delay, stop = false }: UseTimerProps) => {
       let days = 0;
       let hours = 0;
       let minutes = 0;
-      let seconds = 0;
 
       // More than 1 month
       if (secondsLeft >= 2630000) {
@@ -32,31 +34,34 @@ export const useTimer = ({ createdAt, delay, stop = false }: UseTimerProps) => {
         secondsLeft -= monthsLeft * 2630000;
         months = monthsLeft;
       }
+
       // More than 1 week
       if (secondsLeft >= 604800) {
         const weeksLeft = Math.floor(secondsLeft / 604800);
         secondsLeft -= weeksLeft * 604800;
         weeks = weeksLeft;
       }
+
       // More than 1 day
       if (secondsLeft >= 86400) {
         const daysLeft = Math.floor(secondsLeft / 86400);
         secondsLeft -= daysLeft * 86400;
         days = daysLeft;
       }
+
       // More than 1 hour
       if (secondsLeft >= 3600) {
         const hoursLeft = Math.floor(secondsLeft / 3600);
         secondsLeft -= hoursLeft * 3600;
         hours = hoursLeft;
       }
+
       // More than 1 minute
       if (secondsLeft >= 60) {
         const minutesLeft = Math.floor(secondsLeft / 60);
         secondsLeft -= minutesLeft * 60;
         minutes = minutesLeft;
       }
-      seconds = secondsLeft;
 
       setTimer(
         `${months ? `${months} ${t("months")} ` : ""}${
@@ -66,8 +71,8 @@ export const useTimer = ({ createdAt, delay, stop = false }: UseTimerProps) => {
         }${
           !months && !days && !weeks
             ? `${minutes && minutes < 10 ? "0" : ""}${minutes || 0}:${
-                seconds && seconds > 0
-                  ? `${seconds < 10 ? "0" : ""}${seconds}`
+                secondsLeft && secondsLeft > 0
+                  ? `${secondsLeft < 10 ? "0" : ""}${secondsLeft}`
                   : "00"
               }`
             : ""
@@ -79,7 +84,10 @@ export const useTimer = ({ createdAt, delay, stop = false }: UseTimerProps) => {
   useEffect(() => {
     if (createdAt && delay && !stop) {
       updateTimer();
-      const intervalId = setInterval(updateTimer, 1000);
+      const intervalId = setInterval(
+        updateTimer,
+        !isLowEndDevice ? 1000 : 30000
+      );
       return () => {
         clearInterval(intervalId);
       };
