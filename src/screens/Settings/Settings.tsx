@@ -129,7 +129,11 @@ export const Settings = () => {
   const { modal: currencyModal, onPressElement: onPressCurrency } =
     useModalInput({
       element: (
-        <SelectField items={currencies} right={{ icon: faDollarSign }} />
+        <SelectField
+          items={currencies}
+          right={{ icon: faDollarSign }}
+          onValueChange={() => {}}
+        />
       ),
       defaultValue: accountConfig?.currency,
       label: t("currency"),

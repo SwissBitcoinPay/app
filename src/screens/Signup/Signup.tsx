@@ -415,17 +415,13 @@ export const Signup = () => {
             rules={{
               required: true
             }}
-            render={({
-              field: { onChange, onBlur, value },
-              fieldState: { error }
-            }) => {
+            render={({ field: { onChange, value }, fieldState: { error } }) => {
               return (
                 <SelectField
                   label={t("currency")}
                   items={currencies}
                   value={value}
                   onValueChange={onChange}
-                  onBlur={onBlur}
                   error={error?.message}
                 />
               );
