@@ -21,6 +21,7 @@ const babelLoaderConfiguration = {
     ),
     path.resolve(__dirname, "node_modules/@react-native-community/slider"),
     path.resolve(__dirname, "node_modules/react-native-keychain"),
+    path.resolve(__dirname, "node_modules/react-native-picker-select"),
     path.resolve(__dirname, "node_modules/@dotlottie"),
     // path.resolve(__dirname, "node_modules/lottie-react-native"),
     path.resolve(__dirname, "node_modules/react-native-progress")

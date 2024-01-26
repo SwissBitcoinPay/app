@@ -133,17 +133,13 @@ export const FiatSettings = ({
             rules={{
               required: true
             }}
-            render={({
-              field: { onChange, onBlur, value },
-              fieldState: { error }
-            }) => {
+            render={({ field: { onChange, value }, fieldState: { error } }) => {
               return (
                 <SelectField
                   label={t("ownerCountry")}
                   items={countries}
                   value={value}
                   onValueChange={onChange}
-                  onBlur={onBlur}
                   error={error?.message}
                 />
               );

@@ -2,7 +2,7 @@ import { forwardRef, useCallback } from "react";
 import { BaseField } from "@components";
 import { BaseFieldProps } from "@components/BaseField";
 import { StyledComponentComponentProps } from "@types";
-import { ItemValue, Picker } from "@react-native-picker/picker/typings/Picker";
+import RNPickerSelect, { Item } from "react-native-picker-select";
 import * as S from "./styled";
 
 type PickerProps = Omit<
@@ -11,13 +11,13 @@ type PickerProps = Omit<
 >;
 
 type SelectFieldProps = PickerProps & {
-  onChange?: (event: { nativeEvent: { text: ItemValue } }) => void;
+  onChange?: (event: { nativeEvent: { text: Item["label"] } }) => void;
 } & Pick<
     BaseFieldProps,
     "value" | "label" | "left" | "right" | "error" | "disabled"
   >;
 
-export const SelectField = forwardRef<Picker<ItemValue>, SelectFieldProps>(
+export const SelectField = forwardRef<RNPickerSelect, SelectFieldProps>(
   (
     {
       style,
@@ -27,17 +27,17 @@ export const SelectField = forwardRef<Picker<ItemValue>, SelectFieldProps>(
       right,
       error,
       onChange,
-      onFocus,
-      onBlur,
+      onValueChange: propsOnValueChange,
       ...props
     },
     ref
   ) => {
     const onValueChange = useCallback(
-      (newValue: ItemValue) => {
+      (newValue: Item["label"], index: number) => {
+        propsOnValueChange?.(newValue, index);
         onChange?.({ nativeEvent: { text: newValue } });
       },
-      [onChange]
+      [propsOnValueChange, onChange]
     );
 
     return (
@@ -49,14 +49,12 @@ export const SelectField = forwardRef<Picker<ItemValue>, SelectFieldProps>(
         left={left}
         right={right}
         error={error}
-        onFocus={onFocus}
-        onBlur={onBlur}
         component={
           <S.Picker
             ref={ref}
-            selectedValue={`${value}`}
-            onValueChange={onValueChange}
+            value={value}
             {...props}
+            onValueChange={onValueChange}
           />
         }
       />

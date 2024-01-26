@@ -57,7 +57,6 @@ export const QR = ({ style, image, size, ...props }: QRProps) => {
   const { padding, borderRadius, restStyle } = extractPaddingFromStyle(
     style as React.CSSProperties
   );
-
   return (
     <S.QRContainer
       style={{ padding, borderRadius, width: (size || 0) + padding * 2 }}
@@ -66,6 +65,7 @@ export const QR = ({ style, image, size, ...props }: QRProps) => {
         fgColor={theme.colors.primary}
         style={restStyle}
         size={size}
+        level="Q"
         {...props}
       />
       {image && (
