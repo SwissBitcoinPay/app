@@ -38,16 +38,16 @@ export const useNfc = () => {
         } catch (e) {}
 
         if (nfcStatus?.state === "granted") {
-          setIsNfcAvailable(true);
           setIsNfcNeedsTap(false);
           setIsNfcNeedsPermission(false);
+          setIsNfcAvailable(true);
         } else {
           setIsNfcNeedsPermission(true);
           setIsNfcNeedsTap(true);
         }
       } else if (isNative) {
-        setIsNfcAvailable(true);
         setIsNfcNeedsTap(isIos);
+        setIsNfcAvailable(true);
       }
     }
   }, []);

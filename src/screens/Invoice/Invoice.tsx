@@ -149,6 +149,8 @@ export const Invoice = () => {
   const [isInvalidInvoice, setIsInvalidInvoice] = useState(false);
   const [redirectUrl, setRedirectUrl] = useState<`http://${string}`>();
   const [extra, setExtra] = useState<InvoiceType["extra"]>();
+  const [readingNfcData, setReadingNfcData] =
+    useState<Parameters<typeof readingNfcLoop>[0]>();
 
   const [isInitialPaid, setIsInitialPaid] = useState(false);
 
@@ -219,7 +221,7 @@ export const Invoice = () => {
 
   useEffect(() => {
     const fn = async () => {
-      if (isNfcAvailable && !isNfcNeedsTap && isWithdraw) {
+      if (isNfcAvailable && isWithdraw) {
         try {
           const { words: dataPart } = bech32.decode(invoiceId || "", 2000);
           const requestByteArray = bech32.fromWords(dataPart);
@@ -246,14 +248,18 @@ export const Invoice = () => {
           setInvoiceCurrency(unit);
           setAmount(withdrawAmount);
           setIsInit(true);
-          void readingNfcLoop({
+          const readData = {
             callback: lnurlData.callback,
             k1: lnurlData.k1,
             title: `${lnurlData.defaultDescription || ""}${
               customNote ? `- ${customNote}` : ""
             }`,
             amount: withdrawAmount
-          });
+          };
+          setReadingNfcData(readData);
+          if (!isNfcNeedsTap) {
+            void readingNfcLoop(readData);
+          }
 
           const intervalId = setInterval(async () => {
             try {
@@ -298,6 +304,7 @@ export const Invoice = () => {
         setCreatedAt(getInvoiceData.createdAt);
         setDelay(getInvoiceData.delay);
         setPr(getInvoiceData.pr);
+        setReadingNfcData(getInvoiceData.pr);
         setOnChainAddr(getInvoiceData.onChainAddr);
         setAmount(getInvoiceData.amount);
         setBtcAmount(getInvoiceData.btcAmount);
@@ -631,8 +638,8 @@ export const Invoice = () => {
                       onPress={async () => {
                         if (isWeb) {
                           await setupNfc();
-                        } else if (isIos && pr) {
-                          await readingNfcLoop(pr);
+                        } else if (isIos && readingNfcData) {
+                          await readingNfcLoop(readingNfcData);
                         }
                       }}
                     >
