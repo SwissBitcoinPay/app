@@ -1,3 +1,8 @@
-import { Picker as RootPicker } from "@react-native-picker/picker";
+import { Picker as RootPicker, PickerIOS } from "@react-native-picker/picker";
+import { platform } from "@config";
 
-export const PickerRoot = RootPicker;
+const { isIos, isNative } = platform;
+
+export const PickerRoot = (isIos && isNative
+  ? PickerIOS
+  : RootPicker) as unknown as typeof RootPicker;

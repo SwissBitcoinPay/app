@@ -27,7 +27,7 @@ export const Picker = forwardRef<RootPicker<ItemValue>, PickerRootProps>(
 
     return (
       <PickerRoot ref={ref} {...props} onBlur={onBlur} onFocus={onFocus}>
-        <DummyItem label="" enabled={isDummyItemEnabled} />
+        {/* <DummyItem label="" enabled={isDummyItemEnabled} /> */}
         {items.map((value, index) => (
           <PickerRoot.Item
             key={index}
