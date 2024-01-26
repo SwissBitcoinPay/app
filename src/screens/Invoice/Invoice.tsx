@@ -257,7 +257,9 @@ export const Invoice = () => {
             amount: withdrawAmount
           };
           setReadingNfcData(readData);
-          void readingNfcLoop(readData);
+          if (!isNfcNeedsTap) {
+            void readingNfcLoop(readData);
+          }
 
           const intervalId = setInterval(async () => {
             try {
