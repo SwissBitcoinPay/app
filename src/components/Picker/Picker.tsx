@@ -1,22 +1,22 @@
 import { forwardRef } from "react";
-import RNPickerSelect, { PickerSelectProps } from "react-native-picker-select";
-import { StyleProp, ViewStyle } from "react-native";
+import RNPickerSelect, {
+  PickerSelectProps,
+  PickerStyle
+} from "react-native-picker-select";
 
 type PickerRootProps = Omit<PickerSelectProps, "style"> & {
-  style?: StyleProp<ViewStyle>;
+  style?: PickerStyle["viewContainer"];
 };
 
 export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
-  ({ style = {}, ...props }, ref) => {
-    return (
-      <RNPickerSelect
-        ref={ref}
-        {...props}
-        style={{
-          inputWeb: style,
-          viewContainer: style
-        }}
-      />
-    );
-  }
+  ({ style, ...props }, ref) => (
+    <RNPickerSelect
+      ref={ref}
+      {...props}
+      style={{
+        viewContainer: style,
+        inputWeb: style
+      }}
+    />
+  )
 );
