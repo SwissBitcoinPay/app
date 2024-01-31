@@ -1,7 +1,12 @@
 module.exports = {
   project: {
     ios: {},
-    android: {}
+    android: {
+      unstable_reactLegacyComponentNames: [
+        "AndroidCheckBox",
+        "BVLinearGradient"
+      ]
+    }
   },
   assets: ["./src/assets/fonts/"] // stays the same
 };

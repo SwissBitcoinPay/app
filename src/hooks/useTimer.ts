@@ -86,7 +86,7 @@ export const useTimer = ({ createdAt, delay, stop = false }: UseTimerProps) => {
       updateTimer();
       const intervalId = setInterval(
         updateTimer,
-        !isLowEndDevice ? 1000 : 30000
+        !isLowEndDevice ? 1000 : 1000
       );
       return () => {
         clearInterval(intervalId);
