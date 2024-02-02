@@ -1,5 +1,5 @@
 import { mergeDeep } from "@utils";
-import { animated, useSpring, useSpringValue } from "@react-spring/native";
+import { animated, useSpring } from "@react-spring/native";
 import { PropsWithChildren, createContext, useCallback, useState } from "react";
 import { ThemeProvider, DefaultTheme } from "styled-components";
 import { theme } from "@config/themes";
@@ -7,7 +7,7 @@ import { ToastProvider } from "react-native-toast-notifications";
 import { DeepPartial } from "ts-essentials";
 import { ColorValue } from "react-native";
 import { useSafeAreaInsets } from "@hooks";
-import { Toast, View } from "@components";
+import { Toast } from "@components";
 
 type SBPThemeContextType = {
   setTheme: (newTheme: DefaultTheme) => void;

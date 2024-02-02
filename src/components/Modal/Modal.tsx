@@ -54,7 +54,6 @@ export const Modal = ({
 }: ModalProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const isExtraLarge = useIsScreenSizeMin("extraLarge");
-  const { height: windowHeight } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
 
   const opacity = useRef(
@@ -99,8 +98,6 @@ export const Modal = ({
     });
   }, [isOpen]);
 
-  const height = useMemo(() => windowHeight + top, [top, windowHeight]);
-
   return (
     <RootModal
       visible={isVisible}
@@ -113,7 +110,7 @@ export const Modal = ({
       }}
     >
       <KeyboardAvoidingView>
-        <AnimatedModalBackground style={{ opacity, height }}>
+        <AnimatedModalBackground style={{ opacity }}>
           <AnimatedModalContent
             isScreenExtraLarge={isExtraLarge}
             style={{ transform: [{ scale }, { translateY }] }}
