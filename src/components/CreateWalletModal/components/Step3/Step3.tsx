@@ -2,12 +2,7 @@ import { useEffect } from "react";
 import { useTheme } from "styled-components";
 import { useTranslation } from "react-i18next";
 import { ComponentStack, FieldDescription, Text } from "@components";
-import {
-  enableSecureView,
-  disableSecureView,
-  forbidAndroidShare,
-  allowAndroidShare
-} from "react-native-prevent-screenshot-ios-android";
+import SecureWindow from "react-native-secure-window";
 import { StepProps } from "../../CreateWalletModal";
 import { generateBtcAddress, getRandomNumber } from "@utils";
 import { Word } from "../Word";
@@ -52,12 +47,10 @@ export const Step3 = ({ setIsValid, setValue, watch }: StepProps) => {
   }, []);
 
   useEffect(() => {
-    enableSecureView();
-    forbidAndroidShare();
+    SecureWindow.changeSecureWindow(true);
 
     return () => {
-      disableSecureView();
-      allowAndroidShare();
+      SecureWindow.changeSecureWindow(false);
     };
   }, []);
 

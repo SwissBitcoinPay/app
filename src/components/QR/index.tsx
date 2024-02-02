@@ -1,9 +1,11 @@
-import { ImageURISource } from "react-native";
-import QRCode, { QRCodeProps } from "react-qr-code";
+import QRCode, { QRCodeProps } from "react-native-qrcode-svg";
 import { useTheme } from "styled-components";
+import { useMemo } from "react";
+import { ImageURISource } from "react-native";
 import * as S from "./styled";
 
 type QRProps = Omit<QRCodeProps, "ref"> & {
+  style?: React.CSSProperties;
   image?: {
     source: ImageURISource;
     scale?: number;
@@ -52,22 +54,18 @@ const extractPaddingFromStyle = <T extends React.CSSProperties>(
   return { padding, borderRadius, restStyle };
 };
 
-export const QR = ({ style, image, size, ...props }: QRProps) => {
+export const QR = ({ style, image, size = 0, ...props }: QRProps) => {
   const theme = useTheme();
-  const { padding, borderRadius, restStyle } = extractPaddingFromStyle(
-    style as React.CSSProperties
+  const { padding, borderRadius } = useMemo(
+    () => extractPaddingFromStyle(style as React.CSSProperties),
+    [style]
   );
+
   return (
     <S.QRContainer
       style={{ padding, borderRadius, width: (size || 0) + padding * 2 }}
     >
-      <QRCode
-        fgColor={theme.colors.primary}
-        style={restStyle}
-        size={size}
-        level="Q"
-        {...props}
-      />
+      <QRCode color={theme.colors.primary} size={size} ecl="Q" {...props} />
       {image && (
         <S.QRImage
           source={image.source}

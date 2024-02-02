@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { Button, Icon, Pressable, Text, View } from "@components";
 
 export const ModalBackground = styled(View)`
-  height: 100%;
   width: 100%;
   background: rgba(0, 0, 0, 0.6);
   align-items: center;

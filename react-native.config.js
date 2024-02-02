@@ -1,10 +1,21 @@
 module.exports = {
   project: {
-    ios: {},
+    ios: {
+      unstable_reactLegacyComponentNames: [
+        "AndroidCheckBox",
+        "BVLinearGradient",
+        "FastImageView",
+        "CameraView",
+        "RNScreenshotPreventSpec"
+      ]
+    },
     android: {
       unstable_reactLegacyComponentNames: [
         "AndroidCheckBox",
-        "BVLinearGradient"
+        "BVLinearGradient",
+        "FastImageView",
+        "CameraView",
+        "RNScreenshotPreventSpec"
       ]
     }
   },

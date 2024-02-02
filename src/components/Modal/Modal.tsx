@@ -1,10 +1,21 @@
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import React, { ComponentProps, useEffect, useRef, useState } from "react";
-import { Animated, Easing, Modal as RootModal } from "react-native";
+import React, {
+  ComponentProps,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
+import {
+  Animated,
+  Easing,
+  Modal as RootModal,
+  useWindowDimensions
+} from "react-native";
 import { ArrayOrSingle } from "ts-essentials";
 import { Button, KeyboardAvoidingView } from "@components";
 import { ScrollView } from "react-native";
-import { useIsScreenSizeMin } from "@hooks";
+import { useIsScreenSizeMin, useSafeAreaInsets } from "@hooks";
 import { platform } from "@config";
 import * as S from "./styled";
 
@@ -43,6 +54,8 @@ export const Modal = ({
 }: ModalProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const isExtraLarge = useIsScreenSizeMin("extraLarge");
+  const { height: windowHeight } = useWindowDimensions();
+  const { top } = useSafeAreaInsets();
 
   const opacity = useRef(
     new Animated.Value(animationValues.opacity[+isOpen])
@@ -86,19 +99,22 @@ export const Modal = ({
     });
   }, [isOpen]);
 
+  const height = useMemo(() => windowHeight + top, [top, windowHeight]);
+
   return (
     <RootModal
       visible={isVisible}
       transparent
       statusBarTranslucent
-      animationType="none"
+      animationType="fade"
+      hardwareAccelerated
       onRequestClose={() => {
         // TODO: Ask confirmation?
         onClose();
       }}
     >
       <KeyboardAvoidingView>
-        <AnimatedModalBackground style={{ opacity }}>
+        <AnimatedModalBackground style={{ opacity, height }}>
           <AnimatedModalContent
             isScreenExtraLarge={isExtraLarge}
             style={{ transform: [{ scale }, { translateY }] }}

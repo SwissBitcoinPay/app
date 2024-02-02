@@ -20,8 +20,6 @@ const { height: initialWindowHeight, width: initialWindowWidth } =
 
 const isTablet = DeviceInfo.isTablet();
 
-const isLowEndDevice = DeviceInfo.getTotalMemorySync() < 3221225472; // 3 GB
-
 export const platform = {
   isWeb: false,
   isNative: true,
@@ -39,6 +37,5 @@ export const platform = {
   bottomSafeAreaHeight: 0,
   deviceName: DeviceInfo.getDeviceNameSync(),
   deviceLocale: getLocale(),
-  isPrinterSupported: false,
-  isLowEndDevice
+  isPrinterSupported: false
 };
