@@ -1,5 +1,5 @@
 import { mergeDeep } from "@utils";
-import { animated, useSpring } from "@react-spring/native";
+import { animated, useSpring, useSpringValue } from "@react-spring/native";
 import { PropsWithChildren, createContext, useCallback, useState } from "react";
 import { ThemeProvider, DefaultTheme } from "styled-components";
 import { theme } from "@config/themes";
@@ -7,7 +7,7 @@ import { ToastProvider } from "react-native-toast-notifications";
 import { DeepPartial } from "ts-essentials";
 import { ColorValue } from "react-native";
 import { useSafeAreaInsets } from "@hooks";
-import { Toast } from "@components";
+import { Toast, View } from "@components";
 
 type SBPThemeContextType = {
   setTheme: (newTheme: DefaultTheme) => void;
@@ -35,18 +35,20 @@ export const SBPThemeContextProvider = ({ children }: PropsWithChildren) => {
     from: { backgroundColor: currentTheme.colors.primary as string }
   }));
 
-  const setBackgroundColor: SBPThemeContextType["setBackgroundColor"] = (
-    newBackgroundColor,
-    duration = DEFAULT_BACKGROUND_CHANGE_DURATION
-  ) => {
-    api.start({
-      immediate: duration === 0,
-      config: { duration },
-      to: {
-        backgroundColor: newBackgroundColor as string
-      }
-    });
-  };
+  const setBackgroundColor = useCallback<
+    SBPThemeContextType["setBackgroundColor"]
+  >(
+    (newBackgroundColor, duration = DEFAULT_BACKGROUND_CHANGE_DURATION) => {
+      api.start({
+        immediate: duration === 0,
+        config: { duration },
+        to: {
+          backgroundColor: newBackgroundColor as string
+        }
+      });
+    },
+    [api]
+  );
 
   return (
     <SBPThemeContext.Provider

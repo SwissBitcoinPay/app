@@ -1,23 +1,7 @@
 module.exports = {
   project: {
-    ios: {
-      unstable_reactLegacyComponentNames: [
-        "AndroidCheckBox",
-        "BVLinearGradient",
-        "FastImageView",
-        "CameraView",
-        "RNScreenshotPreventSpec"
-      ]
-    },
-    android: {
-      unstable_reactLegacyComponentNames: [
-        "AndroidCheckBox",
-        "BVLinearGradient",
-        "FastImageView",
-        "CameraView",
-        "RNScreenshotPreventSpec"
-      ]
-    }
+    ios: {},
+    android: {}
   },
   assets: ["./src/assets/fonts/"] // stays the same
 };

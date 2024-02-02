@@ -106,7 +106,6 @@ export const Modal = ({
       visible={isVisible}
       transparent
       statusBarTranslucent
-      animationType="fade"
       hardwareAccelerated
       onRequestClose={() => {
         // TODO: Ask confirmation?

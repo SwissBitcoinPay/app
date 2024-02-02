@@ -19,7 +19,7 @@ fi
 npx react-native bundle --minify --platform ios --dev "$DEV" --entry-file index.js --bundle-output ios/main.jsbundle --sourcemap-output ios/main.jsbundle.map --assets-dest ./ios
 
 cd ios
-RCT_NEW_ARCH_ENABLED=1 pod install --repo-update
+pod install --repo-update
 
 xcodebuild -quiet archive -workspace SwissBitcoinPay.xcworkspace -scheme SwissBitcoinPay -configuration "$CONFIGURATION" -archivePath SwissBitcoinPay.xcarchive
 xcodebuild -quiet -exportArchive -archivePath SwissBitcoinPay.xcarchive -exportOptionsPlist "$EXPORT_OPTIONS_FILE" -exportPath "export"
