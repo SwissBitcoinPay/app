@@ -1,4 +1,4 @@
-import { Dimensions, Platform, NativeModules } from "react-native";
+import { Dimensions } from "react-native";
 import {
   // @ts-ignore
   isAndroid,
@@ -11,6 +11,7 @@ import {
 } from "react-native-device-detection";
 import NfcManager from "react-native-nfc-manager";
 import DeviceInfo from "react-native-device-info";
+import { getLocale } from "@utils";
 
 const getIsNfcSupported = async () => await NfcManager.isSupported();
 
@@ -18,8 +19,6 @@ const { height: initialWindowHeight, width: initialWindowWidth } =
   Dimensions.get("window");
 
 const isTablet = DeviceInfo.isTablet();
-
-const isLowEndDevice = DeviceInfo.getTotalMemorySync() < 3221225472; // 3 GB
 
 export const platform = {
   isWeb: false,
@@ -37,11 +36,6 @@ export const platform = {
   initialWindowHeight,
   bottomSafeAreaHeight: 0,
   deviceName: DeviceInfo.getDeviceNameSync(),
-  deviceLocale:
-    Platform.OS === "ios"
-      ? NativeModules.SettingsManager.settings.AppleLocale ||
-        NativeModules.SettingsManager.settings.AppleLanguages[0]
-      : NativeModules.I18nManager?.localeIdentifier,
-  isPrinterSupported: false,
-  isLowEndDevice
+  deviceLocale: getLocale(),
+  isPrinterSupported: false
 };

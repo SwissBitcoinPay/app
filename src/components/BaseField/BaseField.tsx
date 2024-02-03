@@ -54,8 +54,10 @@ export const BaseField = <T extends FieldProps>({
 }: BaseFieldProps<T>) => {
   const { colors } = useTheme();
 
-  const [isPlaceholderTop, setIsPlaceholderTop] = useState(!!value);
   const [isFocused, setIsFocused] = useState(isDefaultFocused);
+  const [isPlaceholderTop, setIsPlaceholderTop] = useState(
+    !!value || isFocused
+  );
 
   const onFocus = useCallback<T["onFocus"]>(
     (e) => {

@@ -7,7 +7,7 @@ export const LabelText = styled(Text)`
   `}
   font-family: Poppins-Medium;
   font-size: 16px;
-  z-index: -1;
+  z-index: 0;
   position: absolute;
   transform-origin: top left;
 `;
