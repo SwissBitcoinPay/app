@@ -1,21 +1,10 @@
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import React, {
-  ComponentProps,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from "react";
-import {
-  Animated,
-  Easing,
-  Modal as RootModal,
-  useWindowDimensions
-} from "react-native";
+import React, { ComponentProps, useEffect, useRef, useState } from "react";
+import { Animated, Easing, Modal as RootModal } from "react-native";
 import { ArrayOrSingle } from "ts-essentials";
 import { Button, KeyboardAvoidingView } from "@components";
 import { ScrollView } from "react-native";
-import { useIsScreenSizeMin, useSafeAreaInsets } from "@hooks";
+import { useIsScreenSizeMin } from "@hooks";
 import { platform } from "@config";
 import * as S from "./styled";
 
@@ -54,7 +43,6 @@ export const Modal = ({
 }: ModalProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const isExtraLarge = useIsScreenSizeMin("extraLarge");
-  const { top } = useSafeAreaInsets();
 
   const opacity = useRef(
     new Animated.Value(animationValues.opacity[+isOpen])
