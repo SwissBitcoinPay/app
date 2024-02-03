@@ -8,6 +8,9 @@ import { generateBtcAddress, getRandomNumber } from "@utils";
 import { Word } from "../Word";
 import { ActivityIndicator } from "react-native";
 import * as S from "./styled";
+import { platform } from "@config";
+
+const { isWeb } = platform;
 
 export const Step3 = ({ setIsValid, setValue, watch }: StepProps) => {
   const { t } = useTranslation(undefined, {
@@ -47,11 +50,13 @@ export const Step3 = ({ setIsValid, setValue, watch }: StepProps) => {
   }, []);
 
   useEffect(() => {
-    ScreenGuardModule.register("#000000");
+    if (!isWeb) {
+      ScreenGuardModule.register("#000000");
 
-    return () => {
-      ScreenGuardModule.unregister();
-    };
+      return () => {
+        ScreenGuardModule.unregister();
+      };
+    }
   }, []);
 
   return (
