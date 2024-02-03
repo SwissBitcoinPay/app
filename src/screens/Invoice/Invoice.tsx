@@ -39,7 +39,13 @@ import { useToast } from "react-native-toast-notifications";
 import { faBitcoin } from "@fortawesome/free-brands-svg-icons";
 import { platform } from "../../config/platform";
 import { Linking, getFormattedUnit, isApiError } from "../../utils";
-import { useIsScreenSizeMin, useNfc, useTimer, useVersionTag } from "@hooks";
+import {
+  useIsScreenSizeMin,
+  useNfc,
+  useSafeAreaInsets,
+  useTimer,
+  useVersionTag
+} from "@hooks";
 import {
   ActivityIndicator,
   Vibration,
@@ -113,6 +119,7 @@ export const Invoice = () => {
   const versionTag = useVersionTag();
   const { t } = useTranslation(undefined, { keyPrefix: "screens.invoice" });
   const { t: tRoot } = useTranslation();
+  const { bottom: bottomInset } = useSafeAreaInsets();
   const { width: windowWidth } = useWindowDimensions();
   const { setBackgroundColor } = useContext(SBPThemeContext);
   const params = useParams<{ id: string }>();
@@ -836,7 +843,10 @@ export const Invoice = () => {
         )}
       </S.InvoicePageContainer>
       {isFullScreenSuccess && (
-        <S.TapAnywhereCatcher onPress={redirect}>
+        <S.TapAnywhereCatcher
+          onPress={redirect}
+          style={{ paddingBottom: gridSize + bottomInset }}
+        >
           <S.TapAnywhereStack gapSize={40}>
             <S.TapAnywhereAction direction="horizontal" gapSize={12}>
               <Icon icon={faHandPointer} color={colors.white} size={24} />

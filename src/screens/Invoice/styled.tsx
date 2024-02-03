@@ -204,7 +204,6 @@ export const TapAnywhereCatcher = styled(Pressable)`
   background-color: transparent;
   align-items: center;
   justify-content: flex-end;
-  padding-bottom: ${({ theme }) => theme.gridSize}px;
 `;
 
 export const TapAnywhereStack = styled(ComponentStack)`
