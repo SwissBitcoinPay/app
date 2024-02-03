@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useTheme } from "styled-components";
 import { useTranslation } from "react-i18next";
 import { ComponentStack, FieldDescription, Text } from "@components";
-import RNScreenshotPrevent from "react-native-screenshot-prevent";
+import ScreenGuardModule from "react-native-screenguard";
 import { StepProps } from "../../CreateWalletModal";
 import { generateBtcAddress, getRandomNumber } from "@utils";
 import { Word } from "../Word";
@@ -47,10 +47,11 @@ export const Step3 = ({ setIsValid, setValue, watch }: StepProps) => {
   }, []);
 
   useEffect(() => {
-    RNScreenshotPrevent.enabled(true);
+    ScreenGuardModule.register("red");
+    // RNScreenshotPrevent.enabled(true);
 
     return () => {
-      RNScreenshotPrevent.enabled(false);
+      // RNScreenshotPrevent.enabled(false);
     };
   }, []);
 
