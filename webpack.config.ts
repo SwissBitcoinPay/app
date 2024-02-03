@@ -23,6 +23,7 @@ const babelLoaderConfiguration = {
     path.resolve(__dirname, "node_modules/react-native-keychain"),
     path.resolve(__dirname, "node_modules/react-native-picker-select"),
     path.resolve(__dirname, "node_modules/@dotlottie"),
+    path.resolve(__dirname, "node_modules/react-native-screenguard"),
     path.resolve(__dirname, "node_modules/react-native-qrcode-svg"),
     path.resolve(__dirname, "node_modules/react-native-progress")
   ],
