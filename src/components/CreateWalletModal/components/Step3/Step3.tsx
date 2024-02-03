@@ -47,11 +47,10 @@ export const Step3 = ({ setIsValid, setValue, watch }: StepProps) => {
   }, []);
 
   useEffect(() => {
-    ScreenGuardModule.register("red");
-    // RNScreenshotPrevent.enabled(true);
+    ScreenGuardModule.register("#000000");
 
     return () => {
-      // RNScreenshotPrevent.enabled(false);
+      ScreenGuardModule.unregister();
     };
   }, []);
 
