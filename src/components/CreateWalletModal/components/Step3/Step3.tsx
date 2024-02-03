@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useTheme } from "styled-components";
 import { useTranslation } from "react-i18next";
 import { ComponentStack, FieldDescription, Text } from "@components";
-import SecureWindow from "react-native-secure-window";
+import { SecureWindow } from "@bufgix/react-native-secure-window";
 import { StepProps } from "../../CreateWalletModal";
 import { generateBtcAddress, getRandomNumber } from "@utils";
 import { Word } from "../Word";
@@ -47,10 +47,10 @@ export const Step3 = ({ setIsValid, setValue, watch }: StepProps) => {
   }, []);
 
   useEffect(() => {
-    SecureWindow.changeSecureWindow(true);
+    // SecureWindow.changeSecureWindow(true);
 
     return () => {
-      SecureWindow.changeSecureWindow(false);
+      // SecureWindow.changeSecureWindow(false);
     };
   }, []);
 
@@ -68,17 +68,19 @@ export const Step3 = ({ setIsValid, setValue, watch }: StepProps) => {
       )}
       {words ? (
         <S.WordsContainer id="no-print">
-          <S.WordsColumn>
-            {words.slice(0, 6).map((word, index) => (
-              <Word key={index} index={index + 1} word={word} />
-            ))}
-          </S.WordsColumn>
-          <S.WordsColumn>
-            {words.slice(6).map((word, index) => (
-              <Word key={index} index={index + 7} word={word} />
-            ))}
-          </S.WordsColumn>
-          <S.ConfidentialText>🔒 {t("confidential")}</S.ConfidentialText>
+          <SecureWindow>
+            <S.WordsColumn>
+              {words.slice(0, 6).map((word, index) => (
+                <Word key={index} index={index + 1} word={word} />
+              ))}
+            </S.WordsColumn>
+            <S.WordsColumn>
+              {words.slice(6).map((word, index) => (
+                <Word key={index} index={index + 7} word={word} />
+              ))}
+            </S.WordsColumn>
+            <S.ConfidentialText>🔒 {t("confidential")}</S.ConfidentialText>
+          </SecureWindow>
         </S.WordsContainer>
       ) : (
         <S.CenteredStackComponent gapSize={6}>
