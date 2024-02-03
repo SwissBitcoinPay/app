@@ -26,7 +26,7 @@ export const SliderContainer = styled(View)`
 `;
 
 export const BtcPercentSlider = styled(Slider)`
-  padding: ${isNative ? 8 : 12}px 0px;
+  height: 30px;
 `;
 
 export const SliderDataContainer = styled(View)`

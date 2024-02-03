@@ -162,7 +162,7 @@
       "patchSettingError": "Erreur lors de la mise à jour du paramètre",
       "merchantName": "Nom du commerce",
       "merchantNameDescription": "Le nom du commerce est présent sur toutes les factures que vous et vos employés générez.",
-      "currency": "Device",
+      "currency": "Devise",
       "currencyDescription": "La devise par défaut de votre compte",
       "currencyChangeWarning": "Vous recevez actuellement {{fiatPercent}}% de vos paiements en {{currency}}. Si vous changez la devise de votre compte, vos prochains paiements seront convertis dans cette nouvelle devise.",
       "onchainAvailable": "Onchain disponible",

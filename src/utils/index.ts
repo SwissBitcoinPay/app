@@ -2,6 +2,7 @@ export { Clipboard } from "./Clipboard";
 export { NFC } from "./NFC";
 export { AsyncStorage } from "./AsyncStorage";
 export { Linking } from "./Linking";
+export { getLocale } from "./getLocale";
 export { Deeplink } from "./Deeplink";
 export { Biometrics } from "./Biometrics";
 export { getShadow } from "./getShadow";

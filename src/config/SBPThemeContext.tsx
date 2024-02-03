@@ -35,18 +35,20 @@ export const SBPThemeContextProvider = ({ children }: PropsWithChildren) => {
     from: { backgroundColor: currentTheme.colors.primary as string }
   }));
 
-  const setBackgroundColor: SBPThemeContextType["setBackgroundColor"] = (
-    newBackgroundColor,
-    duration = DEFAULT_BACKGROUND_CHANGE_DURATION
-  ) => {
-    api.start({
-      immediate: duration === 0,
-      config: { duration },
-      to: {
-        backgroundColor: newBackgroundColor as string
-      }
-    });
-  };
+  const setBackgroundColor = useCallback<
+    SBPThemeContextType["setBackgroundColor"]
+  >(
+    (newBackgroundColor, duration = DEFAULT_BACKGROUND_CHANGE_DURATION) => {
+      api.start({
+        immediate: duration === 0,
+        config: { duration },
+        to: {
+          backgroundColor: newBackgroundColor as string
+        }
+      });
+    },
+    [api]
+  );
 
   return (
     <SBPThemeContext.Provider

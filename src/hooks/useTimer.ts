@@ -1,4 +1,3 @@
-import { platform } from "@config";
 import { useCallback, useDeferredValue, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -7,8 +6,6 @@ type UseTimerProps = {
   delay?: number;
   stop?: boolean;
 };
-
-const { isLowEndDevice } = platform;
 
 export const useTimer = ({ createdAt, delay, stop = false }: UseTimerProps) => {
   const [timer, setTimer] = useState("");
@@ -84,10 +81,7 @@ export const useTimer = ({ createdAt, delay, stop = false }: UseTimerProps) => {
   useEffect(() => {
     if (createdAt && delay && !stop) {
       updateTimer();
-      const intervalId = setInterval(
-        updateTimer,
-        !isLowEndDevice ? 1000 : 30000
-      );
+      const intervalId = setInterval(updateTimer, 1000);
       return () => {
         clearInterval(intervalId);
       };
