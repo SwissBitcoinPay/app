@@ -468,7 +468,7 @@ export const Invoice = () => {
                 }
               }
             : {}),
-          ...(!isFullScreenSuccess
+          ...(!isFullScreenSuccess && !isExternalInvoice
             ? {
                 left: {
                   onPress: -1,
