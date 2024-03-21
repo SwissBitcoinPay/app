@@ -28,6 +28,7 @@ export const PayoutConfigScreen = () => {
     setValue,
     setError,
     resetField,
+    getFieldState,
     trigger
   } = useForm<PayoutConfigForm>({
     mode: "onTouched",
@@ -54,7 +55,6 @@ export const PayoutConfigScreen = () => {
   useEffect(() => {
     setValue("btcPercent", accountConfig?.btcPercent || 0);
   }, []);
-
 
   const [isSubmiting, setIsSubmiting] = useState(false);
 
@@ -160,6 +160,7 @@ export const PayoutConfigScreen = () => {
         setError={setError}
         resetField={resetField}
         trigger={trigger}
+        getFieldState={getFieldState}
         currency={currency}
       />
     </PageContainer>

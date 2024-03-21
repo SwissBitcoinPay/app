@@ -14,6 +14,7 @@ import {
   UseFormSetValue,
   UseFormTrigger,
   UseFormWatch,
+  UseFormGetFieldState,
   useWatch
 } from "react-hook-form";
 import { isSEPACountry } from "ibantools";
@@ -110,12 +111,14 @@ export type PayoutConfigProps = Omit<
   "rates" | "setIsValid"
 > & {
   trigger: UseFormTrigger<PayoutConfigForm>;
+  getFieldState: UseFormGetFieldState<PayoutConfigForm>;
 };
 
 export const PayoutConfig = ({
   control,
   watch,
   resetField,
+  getFieldState,
   setValue,
   setError,
   trigger,
@@ -145,16 +148,31 @@ export const PayoutConfig = ({
 
   useEffect(() => {
     (async () => {
-      const currentBtcPercent = fields.btcPercent || 100;
+      const currentBtcPercent =
+        fields.btcPercent !== undefined ? fields.btcPercent : 100;
       const _isReceiveBitcoin = currentBtcPercent >= 1;
       const _isReceiveFiat = currentBtcPercent <= 99;
 
-      if (_isReceiveBitcoin) {
+      const touchedBitcoinSettingsKeys = bitcoinSettingsKeys.filter(
+        (key) => getFieldState(key).isTouched
+      );
+
+      if (
+        _isReceiveBitcoin &&
+        bitcoinSettingsKeys.length === touchedBitcoinSettingsKeys.length
+      ) {
         setIsBtcSettingsValid(await trigger(bitcoinSettingsKeys));
       }
 
-      if (_isReceiveFiat) {
-        setIsFiatSettingsValid(await trigger(fiatSettingsKeys));
+      const touchedFiatSettingsKeys = fiatSettingsKeys.filter(
+        (key) => getFieldState(key).isTouched
+      );
+
+      if (
+        _isReceiveFiat &&
+        fiatSettingsKeys.length === touchedFiatSettingsKeys.length
+      ) {
+        setIsFiatSettingsValid(await trigger(touchedFiatSettingsKeys));
       }
     })();
   }, [fields]);
