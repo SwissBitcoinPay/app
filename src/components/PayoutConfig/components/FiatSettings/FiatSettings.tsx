@@ -163,7 +163,7 @@ export const FiatSettings = ({
               <TextField
                 label={t("iban")}
                 value={value}
-                onChangeText={onChange}
+                onChangeText={(value) => onChange(value.toUpperCase())}
                 onBlur={onBlur}
                 autoCorrect={false}
                 error={error?.message}

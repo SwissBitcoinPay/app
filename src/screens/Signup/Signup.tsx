@@ -79,6 +79,7 @@ export const Signup = () => {
     setValue,
     setError,
     resetField,
+    getFieldState,
     trigger
   } = useForm<SignupForm>({
     mode: "onTouched",
@@ -436,6 +437,7 @@ export const Signup = () => {
             setError={setError}
             resetField={resetField}
             trigger={trigger}
+            getFieldState={getFieldState}
             currency={watch("currency") as AccountConfigType["currency"]}
           />
         )}
