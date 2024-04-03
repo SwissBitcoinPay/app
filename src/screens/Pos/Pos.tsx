@@ -50,7 +50,7 @@ export const Pos = () => {
   const postInvoice = usePostInvoice();
 
   const { accountConfig, isLoading } = useAccountConfig();
-  const { isAtm, currency, name } = accountConfig || {};
+  const { isAtm, currency, name, hasKyc } = accountConfig || {};
 
   const isBackgroundLoading = useMemo(
     () => !!accountConfig && isLoading,
@@ -92,14 +92,14 @@ export const Pos = () => {
   }, []);
 
   const saveMaxFiatAmount = useCallback(async () => {
-    if (accountConfig?.currency) {
+    if (accountConfig?.currency && !hasKyc) {
       const { data: getTransactionLimitData } = await axios.get<number>(
         `${apiRootUrl}/transaction-limit/${accountConfig?.currency}`
       );
 
       setMaxFiatAmount(getTransactionLimitData);
     }
-  }, [accountConfig?.currency]);
+  }, [accountConfig?.currency, hasKyc]);
 
   useEffect(() => {
     saveMaxFiatAmount();
