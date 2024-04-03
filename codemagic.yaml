@@ -62,6 +62,7 @@ workflows:
     max_build_duration: 120
     instance_type: mac_mini_m1
     environment:
+      xcode: 15.2
       groups:
         - testfairy
         - appstore_credentials
