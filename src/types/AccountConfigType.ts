@@ -7,6 +7,7 @@ export type AccountConfigType = {
   currency: (typeof currencies)[number]["value"];
   isOnchainAvailable: boolean;
   isAtm: boolean;
+  hasKyc: boolean;
 
   // Visible by admin only
   mail?: string;
