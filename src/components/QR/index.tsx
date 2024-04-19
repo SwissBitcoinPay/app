@@ -65,7 +65,7 @@ export const QR = ({ style, image, size = 0, ...props }: QRProps) => {
     <S.QRContainer
       style={{ padding, borderRadius, width: (size || 0) + padding * 2 }}
     >
-      <QRCode color={theme.colors.primary} size={size} ecl="Q" {...props} />
+      <QRCode color={theme.colors.primary} size={size} ecl="M" {...props} />
       {image && (
         <S.QRImage
           source={image.source}
