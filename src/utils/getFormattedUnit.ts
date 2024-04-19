@@ -9,7 +9,7 @@ export const getFormattedUnit = (
     prefix = `< `;
   }
 
-  if (unit === "sats") {
+  if (unit === "sat" || unit === "sats") {
     return `${prefix}${amount} sats`;
   }
 

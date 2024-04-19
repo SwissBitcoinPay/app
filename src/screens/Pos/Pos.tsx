@@ -3,6 +3,7 @@ import {
   KeyboardEvent,
   MutableRefObject,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useRef,
@@ -13,6 +14,7 @@ import { Keyboard, Text, Loader, TextField, PageContainer } from "@components";
 import { NumberInput } from "./components";
 import { useTranslation } from "react-i18next";
 import {
+  faAngleDown,
   faCog,
   faListCheck,
   faPen,
@@ -24,7 +26,7 @@ import {
   usePostInvoice,
   useModalInput
 } from "@hooks";
-import { apiRootUrl, currencies, platform } from "@config";
+import { SBPContext, apiRootUrl, currencies, platform } from "@config";
 import { keyStoreDeviceName } from "@config/settingsKeys";
 import { useToast } from "react-native-toast-notifications";
 import { useTheme } from "styled-components";
@@ -49,8 +51,20 @@ export const Pos = () => {
 
   const postInvoice = usePostInvoice();
 
+  const { preferredCurrency, setPreferredCurrency } = useContext(SBPContext);
+
   const { accountConfig, isLoading } = useAccountConfig();
-  const { isAtm, currency, name, hasKyc } = accountConfig || {};
+  const {
+    isAtm,
+    currency: accountCurrency,
+    name,
+    hasKyc
+  } = accountConfig || {};
+
+  const unit = useMemo(
+    () => preferredCurrency || accountCurrency,
+    [accountCurrency, preferredCurrency]
+  );
 
   const isBackgroundLoading = useMemo(
     () => !!accountConfig && isLoading,
@@ -65,18 +79,24 @@ export const Pos = () => {
   const decimalFiat = useMemo(() => fiatAmount / 100, [fiatAmount]);
   const isActionButtonsDisabled = useMemo(() => fiatAmount === 0, [fiatAmount]);
   const haveDecimals = useMemo(
-    () => !!currencies.find((c) => c.value === currency && !c.noDecimals),
-    [currency]
+    () => !!currencies.find((c) => c.value === unit && !c.noDecimals),
+    [unit]
+  );
+
+  const fiatUnitPickerItems = useMemo(
+    () => [{ label: "sats", value: "sat" }, ...currencies],
+    []
   );
 
   const requestInvoice = useCallback(async () => {
     await postInvoice({
       amount: decimalFiat,
+      unit,
       description,
       deviceName,
       deviceType
     });
-  }, [postInvoice, decimalFiat, description, deviceName]);
+  }, [postInvoice, decimalFiat, unit, description, deviceName]);
 
   const clearAmount = useCallback(() => {
     setFiatAmount(0);
@@ -144,7 +164,7 @@ export const Pos = () => {
       } else {
         toast.show(
           t("cannotGoHigher", {
-            maxAmount: getFormattedUnit(maxFiatAmount, currency || "")
+            maxAmount: getFormattedUnit(maxFiatAmount, unit || "")
           }),
           {
             type: "error"
@@ -152,7 +172,7 @@ export const Pos = () => {
         );
       }
     },
-    [currency, fiatAmount, haveDecimals, maxFiatAmount, t, toast]
+    [unit, fiatAmount, haveDecimals, maxFiatAmount, t, toast]
   );
 
   useEffect(() => {
@@ -230,13 +250,21 @@ export const Pos = () => {
           />
         )}
         {isBackgroundLoading && <S.BackgroundLoader size={20} />}
-        <Text color={colors.white} h2 weight={700}>
-          {getFormattedUnit(
-            decimalFiat,
-            currency || "",
-            decimalFiat === 0 ? 0 : 2
-          )}
-        </Text>
+        <S.FiatAmountComponentStack direction="horizontal" gapSize={10}>
+          <Text color={colors.white} h2 weight={700}>
+            {getFormattedUnit(
+              decimalFiat,
+              unit || "",
+              decimalFiat === 0 || !haveDecimals ? 0 : 2
+            )}
+          </Text>
+          <S.FiatAmountDropdownIcon icon={faAngleDown} color={colors.grey} />
+          <S.FiatUnitPicker
+            value={unit}
+            items={fiatUnitPickerItems}
+            onValueChange={setPreferredCurrency}
+          />
+        </S.FiatAmountComponentStack>
         <S.DescriptionContainer>
           <S.DescriptionInput
             blurOnSubmit
