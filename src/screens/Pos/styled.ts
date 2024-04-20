@@ -1,5 +1,13 @@
 import styled from "styled-components";
-import { View, Icon, Loader, TextInput, Button } from "@components";
+import {
+  View,
+  Icon,
+  Loader,
+  TextInput,
+  Button,
+  ComponentStack,
+  Picker
+} from "@components";
 
 export const InfosContainer = styled(View)`
   flex: 1;
@@ -15,6 +23,24 @@ export const ATMButton = styled(Button)`
   position: absolute;
   top: -16px;
   background-color: ${({ theme }) => theme.colors.grey};
+`;
+
+const fiatAmountDropdownIconSize = 18;
+
+export const FiatAmountComponentStack = styled(ComponentStack)`
+  margin-left: ${({ theme }) =>
+    fiatAmountDropdownIconSize + theme.gridSize / 2}px;
+`;
+
+export const FiatAmountDropdownIcon = styled(Icon).attrs(() => ({
+  size: fiatAmountDropdownIconSize
+}))``;
+
+export const FiatUnitPicker = styled(Picker)`
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
 `;
 
 export const PadContainer = styled(View)`
