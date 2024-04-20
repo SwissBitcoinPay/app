@@ -15,6 +15,8 @@ type SBPContextType = {
   isCameraAvailable: boolean;
   userType?: UserType;
   setUserType: (value: UserType) => void;
+  preferredCurrency?: string;
+  setPreferredCurrency: (value: string) => void;
   accountConfig?: AccountConfigType;
   setAccountConfig: (partialAccountConfig: Partial<AccountConfigType>) => void;
 
@@ -27,6 +29,7 @@ export const SBPContext = createContext<SBPContextType>({});
 
 export const SBPContextProvider = ({ children }: PropsWithChildren) => {
   const [userType, setUserType] = useState<UserType>();
+  const [preferredCurrency, setPreferredCurrency] = useState<string>();
   const [accountConfig, setAccountConfig] = useState<AccountConfigType>();
   const [headerHeight, setHeaderHeight] = useState(0);
   const isCameraAvailable = useIsCameraAvailable();
@@ -69,6 +72,8 @@ export const SBPContextProvider = ({ children }: PropsWithChildren) => {
         isCameraAvailable,
         userType,
         setUserType: _setUserType,
+        preferredCurrency,
+        setPreferredCurrency,
         accountConfig,
         setAccountConfig: setPartialAccountConfig,
         headerHeight,

@@ -10,6 +10,7 @@ import { SBPContext, apiRootUrl } from "@config";
 
 type PostInvoiceParams = {
   amount: number;
+  unit?: string;
   description?: string;
   deviceName?: string;
   deviceType?: string;
@@ -27,6 +28,7 @@ export const usePostInvoice = () => {
   const postInvoice = useCallback(
     async ({
       amount,
+      unit,
       description,
       deviceName,
       deviceType
@@ -50,7 +52,7 @@ export const usePostInvoice = () => {
             `${apiRootUrl}/checkout`,
             {
               amount,
-              unit: currency,
+              unit: unit || currency,
               title: `${name || ""}`,
               description:
                 description ||
