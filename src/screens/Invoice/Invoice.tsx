@@ -544,6 +544,7 @@ export const Invoice = () => {
                       image={{
                         source: require("@assets/images/bitcoin-white-border.png")
                       }}
+                      ecl="M"
                     />
                   ) : null)}
                 {isPending &&
