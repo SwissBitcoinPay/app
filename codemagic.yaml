@@ -85,11 +85,6 @@ workflows:
       - name: Save DEV variable
         script: |
           echo "DEV=$(if [ "$CM_BRANCH" != "main" ]; then echo true; else echo false; fi)" >> $CM_ENV
-      - name: Set Info.plist values
-        script: |
-          PLIST=$CM_BUILD_DIR/ios/$XCODE_SCHEME/Info.plist
-          PLIST_BUDDY=/usr/libexec/PlistBuddy
-          $PLIST_BUDDY -c "Add :ITSAppUsesNonExemptEncryption bool false" $PLIST
       - name: Install npm dependencies
         script: |
           npm install
