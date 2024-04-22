@@ -112,14 +112,14 @@ export const Pos = () => {
   }, []);
 
   const saveMaxFiatAmount = useCallback(async () => {
-    if (accountConfig?.currency && !hasKyc) {
+    if (unit && !hasKyc) {
       const { data: getTransactionLimitData } = await axios.get<number>(
-        `${apiRootUrl}/transaction-limit/${accountConfig?.currency}`
+        `${apiRootUrl}/transaction-limit/${unit}`
       );
 
       setMaxFiatAmount(getTransactionLimitData);
     }
-  }, [accountConfig?.currency, hasKyc]);
+  }, [unit, hasKyc]);
 
   useEffect(() => {
     saveMaxFiatAmount();
