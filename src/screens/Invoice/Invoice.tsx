@@ -348,13 +348,15 @@ export const Invoice = () => {
         }
 
         if (getInvoiceData.paymentMethod === "onchain") {
-          const { data: blockHeight } = await axios.get(
-            "https://mempool.space/api/blocks/tip/height"
-          );
-          const { data: txDetails } = await axios.get(
-            `https://mempool.space/api/tx/${getInvoiceData.txId}`
-          );
-          setConfirmations(blockHeight - txDetails.status.block_height + 1);
+          try {
+            const { data: txDetails } = await axios.get(
+              `https://mempool.space/api/tx/${getInvoiceData.txId}`
+            );
+            const { data: blockHeight } = await axios.get(
+              "https://mempool.space/api/blocks/tip/height"
+            );
+            setConfirmations(blockHeight - txDetails.status.block_height + 1);
+          } catch (e) {}
         }
       } catch (e) {
         setIsInvalidInvoice(true);
