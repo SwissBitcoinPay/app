@@ -106,7 +106,7 @@ export const usePostInvoice = () => {
 
           const data = {
             amount,
-            unit: currency,
+            unit: unit || currency,
             language: i18n.language,
             deviceName,
             deviceType,
