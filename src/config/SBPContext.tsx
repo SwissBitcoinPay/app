@@ -44,6 +44,12 @@ export const SBPContextProvider = ({ children }: PropsWithChildren) => {
     AsyncStorage.setItem(keyStoreUserType, value);
   }, []);
 
+  const _setPreferredCurrency = useCallback((value: string) => {
+    if (value) {
+      setPreferredCurrency(value);
+    }
+  }, []);
+
   useEffect(() => {
     (async () => {
       setUserType(
@@ -73,7 +79,7 @@ export const SBPContextProvider = ({ children }: PropsWithChildren) => {
         userType,
         setUserType: _setUserType,
         preferredCurrency,
-        setPreferredCurrency,
+        setPreferredCurrency: _setPreferredCurrency,
         accountConfig,
         setAccountConfig: setPartialAccountConfig,
         headerHeight,

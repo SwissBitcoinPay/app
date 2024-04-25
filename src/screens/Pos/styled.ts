@@ -41,6 +41,7 @@ export const FiatUnitPicker = styled(Picker)`
   height: 100%;
   width: 100%;
   opacity: 0;
+  z-index: 100;
 `;
 
 export const PadContainer = styled(View)`
