@@ -131,6 +131,7 @@ export const usePostInvoice = () => {
           additionnalHistoryProps = {
             ...additionnalHistoryProps,
             amount: withdrawResponseData.amount,
+            fiatAmount: withdrawResponseData.fiatAmount,
             customNote: description
           };
         }
