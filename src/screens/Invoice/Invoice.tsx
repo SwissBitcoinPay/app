@@ -228,7 +228,7 @@ export const Invoice = () => {
 
   useEffect(() => {
     const fn = async () => {
-      if (isNfcAvailable && isWithdraw) {
+      if (isWithdraw) {
         try {
           const { words: dataPart } = bech32.decode(invoiceId || "", 2000);
           const requestByteArray = bech32.fromWords(dataPart);

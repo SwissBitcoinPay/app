@@ -36,6 +36,7 @@ export const usePostInvoice = () => {
       try {
         const isLocalInvoice = true;
 
+        let decimalFiat = amount;
         let finalUrl = "";
         let id = "";
         let additionnalHistoryProps = {};
@@ -116,6 +117,7 @@ export const usePostInvoice = () => {
           const { data: withdrawResponseData } = await axios.post<{
             lnurl?: string;
             amount: number;
+            fiatAmount: number;
           }>(`${apiRootUrl}/atm-withdraw`, data, {
             headers: {
               "api-key": apiKey,
@@ -131,9 +133,10 @@ export const usePostInvoice = () => {
           additionnalHistoryProps = {
             ...additionnalHistoryProps,
             amount: withdrawResponseData.amount,
-            fiatAmount: withdrawResponseData.fiatAmount,
             customNote: description
           };
+
+          decimalFiat = withdrawResponseData.fiatAmount;
         }
 
         const transactionsHistory = await AsyncStorage.getItem(
@@ -145,7 +148,7 @@ export const usePostInvoice = () => {
           state: {
             isLocalInvoice,
             unit: currency,
-            decimalFiat: amount,
+            decimalFiat,
             customNote: description
           }
         });
@@ -158,7 +161,7 @@ export const usePostInvoice = () => {
               id: id,
               isExpired: false,
               createdAt: new Date().getTime() / 1000,
-              fiatAmount: amount,
+              fiatAmount: decimalFiat,
               fiatUnit: currency,
               ...additionnalHistoryProps
             }
