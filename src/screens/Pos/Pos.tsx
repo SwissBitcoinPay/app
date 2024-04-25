@@ -262,7 +262,12 @@ export const Pos = () => {
           <S.FiatUnitPicker
             value={unit}
             items={fiatUnitPickerItems}
-            onValueChange={setPreferredCurrency}
+            onValueChange={(value: string) => {
+              if (value) {
+                clearAmount();
+                setPreferredCurrency(value);
+              }
+            }}
           />
         </S.FiatAmountComponentStack>
         <S.DescriptionContainer>
