@@ -47,6 +47,10 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
           JSON.stringify(fullConfig)
         );
 
+        if (data.hmacSecret) {
+          await AsyncStorage.setItem(keyStoreHmac, data.hmacSecret);
+        }
+          
         setAccountConfig(fullConfig);
       } catch (e) {
         setIsLoading(false);

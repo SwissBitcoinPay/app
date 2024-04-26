@@ -13,6 +13,7 @@ export type AccountConfigType = {
   mail?: string;
   verifiedAddresses?: string[];
   btcPercent?: number;
+  hmacSecret?: string;
   // Btc settings
   depositAddress?: string;
   // Bank settings
