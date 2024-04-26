@@ -196,7 +196,8 @@ export const Settings = () => {
     >
       <S.FlexComponentStack>
         {accountConfig ? (
-          !accountConfig.isAtm && (
+          !accountConfig.isAtm &&
+          !accountConfig.isCheckoutSecure && (
             <S.FlexComponentStack>
               <Text centered h3 weight={700} color={colors.white}>
                 {t("activationCode")}
