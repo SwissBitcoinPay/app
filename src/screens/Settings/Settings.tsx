@@ -133,6 +133,7 @@ export const Settings = () => {
           items={currencies}
           right={{ icon: faDollarSign }}
           onValueChange={() => {}}
+          placeholder={{}}
         />
       ),
       defaultValue: accountConfig?.currency,
