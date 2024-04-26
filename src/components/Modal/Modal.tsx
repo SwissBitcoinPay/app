@@ -57,7 +57,9 @@ export const Modal = ({
 
   useEffect(() => {
     if (isOpen) {
-      setIsVisible(true);
+      setTimeout(() => {
+        setIsVisible(true);
+      }, 0);
     }
 
     Animated.parallel([

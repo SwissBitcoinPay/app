@@ -197,147 +197,151 @@ export const Settings = () => {
     >
       <S.FlexComponentStack>
         {accountConfig ? (
-          <S.FlexComponentStack>
-            <Text centered h3 weight={700} color={colors.white}>
-              {t("activationCode")}
-            </Text>
-            <S.QRPressable onPress={activationCodeData} disabled={!isWeb}>
-              <S.QR
-                size={220}
-                value={activationCodeData}
-                image={{
-                  source: require("@assets/images/logo-square-rounded.png")
-                }}
-              />
-            </S.QRPressable>
-            <Text centered weight={600} color={colors.white}>
-              {t("scanOtherColleagues")}{" "}
-              <Text centered weight={600} color={colors.bitcoin}>
-                {accountConfig.name}
+          !accountConfig.isAtm &&
+          !accountConfig.isCheckoutSecure && (
+            <S.FlexComponentStack>
+              <Text centered h3 weight={700} color={colors.white}>
+                {t("activationCode")}
               </Text>
-            </Text>
-            {isMinUserType({ userType, minUserType: UserType.Admin }) && (
-              <ItemsList
-                headerComponent={
-                  <S.EditableLine>
-                    <S.EditText
-                      ellipsizeMode="tail"
-                      numberOfLines={1}
-                      h3
-                      weight={600}
-                    >
-                      {t("editableSettings")}
-                    </S.EditText>
-                  </S.EditableLine>
-                }
-                items={[
-                  {
-                    icon: faStore,
-                    title: t("merchantName"),
-                    tags: [{ value: accountConfig.name }],
-                    onPress: onPressMerchantName
-                  },
-                  {
-                    icon: faDollarSign,
-                    title: t("currency"),
-                    tags: [{ value: settingsValues.currency?.label }],
-                    onPress: onPressCurrency
-                  },
-                  {
-                    icon: faChain,
-                    title: t("onchainAvailable"),
-                    tags: [{ value: accountConfig.isOnchainAvailable }],
-                    onPress: onPressOnChain
-                  },
-                  {
-                    icon: faEnvelope,
-                    title: t("email"),
-                    tags: [{ value: accountConfig.mail }],
-                    onPress: () => null,
-                    disabled: true
-                  },
-                  {
-                    icon: faCoins,
-                    title: t("payout"),
-                    tags: [{ value: formattedBtcPayout }],
-                    onPress: "/payout-config"
-                  },
-                  ...(isMinUserType({ userType, minUserType: UserType.Wallet })
-                    ? [
-                        {
-                          icon: faWallet,
-                          title: t("wallet"),
-                          tags: [{ value: t("accessWallet") }],
-                          onPress: "/wallet" as const
-                        }
-                      ]
-                    : [])
-                ]}
-              />
-            )}
-            <S.ConnectedAsContainer>
-              <S.ConnectedAsText h5 weight={600}>
-                {t("connectedAs")}
-              </S.ConnectedAsText>
-              <S.ConnectedAsContainerLine direction="horizontal" gapSize={4}>
-                <Icon
-                  color={colors.primary}
-                  icon={
-                    userType === UserType.Wallet
-                      ? faWallet
-                      : userType === UserType.Admin
-                      ? faUserTie
-                      : faUser
-                  }
-                  size={12}
+              <S.QRPressable onPress={activationCodeData} disabled={!isWeb}>
+                <S.QR
+                  size={220}
+                  value={activationCodeData}
+                  image={{
+                    source: require("@assets/images/logo-square-rounded.png")
+                  }}
                 />
-                <S.UserTypeText h5 weight={600}>
-                  {tRoot(`common.${userType}`)}
-                </S.UserTypeText>
-              </S.ConnectedAsContainerLine>
-            </S.ConnectedAsContainer>
-            <>
-              {merchantNameModal}
-              {currencyModal}
-              {onOnchainModal}
-              <Modal
-                isOpen={isLogoutModalOpen}
-                title={t("confirmLogout")}
-                onClose={() => {
-                  setIsLogoutModalOpen(false);
-                }}
-                submitButton={{
-                  title: t("logout"),
-                  isLoading: isLogoutLoading,
-                  type: "error",
-                  onPress: onLogout
-                }}
-              >
-                <FieldDescription>
-                  {t("confirmLogoutDescription")}
-                </FieldDescription>
-              </Modal>
-            </>
-            <ComponentStack direction={isLarge ? "horizontal" : "vertical"}>
-              <Button
-                title={t("contactSupport")}
-                mode="outline"
-                icon={faEnvelope}
-                onPress="mailto:hello@swiss-bitcoin-pay.ch?subject=Question"
-              />
-              <Button
-                title={t("logout")}
-                icon={faRightFromBracket}
-                type="error"
-                onPress={() => {
-                  setIsLogoutModalOpen(true);
-                }}
-              />
-            </ComponentStack>
-          </S.FlexComponentStack>
+              </S.QRPressable>
+              <Text centered weight={600} color={colors.white}>
+                {t("scanOtherColleagues")}{" "}
+                <Text centered weight={600} color={colors.bitcoin}>
+                  {accountConfig.name}
+                </Text>
+              </Text>
+              {isMinUserType({ userType, minUserType: UserType.Admin }) && (
+                <ItemsList
+                  headerComponent={
+                    <S.EditableLine>
+                      <S.EditText
+                        ellipsizeMode="tail"
+                        numberOfLines={1}
+                        h3
+                        weight={600}
+                      >
+                        {t("editableSettings")}
+                      </S.EditText>
+                    </S.EditableLine>
+                  }
+                  items={[
+                    {
+                      icon: faStore,
+                      title: t("merchantName"),
+                      tags: [{ value: accountConfig.name }],
+                      onPress: onPressMerchantName
+                    },
+                    {
+                      icon: faDollarSign,
+                      title: t("currency"),
+                      tags: [{ value: settingsValues.currency?.label }],
+                      onPress: onPressCurrency
+                    },
+                    {
+                      icon: faChain,
+                      title: t("onchainAvailable"),
+                      tags: [{ value: accountConfig.isOnchainAvailable }],
+                      onPress: onPressOnChain
+                    },
+                    {
+                      icon: faEnvelope,
+                      title: t("email"),
+                      tags: [{ value: accountConfig.mail }],
+                      onPress: () => null,
+                      disabled: true
+                    },
+                    {
+                      icon: faCoins,
+                      title: t("payout"),
+                      tags: [{ value: formattedBtcPayout }],
+                      onPress: "/payout-config"
+                    },
+                    ...(isMinUserType({
+                      userType,
+                      minUserType: UserType.Wallet
+                    })
+                      ? [
+                          {
+                            icon: faWallet,
+                            title: t("wallet"),
+                            tags: [{ value: t("accessWallet") }],
+                            onPress: "/wallet" as const
+                          }
+                        ]
+                      : [])
+                  ]}
+                />
+              )}
+              <S.ConnectedAsContainer>
+                <S.ConnectedAsText h5 weight={600}>
+                  {t("connectedAs")}
+                </S.ConnectedAsText>
+                <S.ConnectedAsContainerLine direction="horizontal" gapSize={4}>
+                  <Icon
+                    color={colors.primary}
+                    icon={
+                      userType === UserType.Wallet
+                        ? faWallet
+                        : userType === UserType.Admin
+                        ? faUserTie
+                        : faUser
+                    }
+                    size={12}
+                  />
+                  <S.UserTypeText h5 weight={600}>
+                    {tRoot(`common.${userType}`)}
+                  </S.UserTypeText>
+                </S.ConnectedAsContainerLine>
+              </S.ConnectedAsContainer>
+              <>
+                {merchantNameModal}
+                {currencyModal}
+                {onOnchainModal}
+              </>
+            </S.FlexComponentStack>
+          )
         ) : (
           <Loader reason={t("loading")} style={{ alignSelf: "center" }} />
         )}
+        <Modal
+          isOpen={isLogoutModalOpen}
+          title={t("confirmLogout")}
+          onClose={() => {
+            setIsLogoutModalOpen(false);
+          }}
+          submitButton={{
+            title: t("logout"),
+            isLoading: isLogoutLoading,
+            type: "error",
+            onPress: onLogout
+          }}
+        >
+          <FieldDescription>{t("confirmLogoutDescription")}</FieldDescription>
+        </Modal>
+        <ComponentStack direction={isLarge ? "horizontal" : "vertical"}>
+          <Button
+            title={t("contactSupport")}
+            mode="outline"
+            icon={faEnvelope}
+            onPress="mailto:hello@swiss-bitcoin-pay.ch?subject=Question"
+          />
+          <Button
+            title={t("logout")}
+            icon={faRightFromBracket}
+            type="error"
+            onPress={() => {
+              setIsLogoutModalOpen(true);
+            }}
+          />
+        </ComponentStack>
         <S.PressableVersion onPress="https://github.com/SwissBitcoinPay/app">
           <S.VersionText>{versionTag}</S.VersionText>
         </S.PressableVersion>
