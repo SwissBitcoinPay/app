@@ -30,6 +30,9 @@ const fiatAmountDropdownIconSize = 18;
 export const FiatAmountComponentStack = styled(ComponentStack)`
   margin-left: ${({ theme }) =>
     fiatAmountDropdownIconSize + theme.gridSize / 2}px;
+
+  overflow: hidden;
+  z-index: 1;
 `;
 
 export const FiatAmountDropdownIcon = styled(Icon).attrs(() => ({
