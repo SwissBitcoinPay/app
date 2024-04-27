@@ -32,7 +32,6 @@ export const FiatAmountComponentStack = styled(ComponentStack)`
     fiatAmountDropdownIconSize + theme.gridSize / 2}px;
 
   overflow: hidden;
-  background-color: green;
   z-index: 1;
 `;
 
@@ -42,10 +41,10 @@ export const FiatAmountDropdownIcon = styled(Icon).attrs(() => ({
 
 export const FiatUnitPicker = styled(Picker)`
   position: absolute;
-  background-color: red;
   height: 100%;
   width: 100%;
-  opacity: 1;
+  opacity: 0;
+  z-index: 100;
 `;
 
 export const PadContainer = styled(View)`
