@@ -40,8 +40,8 @@ then
         -t ios \
         --apple-id $APPLE_ID \
         --bundle-id ch.swissbitcoinpay.checkout \
-        --bundle-short-version-string "$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION" \
-        --bundle-version "$BUILD_NUMBER" \
+        --bundle-short-version-string "$APP_VERSION" \
+        --bundle-version "$APP_BUILD_NUMBER" \
         --apiKey $APP_STORE_CONNECT_KEY_IDENTIFIER \
         --apiIssuer $APP_STORE_CONNECT_ISSUER_ID
 

@@ -5,6 +5,6 @@ cd ..
 
 source .env
 
-sed -i "s/BUILD_NUMBER=.*/BUILD_NUMBER=$((BUILD_NUMBER + 1))/" .env
+sed -i "s/APP_BUILD_NUMBER=.*/APP_BUILD_NUMBER=$((APP_BUILD_NUMBER + 1))/" .env
 
 git add .env

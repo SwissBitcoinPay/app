@@ -180,14 +180,14 @@ dependencies {
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 
 private Integer generateVersionCode() {
-  return project.env.get("BUILD_NUMBER").toInteger()
+  return project.env.get("APP_BUILD_NUMBER").toInteger()
 }
 
 /**
  * Internal version name generator
 */
 private String generateVersionName() {
-   String versionName = "${project.env.get("MAJOR_VERSION")}.${project.env.get("MINOR_VERSION")}.${project.env.get("PATCH_VERSION")}"
+   String versionName = "${project.env.get("APP_VERSION")}"
    if(project.env.get("PRE_RELEASE") != null && !project.env.get("PRE_RELEASE").isEmpty()) {
        versionName = versionName + "-" + project.env.get("PRE_RELEASE")
    }
