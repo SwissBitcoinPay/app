@@ -1,0 +1,3 @@
+- Corrigé le bouton back qui n'est pas visible pour les factures locales qui sont accédées depuis l'Historique
+- Fixé le splash screen Android
+- Améliorations d'UI mineures

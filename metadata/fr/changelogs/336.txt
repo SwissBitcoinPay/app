@@ -1,0 +1,2 @@
+- Fonctions ATM disponibles
+- Améliorations des performances mineures

@@ -1,0 +1,3 @@
+- Nous demandons maintenant une signature de votre portefeuille Bitcoin pour prouver que vous en êtes le propriétaire
+- Comptes pour opérateurs ATM (contactez nous pour plus d'informations)
+- Corrigé un problème lors du paiement avec les 1ère générations de cartes Swiss Bitcoin Pay

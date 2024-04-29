@@ -1,0 +1,2 @@
+- Réduit la compression des QR codes des factures à M. Cela devrait améliorer la lisibilité sur les petits écrans.
+- Possibilité d'entrer des montants en sats et d'autres devises

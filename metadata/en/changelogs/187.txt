@@ -1,0 +1,2 @@
+- First F-droid version!
+- Fixed an issue where the PoS page displays wrong

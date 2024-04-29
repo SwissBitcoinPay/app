@@ -1,0 +1,16 @@
+🚀 Introducing Swiss Bitcoin Pay app V2.0.0 🚀
+
+🔓 Open-source
+🖥️ Web-app support
+🛡️ In-app secure self-custodial wallet generation & seamless signature verification
+👛 If account created with in-app wallet, access to Onchain balance, and on-chain unused receiving addresses
+➗ Ability to split payouts to receive a % in bitcoin / % in fiat
+💱 10 new fiat conversion currencies
+🌐 New languages : 🇩🇪 Deutsch, 🇮🇹 Italiano, 🇪🇸 Español, 🇵🇹 Português
+🔑 Direct connect via Email/Password
+👥 Admin user can see all employees's invoices status in real-time in History screen
+⚙️ Change account settings (Name, currency, Onchain on/off, payout config ...)
+📌 SSL certificate pinning for increased security
+💬 The device name now automatically defaults to user's device model/browser
+💻 The device type (mobile / tablet / desktop) is also automatically recorded to be displayed in the dashboard
+❌ 0 tracker
