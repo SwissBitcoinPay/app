@@ -1,0 +1,3 @@
+- Now we require a signature from your bitcoin wallet to prove ownership
+- ATM operator accounts (contact us for more informations)
+- Fixed an issue when paying with 1st generation of Swiss Bitcoin Pay Cards

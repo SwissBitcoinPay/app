@@ -1,0 +1,1 @@
+- Improved NFC handling in ATM mode

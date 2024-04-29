@@ -1,0 +1,2 @@
+- Corrigé les codes d'activiation QR qui étaient trop petits pour être scannés
+- Corrigé les pickers qui ne fonctionnaient pas dans certaines conditions

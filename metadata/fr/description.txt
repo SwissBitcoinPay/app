@@ -1,0 +1,18 @@
+Le moyen le plus simple d'accepter les paiements en Bitcoin dans votre commerce, restaurant, bar, et autres.
+
+Si simple à utiliser :
+1. Vous tapez le montant dans votre monnaie locale.
+2. Le client scanne le QR ou tape sur une carte Lightning NFC.
+3. Payé.
+
+Compatibilité maximale :
+À travers le même écran, recevez en :
+
+Bitcoin On-chain
+Lightning
+Cartes Lightning-NFC
+
+Non-custodial
+Après que les clients aient payé par Onchain et/ou Lightning, les Lightning-BTC seront convertis en Onchain-BTC (gratuitement) et seront tous envoyés sur votre portefeuille privé (gratuitement), comme configuré dans votre compte.
+
+Vous facturez 100 EUR, vous recevez 100 EUR.

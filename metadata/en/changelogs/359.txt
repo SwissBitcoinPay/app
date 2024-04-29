@@ -1,0 +1,2 @@
+- Increased performance on Invoice screen
+- Minor UI improvements
