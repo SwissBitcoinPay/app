@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { QRCamera, View, Button, Text, ComponentStack } from "@components";
+import { Platform } from "react-native";
 
 const WINDOW_SIZE = 300;
-
 const BORDER_SIZE = 4;
 
 export const WindowContainer = styled(View)`
@@ -15,6 +15,7 @@ export const WindowContainer = styled(View)`
   border-radius: 20px;
   right: 16px;
   border: ${BORDER_SIZE}px solid white;
+  ${Platform.OS === "android" ? "opacity: 0;" : ""}
 `;
 
 export const VerticialPart = styled(View)<{ isItemsBottom?: boolean }>`

@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { ScanCode } from "rn-barcode-zxing";
+import { Camera as RootCamera } from "react-native-vision-camera";
 
-export const Camera = styled(ScanCode)`
+export const Camera = styled(RootCamera)`
   width: 100%;
 `;
