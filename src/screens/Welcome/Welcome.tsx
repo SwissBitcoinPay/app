@@ -1,6 +1,5 @@
 import { Text } from "react-native";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "@components/Router";
 import {
   Image,
   Blur,
@@ -21,16 +20,16 @@ import { colors } from "./gradient-config";
 import { useWindowDimensions } from "react-native";
 import { useTheme } from "styled-components";
 import { useMemo } from "react";
-import { PlaceholderPresets } from "@components/QRCamera/data";
-import { useVersionTag } from "@hooks";
+import { useQrLoginScan, useScanQr, useVersionTag } from "@hooks";
 import * as S from "./styled";
 
 export const Welcome = () => {
   const { t } = useTranslation(undefined, { keyPrefix: "screens.welcome" });
-  const navigate = useNavigate();
   const versionTag = useVersionTag();
   const theme = useTheme();
   const { height, width } = useWindowDimensions();
+  const qrLoginScan = useQrLoginScan();
+  const startQrScan = useScanQr({ onScan: qrLoginScan });
 
   const higherWindowSize = useMemo(
     () => (height > width ? height : width),
@@ -96,14 +95,7 @@ export const Welcome = () => {
           <Button
             icon={faQrcode}
             title={t("scanActivationQRcode")}
-            onPress={() => {
-              navigate("/qr-scanner", {
-                state: {
-                  title: t("scanActivationQRcode"),
-                  placeholderPreset: PlaceholderPresets.activationQrCode
-                }
-              });
-            }}
+            onPress={startQrScan}
           />
           <ComponentStack direction="horizontal" gapSize={12}>
             <Button

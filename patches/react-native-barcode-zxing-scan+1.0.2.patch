@@ -1,0 +1,40 @@
+diff --git a/node_modules/react-native-barcode-zxing-scan/android/src/main/java/com/reactlibrary/BarcodeZxingScanModule.java b/node_modules/react-native-barcode-zxing-scan/android/src/main/java/com/reactlibrary/BarcodeZxingScanModule.java
+index 5e570e7..e83690f 100644
+--- a/node_modules/react-native-barcode-zxing-scan/android/src/main/java/com/reactlibrary/BarcodeZxingScanModule.java
++++ b/node_modules/react-native-barcode-zxing-scan/android/src/main/java/com/reactlibrary/BarcodeZxingScanModule.java
+@@ -12,10 +12,12 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
+ import com.facebook.react.bridge.ReactMethod;
+ import com.facebook.react.bridge.Callback;
+ import com.google.zxing.integration.android.IntentIntegrator;
++import com.google.zxing.integration.android.IntentResult;
+ 
+ public class BarcodeZxingScanModule extends ReactContextBaseJavaModule implements ActivityEventListener {
+ 
+     private final ReactApplicationContext reactContext;
++    private Callback mcallback;
+ 
+     public BarcodeZxingScanModule(ReactApplicationContext reactContext) {
+         super(reactContext);
+@@ -41,9 +43,10 @@ public class BarcodeZxingScanModule extends ReactContextBaseJavaModule implement
+ 
+     @ReactMethod
+     public void showQrReader(Callback callback) {
+-        Callback mCallback = callback;
++        mcallback = callback;
+         IntentIntegrator integrator = new IntentIntegrator(getCurrentActivity());
+         integrator.setOrientationLocked(true);
++        integrator.setBeepEnabled(false);
+         integrator.setCaptureActivity(ContinuousCaptureActivity.class);
+         integrator.initiateScan();
+         reactContext.addActivityEventListener(this);
+@@ -52,7 +55,9 @@ public class BarcodeZxingScanModule extends ReactContextBaseJavaModule implement
+ 
+     @Override
+     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+-
++        IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode, data);
++        mcallback.invoke(result.getContents(),result.getBarcodeImagePath());
++        reactContext.removeActivityEventListener(this);
+     }
+ 
+     @Override
