@@ -1,1 +1,0 @@
-export { QrScanModal } from "./QrScanModal";

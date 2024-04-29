@@ -1,11 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  Camera,
-  useCameraDevices,
-  useCodeScanner,
-  CodeScanner
-} from "react-native-vision-camera";
-import { Loader, View } from "@components";
+import { useCallback, useEffect } from "react";
+import { View } from "@components";
 import { QRScannerProps } from "./QRCamera";
 import { StyleSheet } from "react-native";
 import * as S from "./styled";
@@ -13,73 +7,41 @@ import * as S from "./styled";
 export const QRCamera = ({
   onScan,
   setConfig,
-  isTorchOn,
-  deviceIndex,
   videoHeight,
   isActive = true,
-  resizeMode = "cover",
   style
 }: QRScannerProps) => {
-  const devices = useCameraDevices();
-
-  const [isLoading, setIsLoading] = useState(true);
-
-  const device = useMemo(() => {
-    if (deviceIndex === undefined) {
-      return null;
-    }
-    return devices[deviceIndex];
-  }, [devices, deviceIndex]);
-
-  useEffect(() => {
-    setConfig({
-      hasTorch: device?.hasTorch || false,
-      defaultIndex: devices.findIndex((d) => d.position === "back"),
-      devicesNumber: devices.length
-    });
-  }, [device]);
-
-  useEffect(() => {
-    (async () => {
-      await Camera.requestCameraPermission();
-      setIsLoading(false);
-    })();
-  }, []);
-
-  const onCodeScanned = useCallback<CodeScanner["onCodeScanned"]>(
-    (codes) => {
-      if (codes[0].value) {
-        onScan(codes[0].value);
+  const onScanBarcode = useCallback(
+    (codes: { code: string[] }) => {
+      if (typeof codes?.code?.[0] === "string") {
+        onScan(codes.code[0]);
       }
     },
     [onScan]
   );
 
-  const codeScanner = useCodeScanner({
-    codeTypes: ["qr"],
-    onCodeScanned
-  });
+  useEffect(() => {
+    setConfig({
+      hasTorch: false,
+      defaultIndex: 0,
+      devicesNumber: 1
+    });
+  }, []);
 
-  return !!device && !isLoading ? (
-    isActive ? (
-      <S.Camera
-        isActive
-        key={device.id}
-        device={device}
-        torch={isTorchOn ? "on" : "off"}
-        codeScanner={codeScanner}
-        style={StyleSheet.flatten([
-          style,
-          {
-            height: videoHeight as number
-          }
-        ])}
-        resizeMode={resizeMode}
-      />
-    ) : (
-      <View style={{ height: videoHeight as number }} />
-    )
+  return isActive ? (
+    <S.Camera
+      onScanBarcode={onScanBarcode}
+      shouldScan
+      style={StyleSheet.flatten([
+        style,
+        {
+          height: videoHeight as number,
+          position: "absolute"
+        }
+      ])}
+      ComponentHeader={<></>}
+    />
   ) : (
-    <Loader />
+    <View style={{ height: videoHeight as number }} />
   );
 };

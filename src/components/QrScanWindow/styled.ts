@@ -1,12 +1,20 @@
 import styled from "styled-components";
 import { QRCamera, View, Button, Text, ComponentStack } from "@components";
 
-export const ContainerContent = styled(View)`
-  height: 100%;
-  width: 100%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
+const WINDOW_SIZE = 300;
+
+const BORDER_SIZE = 4;
+
+export const WindowContainer = styled(View)`
+  height: ${WINDOW_SIZE}px;
+  width: ${WINDOW_SIZE}px;
+  position: absolute;
+  overflow: hidden;
+
+  bottom: 110%;
+  border-radius: 20px;
+  right: 16px;
+  border: ${BORDER_SIZE}px solid white;
 `;
 
 export const VerticialPart = styled(View)<{ isItemsBottom?: boolean }>`
@@ -30,19 +38,15 @@ export const BottomButtons = styled(ComponentStack)`
 
 export const Camera = styled(QRCamera)`
   position: relative;
+  height: ${WINDOW_SIZE}px;
+  width: ${WINDOW_SIZE - BORDER_SIZE * 2}px;
   overflow: hidden;
-  border-radius: 20px;
 `;
 
-export const BottomButton = styled(Button)<{ position?: "left" | "right" }>`
-  ${({ position }) => {
-    if (!position) return "";
+const CLOSE_BUTTON_PADDING = 12;
 
-    const distance = 74 + 18;
-
-    return `
-        position: absolute;
-        ${position === "left" ? "right" : "left"}: ${distance}px;
-    `;
-  }}
+export const CloseButton = styled(Button)`
+  position: absolute;
+  top: ${CLOSE_BUTTON_PADDING}px;
+  right: ${CLOSE_BUTTON_PADDING}px;
 `;
