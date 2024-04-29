@@ -18,3 +18,4 @@
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
 -keep class com.facebook.hermes.unicode.** { *; }
 -keep class com.facebook.jni.** { *; }
+-keep class com.google.android.gms.common.** {*;}
