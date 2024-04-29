@@ -103,6 +103,7 @@ android {
         versionCode generateVersionCode()
         versionName generateVersionName()
         resConfigs "en", "fr", "de", "es", "it", "pt"
+        missingDimensionStrategy 'react-native-camera', 'general'
     }
 
     splits {
