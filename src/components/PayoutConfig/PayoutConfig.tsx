@@ -153,14 +153,7 @@ export const PayoutConfig = ({
       const _isReceiveBitcoin = currentBtcPercent >= 1;
       const _isReceiveFiat = currentBtcPercent <= 99;
 
-      const touchedBitcoinSettingsKeys = bitcoinSettingsKeys.filter(
-        (key) => getFieldState(key).isTouched
-      );
-
-      if (
-        _isReceiveBitcoin &&
-        bitcoinSettingsKeys.length === touchedBitcoinSettingsKeys.length
-      ) {
+      if (_isReceiveBitcoin) {
         setIsBtcSettingsValid(await trigger(bitcoinSettingsKeys));
       }
 
@@ -172,7 +165,7 @@ export const PayoutConfig = ({
         _isReceiveFiat &&
         fiatSettingsKeys.length === touchedFiatSettingsKeys.length
       ) {
-        setIsFiatSettingsValid(await trigger(touchedFiatSettingsKeys));
+        setIsFiatSettingsValid(await trigger(fiatSettingsKeys));
       }
     })();
   }, [fields]);
