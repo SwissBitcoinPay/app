@@ -21,11 +21,10 @@ mv app/build/outputs/apk/release/app-release.apk app/build/swiss-bitcoin-pay.apk
 
 if [[ "$DEV" != "true" ]]
 then
+    buildMethod app:bundleRelease
+
     sed -i'' -e "s/def enableSeparateBuildPerCPUArchitecture = false/def enableSeparateBuildPerCPUArchitecture = true/" app/build.gradle 
     buildMethod app:assembleRelease
-
-    sed -i'' -e 's/<queries>/<uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove" \/>\n<queries>/' app/src/main/AndroidManifest.xml
-    buildMethod app:bundleRelease
 fi
 
 cd ..
