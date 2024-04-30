@@ -27,7 +27,7 @@ export { Modal } from "./Modal";
 export { QRCamera } from "./QRCamera";
 export { QR } from "./QR";
 export { QrModal } from "./QrModal";
-export { QrScanModal } from "./QrScanModal";
+export { QrScanWindow } from "./QrScanWindow";
 export { BaseField } from "./BaseField";
 export { TextInput } from "./TextInput";
 export { TextField } from "./TextField";

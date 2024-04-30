@@ -12,3 +12,5 @@ export { useNfc } from "./useNfc";
 export { useRates } from "./useRates";
 export { useTimer } from "./useTimer";
 export { useVersionTag } from "./useVersionTag";
+export { useScanQr } from "./useScanQr";
+export { useQrLoginScan } from "./useQrLoginScan";

@@ -1,0 +1,1 @@
+- Fixed an issue where the Create account Form is not correctly displayed

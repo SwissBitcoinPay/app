@@ -1,7 +1,5 @@
-import { useCameraDevices } from "react-native-vision-camera";
+import { isCameraPresentSync } from "react-native-device-info";
 
 export const useIsCameraAvailable = () => {
-  const devices = useCameraDevices();
-
-  return devices.length > 0;
+  return isCameraPresentSync();
 };

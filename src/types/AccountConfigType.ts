@@ -14,6 +14,7 @@ export type AccountConfigType = {
   verifiedAddresses?: string[];
   btcPercent?: number;
   hmacSecret?: string;
+  isCheckoutSecure?: boolean;
   // Btc settings
   depositAddress?: string;
   // Bank settings

@@ -1,0 +1,2 @@
+- Now we require a signature from your bitcoin wallet to prove ownership
+- Lightning addresses can pay a 1-sat invoice to proof their ownership

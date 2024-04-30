@@ -1,0 +1,1 @@
+export { useScanQr } from "./useScanQr";

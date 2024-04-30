@@ -1,0 +1,2 @@
+- Fixed Activation QR code too small to be scanned
+- Fixed pickers not working in some conditions

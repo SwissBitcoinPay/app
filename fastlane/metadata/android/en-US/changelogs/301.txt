@@ -1,0 +1,1 @@
+- The luminosity of the invoices are set to 70% instead of 100%

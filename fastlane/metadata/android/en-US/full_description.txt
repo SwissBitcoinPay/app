@@ -1,0 +1,18 @@
+The simplest way to accept Bitcoin payments in your Business, restaurant, bar, and others.
+
+So simple to use:
+1. Type the amount in your local currency.
+2. Client scan the QR or tap a Lightning NFC Card.
+3. Paid.
+
+Maximum compatibility:
+Through the same screen, receive in:
+
+Bitcoin On-chain
+Lightning
+Lightning-NFC cards
+
+Non-custodial:
+After clients have paid through Onchain and/or Lightning, the Lightning-BTC will be converted to Onchain-BTC (free of charge) and will all be sent to your private wallet (free of charge), as configured in your account.
+
+You charge 100$, you receive 100$.

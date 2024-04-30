@@ -11,7 +11,7 @@ import {
 import { faLightbulb as faLightbulbOff } from "@fortawesome/free-regular-svg-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CamerasConfig } from "@components/QRCamera/types";
-import { useAccountConfig, useIsScreenSizeMin } from "@hooks";
+import { useAccountConfig, useIsScreenSizeMin, useQrLoginScan } from "@hooks";
 import * as S from "./styled";
 
 const imagePadding = 8;
@@ -25,7 +25,8 @@ export const QRScanner = () => {
   const { height: windowHeight } = useWindowDimensions();
   const isLarge = useIsScreenSizeMin("large");
   const insets = useSafeAreaInsets();
-  const { onQrLogin, isLoading } = useAccountConfig({ refresh: false });
+  const qrLoginScan = useQrLoginScan();
+  const { isLoading } = useAccountConfig({ refresh: false });
 
   const navigate = useNavigate();
   const location = useLocation<LocationState>();
@@ -54,15 +55,6 @@ export const QRScanner = () => {
     [config, deviceIndex]
   );
 
-  const onScan = useCallback(
-    async (value: string) => {
-      if (await onQrLogin?.(value)) {
-        navigate("/");
-      }
-    },
-    [navigate, onQrLogin]
-  );
-
   const onBack = useCallback(() => {
     navigate(-1);
   }, [navigate]);
@@ -77,7 +69,6 @@ export const QRScanner = () => {
     }
   }, [deviceIndex, config?.devicesNumber]);
 
-
   const holeY = useMemo(
     () => (windowHeight + insets.top + insets.bottom) / 2 - holeSize / 2,
     [windowHeight, insets.top, insets.bottom, holeSize]
@@ -90,7 +81,7 @@ export const QRScanner = () => {
           deviceIndex={deviceIndex}
           isTorchOn={isTorchOn}
           setConfig={_setConfig}
-          onScan={onScan}
+          onScan={qrLoginScan}
           videoHeight={isLarge ? windowHeight - 260 : "100%"}
         />
       )}

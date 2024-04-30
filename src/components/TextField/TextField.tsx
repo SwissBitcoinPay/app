@@ -6,7 +6,7 @@ import {
   useState
 } from "react";
 import { TextInput } from "react-native";
-import { BaseField, QrScanModal, QrModal, Text } from "@components";
+import { BaseField, QrScanWindow, QrModal, Text } from "@components";
 import { BaseFieldProps } from "@components/BaseField";
 import { StyledComponentComponentProps } from "@types";
 import { Clipboard, tupulize } from "@utils";
@@ -144,8 +144,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
     return (
       <S.TextFieldContainer style={style}>
         {isCameraAvailable && qrScannable && (
-          <QrScanModal
-            title={label}
+          <QrScanWindow
             isOpen={isScanModalOpen}
             onClose={onToggleScanQrModal}
             onScan={onScanQr}

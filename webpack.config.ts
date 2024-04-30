@@ -146,6 +146,7 @@ module.exports = {
       "react-native-linear-gradient": "react-native-web-linear-gradient",
       crypto: "crypto-browserify",
       path: "path-browserify",
+      vm: "vm-browserify",
       stream: "stream-browserify"
     }
   },

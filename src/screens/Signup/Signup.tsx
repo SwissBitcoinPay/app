@@ -424,6 +424,7 @@ export const Signup = () => {
                   value={value}
                   onValueChange={onChange}
                   error={error?.message}
+                  placeholder={{}}
                 />
               );
             }}

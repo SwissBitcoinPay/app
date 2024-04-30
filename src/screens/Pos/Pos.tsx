@@ -262,7 +262,8 @@ export const Pos = () => {
           <S.FiatUnitPicker
             value={unit}
             items={fiatUnitPickerItems}
-            onValueChange={(value: string) => {
+            placeholder={{}}
+            onValueChange={(value: string | null) => {
               if (value) {
                 clearAmount();
                 setPreferredCurrency(value);

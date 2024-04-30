@@ -1,0 +1,1 @@
+- Corrigé un bug sur lequel les boutons d'une facture externe (pas liée à un marchant) ne fonctionnent pas

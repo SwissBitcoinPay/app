@@ -1,0 +1,2 @@
+- Première version F-Droid !
+- Fixé une erreur d'affichage sur le PoS sur certains appareils

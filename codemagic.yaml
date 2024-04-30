@@ -92,8 +92,8 @@ workflows:
         script: |
           source .env
           cd ios
-          agvtool new-marketing-version "$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION"
-          agvtool new-version -all $BUILD_NUMBER
+          agvtool new-marketing-version "$APP_VERSION"
+          agvtool new-version -all "$APP_BUILD_NUMBER"
       - name: Build iOS release
         script: |
           keychain unlock

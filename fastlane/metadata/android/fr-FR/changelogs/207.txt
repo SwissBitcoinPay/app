@@ -1,0 +1,2 @@
+- Nous demandons maintenant une signature de votre portefeuille Bitcoin pour prouver que vous en êtes le propriétaire
+- Les adresses Lightning peuvent payer une facture d'1 sat pour prouver leur propriété
