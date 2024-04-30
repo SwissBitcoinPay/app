@@ -21,7 +21,7 @@ module.exports = {
       "module:react-native-dotenv",
       {
         safe: true,
-        allowlist: ["CM_COMMIT"]
+        allowlist: ["CM_COMMIT", "COMMIT_REF"]
       }
     ],
     "@babel/plugin-transform-export-namespace-from"
