@@ -16,7 +16,7 @@ then
     EXPORT_OPTIONS_FILE="exportOptions.dev.plist"
 fi
 
-npx react-native bundle --minify --platform ios --dev "$DEV" --entry-file index.js --bundle-output ios/main.jsbundle --sourcemap-output ios/main.jsbundle.map --assets-dest ./ios
+npm run bundle:ios -- --dev "$DEV"
 
 cd ios
 pod install --repo-update

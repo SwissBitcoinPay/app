@@ -64,7 +64,7 @@ local.properties
 .cxx
 *.keystore
 *.android.bundle
-android/app/src/main/res/merged
+android/app/src/main/res/drawable-mdpi
 
 
 # VS Code
