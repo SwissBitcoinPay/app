@@ -47,10 +47,10 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
           JSON.stringify(fullConfig)
         );
 
-        if (data.hmacSecret) {
+        if (typeof data.hmacSecret === "string" && data.isCheckoutSecure) {
           await AsyncStorage.setItem(keyStoreHmac, data.hmacSecret);
         }
-          
+
         setAccountConfig(fullConfig);
       } catch (e) {
         setIsLoading(false);
@@ -87,7 +87,10 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
   const onScan = useCallback(
     async (scannedValue: string) => {
       setIsLoading(true);
-      if (scannedValue.startsWith(`${appRootUrl}/connect/`) || scannedValue.startsWith(`${oldAppRootUrl}/connect/`)) {
+      if (
+        scannedValue.startsWith(`${appRootUrl}/connect/`) ||
+        scannedValue.startsWith(`${oldAppRootUrl}/connect/`)
+      ) {
         const arr = scannedValue.split("/");
         const activationPart = arr.pop();
         const path = arr.pop();
