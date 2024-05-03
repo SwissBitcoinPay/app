@@ -352,10 +352,12 @@ export const Invoice = () => {
             const { data: txDetails } = await axios.get(
               `https://mempool.space/api/tx/${getInvoiceData.txId}`
             );
-            const { data: blockHeight } = await axios.get(
-              "https://mempool.space/api/blocks/tip/height"
-            );
-            setConfirmations(blockHeight - txDetails.status.block_height + 1);
+            if (txDetails.status.confirmed) {
+              const { data: blockHeight } = await axios.get(
+                "https://mempool.space/api/blocks/tip/height"
+              );
+              setConfirmations(blockHeight - txDetails.status.block_height + 1);
+            }
           } catch (e) {}
         }
       } catch (e) {
