@@ -352,7 +352,7 @@ export const Invoice = () => {
             const { data: txDetails } = await axios.get(
               `https://mempool.space/api/tx/${getInvoiceData.txId}`
             );
-            if (blockHeight.status.confirmed) {
+            if (txDetails.status.confirmed) {
               const { data: blockHeight } = await axios.get(
                 "https://mempool.space/api/blocks/tip/height"
               );
