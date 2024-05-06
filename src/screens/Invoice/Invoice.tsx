@@ -472,7 +472,7 @@ export const Invoice = () => {
                 }
               }
             : {}),
-          ...(!isFullScreenSuccess && !isExternalInvoice
+          ...(!isFullScreenSuccess && location.key !== "default"
             ? {
                 left: {
                   onPress: -1,
