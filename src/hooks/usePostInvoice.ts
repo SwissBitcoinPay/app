@@ -79,7 +79,8 @@ export const usePostInvoice = () => {
                 tag: "invoice-tpos",
                 deviceName,
                 deviceType,
-                customNote: description
+                customNote: description,
+                isGuestMode
               },
               onChain: isOnchainAvailable,
               delay: 10 || 10
