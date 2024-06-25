@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import {
   SBPContext,
   apiRootUrl,
@@ -48,6 +48,7 @@ import { AsyncStorage, isMinUserType } from "@utils";
 import { useToast } from "react-native-toast-notifications";
 import { ModalInputDescription } from "@hooks/useModalInput/useModalInput";
 import * as S from "./styled";
+import { keyStoreIsGuest } from "@config/settingsKeys";
 
 const { isWeb } = platform;
 
@@ -98,6 +99,8 @@ export const Settings = () => {
 
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isLogoutLoading, setIsLogoutLoading] = useState(false);
+
+  const [isGuestMode, setIsGuestMode] = useState(false);
 
   const onLogout = useCallback(async () => {
     try {
@@ -188,6 +191,12 @@ export const Settings = () => {
     [accountConfig?.apiKey]
   );
 
+  useEffect(() => {
+    (async () => {
+      setIsGuestMode((await AsyncStorage.getItem(keyStoreIsGuest)) === "true");
+    })();
+  }, []);
+
   return (
     <PageContainer
       header={{
@@ -198,7 +207,8 @@ export const Settings = () => {
       <S.FlexComponentStack>
         {accountConfig ? (
           !accountConfig.isAtm &&
-          !accountConfig.isCheckoutSecure && (
+          !accountConfig.isCheckoutSecure &&
+          !isGuestMode && (
             <S.FlexComponentStack>
               <Text centered h3 weight={700} color={colors.white}>
                 {t("activationCode")}
