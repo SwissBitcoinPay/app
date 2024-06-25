@@ -1,5 +1,8 @@
 import { useCallback, useContext } from "react";
-import { keyStoreTransactionsHistory } from "@config/settingsKeys";
+import {
+  keyStoreIsGuest,
+  keyStoreTransactionsHistory
+} from "@config/settingsKeys";
 import { intlFormat } from "date-fns";
 import { AsyncStorage, Biometrics, getSha256 } from "@utils";
 import { useToast } from "react-native-toast-notifications";
@@ -34,7 +37,10 @@ export const usePostInvoice = () => {
       deviceType
     }: PostInvoiceParams) => {
       try {
-        const isLocalInvoice = true;
+        const isGuestMode =
+          (await AsyncStorage.getItem(keyStoreIsGuest)) === "true";
+
+        const isLocalInvoice = !isAtm && !isGuestMode;
 
         let decimalFiat = amount;
         let finalUrl = "";

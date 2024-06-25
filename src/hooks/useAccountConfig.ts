@@ -3,7 +3,8 @@ import { AppState } from "react-native";
 import {
   keyStoreAccountConfig,
   keyStoreDeviceName,
-  keyStoreHmac
+  keyStoreHmac,
+  keyStoreIsGuest
 } from "@config/settingsKeys";
 import { AsyncStorage } from "@utils";
 import { useNavigate } from "@components/Router";
@@ -107,6 +108,8 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
                 await AsyncStorage.setItem(keyStoreDeviceName, value);
               } else if (key === "hmac") {
                 await AsyncStorage.setItem(keyStoreHmac, value);
+              } else if (key === "isGuest") {
+                await AsyncStorage.setItem(keyStoreIsGuest, "true");
               }
             }
           }

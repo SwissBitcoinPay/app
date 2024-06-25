@@ -106,6 +106,7 @@
       "downloadApp": "Download the app",
       "note": "Note",
       "atmAccount": "ATM account",
+      "guestMode": "Guest mode",
       "allowWithdraw": "Allow withdraw",
       "cannotGoHigher": "Maximum amount is {{maxAmount}}",
       "addToHomeScreen": "Add to home screen"

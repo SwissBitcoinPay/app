@@ -106,6 +106,7 @@
       "downloadApp": "Télécharger l'application",
       "note": "Note",
       "atmAccount": "Compte ATM",
+      "guestMode": "Mode invité",
       "allowWithdraw": "Autoriser le retrait",
       "cannotGoHigher": "Le montant maximum est de {{maxAmount}}",
       "addToHomeScreen": "Ajouter à l'écran d'accueil"

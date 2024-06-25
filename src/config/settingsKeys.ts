@@ -14,6 +14,7 @@ export const keyStoreIsAtm = "settings.isAtm";
 export const keyStoreUserType = "settings.userType";
 export const keyStoreDeviceName = "settings.deviceName";
 export const keyStoreHmac = "settings.hmac";
+export const keyStoreIsGuest = "settings.isGuest";
 export const keyStoreTransactionsHistory = "data.transactionsHistory";
 
 // Local wallet config
