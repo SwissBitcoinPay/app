@@ -18,7 +18,8 @@ import {
   faCog,
   faListCheck,
   faPen,
-  faShop
+  faShop,
+  faUser
 } from "@fortawesome/free-solid-svg-icons";
 import {
   useSafeAreaInsets,
@@ -27,7 +28,7 @@ import {
   useModalInput
 } from "@hooks";
 import { SBPContext, apiRootUrl, currencies, platform } from "@config";
-import { keyStoreDeviceName } from "@config/settingsKeys";
+import { keyStoreDeviceName, keyStoreIsGuest } from "@config/settingsKeys";
 import { useToast } from "react-native-toast-notifications";
 import { useTheme } from "styled-components";
 import { TextInput, TouchableOpacity } from "react-native";
@@ -71,6 +72,8 @@ export const Pos = () => {
     [accountConfig, isLoading]
   );
 
+  const [isGuestMode, setIsGuestMode] = useState(false);
+
   const [fiatAmount, setFiatAmount] = useState(0);
   const [maxFiatAmount, setMaxFiatAmount] = useState<number>();
   const [deviceName, setDeviceName] = useState<string>();
@@ -87,6 +90,12 @@ export const Pos = () => {
     () => [{ label: "sats", value: "sat" }, ...currencies],
     []
   );
+
+  useEffect(() => {
+    (async () => {
+      setIsGuestMode((await AsyncStorage.getItem(keyStoreIsGuest)) === "true");
+    })();
+  }, []);
 
   const requestInvoice = useCallback(async () => {
     await postInvoice({
@@ -247,6 +256,15 @@ export const Pos = () => {
             size="small"
             title={t("atmAccount")}
             icon={faShop}
+          />
+        )}
+        {isGuestMode && (
+          <S.ATMButton
+            secondaryColor={colors.primary}
+            disabled
+            size="small"
+            title={t("guestMode")}
+            icon={faUser}
           />
         )}
         {isBackgroundLoading && <S.BackgroundLoader size={20} />}
