@@ -48,7 +48,10 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
           JSON.stringify(fullConfig)
         );
 
-        if (typeof data.hmacSecret === "string" && data.isCheckoutSecure) {
+        if (
+          typeof data.hmacSecret === "string" &&
+          (data.isCheckoutSecure || data.isAtm)
+        ) {
           await AsyncStorage.setItem(keyStoreHmac, data.hmacSecret);
         }
 
