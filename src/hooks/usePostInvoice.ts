@@ -40,7 +40,7 @@ export const usePostInvoice = () => {
         const isGuestMode =
           (await AsyncStorage.getItem(keyStoreIsGuest)) === "true";
 
-        const isLocalInvoice = !isAtm && !isGuestMode;
+        const isLocalInvoice = isAtm || !isGuestMode;
 
         let decimalFiat = amount;
         let finalUrl = "";
