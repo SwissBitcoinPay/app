@@ -172,10 +172,22 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
               ? [{ icon: faCamera, onPress: onToggleScanQrModal }]
               : []),
             ...(qrDisplayable
-              ? [{ icon: faQrcode, onPress: onToggleQrDisplayModal }]
+              ? [
+                  {
+                    icon: faQrcode,
+                    onPress: onToggleQrDisplayModal,
+                    isAlwaysClickable: true
+                  }
+                ]
               : []),
             ...(copyable
-              ? [{ icon: isCopied ? faCheck : faCopy, onPress: onCopy }]
+              ? [
+                  {
+                    icon: isCopied ? faCheck : faCopy,
+                    onPress: onCopy,
+                    isAlwaysClickable: true
+                  }
+                ]
               : []),
             ...(pastable && isPasteAvailable
               ? [{ icon: isPasted ? faCheck : faClipboard, onPress: onPaste }]

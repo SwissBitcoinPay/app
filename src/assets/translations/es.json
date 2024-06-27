@@ -214,7 +214,7 @@
       "signWithAddressDetails": "Firme el mensaje con esta dirección Bitcoin",
       "receiveInBtcDescription1": "Todos los bitcoins que cobre a través de Swiss Bitcoin Pay se enviarán a la dirección que indique.",
       "receiveInBtcDescription2": "Las conversiones de Lightning a Onchain y las comisiones de minero son siempre gratuitas para usted.",
-      "receiveInBtcDescription3": "El pago se realiza todos los días a las 0:00 UTC. El umbral mínimo es de 1000 sats.",
+      "receiveInBtcDescription3": "Die Einzahlung auf Ihr Portfolio erfolgt standardmäßig an jedem 1. des Monats. El umbral mínimo es de 1000 sats.",
       "receiveInBtcDescription3Lightning": "Tus bitcoins serán enviados instantáneamente a tu dirección lightning después de cada pago. Asegúrate de que tu nodo está bien conectado.",
       "receiveInBtcDescription4": "Se requiere una firma criptográfica de su monedero Bitcoin para demostrar que usted es el propietario.",
       "receiveInBankDescription1": "Todos los bitcoins que cobre a través de Swiss Bitcoin Pay se venderán por {{currency}} y luego se enviarán automáticamente a su cuenta bancaria a través de nuestro partner",
