@@ -434,13 +434,15 @@ export const BitcoinSettings = ({
                   <TextField
                     label={t("bitcoinPayoutWallet")}
                     value={isLocalWallet ? t("localWallet") : value}
-                    onChangeText={(newValue) =>
-                      onChange(
-                        newValue
-                          .replace("bitcoin:", "")
-                          .replace("lightning:", "")
-                      )
-                    }
+                    onChangeText={(newValue) => {
+                      if (newValue) {
+                        onChange(
+                          newValue
+                            .replace("bitcoin:", "")
+                            .replace("lightning:", "")
+                        );
+                      }
+                    }}
                     autoCorrect={false}
                     error={
                       error?.type === "validate" ? error?.message : undefined

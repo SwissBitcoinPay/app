@@ -215,7 +215,7 @@
       "signWithAddressDetails": "Signez le message avec cette adresse Bitcoin",
       "receiveInBtcDescription1": "Tous les bitcoins que vous recevez via Swiss Bitcoin Pay sont envoyés à l'adresse que vous avez indiquée.",
       "receiveInBtcDescription2": "Les conversions Lightning vers Onchain et les frais de minage sont toujours gratuits pour vous.",
-      "receiveInBtcDescription3": "Le paiement est effectué tous les jours à 0:00 UTC. Le seuil minimum est de 1000 sats.",
+      "receiveInBtcDescription3": "Le versement sur votre portefeuille est effectué par défaut tous les 1er du mois. Le seuil minimum est de 1000 sats.",
       "receiveInBtcDescription3Lightning": "Vos bitcoins seront instantanément envoyés à votre adresse lightning après chaque paiement. Assurez-vous que votre nœud soit bien connecté.",
       "receiveInBtcDescription4": "Une signature cryptographique de votre portefeuille Bitcoin est nécessaire pour prouver que vous en êtes bien le propriétaire.",
       "receiveInBankDescription1": "Tous les bitcoins que vous recevez via Swiss Bitcoin Pay seront vendus en {{currency}} puis envoyés automatiquement sur votre compte bancaire par l'intermédiaire de notre partenaire",

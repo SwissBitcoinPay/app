@@ -215,7 +215,7 @@
       "signWithAddressDetails": "Sign the message with this Bitcoin address",
       "receiveInBtcDescription1": "All the bitcoins that you charge via Swiss Bitcoin Pay will be sent to the address you provide.",
       "receiveInBtcDescription2": "Lightning to Onchain conversions and miner fees are always free of charge for you.",
-      "receiveInBtcDescription3": "Payout is done every day at 0:00 UTC. Minimum threshold is 1000 sats.",
+      "receiveInBtcDescription3": "Payments to your wallet are made by default every 1st of the month. Minimum threshold is 1000 sats.",
       "receiveInBtcDescription3Lightning": "Your bitcoins will be instantly sent to your lightning address after each payment. Make sure that your node is well connected.",
       "receiveInBtcDescription4": "A cryptographic signature of your Bitcoin wallet is required to prove ownership.",
       "receiveInBankDescription1": "All the bitcoins that you charge via Swiss Bitcoin Pay will be sold for {{currency}} then sent automatically to your bank account through our partner",
