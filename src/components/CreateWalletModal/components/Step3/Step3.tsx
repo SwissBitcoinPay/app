@@ -6,7 +6,7 @@ import ScreenGuardModule from "react-native-screenguard";
 import { StepProps } from "../../CreateWalletModal";
 import { generateBtcAddress, getRandomNumber } from "@utils";
 import { Word } from "../Word";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, Platform } from "react-native";
 import * as S from "./styled";
 import { platform } from "@config";
 
@@ -19,6 +19,11 @@ export const Step3 = ({ setIsValid, setValue, watch }: StepProps) => {
   const { colors } = useTheme();
 
   const words = watch("words");
+
+  useEffect(() => {
+    if (Platform.OS === "web") {
+    }
+  }, []);
 
   useEffect(() => {
     setIsValid(false);
@@ -55,6 +60,32 @@ export const Step3 = ({ setIsValid, setValue, watch }: StepProps) => {
 
       return () => {
         ScreenGuardModule.unregister();
+      };
+    } else {
+      const noPrintFn = (e: KeyboardEvent) => {
+        if (e.ctrlKey && e.key === "p") {
+          // eslint-disable-next-line no-alert
+          alert(
+            "You can't print or take screenshot of your private key. Write it down on paper!"
+          );
+          e.cancelBubble = true;
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        } else if (e.key === "PrintScreen") {
+          navigator.clipboard.writeText("");
+          // eslint-disable-next-line no-alert
+          alert(
+            "You can't print or take screenshot of your private key. Write it down on paper!"
+          );
+        }
+      };
+
+      document.addEventListener("keydown", noPrintFn);
+      document.addEventListener("keyup", noPrintFn);
+
+      return () => {
+        document.removeEventListener("keydown", noPrintFn);
+        document.removeEventListener("keyup", noPrintFn);
       };
     }
   }, []);
