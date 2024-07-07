@@ -40,6 +40,10 @@ export const Pressable = forwardRef<TouchableOpacity, PressableProps>(
     const navigate = useNavigate();
 
     const onPress = useMemo(() => {
+      if (props.disabled) {
+        return () => null;
+      }
+
       if (typeof _onPress === "function" || !_onPress) {
         return _onPress;
       }
@@ -69,7 +73,7 @@ export const Pressable = forwardRef<TouchableOpacity, PressableProps>(
           return _onPress;
         }
       }
-    }, [_onPress, navigate]);
+    }, [_onPress, navigate, props.disabled]);
 
     const pressableComponent = useMemo(
       () =>

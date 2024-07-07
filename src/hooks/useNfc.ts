@@ -11,7 +11,7 @@ const { isWeb, isNative, isIos, getIsNfcSupported } = platform;
 const getError = (message: string) =>
   // @ts-ignore
   new AxiosError(undefined, undefined, undefined, undefined, {
-    data: { reason: { detail: message } }
+    data: { reason: message }
   });
 
 export const useNfc = () => {
@@ -122,7 +122,7 @@ export const useNfc = () => {
             }>(cardData);
 
             const { data: callbackResponseData } = await axios.get<{
-              reason: { detail: string };
+              reason?: string;
               status: "OK";
             }>(cardDataResponse.callback, {
               params: {
@@ -155,17 +155,17 @@ export const useNfc = () => {
               throw getError("Invalid tag. No callback");
             if (
               !finalUrlRequest.minSendable ||
-              finalUrlRequest.minSendable / 1000 > amount
+              finalUrlRequest.minSendable > amount
             )
               throw getError("Invalid tag. minSendable undefined or too high");
             if (
               !finalUrlRequest.maxSendable ||
-              finalUrlRequest.maxSendable / 1000 < amount
+              finalUrlRequest.maxSendable < amount
             )
               throw getError("Invalid tag. maxSendable undefined or too low");
 
             const { data: callbackRequest } = await axios.get<{ pr?: string }>(
-              `${finalUrlRequest.callback}?amount=${(amount || 0) * 1000}${
+              `${finalUrlRequest.callback}?amount=${(amount || 0) / 1000}${
                 (finalUrlRequest.commentAllowed || 0) >= title.length
                   ? `&comment=${title}`
                   : ""
@@ -195,7 +195,7 @@ export const useNfc = () => {
 
         if (debitCardData?.status !== "OK" || error) {
           setIsNfcLoading(false);
-          toast.show(error?.reason?.detail || t("errors.unknown"), {
+          toast.show(error?.reason || t("errors.unknown"), {
             type: "error"
           });
 

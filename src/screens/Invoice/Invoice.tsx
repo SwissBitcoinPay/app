@@ -10,7 +10,7 @@ import { bech32 } from "bech32";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, useLocation } from "@components/Router";
-import useWebSocket from "react-use-websocket";
+import useWebSocket, { ReadyState } from "react-use-websocket";
 import {
   Loader,
   BitcoinIcon,
@@ -53,50 +53,81 @@ import {
 } from "react-native";
 import { useTheme } from "styled-components";
 import { FooterLine } from "./components/FooterLine";
-import { SBPThemeContext, appRootUrl } from "@config";
+import {
+  SBPThemeContext,
+  apiRootDomain,
+  appRootUrl,
+  currencies
+} from "@config";
 import LottieView from "lottie-react-native";
 import * as S from "./styled";
+import { XOR } from "ts-essentials";
 
 const PAID_ANIMATION_DURATION = 350;
 
 const getTrue = () => true;
-
-// const getError = (message: string) =>
-//   new AxiosError(undefined, undefined, undefined, undefined, {
-//     data: { reason: { detail: message } }
-//   });
 
 const numberWithSpaces = (nb: number) =>
   nb.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
 const { isWeb, isIos } = platform;
 
-export type InvoiceType = {
-  isInit: boolean;
-  title: string;
-  description: string;
-  createdAt: number;
-  delay: number;
-  pr: string;
+type Status =
+  | "draft"
+  | "open"
+  | "unconfirmed"
+  | "underpaid"
+  | "settled"
+  | "canceled"
+  | "expired"
+  | "reserved"
+  | "paying";
+
+type PaymentDetail = XOR<
+  {
+    network: "lightning";
+    paymentRequest: string;
+    hash: string;
+    preimage?: string;
+  },
+  {
+    network: "onchain";
+    address: string;
+    txId?: string;
+    confirmations?: number;
+    minConfirmations?: number;
+  }
+> & {
+  amount?: number;
+  paidAt?: number;
+};
+
+type FiatUnits = (typeof currencies)[number]["value"];
+
+type Input = {
+  unit: FiatUnits | "sat" | "BTC";
   amount: number;
-  btcAmount: string;
-  unit: string;
-  isPaid: boolean;
-  isPending: boolean;
-  isExpired: boolean;
-  paymentMethod: "lightning" | "onchain";
+};
+
+export type InvoiceType = {
+  id: string;
+  tag: string;
+  title: string;
+  time: number;
+  description: string;
+  expiry: number;
+  amount: number;
+  status: Status;
   paidAt: number;
-  hash: string;
-  fiatAmount: number;
-  fiatUnit: string;
-  onChainAddr?: string;
-  minConfirmations: number;
-  confirmations: number;
-  txId: string;
-  redirectAfterPaid: `http://${string}`;
-  extra?: {
-    customNote: string;
+
+  input: Input;
+  paymentDetails: PaymentDetail[];
+  device?: {
+    name: string;
+    type: "mobile" | "tablet" | "desktop";
   };
+  // paymentMethod: "lightning" | "onchain";
+  redirectUrl: `http://${string}`;
 };
 
 const truncate = (str: string, length: number, separator = "...") => {
@@ -147,23 +178,19 @@ export const Invoice = () => {
   const [createdAt, setCreatedAt] = useState<number>();
   const [delay, setDelay] = useState<number>();
   const [amount, setAmount] = useState<number>();
-  const [btcAmount, setBtcAmount] = useState<string>();
   const [pr, setPr] = useState<string>();
   const [onChainAddr, setOnChainAddr] = useState<string>();
   const [invoiceCurrency, setInvoiceCurrency] = useState<string>();
   const [invoiceFiatAmount, setInvoiceFiatAmount] = useState(0);
-  const [isExpired, setIsExpired] = useState(false);
   const [isInvalidInvoice, setIsInvalidInvoice] = useState(false);
   const [redirectUrl, setRedirectUrl] = useState<`http://${string}`>();
-  const [extra, setExtra] = useState<InvoiceType["extra"]>();
   const [readingNfcData, setReadingNfcData] =
     useState<Parameters<typeof readingNfcLoop>[0]>();
 
   const [isInitialPaid, setIsInitialPaid] = useState(false);
 
   // Paid data
-  const [isPending, setIsPending] = useState(false);
-  const [isPaid, setIsPaid] = useState(false);
+  const [status, setStatus] = useState<Status>("draft");
   const [paymentMethod, setPaymentMethod] = useState<"onchain" | "lightning">();
   const [paidAt, setPaidAt] = useState<number>();
 
@@ -173,8 +200,8 @@ export const Invoice = () => {
   const [minConfirmations, setMinConfirmations] = useState<number>();
 
   const isAlive = useMemo(
-    () => !isPaid && !isExpired && !isPending,
-    [isPaid, isExpired, isPending]
+    () => !["settled", "expired", "unconfirmed"].includes(status),
+    [status]
   );
 
   const timer = useTimer({ createdAt, delay, stop: !isAlive });
@@ -186,13 +213,14 @@ export const Invoice = () => {
 
   const isInvoiceLoading = useMemo(() => invoiceId === "loading", [invoiceId]);
 
-  const { sendJsonMessage, lastJsonMessage } = useWebSocket<InvoiceType>(
-    "wss://api.swiss-bitcoin-pay.ch/invoice",
-    {
-      shouldReconnect: getTrue
-    },
-    !isWithdraw && !isInvoiceLoading
-  );
+  const { sendJsonMessage, lastJsonMessage, readyState } =
+    useWebSocket<InvoiceType>(
+      `wss://${apiRootDomain}/invoice`,
+      {
+        shouldReconnect: getTrue
+      },
+      !isWithdraw && !isInvoiceLoading
+    );
 
   const loadingMessage = useMemo(
     () =>
@@ -205,16 +233,15 @@ export const Invoice = () => {
   );
 
   useEffect(() => {
-    if (!isInvoiceLoading) {
+    if (readyState === ReadyState.CONNECTING) {
       sendJsonMessage({ id: invoiceId });
     }
-  }, [isInvoiceLoading]);
+  }, [readyState]);
 
   const successLottieRef = useRef<LottieView>(null);
 
   const onPaid = useCallback(() => {
     Vibration.vibrate(50);
-    setIsPaid(true);
     if (!isExternalInvoice) {
       setBackgroundColor(colors.success, PAID_ANIMATION_DURATION);
     }
@@ -247,7 +274,7 @@ export const Invoice = () => {
             customNote: string;
           };
 
-          const withdrawAmount = lnurlData.maxWithdrawable / 1000;
+          const withdrawAmount = lnurlData.maxWithdrawable;
           setPr(invoiceId || "");
           setTitle(lnurlData.defaultDescription);
           setDescription(customNote);
@@ -261,7 +288,7 @@ export const Invoice = () => {
             title: `${lnurlData.defaultDescription || ""}${
               customNote ? `- ${customNote}` : ""
             }`,
-            amount: withdrawAmount
+            amount: withdrawAmount * 1000
           };
           setReadingNfcData(readData);
           if (!isNfcNeedsTap) {
@@ -275,6 +302,7 @@ export const Invoice = () => {
               if (isApiError(e)) {
                 if (e.response.status === 404) {
                   clearInterval(intervalId);
+                  setStatus("settled");
                   onPaid();
                 }
               }
@@ -287,7 +315,7 @@ export const Invoice = () => {
         } catch (e) {
           navigate("/");
           if (isApiError(e)) {
-            toast.show(e?.response?.data?.detail || tRoot("errors.unknown"), {
+            toast.show(e?.response?.data.reason || tRoot("errors.unknown"), {
               type: "error"
             });
           }
@@ -298,59 +326,70 @@ export const Invoice = () => {
     void fn();
   }, [isNfcAvailable, readingNfcLoop, invoiceId]);
 
+  const btcAmount = useMemo(() => (amount || 0) / 100000000, [amount]);
+
   const updateInvoice = useCallback(
     async (getInvoiceData: InvoiceType, isInitialData?: boolean) => {
       try {
-        setIsInit(getInvoiceData.isInit);
-        if (!getInvoiceData.isInit) {
-          return;
-        }
+        // const delay = new Date().getTime();
+
+        const _pr = getInvoiceData.paymentDetails.find(
+          (p) => p.network === "lightning"
+        )?.paymentRequest;
+
+        const _onChainData = getInvoiceData.paymentDetails.find(
+          (p) => p.network === "onchain"
+        );
+
+        const _paymentMethod = getInvoiceData.paymentDetails.find(
+          (p) => p.paidAt
+        )?.network;
 
         setTitle(getInvoiceData.title);
         setDescription(getInvoiceData.description);
-        setCreatedAt(getInvoiceData.createdAt);
-        setDelay(getInvoiceData.delay);
-        setPr(getInvoiceData.pr);
-        setReadingNfcData(getInvoiceData.pr);
-        setOnChainAddr(getInvoiceData.onChainAddr);
+        setCreatedAt(getInvoiceData.time);
+        setDelay(getInvoiceData.expiry - getInvoiceData.time);
+        setPr(_pr);
+        setReadingNfcData(_pr);
+        setOnChainAddr(_onChainData?.address);
         setAmount(getInvoiceData.amount);
-        setBtcAmount(getInvoiceData.btcAmount);
-        setInvoiceCurrency(getInvoiceData.fiatUnit || "CHF");
-        setInvoiceFiatAmount(getInvoiceData.fiatAmount);
-        setIsPending(getInvoiceData.isPending);
-        setPaymentMethod(getInvoiceData.paymentMethod);
-        setTxId(getInvoiceData.txId);
-        setMinConfirmations(getInvoiceData.minConfirmations);
-        setConfirmations(getInvoiceData.confirmations);
+        setInvoiceCurrency(getInvoiceData.input.unit || "CHF");
+        setInvoiceFiatAmount(getInvoiceData.input.amount);
+        setStatus(getInvoiceData.status);
+        setPaymentMethod(_paymentMethod);
+        setTxId(_onChainData?.txId);
+        setMinConfirmations(_onChainData?.minConfirmations);
+        setConfirmations(_onChainData?.confirmations);
         setPaidAt(getInvoiceData.paidAt);
-        setIsExpired(getInvoiceData.isExpired);
-        setExtra(getInvoiceData.extra);
-        if (getInvoiceData.isPaid && !isPaid) {
+
+        setIsInit(true);
+
+        if (getInvoiceData.status === "settled" && status !== "settled") {
           onPaid();
         }
 
-        if (getInvoiceData.redirectAfterPaid) {
+        if (getInvoiceData.redirectUrl) {
           setRedirectUrl(
-            getInvoiceData.redirectAfterPaid.includes("://")
-              ? getInvoiceData.redirectAfterPaid
-              : `http://${getInvoiceData.redirectAfterPaid}`
+            getInvoiceData.redirectUrl.includes("://")
+              ? getInvoiceData.redirectUrl
+              : `http://${getInvoiceData.redirectUrl}`
           );
         }
 
         if (isInitialData) {
-          if (getInvoiceData.isPaid) {
+          if (status === "settled") {
             setIsInitialPaid(true);
           }
         }
 
-        if (getInvoiceData.isExpired) {
+        if (status === "expired") {
           return;
         }
 
-        if (getInvoiceData.paymentMethod === "onchain") {
+        if (_paymentMethod === "onchain") {
           try {
             const { data: txDetails } = await axios.get(
-              `https://mempool.space/api/tx/${getInvoiceData.txId}`
+              `https://mempool.space/api/tx/${_onChainData?.txId}`
             );
             if (txDetails.status.confirmed) {
               const { data: blockHeight } = await axios.get(
@@ -365,7 +404,7 @@ export const Invoice = () => {
         return;
       }
     },
-    [isPaid, onPaid]
+    [onPaid, status]
   );
 
   const [isInitial, setIsInitial] = useState(true);
@@ -429,8 +468,8 @@ export const Invoice = () => {
   ]);
 
   const isFullScreenSuccess = useMemo(
-    () => isPaid && !isExternalInvoice,
-    [isExternalInvoice, isPaid]
+    () => status === "settled" && !isExternalInvoice,
+    [status, isExternalInvoice]
   );
 
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
@@ -466,9 +505,12 @@ export const Invoice = () => {
           ...(description
             ? {
                 subTitle: {
-                  icon: extra?.customNote ? faPen : faClock,
+                  icon: faPen,
                   text: description || "",
-                  color: isPaid && !isExternalInvoice ? colors.white : undefined
+                  color:
+                    status === "settled" && !isExternalInvoice
+                      ? colors.white
+                      : undefined
                 }
               }
             : {}),
@@ -531,16 +573,16 @@ export const Invoice = () => {
               <S.MainContentStack
                 size={qrCodeSize + gridSize * 1.25}
                 borderColor={
-                  isPaid
+                  status === "settled"
                     ? "transparent"
-                    : isPending
+                    : status === "unconfirmed"
                     ? colors.warning
-                    : isExpired
+                    : status === "expired"
                     ? colors.grey
                     : undefined
                 }
               >
-                {!isExpired &&
+                {status !== "expired" &&
                   (isAlive ? (
                     <QR
                       value={qrData}
@@ -551,7 +593,7 @@ export const Invoice = () => {
                       ecl="M"
                     />
                   ) : null)}
-                {isPending &&
+                {status === "unconfirmed" &&
                 confirmations !== undefined &&
                 minConfirmations ? (
                   <S.ConfirmationsCircle
@@ -566,13 +608,13 @@ export const Invoice = () => {
                       {confirmations}/{minConfirmations}
                     </S.ConfirmationsText>
                   </S.ConfirmationsCircle>
-                ) : isExpired ? (
+                ) : status === "expired" ? (
                   <Icon
                     icon={faClock}
                     color={colors.grey}
                     size={STATUS_ICON_SIZE}
                   />
-                ) : isPaid ? (
+                ) : status === "settled" ? (
                   <S.SuccessLottie
                     ref={successLottieRef}
                     {...(isInitialPaid
@@ -588,23 +630,25 @@ export const Invoice = () => {
                 ) : null}
                 {!isAlive && (
                   <ComponentStack direction="horizontal">
-                    {isPending && <Loader color={colors.warning} />}
+                    {status === "unconfirmed" && (
+                      <Loader color={colors.warning} />
+                    )}
                     <Text
                       h3
                       weight={700}
                       color={
-                        isPending
+                        status === "unconfirmed"
                           ? colors.warning
-                          : isPaid && isExternalInvoice
+                          : status === "settled" && isExternalInvoice
                           ? colors.success
-                          : isExpired
+                          : status === "expired"
                           ? colors.grey
                           : colors.white
                       }
                     >
-                      {isPending
+                      {status === "unconfirmed"
                         ? t("pendingConfirmations")
-                        : isExpired
+                        : status === "expired"
                         ? t("invoiceExpired")
                         : !isWithdraw
                         ? t("invoicePaid")
@@ -613,7 +657,7 @@ export const Invoice = () => {
                   </ComponentStack>
                 )}
               </S.MainContentStack>
-              {isPaid && !isInitialPaid && redirect && (
+              {status === "settled" && !isInitialPaid && redirect && (
                 <ComponentStack direction="horizontal" gapSize={8}>
                   <Text h3 weight={600} color={colors.white}>
                     {t(
@@ -687,16 +731,19 @@ export const Invoice = () => {
                   )}
                 </S.AmountText>
                 <S.AmountText subAmount>
-                  {amount ? numberWithSpaces(amount) : ""} sats
+                  {amount ? numberWithSpaces(amount / 1000) : ""} sats
                 </S.AmountText>
               </>
-              {isPaid && isExternalInvoice && redirectUrl && isInitialPaid && (
-                <Button
-                  title={t("returnToWebsite")}
-                  icon={faArrowUpRightFromSquare}
-                  onPress={redirectUrl}
-                />
-              )}
+              {status === "settled" &&
+                isExternalInvoice &&
+                redirectUrl &&
+                isInitialPaid && (
+                  <Button
+                    title={t("returnToWebsite")}
+                    icon={faArrowUpRightFromSquare}
+                    onPress={redirectUrl}
+                  />
+                )}
               {isAlive && isExternalInvoice && (
                 <ComponentStack gapSize={14}>
                   <S.ActionButton
@@ -740,13 +787,13 @@ export const Invoice = () => {
               <S.Section gapSize={3}>
                 <FooterLine
                   label={t("status")}
-                  {...(isPaid
+                  {...(status === "settled"
                     ? {
                         value: tRoot("common.paid"),
                         color: colors.success,
                         prefixIcon: { icon: faCheck }
                       }
-                    : isPending
+                    : status === "unconfirmed"
                     ? {
                         prefixComponent: (
                           <ActivityIndicator
@@ -757,7 +804,7 @@ export const Invoice = () => {
                         value: tRoot("common.pending"),
                         color: colors.warning
                       }
-                    : isExpired
+                    : status === "expired"
                     ? {
                         value: tRoot("common.expired"),
                         color: colors.greyLight
@@ -769,7 +816,7 @@ export const Invoice = () => {
                 {btcAmount && (
                   <FooterLine
                     label={t("amount")}
-                    value={btcAmount}
+                    value={btcAmount.toString()}
                     valueSuffix=" BTC"
                     copyable
                   />
@@ -782,7 +829,7 @@ export const Invoice = () => {
                     color={colors.white}
                   />
                 )}
-                {isPaid && (
+                {status === "settled" && (
                   <FooterLine
                     label={t("paidWith")}
                     {...(paymentMethod === "onchain"
@@ -824,7 +871,9 @@ export const Invoice = () => {
                   <FooterLine
                     label={t("confirmations")}
                     value={confirmations.toString()}
-                    {...(isPending ? { color: colors.warning } : {})}
+                    {...(status === "unconfirmed"
+                      ? { color: colors.warning }
+                      : {})}
                   />
                 )}
               </S.Section>

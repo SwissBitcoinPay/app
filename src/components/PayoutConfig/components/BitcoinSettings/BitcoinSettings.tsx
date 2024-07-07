@@ -88,8 +88,8 @@ export const BitcoinSettings = ({
 
   const { step1, step2 } = useMemo(() => {
     if (rates) {
-      const btcPriceInChf = rates.BTCCHF.CHF;
-      const btcPriceInCurrency = rates[`BTC${currency}`][currency];
+      const btcPriceInChf = rates.CHF;
+      const btcPriceInCurrency = rates[currency];
 
       return {
         step1: getFormattedUnit(

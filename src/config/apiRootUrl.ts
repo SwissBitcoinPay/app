@@ -1,1 +1,2 @@
-export const apiRootUrl = "https://api.swiss-bitcoin-pay.ch";
+export const apiRootDomain = "jd.ngrok.app";
+export const apiRootUrl = `https://${apiRootDomain}`;
