@@ -254,7 +254,8 @@ export const Invoice = () => {
   }, [colors.success, isExternalInvoice, setBackgroundColor]);
 
   useEffect(() => {
-    const fn = async () => {
+    let intervalId: NodeJS.Timeout;
+    (async () => {
       if (isWithdraw) {
         try {
           const { words: dataPart } = bech32.decode(invoiceId || "", 2000);
@@ -295,23 +296,17 @@ export const Invoice = () => {
             void readingNfcLoop(readData);
           }
 
-          const intervalId = setInterval(async () => {
+          intervalId = setInterval(async () => {
             try {
-              await axios.get(lnurl);
-            } catch (e) {
-              if (isApiError(e)) {
-                if (e.response.status === 404) {
-                  clearInterval(intervalId);
-                  setStatus("settled");
-                  onPaid();
-                }
-              }
-            }
-          }, 2 * 1000);
+              const { data } = await axios.get(lnurl);
 
-          return () => {
-            clearInterval(intervalId);
-          };
+              if (data.status === "settled") {
+                clearInterval(intervalId);
+                setStatus("settled");
+                onPaid();
+              }
+            } catch (e) {}
+          }, 2 * 1000);
         } catch (e) {
           navigate("/");
           if (isApiError(e)) {
@@ -321,9 +316,11 @@ export const Invoice = () => {
           }
         }
       }
-    };
+    })();
 
-    void fn();
+    return () => {
+      clearInterval(intervalId);
+    };
   }, [isNfcAvailable, readingNfcLoop, invoiceId]);
 
   const btcAmount = useMemo(() => (amount || 0) / 100000000, [amount]);
@@ -331,8 +328,6 @@ export const Invoice = () => {
   const updateInvoice = useCallback(
     async (getInvoiceData: InvoiceType, isInitialData?: boolean) => {
       try {
-        // const delay = new Date().getTime();
-
         const _pr = getInvoiceData.paymentDetails.find(
           (p) => p.network === "lightning"
         )?.paymentRequest;

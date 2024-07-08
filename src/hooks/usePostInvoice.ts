@@ -62,11 +62,12 @@ export const usePostInvoice = () => {
               unit: unit || currency,
               title: `${name || ""}`,
               description,
+              tag: "invoice-tpos",
+              device: {
+                name: deviceName,
+                type: deviceType
+              },
               extra: {
-                tag: "invoice-tpos",
-                deviceName,
-                deviceType,
-                customNote: description,
                 isGuestMode
               },
               onChain: isOnchainAvailable,
@@ -111,13 +112,16 @@ export const usePostInvoice = () => {
             amount,
             unit: unit || currency,
             language: i18n.language,
-            deviceName,
-            deviceType,
+            device: {
+              name: deviceName,
+              type: deviceType
+            },
             description
           };
 
           const { data: withdrawResponseData } = await axios.post<{
-            lnurl?: string;
+            id: string;
+            lnurl: string;
             amount: number;
             fiatAmount: number;
           }>(`${apiRootUrl}/atm-withdraw`, data, {
@@ -129,13 +133,14 @@ export const usePostInvoice = () => {
             }
           });
 
-          id = withdrawResponseData.lnurl || "";
-          finalUrl = `/invoice/${id}`;
+          id = withdrawResponseData.id;
+          finalUrl = `/invoice/${withdrawResponseData.lnurl}`;
 
           additionnalHistoryProps = {
             ...additionnalHistoryProps,
+            lnurl: withdrawResponseData.lnurl,
             amount: withdrawResponseData.amount,
-            description: description
+            description
           };
 
           decimalFiat = withdrawResponseData.fiatAmount;
@@ -167,6 +172,14 @@ export const usePostInvoice = () => {
                 unit: currency,
                 amount: decimalFiat
               },
+              ...(deviceName
+                ? {
+                    device: {
+                      name: deviceName,
+                      type: deviceType
+                    }
+                  }
+                : {}),
               ...additionnalHistoryProps
             }
           ])

@@ -41,6 +41,10 @@ const timeFormatter = new Intl.DateTimeFormat(undefined, {
   timeStyle: "short"
 });
 
+type InvoiceWithLnurlUrl = InvoiceType & {
+  lnurl?: string;
+};
+
 export const History = () => {
   const { t: tRoot } = useTranslation();
   const { t } = useTranslation(undefined, {
@@ -53,14 +57,14 @@ export const History = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLocal, setIsLocal] = useState(true);
   const [localIds, setLocalIds] = useState<string[]>([]);
-  const [transactions, setTransactions] = useState<InvoiceType[]>([]);
+  const [transactions, setTransactions] = useState<InvoiceWithLnurlUrl[]>([]);
 
   const now = useMemo(() => new Date().getTime() / 1000, []);
 
   const getTransactions = useCallback(async () => {
-    let transactionsDetails: InvoiceType[] = [];
+    let transactionsDetails: InvoiceWithLnurlUrl[] = [];
 
-    const localTransactionsHistory: InvoiceType[] = JSON.parse(
+    const localTransactionsHistory: InvoiceWithLnurlUrl[] = JSON.parse(
       (await AsyncStorage.getItem(settingsKeys.keyStoreTransactionsHistory)) ||
         "[]"
     );
@@ -86,7 +90,7 @@ export const History = () => {
     } else {
       const lnurlList = localTransactionsHistory.map((v) => {
         if (v.status !== "settled") {
-          const { words: dataPart } = bech32.decode(v.id, 2000);
+          const { words: dataPart } = bech32.decode(v.lnurl || "", 2000);
           const requestByteArray = bech32.fromWords(dataPart);
           return Buffer.from(requestByteArray).toString();
         } else {
@@ -102,8 +106,8 @@ export const History = () => {
                   if (isApiError(e)) {
                     return {
                       data: {
-                        isPaid: e.response.status === 404,
-                        defaultDescription: t("withdrawSuccess"),
+                        status: "expired",
+                        defaultDescription: t("expired"),
                         minWithdrawable:
                           localTransactionsHistory[index].amount || 0
                       }
@@ -118,18 +122,15 @@ export const History = () => {
       ).map(({ data = {} }, index) => {
         return {
           ...data,
-          id: localTransactionsHistory[index].id,
+          ...(localTransactionsHistory[index] || {}),
           title: data.defaultDescription,
-          status: data.tag === "withdraw" ? "unconfirmed" : "expired",
+          status: data.status || "open",
+          tag: "withdraw",
           time: localTransactionsHistory[index].time || 0,
-          amount:
-            localTransactionsHistory[index].amount || data.minWithdrawable,
-          input: localTransactionsHistory[index].input,
-          description: localTransactionsHistory[index].description
-        } as InvoiceType;
+          amount: localTransactionsHistory[index].amount || data.minWithdrawable
+        } as InvoiceWithLnurlUrl;
       });
     }
-
     AsyncStorage.setItem(
       settingsKeys.keyStoreTransactionsHistory,
       JSON.stringify(transactionsDetails)
@@ -149,9 +150,14 @@ export const History = () => {
         }
       );
 
+      // console.log(payments);
+
       transactionsDetails = [
         ...payments
-          .filter(({ tag }) => tag === "invoice-tpos")
+          .filter(
+            ({ tag, amount }) =>
+              tag === "invoice-tpos" || (accountConfig?.isAtm && amount < 0)
+          )
           .map((transaction) => {
             const id = transaction.id || "";
             const localTx = transactionsDetails.find((tx) => tx.id === id);
@@ -274,9 +280,11 @@ export const History = () => {
                 return {
                   title: `${timeFormatter.format(transaction.time * 1000)}`,
                   disabled:
-                    (isPaid && transaction.tag === "withdraw") || isExpired,
+                    (isPaid && transaction.tag === "withdraw") ||
+                    isExpired ||
+                    (accountConfig?.isAtm && !isLocal),
                   onPress: [
-                    `/invoice/${transaction.id}`,
+                    `/invoice/${transaction.lnurl || transaction.id}`,
                     {
                       state: {
                         isLocalInvoice: !isPaid && !isExpired,
