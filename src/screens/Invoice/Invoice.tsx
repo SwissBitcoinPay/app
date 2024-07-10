@@ -347,7 +347,7 @@ export const Invoice = () => {
         setPr(_pr);
         setReadingNfcData(_pr);
         setOnChainAddr(_onChainData?.address);
-        setAmount(getInvoiceData.amount);
+        setAmount(getInvoiceData.amount * 1000);
         setInvoiceCurrency(getInvoiceData.input.unit || "CHF");
         setInvoiceFiatAmount(getInvoiceData.input.amount);
         setStatus(getInvoiceData.status);
