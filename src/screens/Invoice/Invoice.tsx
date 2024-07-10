@@ -725,9 +725,11 @@ export const Invoice = () => {
                     !invoiceFiatAmount || invoiceFiatAmount % 1 === 0 ? 0 : 2
                   )}
                 </S.AmountText>
-                <S.AmountText subAmount>
-                  {amount ? numberWithSpaces(amount / 1000) : ""} sats
-                </S.AmountText>
+                {invoiceCurrency !== "sat" && (
+                  <S.AmountText subAmount>
+                    {amount ? numberWithSpaces(amount / 1000) : ""} sats
+                  </S.AmountText>
+                )}
               </>
               {status === "settled" &&
                 isExternalInvoice &&
