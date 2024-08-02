@@ -323,7 +323,10 @@ export const Invoice = () => {
     };
   }, [isNfcAvailable, readingNfcLoop, invoiceId]);
 
-  const btcAmount = useMemo(() => (amount || 0) / 100000000, [amount]);
+  const btcAmount = useMemo(
+    () => ((amount || 0) / 1000 / 100000000).toFixed(8),
+    [amount]
+  );
 
   const updateInvoice = useCallback(
     async (getInvoiceData: InvoiceType, isInitialData?: boolean) => {
