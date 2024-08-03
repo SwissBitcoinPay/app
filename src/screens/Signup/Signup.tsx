@@ -81,7 +81,9 @@ export const Signup = () => {
   } = useForm<SignupForm>({
     mode: "onTouched",
     defaultValues: {
-      currency: LocaleCurrency.getCurrency(deviceLocale),
+      currency: LocaleCurrency.getCurrency(
+        deviceLocale
+      ) as AccountConfigType["currency"],
       btcPercent: 100,
       btcAddressTypes: {
         onchain: false,
