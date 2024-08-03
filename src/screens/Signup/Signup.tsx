@@ -64,10 +64,7 @@ export const Signup = () => {
   const { colors } = useTheme();
   const [searchParams] = useSearchParams();
 
-  const isAtm = useMemo(
-    () => searchParams.get("isAtm") !== null,
-    [searchParams]
-  );
+  const isAtm = useMemo(() => false, []);
 
   const [isSubmiting, setIsSubmiting] = useState(false);
 
@@ -84,7 +81,9 @@ export const Signup = () => {
   } = useForm<SignupForm>({
     mode: "onTouched",
     defaultValues: {
-      currency: LocaleCurrency.getCurrency(deviceLocale),
+      currency: LocaleCurrency.getCurrency(
+        deviceLocale
+      ) as AccountConfigType["currency"],
       btcPercent: 100,
       btcAddressTypes: {
         onchain: false,

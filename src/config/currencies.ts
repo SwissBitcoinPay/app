@@ -1,671 +1,671 @@
 export const currencies = [
   {
     label: "EUR • Euro 🇪🇺",
-    value: "EUR"
+    value: "EUR" as const
   },
   {
     label: "CHF • Swiss franc 🇨🇭",
-    value: "CHF"
+    value: "CHF" as const
   },
   {
     label: "GBP • Pound sterling 🇬🇧",
-    value: "GBP"
+    value: "GBP" as const
   },
   {
     label: "USD • United States dollar 🇺🇸",
-    value: "USD"
+    value: "USD" as const
   },
   {
     label: "JPY • Japanese yen 🇯🇵",
-    value: "JPY"
+    value: "JPY" as const
   },
   {
     label: "HKD • Hong Kong dollar 🇭🇰",
-    value: "HKD"
+    value: "HKD" as const
   },
   {
     label: "SGD • Singapore dollar 🇸🇬",
-    value: "SGD"
+    value: "SGD" as const
   },
   {
     label: "NOK • Norwegian krone 🇳🇴",
-    value: "NOK"
+    value: "NOK" as const
   },
   {
     label: "NZD • New Zealand dollar 🇳🇿",
-    value: "NZD"
+    value: "NZD" as const
   },
   {
     label: "SEK • Swediss krona 🇸🇪",
-    value: "SEK"
+    value: "SEK" as const
   },
   {
     label: "DKK • Danish krone 🇩🇰",
-    value: "DKK"
+    value: "DKK" as const
   },
   {
     label: "ZAR • South African rand",
-    value: "ZAR"
+    value: "ZAR" as const
   },
   {
     label: "AED • United Arab Emirates dirham",
-    value: "AED"
+    value: "AED" as const
   },
   {
     label: "AFN • Afgan afghani",
-    value: "AFN"
+    value: "AFN" as const
   },
   {
     label: "ALL • Albanian lek",
-    value: "ALL"
+    value: "ALL" as const
   },
   {
     label: "AMD • Armenian dram",
-    value: "AMD"
+    value: "AMD" as const
   },
   {
     label: "ANG • Netherlands Antillean guilder",
-    value: "ANG"
+    value: "ANG" as const
   },
   {
     label: "AOA • Angolan kwanza",
-    value: "AOA"
+    value: "AOA" as const
   },
   {
     label: "ARS • Argentine peso",
-    value: "ARS"
+    value: "ARS" as const
   },
   {
     label: "AUD • Australian dollar",
-    value: "AUD"
+    value: "AUD" as const
   },
   {
     label: "AWG • Aruban floring",
-    value: "AWG"
+    value: "AWG" as const
   },
   {
     label: "AZN • Azerbaijani manat",
-    value: "AZN"
+    value: "AZN" as const
   },
   {
     label: "BAM • Bosnia and Herzegovina convertible mark",
-    value: "BAM"
+    value: "BAM" as const
   },
   {
     label: "BBD • Barbados dollar",
-    value: "BBD"
+    value: "BBD" as const
   },
   {
     label: "BDT • Bangladeshi taka",
-    value: "BDT"
+    value: "BDT" as const
   },
   {
     label: "BGN • Bulgarian Iev",
-    value: "BGN"
+    value: "BGN" as const
   },
   {
     label: "BHD • Bahraini dinar",
-    value: "BHD"
+    value: "BHD" as const
   },
   {
     label: "BIF • Burundian franc",
-    value: "BIF"
+    value: "BIF" as const
   },
   {
     label: "BMD • Bermudian dollar",
-    value: "BMD"
+    value: "BMD" as const
   },
   {
     label: "BND • Brunei dollar",
-    value: "BND"
+    value: "BND" as const
   },
   {
     label: "BOB • Boliviano",
-    value: "BOB"
+    value: "BOB" as const
   },
   {
     label: "BRL • Brazilian real",
-    value: "BRL"
+    value: "BRL" as const
   },
   {
     label: "BSD • Bahamian dollar",
-    value: "BSD"
+    value: "BSD" as const
   },
   {
     label: "BTN • Bhutanese ngultrum",
-    value: "BTN"
+    value: "BTN" as const
   },
   {
     label: "BWP • Botswana pula",
-    value: "BWP"
+    value: "BWP" as const
   },
   {
     label: "BYN • Belarusian ruble",
-    value: "BYN"
+    value: "BYN" as const
   },
   {
     label: "BZD • Belize dollar",
-    value: "BZD"
+    value: "BZD" as const
   },
   {
     label: "CAD • Canadian dollar",
-    value: "CAD"
+    value: "CAD" as const
   },
   {
     label: "CDF • Congolese franc",
-    value: "CDF"
+    value: "CDF" as const
   },
   {
     label: "CLF • Unidad de Fomento",
-    value: "CLF"
+    value: "CLF" as const
   },
   {
     label: "CLP • Chilean peso",
-    value: "CLP"
+    value: "CLP" as const
   },
   {
     label: "CNH",
-    value: "CNH"
+    value: "CNH" as const
   },
   {
     label: "CNY • Renminbi yuan",
-    value: "CNY"
+    value: "CNY" as const
   },
   {
     label: "COP • Colombian peso",
-    value: "COP"
+    value: "COP" as const
   },
   {
     label: "CRC • Costa Rican colon",
-    value: "CRC"
+    value: "CRC" as const
   },
   {
     label: "CUC • Cuban convertible peso",
-    value: "CUC"
+    value: "CUC" as const
   },
   {
     label: "CUP • Cuban peso",
-    value: "CUP"
+    value: "CUP" as const
   },
   {
     label: "CVE • Cape Verdean escudo",
-    value: "CVE"
+    value: "CVE" as const
   },
   {
     label: "CZK • Czech koruna",
-    value: "CZK"
+    value: "CZK" as const
   },
   {
     label: "DJF • Djiboutian franc",
-    value: "DJF"
+    value: "DJF" as const
   },
   {
     label: "DOP • Dominican peso",
-    value: "DOP"
+    value: "DOP" as const
   },
   {
     label: "DZD • Algerian dinar",
-    value: "DZD"
+    value: "DZD" as const
   },
   {
     label: "EGP • Egyptian pound",
-    value: "EGP"
+    value: "EGP" as const
   },
   {
     label: "ERN • Eritran nakfa",
-    value: "ERN"
+    value: "ERN" as const
   },
   {
     label: "ETB • Ethiopian birr",
-    value: "ETB"
+    value: "ETB" as const
   },
   {
     label: "FJD • Fiji dollar",
-    value: "FJD"
+    value: "FJD" as const
   },
   {
     label: "FKP • Falklan Island pound",
-    value: "FKP"
+    value: "FKP" as const
   },
   {
     label: "GEL • Georgian Iari",
-    value: "GEL"
+    value: "GEL" as const
   },
   {
     label: "GGP",
-    value: "GGP"
+    value: "GGP" as const
   },
   {
     label: "GHS • Ghanaian cedi",
-    value: "GHS"
+    value: "GHS" as const
   },
   {
     label: "GIP • Gibraltar pound",
-    value: "GIP"
+    value: "GIP" as const
   },
   {
     label: "GMD • Gambian dalasi",
-    value: "GMD"
+    value: "GMD" as const
   },
   {
     label: "GNF • Guinean franc",
-    value: "GNF"
+    value: "GNF" as const
   },
   {
     label: "GTQ • Guatemalan quetzal",
-    value: "GTQ"
+    value: "GTQ" as const
   },
   {
     label: "GYD • Guyanese dollar",
-    value: "GYD"
+    value: "GYD" as const
   },
   {
     label: "HNL • Honduran lempira",
-    value: "HNL"
+    value: "HNL" as const
   },
   {
     label: "HRK • Croatian kuna",
-    value: "HRK"
+    value: "HRK" as const
   },
   {
     label: "HTG • Haitian gourde",
-    value: "HTG"
+    value: "HTG" as const
   },
   {
     label: "HUF • Hungarian forint",
-    value: "HUF"
+    value: "HUF" as const
   },
   {
     label: "IDR • Indonesian rupiah",
-    value: "IDR"
+    value: "IDR" as const
   },
   {
     label: "ILS • Israeli new shekel",
-    value: "ILS"
+    value: "ILS" as const
   },
   {
     label: "IMP",
-    value: "IMP"
+    value: "IMP" as const
   },
   {
     label: "INR • Indian rupee",
-    value: "INR"
+    value: "INR" as const
   },
   {
     label: "IQD • Iraqi dinar",
-    value: "IQD"
+    value: "IQD" as const
   },
   {
     label: "IRR",
-    value: "IRR"
+    value: "IRR" as const
   },
   {
     label: "ISK • Icelandic króna",
-    value: "ISK"
+    value: "ISK" as const
   },
   {
     label: "JEP",
-    value: "JEP"
+    value: "JEP" as const
   },
   {
     label: "JMD • Jamaican dollar",
-    value: "JMD"
+    value: "JMD" as const
   },
   {
     label: "JOD • Jordanian dinar",
-    value: "JOD"
+    value: "JOD" as const
   },
   {
     label: "KES • Kenyan shilling",
-    value: "KES"
+    value: "KES" as const
   },
   {
     label: "KGS • Kyrgyzstani som",
-    value: "KGS"
+    value: "KGS" as const
   },
   {
     label: "KHR • Cambodian riel",
-    value: "KHR"
+    value: "KHR" as const
   },
   {
     label: "KMF • Comoro franc",
-    value: "KMF"
+    value: "KMF" as const
   },
   {
     label: "KPW • North Korean won",
-    value: "KPW"
+    value: "KPW" as const
   },
   {
     label: "KRW • South Korean won",
-    value: "KRW"
+    value: "KRW" as const
   },
   {
     label: "KWD • Kuwaiti dinar",
-    value: "KWD"
+    value: "KWD" as const
   },
   {
     label: "KYD • Cayman Islands dollar",
-    value: "KYD"
+    value: "KYD" as const
   },
   {
     label: "KZT • Kazakhstani tenge",
-    value: "KZT"
+    value: "KZT" as const
   },
   {
     label: "LAK • Lao kip",
-    value: "LAK"
+    value: "LAK" as const
   },
   {
     label: "LBP • Lebanese pound",
-    value: "LBP"
+    value: "LBP" as const
   },
   {
     label: "LKR • Sri Lankan rupee",
-    value: "LKR"
+    value: "LKR" as const
   },
   {
     label: "LRD • Liberian dollar",
-    value: "LRD"
+    value: "LRD" as const
   },
   {
     label: "LSL • Lesotho loti",
-    value: "LSL"
+    value: "LSL" as const
   },
   {
     label: "LYD • Libyan dinar",
-    value: "LYD"
+    value: "LYD" as const
   },
   {
     label: "MAD • Moroccan dirham",
-    value: "MAD"
+    value: "MAD" as const
   },
   {
     label: "MDL • Moldovan leu",
-    value: "MDL"
+    value: "MDL" as const
   },
   {
     label: "MGA • Malagasy ariary",
-    value: "MGA"
+    value: "MGA" as const
   },
   {
     label: "MKD • Macedonian denar",
-    value: "MKD"
+    value: "MKD" as const
   },
   {
     label: "MMK • Myanmar kyat",
-    value: "MMK"
+    value: "MMK" as const
   },
   {
     label: "MNT • Mongolian tögrög",
-    value: "MNT"
+    value: "MNT" as const
   },
   {
     label: "MOP • Macanese pataca",
-    value: "MOP"
+    value: "MOP" as const
   },
   {
     label: "MRO",
-    value: "MRO"
+    value: "MRO" as const
   },
   {
     label: "MUR • Mauritian rupee",
-    value: "MUR"
+    value: "MUR" as const
   },
   {
     label: "MVR • Maldivian rufiyaa",
-    value: "MVR"
+    value: "MVR" as const
   },
   {
     label: "MWK • Malawian kwache",
-    value: "MWK"
+    value: "MWK" as const
   },
   {
     label: "MXN • Mexican peso",
-    value: "MXN"
+    value: "MXN" as const
   },
   {
     label: "MYR • Malaysian ringgit",
-    value: "MYR"
+    value: "MYR" as const
   },
   {
     label: "MZN • Mozamican metical",
-    value: "MZN"
+    value: "MZN" as const
   },
   {
     label: "NAD • Namiian dollar",
-    value: "NAD"
+    value: "NAD" as const
   },
   {
     label: "NGN • Nigerian naira",
-    value: "NGN"
+    value: "NGN" as const
   },
   {
     label: "NIO • Nicaraguan córdoba",
-    value: "NIO"
+    value: "NIO" as const
   },
   {
     label: "NPR • Nepalese rupee",
-    value: "NPR"
+    value: "NPR" as const
   },
   {
     label: "OMR • Omani rial",
-    value: "OMR"
+    value: "OMR" as const
   },
   {
     label: "PAB • Panamanian balboa",
-    value: "PAB"
+    value: "PAB" as const
   },
   {
     label: "PEN • Peruvian sol",
-    value: "PEN"
+    value: "PEN" as const
   },
   {
     label: "PGK • Papua New Guinean kina",
-    value: "PGK"
+    value: "PGK" as const
   },
   {
     label: "PHP • Philippine peso",
-    value: "PHP"
+    value: "PHP" as const
   },
   {
     label: "PKR • Pakistan rupee",
-    value: "PKR"
+    value: "PKR" as const
   },
   {
     label: "PLN • Polish złoty",
-    value: "PLN"
+    value: "PLN" as const
   },
   {
     label: "PYG • Paraguayan guaraní",
-    value: "PYG"
+    value: "PYG" as const
   },
   {
     label: "QAR • Qatari riyal",
-    value: "QAR"
+    value: "QAR" as const
   },
   {
     label: "RON • Romanian leu",
-    value: "RON"
+    value: "RON" as const
   },
   {
     label: "RSD • Serbian dinar",
-    value: "RSD"
+    value: "RSD" as const
   },
   {
     label: "RUB • Russian ruble",
-    value: "RUB"
+    value: "RUB" as const
   },
   {
     label: "RWF • Rwandan franc",
-    value: "RWF"
+    value: "RWF" as const
   },
   {
     label: "SAR • Saudi riyal",
-    value: "SAR"
+    value: "SAR" as const
   },
   {
     label: "SBD • Solomon Islands dollar",
-    value: "SBD"
+    value: "SBD" as const
   },
   {
     label: "SCR • Seychelles rupee",
-    value: "SCR"
+    value: "SCR" as const
   },
   {
     label: "SDG • Sudanese pound",
-    value: "SDG"
+    value: "SDG" as const
   },
   {
     label: "SHP • Saint Helena leone",
-    value: "SHP"
+    value: "SHP" as const
   },
   {
     label: "SLL • Sierra Leonean leone",
-    value: "SLL"
+    value: "SLL" as const
   },
   {
     label: "SOS • Somali shilling",
-    value: "SOS"
+    value: "SOS" as const
   },
   {
     label: "SRD • Surinamese dollar",
-    value: "SRD"
+    value: "SRD" as const
   },
   {
     label: "SSP • South Sudanese pound",
-    value: "SSP"
+    value: "SSP" as const
   },
   {
     label: "STD",
-    value: "STD"
+    value: "STD" as const
   },
   {
     label: "SVC • Salvadoran colón",
-    value: "SVC"
+    value: "SVC" as const
   },
   {
     label: "SYP • Syrian pound",
-    value: "SYP"
+    value: "SYP" as const
   },
   {
     label: "SZL • Swazi lilangeni",
-    value: "SZL"
+    value: "SZL" as const
   },
   {
     label: "THB • Thai baht",
-    value: "THB"
+    value: "THB" as const
   },
   {
     label: "TJS • Tajikistani somoni",
-    value: "TJS"
+    value: "TJS" as const
   },
   {
     label: "TMT • Turkmenistan manat",
-    value: "TMT"
+    value: "TMT" as const
   },
   {
     label: "TND • Tunisian dinar",
-    value: "TND"
+    value: "TND" as const
   },
   {
     label: "TOP • Tongan pa'anga",
-    value: "TOP"
+    value: "TOP" as const
   },
   {
     label: "TRY • Turkish lira",
-    value: "TRY"
+    value: "TRY" as const
   },
   {
     label: "TTD • Trinid and Tobago dollar",
-    value: "TTD"
+    value: "TTD" as const
   },
   {
     label: "TWD • New Taiwan dollar",
-    value: "TWD"
+    value: "TWD" as const
   },
   {
     label: "TZS • Tanzanian shilling",
-    value: "TZS"
+    value: "TZS" as const
   },
   {
     label: "UAH • Ukrainian hryvnia",
-    value: "UAH"
+    value: "UAH" as const
   },
   {
     label: "UGX • Ugandan shilling",
-    value: "UGX"
+    value: "UGX" as const
   },
   {
     label: "UYU • Uruguyan peso",
-    value: "UYU"
+    value: "UYU" as const
   },
   {
     label: "UZS • Uzbekistan som",
-    value: "UZS"
+    value: "UZS" as const
   },
   {
     label: "VES • Venezuelan bolívar soberano",
-    value: "VES"
+    value: "VES" as const
   },
   {
     label: "VND • Vietnamese đồng",
-    value: "VND"
+    value: "VND" as const
   },
   {
     label: "VUV • Vanuatu vatu",
-    value: "VUV"
+    value: "VUV" as const
   },
   {
     label: "WST • Samoan tala",
-    value: "WST"
+    value: "WST" as const
   },
   {
     label: "XAF",
-    value: "XAF"
+    value: "XAF" as const
   },
   {
     label: "XAG • Silver",
-    value: "XAG"
+    value: "XAG" as const
   },
   {
     label: "XAU • Gold",
-    value: "XAU"
+    value: "XAU" as const
   },
   {
     label: "XCD • East Caribbean dollar",
-    value: "XCD"
+    value: "XCD" as const
   },
   {
     label: "XDR",
-    value: "XDR"
+    value: "XDR" as const
   },
   {
     label: "XOF • CFA franc BCEAO",
-    value: "XOF",
+    value: "XOF" as const,
     noDecimals: true
   },
   {
     label: "XPD",
-    value: "XPD"
+    value: "XPD" as const
   },
   {
     label: "XPF",
-    value: "XPF"
+    value: "XPF" as const
   },
   {
     label: "XPT",
-    value: "XPT"
+    value: "XPT" as const
   },
   {
     label: "YER • Yemen rial",
-    value: "YER"
+    value: "YER" as const
   },
   {
     label: "ZMW • Zambian kwacha",
-    value: "ZMW"
+    value: "ZMW" as const
   },
   {
     label: "ZWL • Zimabwean dollar",
-    value: "ZWL"
+    value: "ZWL" as const
   }
 ];

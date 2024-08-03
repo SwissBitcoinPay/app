@@ -3,7 +3,6 @@ import {
   keyStoreIsGuest,
   keyStoreTransactionsHistory
 } from "@config/settingsKeys";
-import { intlFormat } from "date-fns";
 import { AsyncStorage, Biometrics, getSha256 } from "@utils";
 import { useToast } from "react-native-toast-notifications";
 import axios from "axios";
@@ -55,41 +54,38 @@ export const usePostInvoice = () => {
           });
           const { data: checkoutResponseData } = await axios.post<{
             checkoutUrl: string;
+            expiry: number;
           }>(
             `${apiRootUrl}/checkout`,
             {
               amount,
               unit: unit || currency,
               title: `${name || ""}`,
-              description:
-                description ||
-                intlFormat(
-                  Date.now(),
-                  {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                    formatMatcher: "basic"
-                  },
-                  { locale: i18n.language }
-                ),
+              description,
+              tag: "invoice-tpos",
+              device: {
+                name: deviceName,
+                type: deviceType
+              },
               extra: {
-                tag: "invoice-tpos",
-                deviceName,
-                deviceType,
-                customNote: description,
                 isGuestMode
               },
               onChain: isOnchainAvailable,
-              delay: 10 || 10
+              delay: 10
             },
             {
               headers: { "Api-Key": apiKey }
             }
           );
 
+          additionnalHistoryProps = {
+            device: {
+              name: deviceName,
+              type: deviceType
+            },
+            description,
+            expiry: checkoutResponseData.expiry
+          };
           const url = checkoutResponseData.checkoutUrl;
           id = url.split("/").pop() || "";
           finalUrl = `/invoice/${id}`;
@@ -116,13 +112,16 @@ export const usePostInvoice = () => {
             amount,
             unit: unit || currency,
             language: i18n.language,
-            deviceName,
-            deviceType,
-            customNote: description
+            device: {
+              name: deviceName,
+              type: deviceType
+            },
+            description
           };
 
           const { data: withdrawResponseData } = await axios.post<{
-            lnurl?: string;
+            id: string;
+            lnurl: string;
             amount: number;
             fiatAmount: number;
           }>(`${apiRootUrl}/atm-withdraw`, data, {
@@ -134,13 +133,14 @@ export const usePostInvoice = () => {
             }
           });
 
-          id = withdrawResponseData.lnurl || "";
-          finalUrl = `/invoice/${id}`;
+          id = withdrawResponseData.id;
+          finalUrl = `/invoice/${withdrawResponseData.lnurl}`;
 
           additionnalHistoryProps = {
             ...additionnalHistoryProps,
+            lnurl: withdrawResponseData.lnurl,
             amount: withdrawResponseData.amount,
-            customNote: description
+            description
           };
 
           decimalFiat = withdrawResponseData.fiatAmount;
@@ -166,19 +166,29 @@ export const usePostInvoice = () => {
             ...JSON.parse(transactionsHistory || "[]"),
             {
               id: id,
-              isExpired: false,
-              createdAt: new Date().getTime() / 1000,
-              fiatAmount: decimalFiat,
-              fiatUnit: currency,
+              status: "open",
+              time: new Date().getTime() / 1000,
+              input: {
+                unit: currency,
+                amount: decimalFiat
+              },
+              ...(deviceName
+                ? {
+                    device: {
+                      name: deviceName,
+                      type: deviceType
+                    }
+                  }
+                : {}),
               ...additionnalHistoryProps
             }
           ])
         );
       } catch (e) {
-        if (axios.isAxiosError<string>(e)) {
+        if (axios.isAxiosError<{ reason: string }>(e)) {
           navigate("/");
           if (e.response?.data) {
-            toast.show(t(e.response.data), {
+            toast.show(t(e.response.data.reason), {
               type: "error"
             });
           }

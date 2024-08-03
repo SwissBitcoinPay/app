@@ -207,8 +207,7 @@ export const Wallet = () => {
                 {rates && fiatCurrency && (
                   <S.Balance h3 weight={600}>
                     {getFormattedUnit(
-                      (balance * rates[`BTC${fiatCurrency}`]?.[fiatCurrency]) /
-                        100000000,
+                      (balance * rates[fiatCurrency]) / 100000000,
                       fiatCurrency
                     )}
                   </S.Balance>

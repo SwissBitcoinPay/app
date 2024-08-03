@@ -5,7 +5,7 @@ export { currencies } from "./currencies";
 export { currencyToCountry } from "./currencyToCountry";
 export { countries } from "./countries";
 export { routesList } from "./routesList";
-export { apiRootUrl } from "./apiRootUrl";
+export { apiRootUrl, apiRootDomain } from "./apiRootUrl";
 export { appRootUrl } from "./appRootUrl";
 export { screenSizes } from "./screenSizes";
 export { SBPContext, SBPContextProvider } from "./SBPContext";

@@ -56,8 +56,8 @@ export const FiatSettings = ({
   const chfToFiat = useCallback(
     (amount: number) => {
       if (rates) {
-        const btcPriceInChf = rates.BTCCHF.CHF;
-        const btcPriceInCurrency = rates[`BTC${currency}`][currency];
+        const btcPriceInChf = rates.CHF;
+        const btcPriceInCurrency = rates[currency];
         return (amount * (btcPriceInCurrency || 0)) / (btcPriceInChf || 0);
       }
       return 0;

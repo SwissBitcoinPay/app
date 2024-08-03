@@ -34,7 +34,7 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
     async (testApiKey?: string) => {
       try {
         const { data } = await axios.get<AccountConfigType>(
-          `${apiRootUrl}/account-v3`,
+          `${apiRootUrl}/account`,
           {
             withCredentials: true,
             headers: { "Api-Key": testApiKey }

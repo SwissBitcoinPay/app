@@ -21,6 +21,7 @@ import { isSEPACountry } from "ibantools";
 import { AccountConfigType } from "@types";
 import { Vibration } from "react-native";
 import { useRates } from "@hooks";
+import { RatesType } from "@hooks/useRates";
 import * as S from "./styled";
 
 const fiatCurrencies = [
@@ -101,7 +102,7 @@ export type BitcoinFiatFormSettings = {
   setValue: UseFormSetValue<PayoutConfigForm>;
   setError: UseFormSetError<PayoutConfigForm>;
 
-  rates?: { [k in string]: { [key in string]: number } };
+  rates?: RatesType;
   currency: AccountConfigType["currency"];
   setIsValid: (value: boolean) => void;
 };

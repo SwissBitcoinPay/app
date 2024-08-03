@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import {
   AsyncStorage,
   getFormattedUnit,
@@ -31,53 +31,19 @@ import { Switch } from "react-native";
 import { useAccountConfig } from "@hooks";
 import { ListItemValueText } from "@components/ItemsList/components/ListItem/ListItem";
 import { UserType } from "@types";
+import { InvoiceType } from "@screens/Invoice/Invoice";
 import * as S from "./styled";
 
 const SPECIAL_TAG_GAP = 4;
-
-type ApiPaymentsType = {
-  extra: {
-    originalHash: string;
-    fiatAmount: number;
-    isExpired?: boolean;
-    fiatUnit: string;
-    deviceType: "mobile" | "tablet" | "desktop";
-    deviceName: string;
-    customNote?: string;
-    tag: "invoice-tpos";
-  };
-  pending: boolean;
-  amount: number;
-  time: number;
-  payment_hash?: string;
-};
-
-type StoreTransactionType = {
-  id: string;
-  isExpired: boolean;
-  isPaid?: boolean;
-  createdAt: number;
-  fiatUnit: string;
-  fiatAmount: number;
-  amount?: number;
-  customNote?: string;
-};
-
-type TransactionType = {
-  description?: string;
-  delay?: number;
-  isWithdraw?: boolean;
-  extra?: {
-    deviceType: "mobile" | "tablet" | "desktop";
-    deviceName: string;
-    customNote?: string;
-  };
-} & StoreTransactionType;
 
 const timeFormatter = new Intl.DateTimeFormat(undefined, {
   dateStyle: "long",
   timeStyle: "short"
 });
+
+type InvoiceWithLnurlUrl = InvoiceType & {
+  lnurl?: string;
+};
 
 export const History = () => {
   const { t: tRoot } = useTranslation();
@@ -91,12 +57,14 @@ export const History = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLocal, setIsLocal] = useState(true);
   const [localIds, setLocalIds] = useState<string[]>([]);
-  const [transactions, setTransactions] = useState<TransactionType[]>([]);
+  const [transactions, setTransactions] = useState<InvoiceWithLnurlUrl[]>([]);
+
+  const now = useMemo(() => new Date().getTime() / 1000, []);
 
   const getTransactions = useCallback(async () => {
-    let transactionsDetails: TransactionType[] = [];
+    let transactionsDetails: InvoiceWithLnurlUrl[] = [];
 
-    const localTransactionsHistory: StoreTransactionType[] = JSON.parse(
+    const localTransactionsHistory: InvoiceWithLnurlUrl[] = JSON.parse(
       (await AsyncStorage.getItem(settingsKeys.keyStoreTransactionsHistory)) ||
         "[]"
     );
@@ -106,22 +74,23 @@ export const History = () => {
     if (!accountConfig?.isAtm) {
       transactionsDetails = (
         await Promise.all(
-          localTransactionsHistory.map((transaction) =>
-            !transaction.isExpired && !transaction.isPaid
-              ? axios.get(`${apiRootUrl}/checkout/${transaction.id}`)
-              : { data: transaction }
-          )
+          localTransactionsHistory.map((transaction) => {
+            return !["settled", "canceled"].includes(transaction.status) &&
+              transaction.expiry > now
+              ? axios.get<InvoiceType>(
+                  `${apiRootUrl}/checkout/${transaction.id}`
+                )
+              : { data: transaction };
+          })
         )
-      )
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        .map(({ data: { id = null, hash = id, ...data } }) => ({
-          ...data,
-          id: hash
-        }));
+      ).map(({ data }) => ({
+        ...data,
+        status: data.expiry <= now ? "expired" : data.status
+      }));
     } else {
       const lnurlList = localTransactionsHistory.map((v) => {
-        if (!v.isPaid) {
-          const { words: dataPart } = bech32.decode(v.id, 2000);
+        if (v.status !== "settled") {
+          const { words: dataPart } = bech32.decode(v.lnurl || "", 2000);
           const requestByteArray = bech32.fromWords(dataPart);
           return Buffer.from(requestByteArray).toString();
         } else {
@@ -137,8 +106,8 @@ export const History = () => {
                   if (isApiError(e)) {
                     return {
                       data: {
-                        isPaid: e.response.status === 404,
-                        defaultDescription: t("withdrawSuccess"),
+                        status: "expired",
+                        defaultDescription: t("expired"),
                         minWithdrawable:
                           localTransactionsHistory[index].amount || 0
                       }
@@ -151,27 +120,17 @@ export const History = () => {
           )
         )
       ).map(({ data = {} }, index) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return {
           ...data,
+          ...(localTransactionsHistory[index] || {}),
           title: data.defaultDescription,
-          isPending: data.tag === "withdrawRequest",
-          createdAt: localTransactionsHistory[index].createdAt || 0,
-          amount:
-            localTransactionsHistory[index].amount || data.minWithdrawable,
-          fiatAmount: localTransactionsHistory[index].fiatAmount || 0,
-          fiatUnit: localTransactionsHistory[index].fiatUnit,
-          isExpired: false,
-          id: localTransactionsHistory[index].id,
-          isWithdraw: true,
-          customNote: localTransactionsHistory[index].customNote,
-          extra: {
-            customNote: localTransactionsHistory[index].customNote
-          }
-        };
+          status: data.status || "open",
+          tag: "withdraw",
+          time: localTransactionsHistory[index].time || 0,
+          amount: localTransactionsHistory[index].amount || data.minWithdrawable
+        } as InvoiceWithLnurlUrl;
       });
     }
-
     AsyncStorage.setItem(
       settingsKeys.keyStoreTransactionsHistory,
       JSON.stringify(transactionsDetails)
@@ -181,7 +140,7 @@ export const History = () => {
       if (localTransactionsHistory.length === 0) {
         setIsLocal(false);
       }
-      const { data: payments } = await axios.get<ApiPaymentsType[]>(
+      const { data: payments } = await axios.get<InvoiceType[]>(
         `${apiRootUrl}/payments`,
         {
           withCredentials: true,
@@ -191,40 +150,29 @@ export const History = () => {
         }
       );
 
+      // console.log(payments);
+
       transactionsDetails = [
         ...payments
-          .filter(({ extra }) => extra.tag === "invoice-tpos")
+          .filter(
+            ({ tag, amount }) =>
+              tag === "invoice-tpos" || (accountConfig?.isAtm && amount < 0)
+          )
           .map((transaction) => {
-            const id =
-              transaction.extra.originalHash || transaction.payment_hash || "";
+            const id = transaction.id || "";
             const localTx = transactionsDetails.find((tx) => tx.id === id);
 
-            return (
-              localTx || {
-                id,
-                hash: transaction.payment_hash,
-                isExpired: transaction.extra.isExpired || false,
-                isPaid: !transaction.pending && !transaction.extra.isExpired,
-                createdAt: transaction.time,
-                fiatUnit: transaction.extra.fiatUnit,
-                fiatAmount: transaction.extra.fiatAmount,
-                extra: {
-                  deviceName: transaction.extra.deviceName,
-                  deviceType: transaction.extra.deviceType,
-                  customNote: transaction.extra.customNote
-                }
-              }
-            );
+            return localTx || transaction;
           }),
-        ...localTransactionsHistory.filter(
-          (transaction) => transaction.isExpired
-        )
+        ...localTransactionsHistory
+          .filter((transaction) => transaction.status === "expired")
+          .reverse()
       ].reverse();
     }
 
     setTransactions([...transactionsDetails].reverse());
     setIsLoading(false);
-  }, [accountConfig?.apiKey, accountConfig?.isAtm, t, userType]);
+  }, [accountConfig?.apiKey, accountConfig?.isAtm, now, t, userType]);
 
   useEffect(() => {
     getTransactions();
@@ -255,8 +203,8 @@ export const History = () => {
                   (isLocal && localIds.includes(transaction.id))
               )
               .map((transaction) => {
-                const isPaid = transaction.isPaid;
-                const isExpired = transaction.isExpired;
+                const isPaid = transaction.status === "settled";
+                const isExpired = transaction.status === "expired";
 
                 const color = isPaid
                   ? colors.success
@@ -264,12 +212,12 @@ export const History = () => {
                   ? colors.primaryLight
                   : colors.warning;
                 const valueBase = getFormattedUnit(
-                  transaction.fiatAmount,
-                  transaction.fiatUnit
+                  transaction.input.amount,
+                  transaction.input.unit
                 );
-                const customNote = transaction.extra?.customNote;
-                const deviceType = transaction.extra?.deviceType;
-                const deviceName = transaction.extra?.deviceName;
+
+                const deviceType = transaction.device?.type;
+                const deviceName = transaction.device?.name;
 
                 const lastTags = [
                   ...(isMinUserType({
@@ -305,7 +253,7 @@ export const History = () => {
                         }
                       ]
                     : []),
-                  ...(customNote
+                  ...(transaction.description
                     ? [
                         {
                           value: (
@@ -319,7 +267,7 @@ export const History = () => {
                                 size={13}
                               />
                               <ListItemValueText>
-                                {customNote}
+                                {transaction.description}
                               </ListItemValueText>
                             </ComponentStack>
                           ),
@@ -330,18 +278,19 @@ export const History = () => {
                 ];
 
                 return {
-                  title: `${timeFormatter.format(
-                    transaction.createdAt * 1000
-                  )}`,
-                  disabled: isPaid && transaction.isWithdraw,
+                  title: `${timeFormatter.format(transaction.time * 1000)}`,
+                  disabled:
+                    (isPaid && transaction.tag === "withdraw") ||
+                    isExpired ||
+                    (accountConfig?.isAtm && !isLocal),
                   onPress: [
-                    `/invoice/${transaction.id}`,
+                    `/invoice/${transaction.lnurl || transaction.id}`,
                     {
                       state: {
                         isLocalInvoice: !isPaid && !isExpired,
-                        unit: transaction.fiatUnit,
-                        decimalFiat: transaction.fiatAmount,
-                        customNote: transaction.extra?.customNote
+                        unit: transaction.input.unit,
+                        decimalFiat: transaction.input.amount,
+                        description: transaction.description
                       }
                     }
                   ],
