@@ -1,0 +1,2 @@
+- Meilleur support de notre nouvelle infrastructure
+- Corrigé quelques bugs
