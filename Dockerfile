@@ -1,3 +1,8 @@
+# Generates a release APK by running:
+#
+# docker build -t sbp-builder . -o sbp-output
+#
+
 ARG SBP_CHECKOUT_UPLOAD_STORE_FILE=sbp.keystore
 ARG SBP_CHECKOUT_UPLOAD_KEY_ALIAS=sbp
 ARG SBP_CHECKOUT_UPLOAD_STORE_PASSWORD=unsecure_storepass
