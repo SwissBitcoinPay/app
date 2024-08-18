@@ -22,4 +22,6 @@ export const BitcoinIconBackground = styled(View)<{
   z-index: -1;
 `;
 
-export const BitcoinIcon = styled(Icon)``;
+export const BitcoinIcon = styled(Icon)`
+  color: ${({ theme }) => theme.colors.bitcoin};
+`;

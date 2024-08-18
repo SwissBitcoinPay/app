@@ -55,7 +55,7 @@ export const FooterLine = ({
         gapSize={8}
         // @ts-ignore
         as={Pressable}
-        disabled={!copyable}
+        disabled={!copyable && !url}
         onPress={url || onPress}
         target="_blank"
         rel="noopener noreferrer"
