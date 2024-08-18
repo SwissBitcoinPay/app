@@ -78,10 +78,17 @@ export const FiatSettings = ({
   return (
     <ComponentStack>
       <ComponentStack gapSize={14}>
-        <DescriptionLine>
-          <FieldDescription>💶 {t("feesDetails1")}</FieldDescription>
-          <FieldDescription>1.5%</FieldDescription>
-        </DescriptionLine>
+        <FieldDescription>💶 {t("feesDetails1")}</FieldDescription>
+        <ComponentStack gapSize={4}>
+          <DescriptionLine>
+            <FieldDescription>{t("feesFirstYear")}</FieldDescription>
+            <FieldDescription>0.21%</FieldDescription>
+          </DescriptionLine>
+          <DescriptionLine>
+            <FieldDescription>{t("feesAfterwards")}</FieldDescription>
+            <FieldDescription>1.50%</FieldDescription>
+          </DescriptionLine>
+        </ComponentStack>
         <FieldDescription>
           🏦{" "}
           {t("receiveInBankDescription1", {

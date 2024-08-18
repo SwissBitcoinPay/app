@@ -269,7 +269,7 @@ export const PayoutConfig = ({
                 </S.SubPercentageView>
               </S.ValueContent>
               <S.SliderDetailsText>
-                💸 {t("fees", { percent: "0-1" })}
+                💸 {t("fees", { percent: 0.21 })}
               </S.SliderDetailsText>
               <S.SliderDetailsText>
                 🔑 {t("cryptoSignature")}
@@ -295,7 +295,7 @@ export const PayoutConfig = ({
                 </S.SubPercentageView>
               </S.ValueContent>
               <S.SliderDetailsText>
-                {t("fees", { percent: "1.5" })} 💸
+                {t("fees", { percent: 0.21 })} 💸
               </S.SliderDetailsText>
               <S.SliderDetailsText>
                 {isInstant
