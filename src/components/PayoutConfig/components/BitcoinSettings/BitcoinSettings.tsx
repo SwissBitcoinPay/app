@@ -362,27 +362,11 @@ export const BitcoinSettings = ({
           <FieldDescription>💶 {t("feesDetails1")}</FieldDescription>
           <ComponentStack gapSize={4}>
             <DescriptionLine>
-              <FieldDescription>
-                {t("feesDetailsBelow", {
-                  amount: step1
-                })}
-              </FieldDescription>
-              <FieldDescription>0%</FieldDescription>
-            </DescriptionLine>
-            <DescriptionLine>
-              <FieldDescription>
-                {t("feesDetailsBelow", {
-                  amount: step2
-                })}
-              </FieldDescription>
+              <FieldDescription>{t("feesFirstYear")}</FieldDescription>
               <FieldDescription>0.21%</FieldDescription>
             </DescriptionLine>
             <DescriptionLine>
-              <FieldDescription>
-                {t("feesDetailsAbove", {
-                  amount: step2
-                })}
-              </FieldDescription>
+              <FieldDescription>{t("feesAfterwards")}</FieldDescription>
               <FieldDescription>1%</FieldDescription>
             </DescriptionLine>
           </ComponentStack>
