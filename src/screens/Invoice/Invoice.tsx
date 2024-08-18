@@ -83,6 +83,15 @@ type Status =
   | "reserved"
   | "paying";
 
+type OnchainTx = {
+  network: "onchain";
+  address: string;
+  txId?: string;
+  vout_index?: number;
+  confirmations?: number;
+  minConfirmations?: number;
+};
+
 type PaymentDetail = XOR<
   {
     network: "lightning";
@@ -90,13 +99,7 @@ type PaymentDetail = XOR<
     hash: string;
     preimage?: string;
   },
-  {
-    network: "onchain";
-    address: string;
-    txId?: string;
-    confirmations?: number;
-    minConfirmations?: number;
-  }
+  OnchainTx
 > & {
   amount?: number;
   paidAt?: number;
@@ -195,9 +198,7 @@ export const Invoice = () => {
   const [paidAt, setPaidAt] = useState<number>();
 
   // Onchain data
-  const [txId, setTxId] = useState<string>();
-  const [confirmations, setConfirmations] = useState<number>();
-  const [minConfirmations, setMinConfirmations] = useState<number>();
+  const [onChainTx, setOnchainTx] = useState<OnchainTx>();
 
   const isAlive = useMemo(
     () => !["settled", "expired", "unconfirmed"].includes(status),
@@ -331,13 +332,18 @@ export const Invoice = () => {
   const updateInvoice = useCallback(
     async (getInvoiceData: InvoiceType, isInitialData?: boolean) => {
       try {
-        const _pr = getInvoiceData.paymentDetails.find(
-          (p) => p.network === "lightning"
-        )?.paymentRequest;
+        const _pr =
+          getInvoiceData.paymentDetails.find(
+            (p) => p.network === "lightning" && p.paidAt
+          )?.paymentRequest ||
+          getInvoiceData.paymentDetails.find((p) => p.network === "lightning")
+            ?.paymentRequest;
 
-        const _onChainData = getInvoiceData.paymentDetails.find(
-          (p) => p.network === "onchain"
-        );
+        const _onChainData =
+          getInvoiceData.paymentDetails.find(
+            (p) => p.network === "onchain" && p.paidAt
+          ) ||
+          getInvoiceData.paymentDetails.find((p) => p.network === "onchain");
 
         const _paymentMethod = getInvoiceData.paymentDetails.find(
           (p) => p.paidAt
@@ -355,9 +361,7 @@ export const Invoice = () => {
         setInvoiceFiatAmount(getInvoiceData.input.amount);
         setStatus(getInvoiceData.status);
         setPaymentMethod(_paymentMethod);
-        setTxId(_onChainData?.txId);
-        setMinConfirmations(_onChainData?.minConfirmations);
-        setConfirmations(_onChainData?.confirmations);
+        setOnchainTx(_onChainData);
         setPaidAt(getInvoiceData.paidAt);
 
         setIsInit(true);
@@ -393,7 +397,11 @@ export const Invoice = () => {
               const { data: blockHeight } = await axios.get(
                 "https://mempool.space/api/blocks/tip/height"
               );
-              setConfirmations(blockHeight - txDetails.status.block_height + 1);
+              setOnchainTx({
+                ..._onChainData,
+                minConfirmations:
+                  blockHeight - txDetails.status.block_height + 1
+              });
             }
           } catch (e) {}
         }
@@ -860,17 +868,21 @@ export const Invoice = () => {
                       .toString()}
                   />
                 )}
-                {txId && (
+                {onChainTx?.txId && (
                   <FooterLine
                     label={t("transactionId")}
-                    url={`https://mempool.space/tx/${txId}`}
-                    value={truncate(txId, 16)}
+                    url={`https://mempool.space/tx/${onChainTx.txId}${
+                      onChainTx.vout_index !== undefined
+                        ? `#vout=${onChainTx.vout_index}`
+                        : ""
+                    }`}
+                    value={truncate(onChainTx.txId, 16)}
                   />
                 )}
-                {confirmations !== undefined && (
+                {onChainTx?.confirmations !== undefined && (
                   <FooterLine
                     label={t("confirmations")}
-                    value={confirmations.toString()}
+                    value={onChainTx.confirmations.toString()}
                     {...(status === "unconfirmed"
                       ? { color: colors.warning }
                       : {})}
