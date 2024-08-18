@@ -1,0 +1,2 @@
+- Mis à jour les frais affichés
+- Corrigé des bugs d'affichage des paiements Onchain
