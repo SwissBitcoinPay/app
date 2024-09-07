@@ -36,7 +36,7 @@ import {
   useMemo,
   useState
 } from "react";
-import { getFormattedUnit, validateBitcoinAddress } from "@utils";
+import { validateBitcoinAddress } from "@utils";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
@@ -47,8 +47,6 @@ import { BitcoinFiatFormSettings } from "@components/PayoutConfig/PayoutConfig";
 import * as S from "./styled";
 
 export const BitcoinSettings = ({
-  rates,
-  currency,
   setValue,
   resetField,
   watch,
@@ -85,27 +83,6 @@ export const BitcoinSettings = ({
     () => !!alreadyVerifiedAddresses.includes(depositAddress || ""),
     [alreadyVerifiedAddresses, depositAddress]
   );
-
-  const { step1, step2 } = useMemo(() => {
-    if (rates) {
-      const btcPriceInChf = rates.CHF;
-      const btcPriceInCurrency = rates[currency];
-
-      return {
-        step1: getFormattedUnit(
-          (100 * btcPriceInCurrency) / btcPriceInChf,
-          currency,
-          0
-        ),
-        step2: getFormattedUnit(
-          (1000 * btcPriceInCurrency) / btcPriceInChf,
-          currency,
-          0
-        )
-      };
-    }
-    return { step1: null, step2: null };
-  }, [rates, currency]);
 
   useEffect(() => {
     if (finalDepositAddress && !messageToSign && !isAddressAlreadyVerified) {

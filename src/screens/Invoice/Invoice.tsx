@@ -339,11 +339,17 @@ export const Invoice = () => {
           getInvoiceData.paymentDetails.find((p) => p.network === "lightning")
             ?.paymentRequest;
 
-        const _onChainData =
+        const _onChainData = (getInvoiceData.paymentDetails.find(
+          (p) => p.network === "onchain" && p.paidAt
+        ) ||
           getInvoiceData.paymentDetails.find(
-            (p) => p.network === "onchain" && p.paidAt
-          ) ||
-          getInvoiceData.paymentDetails.find((p) => p.network === "onchain");
+            (p) => p.network === "onchain"
+          )) as
+          | (Omit<PaymentDetail, "network" | "address"> & {
+              network: "onchain";
+              address: string;
+            })
+          | undefined;
 
         const _paymentMethod = getInvoiceData.paymentDetails.find(
           (p) => p.paidAt
@@ -388,10 +394,10 @@ export const Invoice = () => {
           return;
         }
 
-        if (_paymentMethod === "onchain") {
+        if (_paymentMethod === "onchain" && _onChainData) {
           try {
             const { data: txDetails } = await axios.get(
-              `https://mempool.space/api/tx/${_onChainData?.txId}`
+              `https://mempool.space/api/tx/${_onChainData.txId}`
             );
             if (txDetails.status.confirmed) {
               const { data: blockHeight } = await axios.get(
@@ -600,10 +606,12 @@ export const Invoice = () => {
                     />
                   ) : null)}
                 {status === "unconfirmed" &&
-                confirmations !== undefined &&
-                minConfirmations ? (
+                onChainTx?.confirmations !== undefined &&
+                onChainTx?.minConfirmations ? (
                   <S.ConfirmationsCircle
-                    progress={confirmations / minConfirmations}
+                    progress={
+                      onChainTx?.confirmations / onChainTx?.minConfirmations
+                    }
                     borderWidth={0}
                     thickness={12}
                     unfilledColor={colors.grey}
@@ -611,7 +619,7 @@ export const Invoice = () => {
                     size={STATUS_ICON_SIZE}
                   >
                     <S.ConfirmationsText>
-                      {confirmations}/{minConfirmations}
+                      {onChainTx?.confirmations}/{onChainTx?.minConfirmations}
                     </S.ConfirmationsText>
                   </S.ConfirmationsCircle>
                 ) : status === "expired" ? (

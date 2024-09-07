@@ -35,7 +35,13 @@ const fiatCurrencies = [
   "SEK",
   "SGD",
   "USD",
-  "ZAR"
+  "ZAR",
+  "AED",
+  "AUD",
+  "CAD",
+  "CZK",
+  "MXN",
+  "PLN"
 ];
 
 type BitcoinSettingsForm = {
