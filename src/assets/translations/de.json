@@ -119,6 +119,8 @@
       "status": "Status",
       "timeLeft": "Verbleibende Zeit",
       "amount": "Betrag",
+      "alreadyPaid": "Bereits bezahlt",
+      "payTheRest": "Bezahlen Sie den Rest ({{sats}} sats) über Lightning oder Onchain",
       "paidOn": "Bezahlt am",
       "awaitingPayment": "Erwartete Zahlung",
       "returningToTerminal": "Rückkehr zum Terminal",

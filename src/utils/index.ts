@@ -19,3 +19,4 @@ export { validateBitcoinAddress } from "./validateBitcoinAddress";
 export { hexToRgb } from "./hexToRgb";
 export { mergeDeep } from "./mergeDeep";
 export { isMinUserType } from "./isMinUserType";
+export { numberWithSpaces } from "./numberWithSpaces";

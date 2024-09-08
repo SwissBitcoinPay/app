@@ -119,6 +119,8 @@
       "status": "Estado",
       "timeLeft": "Tempo restante",
       "amount": "Montante",
+      "alreadyPaid": "Já pago",
+      "payTheRest": "Pagar o restante ({{sats}} sats) via Lightning ou Onchain",
       "paidOn": "Pago em",
       "awaitingPayment": "A aguardar pagamento",
       "returningToTerminal": "Regresso ao terminal",

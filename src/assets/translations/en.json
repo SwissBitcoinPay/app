@@ -120,6 +120,8 @@
       "status": "Status",
       "timeLeft": "Time left",
       "amount": "Amount",
+      "alreadyPaid": "Already paid",
+      "payTheRest": "Pay the rest ({{sats}} sats) via Lightning or Onchain",
       "paidOn": "Paid on",
       "awaitingPayment": "Awaiting payment",
       "returningToTerminal": "Returning to terminal",
