@@ -1,5 +1,5 @@
 import { Routes, Route, useNavigate } from "@components/Router";
-import { Button, StatusBar, TopLeftLogo } from "@components";
+import { StatusBar, TopLeftLogo } from "@components";
 import {
   Welcome,
   QRScanner,
@@ -66,12 +66,6 @@ const App = () => {
           navigate("/");
         }}
       >
-        <Button
-          style={{ marginTop: 100 }}
-          onPress={() => {
-            Sentry.captureException(new Error("My error test"));
-          }}
-        />
         <Routes>
           {
             <Route
