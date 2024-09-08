@@ -1,0 +1,3 @@
+- Meilleure prise en charge des factures sous-payées (avec les paiements Onchain)
+- Correction de quelques crashs aléatoires dans l'onglet Historique
+- Correction d'un bug où la devise de l'écran PoS ne change pas avec la devise de base du compte
