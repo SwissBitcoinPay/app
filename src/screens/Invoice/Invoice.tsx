@@ -62,13 +62,11 @@ import {
 import LottieView from "lottie-react-native";
 import * as S from "./styled";
 import { XOR } from "ts-essentials";
+import { numberWithSpaces } from "@utils/numberWithSpaces";
 
 const PAID_ANIMATION_DURATION = 350;
 
 const getTrue = () => true;
-
-const numberWithSpaces = (nb: number) =>
-  nb.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
 const { isWeb, isIos } = platform;
 
@@ -87,6 +85,7 @@ type OnchainTx = {
   network: "onchain";
   address: string;
   txId?: string;
+  amount?: number;
   vout_index?: number;
   confirmations?: number;
   minConfirmations?: number;
@@ -198,7 +197,7 @@ export const Invoice = () => {
   const [paidAt, setPaidAt] = useState<number>();
 
   // Onchain data
-  const [onChainTx, setOnchainTx] = useState<OnchainTx>();
+  const [onChainTxs, setOnchainTxs] = useState<OnchainTx[]>();
 
   const isAlive = useMemo(
     () => !["settled", "expired", "unconfirmed"].includes(status),
@@ -330,7 +329,7 @@ export const Invoice = () => {
   );
 
   const updateInvoice = useCallback(
-    async (getInvoiceData: InvoiceType, isInitialData?: boolean) => {
+    (getInvoiceData: InvoiceType, isInitialData?: boolean) => {
       try {
         const _pr =
           getInvoiceData.paymentDetails.find(
@@ -339,11 +338,9 @@ export const Invoice = () => {
           getInvoiceData.paymentDetails.find((p) => p.network === "lightning")
             ?.paymentRequest;
 
-        const _onChainData =
-          getInvoiceData.paymentDetails.find(
-            (p) => p.network === "onchain" && p.paidAt
-          ) ||
-          getInvoiceData.paymentDetails.find((p) => p.network === "onchain");
+        const unpaidOnchain = getInvoiceData.paymentDetails.find(
+          (p) => p.network === "onchain" && !p.paidAt
+        );
 
         const _paymentMethod = getInvoiceData.paymentDetails.find(
           (p) => p.paidAt
@@ -355,13 +352,17 @@ export const Invoice = () => {
         setDelay(getInvoiceData.expiry - getInvoiceData.time);
         setPr(_pr);
         setReadingNfcData(_pr);
-        setOnChainAddr(_onChainData?.address);
+        setOnChainAddr(unpaidOnchain?.address);
         setAmount(getInvoiceData.amount * 1000);
         setInvoiceCurrency(getInvoiceData.input.unit || "CHF");
         setInvoiceFiatAmount(getInvoiceData.input.amount);
         setStatus(getInvoiceData.status);
         setPaymentMethod(_paymentMethod);
-        setOnchainTx(_onChainData);
+        setOnchainTxs(
+          getInvoiceData.paymentDetails.filter(
+            (p) => p.network === "onchain" && p.paidAt
+          )
+        );
         setPaidAt(getInvoiceData.paidAt);
 
         setIsInit(true);
@@ -386,24 +387,6 @@ export const Invoice = () => {
 
         if (status === "expired") {
           return;
-        }
-
-        if (_paymentMethod === "onchain") {
-          try {
-            const { data: txDetails } = await axios.get(
-              `https://mempool.space/api/tx/${_onChainData?.txId}`
-            );
-            if (txDetails.status.confirmed) {
-              const { data: blockHeight } = await axios.get(
-                "https://mempool.space/api/blocks/tip/height"
-              );
-              setOnchainTx({
-                ..._onChainData,
-                minConfirmations:
-                  blockHeight - txDetails.status.block_height + 1
-              });
-            }
-          } catch (e) {}
         }
       } catch (e) {
         setIsInvalidInvoice(true);
@@ -476,6 +459,20 @@ export const Invoice = () => {
   const isFullScreenSuccess = useMemo(
     () => status === "settled" && !isExternalInvoice,
     [status, isExternalInvoice]
+  );
+
+  const alreadyPaidAmount = useMemo(
+    () => onChainTxs?.reduce((result, o) => result + (o.amount || 0), 0) || 0,
+    [onChainTxs]
+  );
+
+  const { confirmations, minConfirmations } = useMemo(
+    () =>
+      (onChainTxs || []).reduce(
+        (result, o) => (o.confirmations < result.confirmations ? o : result),
+        { confirmations: 100, minConfirmations: 0 }
+      ),
+    [onChainTxs]
   );
 
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
@@ -635,7 +632,7 @@ export const Invoice = () => {
                   />
                 ) : null}
                 {!isAlive && (
-                  <ComponentStack direction="horizontal">
+                  <ComponentStack direction="horizontal" gapSize={8}>
                     {status === "unconfirmed" && (
                       <Loader color={colors.warning} />
                     )}
@@ -740,6 +737,28 @@ export const Invoice = () => {
                   <S.AmountText subAmount>
                     {amount ? numberWithSpaces(amount / 1000) : ""} sats
                   </S.AmountText>
+                )}
+                {alreadyPaidAmount > 0 && status === "underpaid" && (
+                  <>
+                    <S.BitcoinSlotText subAmount color={colors.warning}>
+                      <S.BitcoinSlotImage
+                        source={require("@assets/images/bitcoin-to-slot.png")}
+                      />
+                      {t("alreadyPaid")}: {numberWithSpaces(alreadyPaidAmount)}{" "}
+                      sats
+                    </S.BitcoinSlotText>
+                    <S.BitcoinSlotText
+                      subAmount
+                      color={colors.warning}
+                      style={{ marginTop: 6 }}
+                    >
+                      {t("payTheRest", {
+                        sats: numberWithSpaces(
+                          amount / 1000 - alreadyPaidAmount
+                        )
+                      })}
+                    </S.BitcoinSlotText>
+                  </>
                 )}
               </>
               {status === "settled" &&
@@ -868,26 +887,32 @@ export const Invoice = () => {
                       .toString()}
                   />
                 )}
-                {onChainTx?.txId && (
-                  <FooterLine
-                    label={t("transactionId")}
-                    url={`https://mempool.space/tx/${onChainTx.txId}${
-                      onChainTx.vout_index !== undefined
-                        ? `#vout=${onChainTx.vout_index}`
-                        : ""
-                    }`}
-                    value={truncate(onChainTx.txId, 16)}
-                  />
-                )}
-                {onChainTx?.confirmations !== undefined && (
-                  <FooterLine
-                    label={t("confirmations")}
-                    value={onChainTx.confirmations.toString()}
-                    {...(status === "unconfirmed"
-                      ? { color: colors.warning }
-                      : {})}
-                  />
-                )}
+                {onChainTxs?.map((tx) => {
+                  const success = tx.confirmations >= tx.minConfirmations;
+                  const color = success ? colors.success : colors.warning;
+
+                  return (
+                    <>
+                      {tx.txId && (
+                        <FooterLine
+                          label={t("transactionId")}
+                          {...(success
+                            ? { prefixIcon: { icon: faCheck, color } }
+                            : {
+                                color: color,
+                                prefixComponent: <Loader size={22} />
+                              })}
+                          url={`https://mempool.space/tx/${tx.txId}${
+                            tx.vout_index !== undefined
+                              ? `#vout=${tx.vout_index}`
+                              : ""
+                          }`}
+                          value={truncate(tx.txId, 16)}
+                        />
+                      )}
+                    </>
+                  );
+                })}
               </S.Section>
             )}
           </S.SectionsContainer>

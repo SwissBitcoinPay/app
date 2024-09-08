@@ -15,7 +15,7 @@ import {
 import { platform } from "@config";
 import { Circle } from "react-native-progress";
 
-const isNative = { platform };
+const { isNative } = platform;
 
 type InvoicePageContainerProps = { isLoading: boolean };
 
@@ -173,15 +173,27 @@ export const NFCSwitchContainerCircle = styled(View)`
 
 type AmountTextProps = {
   subAmount?: boolean;
+  color?: string;
 };
 
 export const AmountText = styled(Text).attrs<AmountTextProps>(
-  ({ theme, subAmount }) => ({
+  ({ theme, subAmount, color }) => ({
     ...(subAmount ? { h4: true } : { h2: true }),
     weight: 700,
-    color: theme.colors.white
+    color: color || theme.colors.white
   })
 )<AmountTextProps>``;
+
+export const BitcoinSlotText = styled(AmountText)`
+  display: flex;
+  margin-top: 16px;
+`;
+
+export const BitcoinSlotImage = styled(Image)`
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+`;
 
 export const ProgressBar = styled(RootProgressBar)`
   width: 90%;

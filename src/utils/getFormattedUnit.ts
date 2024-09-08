@@ -1,3 +1,5 @@
+import { numberWithSpaces } from "@utils";
+
 export const getFormattedUnit = (
   amount: number,
   unit: string,
@@ -10,7 +12,7 @@ export const getFormattedUnit = (
   }
 
   if (unit === "sat" || unit === "sats") {
-    return `${prefix}${amount} sats`;
+    return `${prefix}${numberWithSpaces(amount)} sats`;
   }
 
   return `${prefix}${Intl.NumberFormat(undefined, {
