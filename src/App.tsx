@@ -1,5 +1,5 @@
 import { Routes, Route, useNavigate } from "@components/Router";
-import { Button, StatusBar, Text, TopLeftLogo } from "@components";
+import { Button, StatusBar, TopLeftLogo } from "@components";
 import {
   Welcome,
   QRScanner,
