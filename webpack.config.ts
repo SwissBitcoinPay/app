@@ -63,6 +63,7 @@ const HTMLWebpackPlugin = new HtmlWebpackPlugin({
 const defineEnvVariablesPlugin = new webpack.DefinePlugin({
   "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development"),
   "process.env.COMMIT_REF": JSON.stringify(process.env.COMMIT_REF),
+  "process.env.SENTRY_DSN": JSON.stringify(process.env.SENTRY_DSN),
   __DEV__: process.env.NODE_ENV !== "production"
 });
 

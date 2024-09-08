@@ -34,6 +34,7 @@
     "@react-native/metro-config": "0.73.3",
     "@react-spring/native": "9.7.3",
     "@react-spring/web": "9.7.3",
+    "@sentry/react-native": "5.31.1",
     "@yudiel/react-qr-scanner": "1.1.10",
     "axios": "1.6.2",
     "bcrypt-react-native": "1.1.1",

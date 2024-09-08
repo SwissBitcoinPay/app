@@ -59,12 +59,6 @@ export const History = () => {
   const [localIds, setLocalIds] = useState<string[]>([]);
   const [transactions, setTransactions] = useState<InvoiceWithLnurlUrl[]>([]);
 
-
-  useEffect(() => {
-    throw new Error("Test error");
-    setTimeout(() => {}, 2000);
-  }, []);
-
   const now = useMemo(() => new Date().getTime() / 1000, []);
 
   const getTransactions = useCallback(async () => {

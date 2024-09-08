@@ -1,5 +1,5 @@
 import { Routes, Route, useNavigate } from "@components/Router";
-import { StatusBar, Text, TopLeftLogo } from "@components";
+import { Button, StatusBar, Text, TopLeftLogo } from "@components";
 import {
   Welcome,
   QRScanner,
@@ -27,12 +27,15 @@ import ErrorBoundary, {
 import { useEffect } from "react";
 import { useToast } from "react-native-toast-notifications";
 import { useTranslation } from "react-i18next";
+import * as Sentry from "@sentry/react-native";
+import "./config/sentry.config";
 
 const ErrorComponent = ({ error, resetError }: FallbackComponentProps) => {
   const toast = useToast();
   const { t } = useTranslation();
 
   useEffect(() => {
+    Sentry.captureException(error);
     toast.show(t("common.errors.unknown"), {
       type: "error"
     });
@@ -59,10 +62,16 @@ const App = () => {
       />
       <ErrorBoundary
         FallbackComponent={ErrorComponent}
-        onError={(error, stackTrace) => {
+        onError={() => {
           navigate("/");
         }}
       >
+        <Button
+          style={{ marginTop: 100 }}
+          onPress={() => {
+            Sentry.captureException(new Error("My error test"));
+          }}
+        />
         <Routes>
           {
             <Route
