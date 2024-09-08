@@ -75,7 +75,7 @@
     "react-native-config": "1.5.1",
     "react-native-countdown-circle-timer": "3.2.1",
     "react-native-device-detection": "0.2.1",
-    "react-native-device-info": "10.11.0",
+    "react-native-device-info": "11.1.0",
     "react-native-dotenv": "3.4.9",
     "react-native-encrypted-storage": "4.0.3",
     "react-native-error-boundary": "1.2.4",
