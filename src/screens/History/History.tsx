@@ -59,6 +59,12 @@ export const History = () => {
   const [localIds, setLocalIds] = useState<string[]>([]);
   const [transactions, setTransactions] = useState<InvoiceWithLnurlUrl[]>([]);
 
+
+  useEffect(() => {
+    throw new Error("Test error");
+    setTimeout(() => {}, 2000);
+  }, []);
+
   const now = useMemo(() => new Date().getTime() / 1000, []);
 
   const getTransactions = useCallback(async () => {
@@ -109,7 +115,7 @@ export const History = () => {
                         status: "expired",
                         defaultDescription: t("expired"),
                         minWithdrawable:
-                          localTransactionsHistory[index].amount || 0
+                          localTransactionsHistory[index]?.amount || 0
                       }
                     };
                   } else {
@@ -127,7 +133,8 @@ export const History = () => {
           status: data.status || "open",
           tag: "withdraw",
           time: localTransactionsHistory[index].time || 0,
-          amount: localTransactionsHistory[index].amount || data.minWithdrawable
+          amount:
+            localTransactionsHistory[index]?.amount || data.minWithdrawable
         } as InvoiceWithLnurlUrl;
       });
     }

@@ -1,5 +1,5 @@
-import { Routes, Route } from "@components/Router";
-import { StatusBar, TopLeftLogo } from "@components";
+import { Routes, Route, useNavigate } from "@components/Router";
+import { StatusBar, Text, TopLeftLogo } from "@components";
 import {
   Welcome,
   QRScanner,
@@ -21,9 +21,29 @@ import {
   useRefCode,
   useSplashScreen
 } from "@hooks";
+import ErrorBoundary, {
+  FallbackComponentProps
+} from "react-native-error-boundary";
+import { useEffect } from "react";
+import { useToast } from "react-native-toast-notifications";
+import { useTranslation } from "react-i18next";
+
+const ErrorComponent = ({ error, resetError }: FallbackComponentProps) => {
+  const toast = useToast();
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    toast.show(t("common.errors.unknown"), {
+      type: "error"
+    });
+    resetError();
+  }, []);
+  return null;
+};
 
 const App = () => {
   const { accountConfig } = useAccountConfig({ refresh: false });
+  const navigate = useNavigate();
 
   useDeepLink();
   useRefCode();
@@ -37,24 +57,31 @@ const App = () => {
         translucent
         backgroundColor="transparent"
       />
-      <Routes>
-        {
-          <Route
-            path="/"
-            element={accountConfig?.apiKey ? <Pos /> : <Welcome />}
-          />
-        }
-        <Route path="qr-scanner" element={<QRScanner />} />
-        <Route path="settings" element={<Settings />} />
-        <Route path="payout-config" element={<PayoutConfigScreen />} />
-        <Route path="signup" element={<Signup />} />
-        <Route path="email-login" element={<EmailLogin />} />
-        <Route path="signature-login" element={<SignatureLogin />} />
-        <Route path="wallet" element={<Wallet />} />
-        <Route path="history" element={<History />} />
-        <Route path="connect/:id" element={<Connect />} />
-        <Route path="invoice/:id?" element={<Invoice />} />
-      </Routes>
+      <ErrorBoundary
+        FallbackComponent={ErrorComponent}
+        onError={(error, stackTrace) => {
+          navigate("/");
+        }}
+      >
+        <Routes>
+          {
+            <Route
+              path="/"
+              element={accountConfig?.apiKey ? <Pos /> : <Welcome />}
+            />
+          }
+          <Route path="qr-scanner" element={<QRScanner />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="payout-config" element={<PayoutConfigScreen />} />
+          <Route path="signup" element={<Signup />} />
+          <Route path="email-login" element={<EmailLogin />} />
+          <Route path="signature-login" element={<SignatureLogin />} />
+          <Route path="wallet" element={<Wallet />} />
+          <Route path="history" element={<History />} />
+          <Route path="connect/:id" element={<Connect />} />
+          <Route path="invoice/:id?" element={<Invoice />} />
+        </Routes>
+      </ErrorBoundary>
       <TopLeftLogo />
     </>
   );
