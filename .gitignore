@@ -93,3 +93,6 @@ android/app/src/main/res/drawable-mdpi
 .metro-health-check*
 
 .json-autotranslate-cache
+
+# Sentry Config File
+.env.sentry-build-plugin
