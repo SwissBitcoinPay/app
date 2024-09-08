@@ -1,3 +1,5 @@
+const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
+
 const webpack = require("webpack");
 const path = require("path");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
@@ -87,7 +89,7 @@ module.exports = {
     publicPath: "/"
   },
 
-  devtool: isDevelopment ? "eval" : "nosources-source-map",
+  devtool: "source-map",
   context: __dirname,
   mode: process.env.NODE_ENV,
   optimization: {
@@ -113,7 +115,12 @@ module.exports = {
     defineEnvVariablesPlugin,
     providePlugin,
     ignorePlugin,
-    isDevelopment && new ReactRefreshWebpackPlugin()
+    isDevelopment && new ReactRefreshWebpackPlugin(),
+    sentryWebpackPlugin({
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      org: "swiss-bitcoin-pay",
+      project: "react-native"
+    })
   ].filter(Boolean),
 
   module: {
