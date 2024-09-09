@@ -46,7 +46,6 @@ rm -f main.jsbundle.packager.map
 
 ../node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload \
   --debug-id-reference \
-  --strip-prefix ./ \
   main.jsbundle main.jsbundle.map
 
 ###
