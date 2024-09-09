@@ -19,6 +19,38 @@ fi
 npm run bundle:ios -- --dev "$DEV"
 
 cd ios
+
+# Sourcemaps uploading
+
+ios/Pods/hermes-engine/destroot/bin/hermesc \
+  -O -emit-binary \
+  -output-source-map \
+  -out=main.jsbundle.hbc \
+  main.jsbundle
+
+rm -f main.jsbundle
+
+mv main.jsbundle.hbc main.jsbundle
+mv main.jsbundle.map main.jsbundle.packager.map
+
+node \
+  ../node_modules/react-native/scripts/compose-source-maps.js \
+  main.jsbundle.packager.map \
+  main.jsbundle.hbc.map \
+  -o main.jsbundle.map
+node \
+  ../node_modules/@sentry/react-native/scripts/copy-debugid.js \
+  main.jsbundle.packager.map main.jsbundle.map
+
+rm -f main.jsbundle.packager.map
+
+../node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload \
+  --debug-id-reference \
+  --strip-prefix ./ \
+  main.jsbundle main.jsbundle.map
+
+###
+
 pod install --repo-update
 
 xcodebuild -quiet archive -workspace SwissBitcoinPay.xcworkspace -scheme SwissBitcoinPay -configuration "$CONFIGURATION" -archivePath SwissBitcoinPay.xcarchive

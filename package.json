@@ -7,7 +7,7 @@
     "mobile-start": "react-native start --reset-cache",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "bundle:android": "react-native bundle --minify --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
+    "bundle:android": "react-native bundle --minify --platform android --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --sourcemap-output android/app/src/main/assets/index.android.bundle.map --assets-dest android/app/src/main/res/",
     "bundle:ios": "react-native bundle --minify --platform ios --entry-file index.js --bundle-output ios/main.jsbundle --sourcemap-output ios/main.jsbundle.map --assets-dest ./ios",
     "build": "NODE_ENV=production webpack --mode=production && rm public/index.html && cp -r public/. build/",
     "test": "react-scripts test",
