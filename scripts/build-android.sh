@@ -37,8 +37,6 @@ node \
 rm -f $ANDROID_BUILD_ASSETS/index.android.bundle.packager.map
 
 node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload \
-  -o $SENTRY_ORG_ID \
-  -p $SENTRY_PROJECT_ID \
   --debug-id-reference \
   --strip-prefix ./android \
   $ANDROID_BUILD_ASSETS/index.android.bundle $ANDROID_BUILD_ASSETS/index.android.bundle.map
