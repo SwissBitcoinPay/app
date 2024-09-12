@@ -41,7 +41,8 @@ const fiatCurrencies = [
   "CAD",
   "CZK",
   "MXN",
-  "PLN"
+  "PLN",
+  "GBP"
 ];
 
 type BitcoinSettingsForm = {

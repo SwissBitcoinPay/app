@@ -224,6 +224,7 @@
       "receiveInBankDescription2Batched": "El pago a su cuenta bancaria se realiza automáticamente todos los días a las 0:00 UTC si su saldo supera el mínimo de {{formattedAmount}}.",
       "receiveInBankDescription2Swift": "Las transferencias Swift en {{currency}} están sujetas a comisiones bancarias Swift, que no son previsibles y pueden representar entre un 5% y un 30% de comisiones adicionales.",
       "receiveInBankDescription3": "Por debajo de esta cantidad, también es posible activar manualmente una transferencia, por una tarifa de {{formattedAmount}}.",
+      "receiveInBankDescription3Swift": "El abono en su cuenta bancaria se realiza automáticamente cada 1 de mes una vez que su saldo supera el mínimo de {{formattedAmount}}.",
       "receiveInBankDescriptionInstantSepa": "Si su banco es compatible con Instant SEPA, recibirá sus pagos instantáneamente en su cuenta bancaria.",
       "receiveInBankDescriptionFasterPayments": "El pago a su cuenta bancaria en GBP se realiza instantáneamente a través de Faster Payments.",
       "createYourBitcoinWallet": "Cree su monedero Bitcoin",

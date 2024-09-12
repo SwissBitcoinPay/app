@@ -224,6 +224,7 @@
       "receiveInBankDescription2Batched": "Die Zahlung auf Ihr Bankkonto erfolgt automatisch jeden Tag um 0:00 UTC, wenn Ihr Guthaben den Mindestbetrag von {{formattedAmount}} übersteigt.",
       "receiveInBankDescription2Swift": "Swift-Überweisungen auf {{currency}} unterliegen den Swift-Bankgebühren, die nicht vorhersehbar sind und 5 bis 30 % zusätzliche Gebühren ausmachen können.",
       "receiveInBankDescription3": "Unterhalb dieses Betrags ist es auch möglich, eine Überweisung manuell auszulösen, gegen eine Gebühr von {{formattedAmount}}.",
+      "receiveInBankDescription3Swift": "Die Einzahlung auf Ihr Bankkonto erfolgt automatisch an jedem 1. des Monats, sobald Ihr Kontostand den Mindestbetrag von {{formattedAmount}} überschreitet.",
       "receiveInBankDescriptionInstantSepa": "Wenn Ihre Bank Instant SEPA-kompatibel ist, erhalten Sie Ihre Zahlungen sofort auf Ihr Bankkonto.",
       "receiveInBankDescriptionFasterPayments": "Die Zahlung auf Ihr Bankkonto in GBP erfolgt sofort über Faster Payments.",
       "createYourBitcoinWallet": "Erstellen Sie Ihre Bitcoin-Wallet",

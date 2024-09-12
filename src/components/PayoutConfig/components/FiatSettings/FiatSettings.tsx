@@ -23,6 +23,7 @@ import { countries } from "@config";
 import { DescriptionLine } from "../DescriptionLine";
 import isValidZipcode from "is-valid-zipcode";
 import { BitcoinFiatFormSettings } from "@components/PayoutConfig/PayoutConfig";
+import { useTheme } from "styled-components";
 
 type FiatSettingsProps = BitcoinFiatFormSettings & {
   isEURInstantSEPA: boolean;
@@ -37,6 +38,7 @@ export const FiatSettings = ({
   isEURInstantSEPA,
   isGBPFasterPayments
 }: FiatSettingsProps) => {
+  const { colors } = useTheme();
   const { t } = useTranslation(undefined, {
     keyPrefix: "screens.payoutConfig"
   });
@@ -71,7 +73,7 @@ export const FiatSettings = ({
   );
 
   const isSwift = useMemo(
-    () => !["CHF", "EUR", "GBP"].includes(currency || ""),
+    () => !["CHF", "EUR"].includes(currency || ""),
     [currency]
   );
 
@@ -101,26 +103,43 @@ export const FiatSettings = ({
           />
           .
         </FieldDescription>
-        <FieldDescription>
-          🔄{" "}
-          {t(`receiveInBankDescription2${isInstant ? "Instant" : "Batched"}`, {
-            formattedAmount: getFormattedUnit(
-              !isSwift ? 50 : chfToFiat(101),
-              currency,
-              isSwift ? 2 : 0
-            )
-          })}
-        </FieldDescription>
-        <FieldDescription>
-          💰{" "}
-          {t("receiveInBankDescription3", {
-            formattedAmount: getFormattedUnit(
-              !isSwift ? 1 : chfToFiat(1),
-              currency,
-              isSwift ? 2 : 0
-            )
-          })}
-        </FieldDescription>
+        {!isSwift ? (
+          <FieldDescription>
+            🔄{" "}
+            {t(
+              `receiveInBankDescription2${isInstant ? "Instant" : "Batched"}`,
+              {
+                formattedAmount: getFormattedUnit(50, currency, 0)
+              }
+            )}
+          </FieldDescription>
+        ) : (
+          <FieldDescription color={colors.warning}>
+            ⚠️{" "}
+            {t(`receiveInBankDescription2Swift`, {
+              currency
+            })}
+          </FieldDescription>
+        )}
+        {!isSwift ? (
+          <FieldDescription>
+            💰{" "}
+            {t("receiveInBankDescription3", {
+              formattedAmount: getFormattedUnit(
+                !isSwift ? 1 : chfToFiat(1),
+                currency,
+                isSwift ? 2 : 0
+              )
+            })}
+          </FieldDescription>
+        ) : (
+          <FieldDescription>
+            💰{" "}
+            {t("receiveInBankDescription3Swift", {
+              formattedAmount: getFormattedUnit(chfToFiat(101), currency, 2)
+            })}
+          </FieldDescription>
+        )}
         {isInstant && (
           <FieldDescription>
             ⚡{" "}

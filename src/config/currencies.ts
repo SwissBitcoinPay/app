@@ -44,12 +44,36 @@ export const currencies = [
     value: "DKK" as const
   },
   {
-    label: "ZAR • South African rand",
-    value: "ZAR" as const
+    label: "AUD • Australian dollar 🇦🇺",
+    value: "AUD" as const
   },
   {
-    label: "AED • United Arab Emirates dirham",
+    label: "CAD • Canadian dollar 🇨🇦",
+    value: "CAD" as const
+  },
+  {
+    label: "PLN • Polish złoty 🇵🇱",
+    value: "PLN" as const
+  },
+  {
+    label: "CZK • Czech koruna 🇨🇿",
+    value: "CZK" as const
+  },
+  {
+    label: "AED • United Arab Emirates dirham 🇦🇪",
     value: "AED" as const
+  },
+  {
+    label: "HUF • Hungarian forint 🇭🇺",
+    value: "HUF" as const
+  },
+  {
+    label: "MXN • Mexican peso 🇲🇽",
+    value: "MXN" as const
+  },
+  {
+    label: "ZAR • South African rand 🇿🇦",
+    value: "ZAR" as const
   },
   {
     label: "AFN • Afgan afghani",
@@ -74,10 +98,6 @@ export const currencies = [
   {
     label: "ARS • Argentine peso",
     value: "ARS" as const
-  },
-  {
-    label: "AUD • Australian dollar",
-    value: "AUD" as const
   },
   {
     label: "AWG • Aruban floring",
@@ -148,10 +168,6 @@ export const currencies = [
     value: "BZD" as const
   },
   {
-    label: "CAD • Canadian dollar",
-    value: "CAD" as const
-  },
-  {
     label: "CDF • Congolese franc",
     value: "CDF" as const
   },
@@ -190,10 +206,6 @@ export const currencies = [
   {
     label: "CVE • Cape Verdean escudo",
     value: "CVE" as const
-  },
-  {
-    label: "CZK • Czech koruna",
-    value: "CZK" as const
   },
   {
     label: "DJF • Djiboutian franc",
@@ -270,10 +282,6 @@ export const currencies = [
   {
     label: "HTG • Haitian gourde",
     value: "HTG" as const
-  },
-  {
-    label: "HUF • Hungarian forint",
-    value: "HUF" as const
   },
   {
     label: "IDR • Indonesian rupiah",
@@ -420,10 +428,6 @@ export const currencies = [
     value: "MWK" as const
   },
   {
-    label: "MXN • Mexican peso",
-    value: "MXN" as const
-  },
-  {
     label: "MYR • Malaysian ringgit",
     value: "MYR" as const
   },
@@ -470,10 +474,6 @@ export const currencies = [
   {
     label: "PKR • Pakistan rupee",
     value: "PKR" as const
-  },
-  {
-    label: "PLN • Polish złoty",
-    value: "PLN" as const
   },
   {
     label: "PYG • Paraguayan guaraní",
