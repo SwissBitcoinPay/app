@@ -109,7 +109,7 @@ export const History = () => {
                         status: "expired",
                         defaultDescription: t("expired"),
                         minWithdrawable:
-                          localTransactionsHistory[index].amount || 0
+                          localTransactionsHistory[index]?.amount || 0
                       }
                     };
                   } else {
@@ -127,7 +127,8 @@ export const History = () => {
           status: data.status || "open",
           tag: "withdraw",
           time: localTransactionsHistory[index].time || 0,
-          amount: localTransactionsHistory[index].amount || data.minWithdrawable
+          amount:
+            localTransactionsHistory[index]?.amount || data.minWithdrawable
         } as InvoiceWithLnurlUrl;
       });
     }

@@ -14,6 +14,7 @@ workflows:
       groups:
         - google_credentials
         - testfairy
+        - sentry
       vars:
         PACKAGE_NAME: "ch.swissbitcoinpay.checkout"
         SKIP_BUNDLING: 1
@@ -68,6 +69,7 @@ workflows:
         - testfairy
         - appstore_credentials
         - authkey
+        - sentry
       ios_signing:
         provisioning_profiles:
           - dev_provisioning

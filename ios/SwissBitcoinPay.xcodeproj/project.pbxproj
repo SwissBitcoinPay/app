@@ -250,6 +250,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
+				8C0C901E871A433B97564943 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
@@ -350,7 +351,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT \\\"/bin/sh ../node_modules/@sentry/react-native/scripts/sentry-xcode.sh $REACT_NATIVE_XCODE\\\"\"\n";
 		};
 		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -463,6 +464,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwissBitcoinPay-SwissBitcoinPayTests/Pods-SwissBitcoinPay-SwissBitcoinPayTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		8C0C901E871A433B97564943 /* Upload Debug Symbols to Sentry */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Upload Debug Symbols to Sentry";
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "/bin/sh ../node_modules/@sentry/react-native/scripts/sentry-xcode-debug-files.sh";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -678,7 +693,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
-					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios"
+					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -752,7 +767,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
-					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios"
+					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (

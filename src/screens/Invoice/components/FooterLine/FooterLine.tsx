@@ -60,13 +60,6 @@ export const FooterLine = ({
         target="_blank"
         rel="noopener noreferrer"
       >
-        {(copyable || url) && (
-          <Icon
-            size={ICON_SIZE}
-            icon={url ? faExternalLinkAlt : isCopied ? faCheck : faCopy}
-            color={colors.white}
-          />
-        )}
         {prefixIcon && (
           <Icon
             size={ICON_SIZE}
@@ -75,6 +68,13 @@ export const FooterLine = ({
           />
         )}
         {prefixComponent && cloneElement(prefixComponent, { color })}
+        {(copyable || url) && (
+          <Icon
+            size={ICON_SIZE}
+            icon={url ? faExternalLinkAlt : isCopied ? faCheck : faCopy}
+            color={color || colors.white}
+          />
+        )}
         <S.FooterValue color={color || colors.white}>
           {value}
           {valueSuffix}

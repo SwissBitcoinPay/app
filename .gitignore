@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 
+
 # testing
 /coverage
 
@@ -84,6 +85,7 @@ android/app/src/main/res/drawable-mdpi
 
 # Bundle artifact
 *.jsbundle
+*.map
 
 # Ruby / CocoaPods
 /ios/Pods/
@@ -93,3 +95,6 @@ android/app/src/main/res/drawable-mdpi
 .metro-health-check*
 
 .json-autotranslate-cache
+
+# Sentry Config File
+.env.sentry-build-plugin

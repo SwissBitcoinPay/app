@@ -1,3 +1,5 @@
+const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
+
 const webpack = require("webpack");
 const path = require("path");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
@@ -25,7 +27,8 @@ const babelLoaderConfiguration = {
     path.resolve(__dirname, "node_modules/@dotlottie"),
     path.resolve(__dirname, "node_modules/react-native-screenguard"),
     path.resolve(__dirname, "node_modules/react-native-qrcode-svg"),
-    path.resolve(__dirname, "node_modules/react-native-progress")
+    path.resolve(__dirname, "node_modules/react-native-progress"),
+    path.resolve(__dirname, "node_modules/react-native-error-boundary")
   ],
   exclude: [/\.native.[jt]sx$/, /\.ios.[jt]sx$/, /\.android.[jt]sx$/],
   use: {
@@ -62,6 +65,7 @@ const HTMLWebpackPlugin = new HtmlWebpackPlugin({
 const defineEnvVariablesPlugin = new webpack.DefinePlugin({
   "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development"),
   "process.env.COMMIT_REF": JSON.stringify(process.env.COMMIT_REF),
+  "process.env.SENTRY_DSN": JSON.stringify(process.env.SENTRY_DSN),
   __DEV__: process.env.NODE_ENV !== "production"
 });
 
@@ -85,7 +89,7 @@ module.exports = {
     publicPath: "/"
   },
 
-  devtool: isDevelopment ? "eval" : "nosources-source-map",
+  devtool: "source-map",
   context: __dirname,
   mode: process.env.NODE_ENV,
   optimization: {
@@ -111,7 +115,12 @@ module.exports = {
     defineEnvVariablesPlugin,
     providePlugin,
     ignorePlugin,
-    isDevelopment && new ReactRefreshWebpackPlugin()
+    isDevelopment && new ReactRefreshWebpackPlugin(),
+    sentryWebpackPlugin({
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      org: "swiss-bitcoin-pay",
+      project: "react-native"
+    })
   ].filter(Boolean),
 
   module: {
