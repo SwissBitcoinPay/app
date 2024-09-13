@@ -222,7 +222,7 @@
       "bankSettings": "Definições Bancárias",
       "receiveInBankDescription2Instant": "O pagamento para a sua conta bancária é efectuado automaticamente assim que o seu saldo excede o mínimo de {{formattedAmount}}.",
       "receiveInBankDescription2Batched": "O pagamento para a sua conta bancária é efectuado automaticamente todos os dias às 0:00 UTC quando o seu saldo exceder o mínimo de {{formattedAmount}}.",
-      "receiveInBankDescription2Swift": "As transferências Swift em {{currency}} estão sujeitas a taxas bancárias Swift, que não são previsíveis e podem representar 5% a 30% de taxas adicionais.",
+      "receiveInBankDescription2Swift": "As transferências Swift em {{currency}} estão sujeitas a taxas bancárias Swift, que não são previsíveis e podem representar {{formattedAmountLow}} a {{formattedAmountHigh}} de taxas adicionais.",
       "receiveInBankDescription3": "Abaixo deste montante, também é possível acionar manualmente uma transferência, mediante o pagamento de uma taxa de {{formattedAmount}}.",
       "receiveInBankDescription3Swift": "Os pagamentos para a sua conta bancária são efectuados automaticamente todos os dias às 0:00 UTC quando o seu saldo excede o mínimo de {{formattedAmount}}.",
       "receiveInBankDescriptionInstantSepa": "Se o seu banco for compatível com Instant SEPA, receberá os seus pagamentos instantaneamente na sua conta bancária.",
