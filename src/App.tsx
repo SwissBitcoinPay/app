@@ -30,17 +30,17 @@ import { useTranslation } from "react-i18next";
 import * as Sentry from "@sentry/react-native";
 import "./config/sentry.config";
 
-const ErrorComponent = ({ error, resetError }: FallbackComponentProps) => {
+const ErrorComponent = ({ resetError }: FallbackComponentProps) => {
   const toast = useToast();
   const { t } = useTranslation();
 
   useEffect(() => {
-    Sentry.captureException(error);
     toast.show(t("common.errors.unknown"), {
       type: "error"
     });
     resetError();
   }, []);
+
   return null;
 };
 
@@ -63,6 +63,9 @@ const App = () => {
       <ErrorBoundary
         FallbackComponent={ErrorComponent}
         onError={() => {
+          Sentry.captureException(error, {
+            captureContext: { user: { id: accountConfig.id } }
+          });
           navigate("/");
         }}
       >
