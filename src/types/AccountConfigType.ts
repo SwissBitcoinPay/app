@@ -2,6 +2,7 @@ import { currencies } from "@config";
 
 export type AccountConfigType = {
   // Visible by all users
+  id: string;
   apiKey: string;
   name: string;
   currency: (typeof currencies)[number]["value"];

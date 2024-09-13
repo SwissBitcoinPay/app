@@ -75,8 +75,9 @@ export const History = () => {
       transactionsDetails = (
         await Promise.all(
           localTransactionsHistory.map((transaction) => {
-            return !["settled", "canceled"].includes(transaction.status) &&
-              transaction.expiry > now
+            return !["settled", "expired", "canceled"].includes(
+              transaction.status
+            ) && transaction.expiry > now
               ? axios.get<InvoiceType>(
                   `${apiRootUrl}/checkout/${transaction.id}`
                 )
@@ -151,8 +152,6 @@ export const History = () => {
         }
       );
 
-      // console.log(payments);
-
       transactionsDetails = [
         ...payments
           .filter(
@@ -213,8 +212,8 @@ export const History = () => {
                   ? colors.primaryLight
                   : colors.warning;
                 const valueBase = getFormattedUnit(
-                  transaction.input.amount,
-                  transaction.input.unit
+                  transaction.input?.amount || "?",
+                  transaction.input?.unit || "?"
                 );
 
                 const deviceType = transaction.device?.type;
