@@ -1,2 +1,2 @@
-- Ajouté les devises AED, AUD, CAD, CZK, GBP, HUF, MXN et PLN en tant que devises de versement via le réseau Swift (frais Swift appliqués)
-- Corrigé quelques crashes sur l'écran Historique des paiements
+- Added AED, AUD, CAD, CZK, GBP, HUF, MXN and PLN as fiat payout currencies via the Swift network (Swift fees apply)
+- Fixed few crashes in History tab
