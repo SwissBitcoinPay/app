@@ -77,6 +77,11 @@ export const FiatSettings = ({
     [currency]
   );
 
+  const isMainCurrencies = useMemo(
+    () => !isSwift || currency === "GBP",
+    [currency, isSwift]
+  );
+
   return (
     <ComponentStack>
       <ComponentStack gapSize={14}>
@@ -117,7 +122,17 @@ export const FiatSettings = ({
           <FieldDescription color={colors.warning}>
             ⚠️{" "}
             {t(`receiveInBankDescription2Swift`, {
-              currency
+              currency,
+              formattedAmountLow: getFormattedUnit(
+                isMainCurrencies ? 10 : chfToFiat(10),
+                currency,
+                isMainCurrencies ? 0 : 2
+              ),
+              formattedAmountHigh: getFormattedUnit(
+                isMainCurrencies ? 50 : chfToFiat(50),
+                currency,
+                isMainCurrencies ? 0 : 2
+              )
             })}
           </FieldDescription>
         )}

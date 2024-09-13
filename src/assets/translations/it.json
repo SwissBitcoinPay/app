@@ -222,7 +222,7 @@
       "bankSettings": "Impostazioni Bancarie",
       "receiveInBankDescription2Instant": "Il pagamento al tuo conto corrente viene effettuato automaticamente non appena il tuo saldo supera il minimo di {{formattedAmount}}.",
       "receiveInBankDescription2Batched": "Il pagamento al tuo conto corrente avviene automaticamente ogni giorno alle 0:00 UTC se il tuo saldo supera il minimo di {{formattedAmount}}.",
-      "receiveInBankDescription2Swift": "I trasferimenti Swift in {{currency}} sono soggetti alle commissioni bancarie Swift, che non sono prevedibili e possono rappresentare dal 5% al 30% di commissioni aggiuntive.",
+      "receiveInBankDescription2Swift": "I trasferimenti Swift in {{currency}} sono soggetti alle commissioni bancarie Swift, che non sono prevedibili e possono rappresentare dal {{formattedAmountLow}} al {{formattedAmountHigh}} di commissioni aggiuntive.",
       "receiveInBankDescription3": "Al di sotto di questo importo, è possibile richiedere manualmente un trasferimento, pagando una commissione di {{formattedAmount}}.",
       "receiveInBankDescription3Swift": "Il pagamento sul conto corrente viene effettuato automaticamente ogni 1° del mese, quando il saldo supera il minimo di {{formattedAmount}}.",
       "receiveInBankDescriptionInstantSepa": "Se la tua banca è compatibile con SEPA Instant, riceverai subito i pagamenti sul tuo conto corrente.",
