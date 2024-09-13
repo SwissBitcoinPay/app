@@ -94,8 +94,8 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
     async (scannedValue: string) => {
       setIsLoading(true);
       if (
-        scannedValue.startsWith(`${appRootUrl}/connect/`) ||
-        scannedValue.startsWith(`${oldAppRootUrl}/connect/`)
+        scannedValue?.startsWith(`${appRootUrl}/connect/`) ||
+        scannedValue?.startsWith(`${oldAppRootUrl}/connect/`)
       ) {
         const arr = scannedValue.split("/");
         const activationPart = arr.pop();
