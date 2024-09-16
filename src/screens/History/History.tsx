@@ -4,9 +4,11 @@ import {
   AsyncStorage,
   getFormattedUnit,
   isApiError,
-  isMinUserType
+  isMinUserType,
+  numberWithSpaces
 } from "@utils";
 import { bech32 } from "bech32";
+import { startOfDay } from "date-fns";
 import {
   Loader,
   PageContainer,
@@ -23,12 +25,13 @@ import {
   faDesktopAlt,
   faMobileAlt,
   faTabletAlt,
-  faPen
+  faPen,
+  faCashRegister
 } from "@fortawesome/free-solid-svg-icons";
 import { SBPContext, apiRootUrl, settingsKeys } from "@config";
 import { useTheme } from "styled-components";
 import { Switch } from "react-native";
-import { useAccountConfig } from "@hooks";
+import { useAccountConfig, useRates } from "@hooks";
 import { ListItemValueText } from "@components/ItemsList/components/ListItem/ListItem";
 import { UserType } from "@types";
 import { InvoiceType } from "@screens/Invoice/Invoice";
@@ -50,9 +53,10 @@ export const History = () => {
   const { t } = useTranslation(undefined, {
     keyPrefix: "screens.history"
   });
-  const { accountConfig } = useAccountConfig();
+  const { accountConfig } = useAccountConfig({ refresh: true });
   const { userType } = useContext(SBPContext);
-  const { colors } = useTheme();
+  const { colors, borderRadius } = useTheme();
+  const rates = useRates();
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLocal, setIsLocal] = useState(true);
@@ -182,12 +186,55 @@ export const History = () => {
     setIsLocal(!isLocal);
   }, [isLocal]);
 
+  const todayReceive = useMemo(() => {
+    if (rates && accountConfig?.currency) {
+      const startOfToday = startOfDay(new Date()).getTime() / 1000;
+      const satsTotal =
+        transactions.reduce((result, transaction) => {
+          if (
+            transaction.time < startOfToday ||
+            transaction.amount <= 0 ||
+            transaction.status !== "settled"
+          ) {
+            return result;
+          }
+          return result + (transaction.grossAmount || 0);
+        }, 0) / 1000;
+
+      return {
+        fiat: getFormattedUnit(
+          (rates[accountConfig.currency] * satsTotal) / 100000000,
+          accountConfig.currency
+        ),
+        sats: satsTotal
+      };
+    }
+  }, [accountConfig?.currency, rates, transactions]);
+
   return (
     <PageContainer
       header={{ title: t("title"), left: { icon: faArrowLeft, onPress: -1 } }}
     >
       {!isLoading ? (
         <ComponentStack>
+          {todayReceive?.sats > 0 && (
+            <ComponentStack fullWidth>
+              <S.CashedListItem
+                title={t("cashedToday")}
+                icon={faCashRegister}
+                iconColor={colors.white}
+                tags={[
+                  {
+                    value: `${numberWithSpaces(todayReceive.sats)} sats (~${
+                      todayReceive.fiat
+                    })`,
+                    color: "transparent"
+                  }
+                ]}
+                disabled
+              />
+            </ComponentStack>
+          )}
           {isMinUserType({ userType, minUserType: UserType.Admin }) && (
             <S.SwitchContainerStack direction="horizontal" gapSize={10}>
               <S.SwitchLabel>{t("myEmployees")}</S.SwitchLabel>
@@ -212,7 +259,7 @@ export const History = () => {
                   ? colors.primaryLight
                   : colors.warning;
                 const valueBase = getFormattedUnit(
-                  transaction.input?.amount || "?",
+                  transaction.input?.amount || 0,
                   transaction.input?.unit || "?"
                 );
 

@@ -146,6 +146,7 @@
     },
     "history": {
       "title": "Verlauf der Transaktionen",
+      "cashedToday": "Heute eingelöst",
       "previous": "Vorherige",
       "noData": "Keine Daten",
       "total": "Insgesamt",

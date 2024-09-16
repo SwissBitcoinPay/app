@@ -146,6 +146,7 @@
     },
     "history": {
       "title": "Histórico de transações",
+      "cashedToday": "Recebido hoje",
       "previous": "Anterior",
       "noData": "Sem dados",
       "total": "Total",

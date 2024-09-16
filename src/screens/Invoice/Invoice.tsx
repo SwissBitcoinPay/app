@@ -119,6 +119,7 @@ export type InvoiceType = {
   description: string;
   expiry: number;
   amount: number;
+  grossAmount?: number;
   status: Status;
   paidAt: number;
 

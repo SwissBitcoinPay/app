@@ -147,6 +147,7 @@
     },
     "history": {
       "title": "Historique des transactions",
+      "cashedToday": "Encaissé aujourd'hui",
       "previous": "Plus tôt",
       "noData": "Pas de données",
       "total": "Total",
