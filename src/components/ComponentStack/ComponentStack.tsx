@@ -8,13 +8,14 @@ import { useIsScreenSizeMin } from "@hooks";
 type ComponentStackProps = MarkOptional<
   StyledComponentComponentProps<typeof S.GapView>,
   "direction"
->;
+> & { fullWidth?: boolean };
 
 export const ComponentStack = ({
   children,
   direction = "vertical",
   gapColor,
   gapSize,
+  fullWidth,
   ...props
 }: PropsWithChildren<ComponentStackProps>) => {
   const { width: windowWidth } = useWindowDimensions();
@@ -28,7 +29,7 @@ export const ComponentStack = ({
     <S.ComponentStack
       {...props}
       direction={direction}
-      fullWidth={!isLarge && gapColor ? windowWidth : undefined}
+      fullWidth={!isLarge && (gapColor || fullWidth) ? windowWidth : undefined}
     >
       {filteredChildren.map((child, index) => (
         <Fragment key={index}>

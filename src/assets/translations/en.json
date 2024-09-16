@@ -147,6 +147,7 @@
     },
     "history": {
       "title": "Transaction history",
+      "cashedToday": "Cashed today",
       "previous": "Previous",
       "noData": "No data",
       "total": "Total",

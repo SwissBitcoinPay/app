@@ -33,7 +33,12 @@ export const ListItem = ({
 }: ListItemProps) => {
   const { t } = useTranslation();
 
-  const isNotSet = useMemo(() => tags.length === 0, [tags]);
+  const isNotSet = useMemo(
+    () =>
+      tags.length === 0 ||
+      (tags.length === 1 && tags[0].color === "transparent"),
+    [tags]
+  );
 
   return (
     <S.ListItemContainer {...props}>
@@ -58,7 +63,7 @@ export const ListItem = ({
               return (
                 <S.ListItemValue
                   key={index}
-                  isNotSet={isUndefined}
+                  isNotSet={isUndefined || color === "transparent"}
                   isDisabled={isDisabled}
                   customColor={color}
                 >
