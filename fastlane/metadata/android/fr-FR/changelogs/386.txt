@@ -1,0 +1,2 @@
+- Ajout de l'information "Encaissé aujourd'hui" sur l'écran Historique des paiements
+- Corrigé quelques crashs lors des paiements Onchain
