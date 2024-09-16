@@ -62,10 +62,12 @@ const App = () => {
       />
       <ErrorBoundary
         FallbackComponent={ErrorComponent}
-        onError={() => {
-          Sentry.captureException(error, {
-            captureContext: { user: { id: accountConfig.id } }
-          });
+        onError={(error) => {
+          if (error) {
+            Sentry.captureException(error, {
+              captureContext: { user: { id: accountConfig.id } }
+            });
+          }
           navigate("/");
         }}
       >
