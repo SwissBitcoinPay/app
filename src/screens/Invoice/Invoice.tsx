@@ -597,12 +597,10 @@ export const Invoice = () => {
                     />
                   ) : null)}
                 {status === "unconfirmed" &&
-                onChainTx?.confirmations !== undefined &&
-                onChainTx?.minConfirmations ? (
+                confirmations !== undefined &&
+                minConfirmations ? (
                   <S.ConfirmationsCircle
-                    progress={
-                      onChainTx?.confirmations / onChainTx?.minConfirmations
-                    }
+                    progress={confirmations / minConfirmations}
                     borderWidth={0}
                     thickness={12}
                     unfilledColor={colors.grey}
@@ -610,7 +608,7 @@ export const Invoice = () => {
                     size={STATUS_ICON_SIZE}
                   >
                     <S.ConfirmationsText>
-                      {onChainTx?.confirmations}/{onChainTx?.minConfirmations}
+                      {confirmations}/{minConfirmations}
                     </S.ConfirmationsText>
                   </S.ConfirmationsCircle>
                 ) : status === "expired" ? (
