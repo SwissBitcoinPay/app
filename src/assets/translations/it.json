@@ -332,7 +332,7 @@
     "connectionSuccess": "Il BitBox02 è stato collegato con successo. È possibile scollegarlo.",
     "afterUpgrade": {
       "title": "Aprire il BitBox02",
-      "instruction": "Toccare uno dei 2 lati contrassegnati da \"Toccare questo lato\".",
+      "instruction": "Toccare uno dei 2 lati contrassegnati da \"Tab this side\".",
       "rebooting": "Riavvio del BitBox02"
     },
     "afterSetup": {

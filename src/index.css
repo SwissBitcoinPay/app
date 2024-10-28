@@ -71,8 +71,8 @@
 }
 
 @font-face {
-  font-family: "SpaceMono-Regular";
-  src: url("./assets/fonts/SpaceMono/SpaceMono-Regular.ttf");
+  font-family: "SpaceMono-Bold";
+  src: url("./assets/fonts/SpaceMono/SpaceMono-Bold.ttf");
 }
 
 @media print {

@@ -324,30 +324,30 @@
   },
   "secureWallet": {
     "instructions1": "Vous ne dépendez pas de Swiss Bitcoin Pay pour accéder à vos bitcoins, votre {{backup}} peut être utilisé sur n'importe quel portefeuille bitcoin.",
-    "instructions2": "Ne faites jamais de copie dans un nuage, sur votre téléphone ou votre ordinateur. Tout appareil connecté à l'internet est vulnérable !",
-    "instructions3": "Ne communiquez jamais votre {{backup}} à qui que ce soit. Toute personne qui accède à votre {{backup}} pourra voler tous vos fonds."
+    "instructions2": "Ne faites jamais de copie dans un cloud, sur votre téléphone ou votre ordinateur. Tout appareil connecté à internet est vulnérable !",
+    "instructions3": "Ne partagez jamais votre {{backup}} à qui que ce soit. Toute personne qui accède à votre {{backup}} pourra voler tous vos fonds."
   },
   "connectWalletModal": {
     "iUnderstand": "Je comprends",
-    "connectionSuccess": "Votre BitBox02 a été connectée avec succès. Vous pouvez la débrancher.",
+    "connectionSuccess": "Votre BitBox02 a été connecté avec succès. Vous pouvez le débrancher.",
     "afterUpgrade": {
       "title": "Ouvrez votre BitBox02",
-      "instruction": "Touchez l'un des deux côtés marqués \"Touchez ce côté\"",
+      "instruction": "Touchez l'un des deux côtés marqués \"Tab this side\"",
       "rebooting": "Redémarrer votre BitBox02"
     },
     "afterSetup": {
       "sdcard": "Carte SD",
-      "12-words": "12 mots",
-      "24-words": "24 mots",
+      "12-words": "liste de 12 mots",
+      "24-words": "liste de 24 mots",
       "title": "Sécurisez votre sauvegarde",
       "removeSdCard": "Retirez la carte SD de votre BitBox02 pour continuer.",
-      "instructions1": "Conservez votre site {{backup}} dans un endroit sûr, auquel vous êtes le seul à avoir accès.",
+      "instructions1": "Conservez votre {{backup}} dans un endroit sûr, auquel vous êtes le seul à avoir accès.",
       "understand1": "Vous êtes le seul responsable du stockage de votre {{backup}}.",
-      "understand2": "La perte de votre site {{backup}} ou l'accès à celui-ci par un voleur entraînera une perte de fonds.",
+      "understand2": "La perte de votre {{backup}} ou l'accès à celle-ci par un voleur entraînera une perte de fonds.",
       "understand3": "Personne ne peut vous aider à récupérer vos fonds si vous perdez votre {{backup}}, pas même Swiss Bitcoin Pay."
     },
     "bootloader": {
-      "title": "Installation du micrologiciel",
+      "title": "Installation du firmware",
       "instruction1": "Nous sommes en train d'installer le firmware officiel dans votre BitBox02",
       "instruction2": "Ne retirez pas le BitBox02 de votre appareil"
     },
@@ -355,21 +355,21 @@
       "title": "Connectez votre BitBox02",
       "connecting": "Connecter votre portefeuille",
       "disconnected": "Portefeuille déconnecté",
-      "updateBitbox": "Assurez-vous que votre BitBox02 dispose d'un micrologiciel installé."
+      "updateBitbox": "Assurez-vous que votre BitBox02 dispose d'un firmware installé."
     },
     "connected": {
       "title": "Déverrouiller",
       "instruction": "Entrez le mot de passe de BitBox02 pour le déverrouiller"
     },
     "pairing": {
-      "title": "Vérifier le code d'appariement",
-      "instruction": "Vérifiez que le code d'appariement suivant est le même que celui affiché sur votre BitBox02 :",
+      "title": "Vérifier le code de pairage",
+      "instruction": "Vérifiez que le code de pairage suivant est le même que celui affiché sur votre BitBox02 :",
       "confirm1": "Si les codes sont identiques, confirmez-les en appuyant sur la touche",
       "confirm2": "sur le côté de votre BitBox02",
-      "pairingFailed": "Échec de l'appairage"
+      "pairingFailed": "Échec du pairage"
     },
     "setup": {
-      "title": "Mise en place du portefeuille",
+      "title": "Création du portefeuille",
       "myBitbox": "Mon BitBox02",
       "instruction1": "Comment voulez-vous sauvegarder le portefeuille de votre BitBox02 ?",
       "sdcard": "Carte SD (recommandée)",
@@ -385,7 +385,7 @@
       "insertSdCard": "Veuillez insérer la carte SD dans votre BitBox02",
       "setPassword1": "Veuillez définir un mot de passe sur votre BitBox02.",
       "setPassword2": "Ce mot de passe sera utilisé pour le déverrouiller à chaque fois que vous l'utiliserez.",
-      "creatingWallet": "Création d'un portefeuille",
+      "creatingWallet": "Création de votre portefeuille",
       "confirmName1": "Confirmez le nom de l'appareil en appuyant sur",
       "confirmName2": "sur le côté de votre BitBox02",
       "uninitBitboxNoWeb": "Les BitBox02 non-initalisés ne sont pas supportés sur le web. Veuillez configurer votre portefeuille en utilisant l'application officielle BitBoxApp."

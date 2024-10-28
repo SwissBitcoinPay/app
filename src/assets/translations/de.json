@@ -334,7 +334,7 @@
     "connectionSuccess": "Ihre BitBox02 wurde erfolgreich angeschlossen. Sie können sie ausstecken.",
     "afterUpgrade": {
       "title": "Öffnen Sie Ihre BitBox02",
-      "instruction": "Berühren Sie eine der 2 Seiten, die mit \"Tippen Sie auf diese Seite\" markiert sind.",
+      "instruction": "Berühren Sie eine der 2 Seiten, die mit \"Tab this side\" markiert sind.",
       "rebooting": "Neustart der BitBox02"
     },
     "afterSetup": {

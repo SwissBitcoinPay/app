@@ -25,7 +25,7 @@ export const Pairing = ({ deviceId }: ConnectWalletComponentProps) => {
               <FieldDescription
                 key={hashSplit}
                 color={colors.white}
-                style={{ fontFamily: "SpaceMono-Regular" }}
+                style={{ fontFamily: "SpaceMono-Bold" }}
               >
                 {hashSplit}
               </FieldDescription>
