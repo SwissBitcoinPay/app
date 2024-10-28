@@ -49,12 +49,11 @@ export const Signature = ({
         depositAddress: accountXpub
       });
 
-      let success = false;
       let signature: string;
 
       setState("waitingForSignature");
       setAttentionToBitbox(true);
-      while (!success) {
+      while (!signature) {
         const signatureData = await signMessage(
           "p2wpkh",
           verifyData.message,
@@ -62,7 +61,6 @@ export const Signature = ({
         );
 
         if (signatureData.success) {
-          success = true;
           signature = signatureData.signature;
         } else {
           error(t("signatureError"));

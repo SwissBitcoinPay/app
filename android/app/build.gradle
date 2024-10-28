@@ -168,8 +168,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.aar"])
-    implementation("android.arch.lifecycle:extensions:1.1.1")
-    implementation("android.arch.lifecycle:viewmodel:1.1.1")
     implementation("com.google.code.gson:gson:2.8.9")
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")  // From node_modules
