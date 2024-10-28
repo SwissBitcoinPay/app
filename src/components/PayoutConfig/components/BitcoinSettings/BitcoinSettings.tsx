@@ -8,6 +8,7 @@ import {
   Icon,
   FieldDescription,
   CreateWalletModal,
+  ConnectWalletModal,
   FieldContainer,
   Text
 } from "@components";
@@ -43,8 +44,19 @@ import { faCircle } from "@fortawesome/free-regular-svg-icons";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { SBPContext, apiRootUrl } from "@config";
 import { DescriptionLine } from "../DescriptionLine";
-import { BitcoinFiatFormSettings } from "@components/PayoutConfig/PayoutConfig";
+import {
+  BitcoinFiatFormSettings,
+  WalletType
+} from "@components/PayoutConfig/PayoutConfig";
 import * as S from "./styled";
+import { faUsb } from "@fortawesome/free-brands-svg-icons";
+
+export type SignatureData = {
+  zPub: string;
+  message: string;
+  signature: string;
+  walletType: WalletType;
+};
 
 export const BitcoinSettings = ({
   setValue,
@@ -64,7 +76,7 @@ export const BitcoinSettings = ({
   const btcAddressTypes = watch("btcAddressTypes");
   const nextAddresses = watch("nextAddresses");
   const finalDepositAddress = watch("finalDepositAddress");
-  const isLocalWallet = watch("isLocalWallet");
+  const walletType = watch("walletType");
 
   // Signature stuff
   const messageToSign = watch("messageToSign");
@@ -124,7 +136,6 @@ export const BitcoinSettings = ({
   }, [finalDepositAddress]);
 
   const onChangeDepositAddress = useCallback(() => {
-    setValue("isLocalWallet", false);
     setValue("signature", undefined);
     setValue("messageToSign", undefined);
     setValue("nextAddresses", undefined);
@@ -137,7 +148,7 @@ export const BitcoinSettings = ({
     setValue("prToPay", undefined);
     setValue("hash", undefined);
     setValue("finalDepositAddress", undefined);
-    setValue("isLocalWallet", undefined);
+    setValue("walletType", undefined);
 
     resetField("signature");
     resetField("messageToSign");
@@ -147,8 +158,12 @@ export const BitcoinSettings = ({
     resetField("prToPay");
     resetField("hash");
     resetField("finalDepositAddress");
-    resetField("isLocalWallet");
+    resetField("walletType");
   }, [resetField, setValue]);
+
+  const onPressConnectWallet = useCallback(() => {
+    setIsConnectWalletModalOpen(true);
+  }, []);
 
   const validateDepositAddress = useCallback(
     async (value = "") => {
@@ -309,13 +324,15 @@ export const BitcoinSettings = ({
   }, [readyState, hash]);
 
   const [isCreateWalletModalOpen, setIsCreateWalletModalOpen] = useState(false);
+  const [isConnectWalletModalOpen, setIsConnectWalletModalOpen] =
+    useState(false);
 
-  const onCreateWalletModalClose = useCallback<
+  const onWalletModalsClose = useCallback<
     ComponentProps<typeof CreateWalletModal>["onClose"]
   >(
     (signatureData) => {
       if (signatureData) {
-        setValue("isLocalWallet", true);
+        setValue("walletType", signatureData.walletType);
         setValue("depositAddress", signatureData.zPub, {
           shouldValidate: false
         });
@@ -323,6 +340,7 @@ export const BitcoinSettings = ({
         setValue("signature", signatureData.signature);
       }
       setIsCreateWalletModalOpen(false);
+      setIsConnectWalletModalOpen(false);
     },
     [setValue]
   );
@@ -332,7 +350,12 @@ export const BitcoinSettings = ({
       <CreateWalletModal
         title={t("createYourBitcoinWallet")}
         isOpen={isCreateWalletModalOpen}
-        onClose={onCreateWalletModalClose}
+        onClose={onWalletModalsClose}
+      />
+      <ConnectWalletModal
+        title={t("connectBitbox")}
+        isOpen={isConnectWalletModalOpen}
+        onClose={onWalletModalsClose}
       />
       <ComponentStack>
         <ComponentStack gapSize={14}>
@@ -394,7 +417,13 @@ export const BitcoinSettings = ({
                 >
                   <TextField
                     label={t("bitcoinPayoutWallet")}
-                    value={isLocalWallet ? t("localWallet") : value}
+                    value={
+                      walletType === "local"
+                        ? t("localWallet")
+                        : walletType === "bitbox02"
+                        ? "BitBox02"
+                        : value
+                    }
                     onChangeText={(newValue) => {
                       if (newValue) {
                         onChange(
@@ -408,7 +437,7 @@ export const BitcoinSettings = ({
                     error={
                       error?.type === "validate" ? error?.message : undefined
                     }
-                    disabled={isLocalWallet}
+                    disabled={!!walletType}
                     qrScannable
                     pastable
                   />
@@ -441,7 +470,12 @@ export const BitcoinSettings = ({
                     </ComponentStack>
                   )}
                 </FieldContainer>
-                {!isLocalWallet && (
+                <Button
+                  title={t("connectBitbox")}
+                  icon={faUsb}
+                  onPress={onPressConnectWallet}
+                />
+                {!walletType && (
                   <ComponentStack direction="horizontal" gapSize={10}>
                     {[
                       {
@@ -501,7 +535,7 @@ export const BitcoinSettings = ({
                     })}
                   </ComponentStack>
                 )}
-                {!isLocalWallet && btcAddressTypes.xpub === true && (
+                {!walletType && btcAddressTypes.xpub === true && (
                   <ComponentStack>
                     <ComponentStack direction="horizontal" gapSize={10}>
                       {[
@@ -558,7 +592,7 @@ export const BitcoinSettings = ({
             );
           }}
         />
-        {messageToSign && !prToPay && !isLocalWallet && (
+        {messageToSign && !prToPay && !walletType && (
           <ComponentStack>
             {signWithAddress && (
               <FieldContainer
@@ -587,7 +621,7 @@ export const BitcoinSettings = ({
             </FieldContainer>
           </ComponentStack>
         )}
-        {!isLocalWallet && !isAddressAlreadyVerified && (
+        {!walletType && !isAddressAlreadyVerified && (
           <Controller
             name="signature"
             control={control}

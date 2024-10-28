@@ -70,6 +70,11 @@
   src: url("./assets/fonts/Poppins/Poppins-BlackItalic.ttf");
 }
 
+@font-face {
+  font-family: "SpaceMono-Bold";
+  src: url("./assets/fonts/SpaceMono/SpaceMono-Bold.ttf");
+}
+
 @media print {
     #no-print {
        display: none;

@@ -53,7 +53,7 @@
       "title": "Inicio de sesión mediante firma",
       "word": "Palabra {{number}}",
       "enter12wordsDescription1": "Sus 12 palabras se quedarán en su dispositivo, para firmar un mensaje de autenticación.",
-      "enter12wordsDescription2": "Asegúrese de introducir su frase semilla en un software de código abierto y verificado.",
+      "enter12wordsDescription2": "Asegúrese de introducir su frase de contraseña en un software de código abierto y verificado.",
       "enter12wordsDescription3": "Aún así, este método de acceso no se considera 100% seguro, ya que su dispositivo está conectado a Internet y, por lo tanto, es vulnerable. No nos hacemos responsables de ninguna pérdida causada por el uso de este método de acceso.",
       "error": {
         "invalidSignature": "Firma no válida",
@@ -97,7 +97,8 @@
         "referralCode": {
           "doesntExists": "Este código de referencia no existe"
         }
-      }
+      },
+      "optional": "Opcional"
     },
     "pos": {
       "deviceName": "Nombre del dispositivo",
@@ -108,7 +109,8 @@
       "atmAccount": "Cuenta de cajero automático",
       "allowWithdraw": "Permitir la retirada",
       "cannotGoHigher": "El importe máximo es de {{maxAmount}}",
-      "addToHomeScreen": "Añadir a la pantalla de inicio"
+      "addToHomeScreen": "Añadir a la pantalla de inicio",
+      "guestMode": "Modo invitado"
     },
     "invoice": {
       "creatingInvoice": "Crear factura",
@@ -142,7 +144,8 @@
       "scanToYourPhone": "Escanee para acceder a esta página desde su teléfono",
       "scanToPayIn": "Escanear para pagar en Bitcoin por",
       "or": "o",
-      "scanToWithdraw": "Escanear para recibir bitcoin a través de"
+      "scanToWithdraw": "Escanear para recibir bitcoin a través de",
+      "transactionId": "ID de transacción"
     },
     "history": {
       "title": "Historial de transacciones",
@@ -247,7 +250,9 @@
       "ibanInvalid": "IBAN no válido",
       "zipInvalid": "Código postal no válido",
       "submit": "Enviar",
-      "patchSettingNeedsEmailValidation": "Confirme la nueva configuración a través del correo electrónico que ha recibido"
+      "patchSettingNeedsEmailValidation": "Confirme la nueva configuración a través del correo electrónico que ha recibido",
+      "connectBitbox": "Conectar BitBox02",
+      "optional": "Opcional"
     },
     "wallet": {
       "title": "Monedero Onchain",
@@ -270,7 +275,7 @@
   },
   "createWalletModal": {
     "continue": "Continuar",
-    "showMySeedPhrase": "Mostrar mi frase semilla",
+    "showMySeedPhrase": "Mostrar mi frase de contraseña",
     "IwroteMyWords": "Escribí mis 12 palabras",
     "validateWords": "Validar palabras",
     "returnToForm": "Volver al formulario",
@@ -283,20 +288,19 @@
       "instructions4": "No almacenamos ninguna copia de las claves de su monedero ni de sus fondos. No podemos acceder a ellos ni recuperarlos. Usted es el único responsable de la seguridad de su monedero."
     },
     "step2": {
-      "instructions1": "En el siguiente paso, mostraremos tus 12 palabras (también llamadas frase semilla). Esta frase semilla secreta es la única forma de acceder a tus bitcoins.",
-      "instructions2": "Tu frase semilla se genera de forma segura y local en tu dispositivo, y nunca se envía a nuestros servidores.",
+      "instructions1": "En el siguiente paso, mostraremos tus 12 palabras (también llamadas frase de contraseña). Esta frase de contraseña secreta es la única forma de acceder a tus bitcoins.",
+      "instructions2": "Tu frase de contraseña se genera de forma segura y local en tu dispositivo, y nunca se envía a nuestros servidores.",
       "instructions3": "Anótala en un soporte duradero y guárdalo en un lugar seguro.",
-      "instructions4": "Si pierde su frase semilla, sus fondos se perderán para siempre. Por lo tanto, es absolutamente fundamental almacenar y proteger adecuadamente su frase semilla.",
-      "instructions5": "Nunca la guardes en una nube, en tu teléfono o en tu ordenador. ¡Cualquier dispositivo conectado a internet es vulnerable!",
-      "instructions6": "Nunca compartas tu frase semilla con nadie. Cualquier persona que acceda a tu frase semilla podrá robarte todos tus fondos.",
-      "agree1": "Entiendo que soy el único responsable del almacenamiento de mi frase semilla.",
-      "agree2": "Entiendo que la pérdida de mi frase semilla o un robo al verla dará lugar a una pérdida de fondos.",
-      "agree3": "Entiendo que nadie puede ayudarme a recuperar mis fondos si pierdo mi frase inicial, ni siquiera Swiss Bitcoin Pay."
+      "instructions4": "Si pierde su frase de contraseña, sus fondos se perderán para siempre. Por lo tanto, es absolutamente fundamental almacenar y proteger adecuadamente su frase de contraseña.",
+      "agree1": "Entiendo que soy el único responsable del almacenamiento de mi frase de contraseña.",
+      "agree2": "Entiendo que la pérdida de mi frase de contraseña o un robo al verla dará lugar a una pérdida de fondos.",
+      "agree3": "Entiendo que nadie puede ayudarme a recuperar mis fondos si pierdo mi frase inicial, ni siquiera Swiss Bitcoin Pay.",
+      "seedPhrase": "frase de contraseña"
     },
     "step3": {
       "instructions1": "Escriba sus 12 palabras y asegúrese de que se leen con claridad.",
       "instructions2": "Es fundamental que se respete el orden de las palabras.",
-      "instructions3": "Esta frase semilla se generó a partir de un código 100% abierto y nunca saldrá de tu dispositivo.",
+      "instructions3": "Esta frase de contraseña se generó a partir de un código 100% abierto y nunca saldrá de tu dispositivo.",
       "generatingYourWallet": "Generar su cartera",
       "confidential": "Confidencial"
     },
@@ -308,7 +312,7 @@
     },
     "step5": {
       "instructions1": "Cartera creada correctamente",
-      "instructions2": "Guarde su frase semilla en un lugar seguro y no se la enseñe nunca a nadie."
+      "instructions2": "Guarde su frase de contraseña en un lugar seguro y no se la enseñe nunca a nadie."
     }
   },
   "accountConfigHook": {
@@ -320,5 +324,84 @@
     "serverInMaintenance": "Servidor en mantenimiento. Vuelva a intentarlo más tarde",
     "noKycLimit": "Ha alcanzado el límite no KYC",
     "accountNotVerified": "Verifique su dirección de depósito en su panel de control"
+  },
+  "secureWallet": {
+    "instructions1": "Usted no depende de Swiss Bitcoin Pay para acceder a sus bitcoins, su {{backup}} puede utilizarse en cualquier monedero bitcoin.",
+    "instructions2": "Nunca hagas una copia en la nube, en tu teléfono o en tu ordenador. Cualquier dispositivo conectado a Internet es vulnerable.",
+    "instructions3": "Nunca compartas tu {{backup}} con nadie. Cualquier persona que acceda a tu {{backup}} podrá robarte todos tus fondos."
+  },
+  "connectWalletModal": {
+    "iUnderstand": "Comprendo",
+    "connectionSuccess": "Tu BitBox02 se ha conectado correctamente. Puede desconectarla.",
+    "afterUpgrade": {
+      "title": "Abre tu BitBox02",
+      "instruction": "Toca uno de los 2 lados marcados con \"Tab this side\"",
+      "rebooting": "Reiniciando tu BitBox02"
+    },
+    "afterSetup": {
+      "sdcard": "Tarjeta SD",
+      "12-words": "12 palabras",
+      "24-words": "24 palabras",
+      "title": "Proteja su copia de seguridad",
+      "removeSdCard": "Retira la tarjeta SD de tu BitBox02 para continuar.",
+      "instructions1": "Guarde su {{backup}} en un lugar seguro, al que sólo usted pueda acceder.",
+      "understand1": "Usted es el único responsable del almacenamiento de su {{backup}}.",
+      "understand2": "Perder su {{backup}} o que un ladrón acceda a él supondrá una pérdida de fondos.",
+      "understand3": "Nadie puede ayudarle a recuperar sus fondos si pierde su {{backup}}, ni siquiera Swiss Bitcoin Pay."
+    },
+    "bootloader": {
+      "title": "Instalación del firmware",
+      "instruction1": "Estamos instalando el firmware oficial en tu BitBox02",
+      "instruction2": "No retire el BitBox02 de su dispositivo"
+    },
+    "connect": {
+      "title": "Conecta tu BitBox02",
+      "connecting": "Conectar su monedero",
+      "disconnected": "Cartera desconectada",
+      "updateBitbox": "Asegúrate de que tu BitBox02 tiene un firmware instalado"
+    },
+    "connected": {
+      "title": "Desbloquear",
+      "instruction": "Introduce la contraseña de BitBox02 para desbloquearlo"
+    },
+    "pairing": {
+      "title": "Verificar el código de emparejamiento",
+      "instruction": "Comprueba que el siguiente código de emparejamiento es el mismo que aparece en tu BitBox02:",
+      "confirm1": "Si los códigos coinciden, confírmelo pulsando",
+      "confirm2": "en el lateral de su BitBox02",
+      "pairingFailed": "Error de emparejamiento"
+    },
+    "setup": {
+      "title": "Configure su monedero",
+      "myBitbox": "Mi BitBox02",
+      "instruction1": "¿Cómo te gustaría hacer una copia de seguridad de tu monedero BitBox02?",
+      "sdcard": "Tarjeta SD (recomendada)",
+      "sdcardDetectionError": "Error de detección de tarjeta SD",
+      "createBackupAborted": "Crear copia de seguridad abortada",
+      "createBackupFailed": "Error al crear copia de seguridad",
+      "setPasswordAborted": "Contraseña abortada",
+      "setPasswordFailed": "Error al establecer la contraseña",
+      "advancedOptions": "Opciones avanzadas",
+      "bitboxName": "Nombre de BitBox",
+      "24words": "Palabras de recuperación (24 palabras)",
+      "12words": "Palabras de recuperación (12 palabras)",
+      "insertSdCard": "Por favor, inserta la tarjeta SD en tu BitBox02",
+      "setPassword1": "Por favor, establece una contraseña en tu BitBox02.",
+      "setPassword2": "Esta contraseña servirá para desbloquearlo cada vez que lo utilices.",
+      "creatingWallet": "Crear cartera",
+      "confirmName1": "Confirme el nombre del dispositivo pulsando",
+      "confirmName2": "en el lateral de su BitBox02",
+      "uninitBitboxNoWeb": "Los BitBox02 no integrados no son compatibles con la web. Por favor, configura tu monedero usando la BitBoxApp oficial."
+    },
+    "signature": {
+      "title": "Firma",
+      "getAccount": "Obtener cuenta",
+      "prepareSignature": "Preparar la firma",
+      "waitingForSignature": "Por favor, firme el mensaje en su BitBox02",
+      "verifySignature": "Verificar la firma",
+      "cannotGetAccount": "No se puede obtener la cuenta",
+      "cannotGetXpub": "No se puede obtener xpub",
+      "signatureError": "Mensaje de error al firmar. Vuelva a intentarlo"
+    }
   }
 }

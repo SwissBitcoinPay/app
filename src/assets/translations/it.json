@@ -108,7 +108,8 @@
       "atmAccount": "ATM account",
       "allowWithdraw": "Consentire il prelievo",
       "cannotGoHigher": "L'importo massimo è {{maxAmount}}",
-      "addToHomeScreen": "Aggiungi alla schermata iniziale"
+      "addToHomeScreen": "Aggiungi alla schermata iniziale",
+      "guestMode": "Modalità ospite"
     },
     "invoice": {
       "creatingInvoice": "Creazione della fattura",
@@ -247,7 +248,8 @@
       "ibanInvalid": "IBAN non valido",
       "zipInvalid": "CAP non valido",
       "submit": "Invia",
-      "patchSettingNeedsEmailValidation": "Conferma le nuove impostazioni tramite l'e-mail ricevuta"
+      "patchSettingNeedsEmailValidation": "Conferma le nuove impostazioni tramite l'e-mail ricevuta",
+      "connectBitbox": "Collegare BitBox02"
     },
     "wallet": {
       "title": "Wallet Onchain",
@@ -287,11 +289,10 @@
       "instructions2": "La tua seed phrase viene generata in locale in modo sicuro sul tuo dispositivo e non viene mai inviata ai nostri server.",
       "instructions3": "Scrivila su un supporto durevole e conservala in un luogo sicuro.",
       "instructions4": "Se perdi la tua seed phrase, i tuoi fondi saranno persi per sempre. È quindi assolutamente fondamentale conservare e proteggere adeguatamente la propria seed phrase.",
-      "instructions5": "Non salvarla mai nel cloud, sul telefono o sul computer. Qualsiasi dispositivo connesso a Internet è vulnerabile!",
-      "instructions6": "Non condividere mai la tua seed phrase con nessuno. Chiunque acceda alla tua seed phrase sarà in grado di rubare tutti i tuoi fondi.",
       "agree1": "Sono consapevole di essere l'unico responsabile della conservazione della mia seed phrase.",
       "agree2": "Sono consapevole che la perdita della mia seed phrase o mostrarla a qualcuno comporterà la perdita dei fondi.",
-      "agree3": "Sono consapevole che nessuno può aiutarmi a recuperare i miei fondi se perdo la mia seed phrase, nemmeno Swiss Bitcoin Pay."
+      "agree3": "Sono consapevole che nessuno può aiutarmi a recuperare i miei fondi se perdo la mia seed phrase, nemmeno Swiss Bitcoin Pay.",
+      "seedPhrase": "seed phrase"
     },
     "step3": {
       "instructions1": "Scrivi le tue 12 parole e assicurati che siano chiaramente leggibili.",
@@ -320,5 +321,84 @@
     "serverInMaintenance": "Server in manutenzione. Riprovare più tardi",
     "noKycLimit": "Hai raggiunto il limite senza KYC",
     "accountNotVerified": "Verifica l'indirizzo di deposito nella tua dashboard"
+  },
+  "secureWallet": {
+    "instructions1": "Non dipendete da Swiss Bitcoin Pay per accedere ai vostri bitcoin, il vostro {{backup}} può essere utilizzato su qualsiasi portafoglio bitcoin.",
+    "instructions2": "Non fate mai una copia in un cloud, sul telefono o sul computer. Qualsiasi dispositivo connesso a Internet è vulnerabile!",
+    "instructions3": "Non condividete mai il vostro {{backup}} con nessuno. Chiunque acceda al vostro {{backup}} potrà rubare tutti i vostri fondi."
+  },
+  "connectWalletModal": {
+    "iUnderstand": "Capisco",
+    "connectionSuccess": "Il BitBox02 è stato collegato con successo. È possibile scollegarlo.",
+    "afterUpgrade": {
+      "title": "Aprire il BitBox02",
+      "instruction": "Toccare uno dei 2 lati contrassegnati da \"Tab this side\".",
+      "rebooting": "Riavvio del BitBox02"
+    },
+    "afterSetup": {
+      "sdcard": "Scheda SD",
+      "12-words": "12 parole",
+      "24-words": "24 parole",
+      "title": "Proteggere il backup",
+      "removeSdCard": "Rimuovere la scheda SD dal BitBox02 per continuare.",
+      "instructions1": "Conservate il vostro {{backup}} in un luogo sicuro, dove solo voi potete accedere.",
+      "understand1": "Siete gli unici responsabili della conservazione del vostro {{backup}}.",
+      "understand2": "Lo smarrimento del sito {{backup}} o l'accesso da parte di un ladro comportano una perdita di fondi.",
+      "understand3": "Nessuno può aiutarvi a recuperare i vostri fondi se perdete il vostro {{backup}}, nemmeno Swiss Bitcoin Pay."
+    },
+    "bootloader": {
+      "title": "Installazione del firmware",
+      "instruction1": "Stiamo installando il firmware ufficiale nel vostro BitBox02",
+      "instruction2": "Non rimuovere il BitBox02 dal dispositivo."
+    },
+    "connect": {
+      "title": "Collegare il BitBox02",
+      "connecting": "Collegare il portafoglio",
+      "disconnected": "Portafoglio disconnesso",
+      "updateBitbox": "Assicurarsi che il BitBox02 abbia installato un firmware"
+    },
+    "connected": {
+      "title": "Sbloccare",
+      "instruction": "Inserire la password di BitBox02 per sbloccarlo"
+    },
+    "pairing": {
+      "title": "Verifica del codice di accoppiamento",
+      "instruction": "Verificare che il seguente codice di accoppiamento sia lo stesso visualizzato sul BitBox02:",
+      "confirm1": "Se i codici sono uguali, confermarli premendo",
+      "confirm2": "sul lato del BitBox02",
+      "pairingFailed": "Accoppiamento fallito"
+    },
+    "setup": {
+      "title": "Configurare il portafoglio",
+      "myBitbox": "Il mio BitBox02",
+      "instruction1": "Come si desidera eseguire il backup del portafoglio di BitBox02?",
+      "sdcard": "Scheda SD (consigliata)",
+      "sdcardDetectionError": "Errore di rilevamento della scheda SD",
+      "createBackupAborted": "Creazione del backup interrotta",
+      "createBackupFailed": "Creazione del backup non riuscita",
+      "setPasswordAborted": "Impostazione password interrotta",
+      "setPasswordFailed": "Errore durante l'impostazione della password",
+      "advancedOptions": "Opzioni avanzate",
+      "bitboxName": "Nome del BitBox",
+      "24words": "Parole di recupero (24 parole)",
+      "12words": "Parole di recupero (12 parole)",
+      "insertSdCard": "Inserire la scheda SD nel BitBox02",
+      "setPassword1": "Impostare una password sul BitBox02.",
+      "setPassword2": "Questa password verrà utilizzata per sbloccarlo ogni volta che lo si utilizza.",
+      "creatingWallet": "Creare un portafoglio",
+      "confirmName1": "Confermare il nome del dispositivo premendo",
+      "confirmName2": "sul lato del BitBox02",
+      "uninitBitboxNoWeb": "I BitBox02 non integrati non sono supportati sul web. Si prega di configurare il portafoglio utilizzando la BitBoxApp ufficiale."
+    },
+    "signature": {
+      "title": "Firma",
+      "getAccount": "Ottenere il conto",
+      "prepareSignature": "Preparare la firma",
+      "waitingForSignature": "Firma il messaggio sul tuo BitBox02",
+      "verifySignature": "Verifica della firma",
+      "cannotGetAccount": "Impossibile ottenere l'account",
+      "cannotGetXpub": "Impossibile ottenere xpub",
+      "signatureError": "Messaggio di errore nella firma. Riprovare"
+    }
   }
 }

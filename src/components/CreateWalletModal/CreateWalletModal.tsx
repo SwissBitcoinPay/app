@@ -14,6 +14,7 @@ import { useToast } from "react-native-toast-notifications";
 import axios from "axios";
 import { AsyncStorage } from "@utils";
 import {
+  keyStoreIsBitboxWallet,
   keyStoreMnemonicWords,
   keyStoreUserType,
   keyStoreZpub
@@ -21,6 +22,7 @@ import {
 import { ACCESS_CONTROL } from "react-native-keychain";
 import { UserType } from "@types";
 import { apiRootUrl } from "@config";
+import { SignatureData } from "@components/PayoutConfig/components/BitcoinSettings/BitcoinSettings";
 
 type CreateWalletForm = {
   words: string[];
@@ -28,12 +30,6 @@ type CreateWalletForm = {
   zPub: string;
   firstAddress: string;
   firstAddressPrivateKey: string;
-};
-
-type SignatureData = {
-  zPub: string;
-  message: string;
-  signature: string;
 };
 
 type CreateWalletModalProps = Omit<
@@ -136,8 +132,9 @@ export const CreateWalletModal = ({
             ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE
           );
           await AsyncStorage.setItem(keyStoreUserType, UserType.Wallet);
+          await AsyncStorage.setItem(keyStoreIsBitboxWallet, "false");
 
-          onClose({ zPub: data.zPub, message, signature });
+          onClose({ zPub: data.zPub, message, signature, walletType: "local" });
         } catch (e) {
           toast.show(t("autoSignatureError"));
         }

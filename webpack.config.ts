@@ -46,7 +46,7 @@ const babelLoaderConfiguration = {
 };
 
 const assetLoaderConfiguration = {
-  test: /\.(ico|png|jpe?g|gif|ttf|woff2|svg|mp4|lottie)$/i,
+  test: /\.(ico|png|jpe?g|gif|ttf|woff2|svg|mp4|webm|lottie)$/i,
   type: "asset/resource"
 };
 

@@ -10,7 +10,7 @@ import {
   isIphoneX
 } from "react-native-device-detection";
 import NfcManager from "react-native-nfc-manager";
-import DeviceInfo from "react-native-device-info";
+import DeviceInfo, { getDeviceSync } from "react-native-device-info";
 import { getLocale } from "@utils";
 
 const getIsNfcSupported = async () => await NfcManager.isSupported();
@@ -37,5 +37,5 @@ export const platform = {
   bottomSafeAreaHeight: 0,
   deviceName: DeviceInfo.getDeviceNameSync(),
   deviceLocale: getLocale(),
-  isPrinterSupported: false
+  isBitcoinize: getDeviceSync() === "BTC21PRO"
 };

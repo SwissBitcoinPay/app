@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { ActivityIndicator, ColorValue } from "react-native";
 import { Text } from "@components";
 import { IntRange } from "@types";
@@ -6,36 +6,28 @@ import { Bar, BarPropTypes } from "react-native-progress";
 import { useTheme } from "styled-components";
 import * as S from "./styled";
 
-type ProgressBarProps = Omit<BarPropTypes, "progress"> & {
-  createdAt: number;
-  delay: number;
-  timer: string;
+type Progress = IntRange<1, 101>;
+
+export type ProgressBarProps = Omit<BarPropTypes, "progress"> & {
+  progress: Progress;
+  text: string;
+  isTextCentered?: boolean;
   colorConfig?: {
-    [k in IntRange<1, 101>]?: ColorValue;
+    [k in Progress]?: ColorValue;
   };
 };
 
-const PROGRSS_BAR_HEIGHT = 24;
-const PROGRSS_BAR_BORDER_WIDTH = 2;
+const PROGRESS_BAR_HEIGHT = 24;
+const PROGRESS_BAR_BORDER_WIDTH = 2;
 
 export const ProgressBar = ({
-  createdAt,
-  delay,
+  progress,
   colorConfig,
-  timer,
+  text,
+  isTextCentered,
   ...props
 }: ProgressBarProps) => {
   const { colors } = useTheme();
-
-  const getProgress = useCallback(() => {
-    const now = Math.round(Date.now() / 1000);
-    const timeElapsed = now - createdAt;
-    const newProgress = timeElapsed / delay;
-
-    return 1 - newProgress;
-  }, [createdAt, delay]);
-
-  const [progress, setProgress] = useState<number>(getProgress());
 
   const currentColor = useMemo(() => {
     const colorKeys = Object.keys(colorConfig || {});
@@ -48,36 +40,34 @@ export const ProgressBar = ({
     return colorConfig?.[maxValue as keyof typeof colorConfig];
   }, [colorConfig, progress]);
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setProgress(getProgress());
-    }, 1000);
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
-
   return (
     <Bar
       useNativeDriver
       width={null}
       progress={progress}
       color={(currentColor || colors.grey) as string}
-      height={PROGRSS_BAR_HEIGHT}
-      borderRadius={(PROGRSS_BAR_HEIGHT + PROGRSS_BAR_BORDER_WIDTH) / 2}
+      height={PROGRESS_BAR_HEIGHT}
+      borderRadius={(PROGRESS_BAR_HEIGHT + PROGRESS_BAR_BORDER_WIDTH) / 2}
       animationType="spring"
-      borderWidth={PROGRSS_BAR_BORDER_WIDTH}
+      borderWidth={PROGRESS_BAR_BORDER_WIDTH}
       {...props}
     >
-      <S.ProgressBarContent direction="horizontal" gapSize={6}>
-        <ActivityIndicator
-          color={colors.white}
-          size="small"
-          style={{ transform: [{ scale: 0.9 }] }}
-        />
+      <S.ProgressBarContent
+        direction="horizontal"
+        gapSize={6}
+        {...(isTextCentered
+          ? { style: { left: 0, width: "100%", justifyContent: "center" } }
+          : {})}
+      >
+        {!isTextCentered && (
+          <ActivityIndicator
+            color={colors.white}
+            size="small"
+            style={{ transform: [{ scale: 0.9 }] }}
+          />
+        )}
         <Text h5 weight={600} color={colors.white as string}>
-          {timer}
+          {text}
         </Text>
       </S.ProgressBarContent>
     </Bar>

@@ -11,7 +11,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import { AsyncStorage, Linking, bcrypt, isApiError } from "@utils";
-import { SBPContext, apiRootUrl, currencies, platform } from "@config";
+import {
+  SBPBitboxContext,
+  SBPContext,
+  apiRootUrl,
+  currencies,
+  platform
+} from "@config";
 import LocaleCurrency from "locale-currency";
 import {
   ComponentStack,
@@ -113,7 +119,7 @@ export const Signup = () => {
     fn();
   }, []);
 
-  const isLocalWallet = watch("isLocalWallet");
+  const walletType = watch("walletType");
 
   const onSubmit = useCallback<SubmitHandler<SignupForm>>(
     async (values) => {
@@ -194,7 +200,7 @@ export const Signup = () => {
 
           await onAuthLogin(emailLoginData, true);
 
-          setUserType(isLocalWallet ? UserType.Wallet : UserType.Admin);
+          setUserType(walletType ? UserType.Wallet : UserType.Admin);
         } else if (isAtm) {
           await Linking.openURL("https://dashboard.swiss-bitcoin-pay.ch");
         } else {
@@ -225,7 +231,7 @@ export const Signup = () => {
     [
       i18n.language,
       isAtm,
-      isLocalWallet,
+      walletType,
       onAuthLogin,
       setError,
       setUserType,
