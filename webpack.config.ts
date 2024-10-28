@@ -28,6 +28,7 @@ const babelLoaderConfiguration = {
     path.resolve(__dirname, "node_modules/react-native-screenguard"),
     path.resolve(__dirname, "node_modules/react-native-qrcode-svg"),
     path.resolve(__dirname, "node_modules/react-native-progress"),
+    path.resolve(__dirname, "node_modules/@react-native/assets-registry"),
     path.resolve(__dirname, "node_modules/react-native-error-boundary")
   ],
   exclude: [/\.native.[jt]sx$/, /\.ios.[jt]sx$/, /\.android.[jt]sx$/],
