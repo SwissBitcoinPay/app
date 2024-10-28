@@ -39,6 +39,7 @@ const ATTENTION_ARROW_TRANSLATE_Y = isBitcoinize ? [0, 35] : [0, 35];
 export const SBPBitboxContext = React.createContext<SBPBitboxContextType>({});
 
 export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
+  const [isBitboxServerRunning, setIsBitboxServerRunning] = useState(false);
   const [isAfterUpgradeScreen, setIsAfterUpgradeScreen] = useState(false);
   const [afterSetupMode, setAfterSetupMode] = useState<BackupMode>();
   const { setModalOverlayComponent } = useContext(SBPModalContext);
@@ -185,19 +186,20 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
   const ref = useRef<WebView>(null);
   const messages = useRef<{ [k in number]: (value: unknown) => void }>({});
   const bitboxQueryId = useRef<number>(1);
-  const isServerStated = useRef<boolean>(false);
 
   const toast = useToast();
 
-  const onLoad = useCallback(() => {
-    if (!isServerStated.current) {
-      Bitbox.startBitBoxBridge()
-        .then(() => {
-          isServerStated.current = true;
-        })
-        .catch((error) => console.error(error));
-    }
-  }, []);
+  const _setIsBitboxServerRunning = useCallback(
+    async (value: boolean) => {
+      setIsBitboxServerRunning(value);
+      if (value) {
+        await Bitbox.startBitBoxBridge();
+      } else if (!value && isBitboxServerRunning) {
+        await Bitbox.stopBitBoxBridge();
+      }
+    },
+    [isBitboxServerRunning]
+  );
 
   const onMessage = useCallback(
     (event: WebViewMessageEvent) => {
@@ -244,12 +246,6 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
     global.bitboxAndroidSend = bitboxAndroidSend;
   }, [bitboxAndroidSend]);
 
-  useEffect(() => {
-    if (Platform.OS === "web") {
-      onLoad();
-    }
-  }, [onLoad]);
-
   const _subscribeEndpoint = useCallback(
     (endpoint: string, cb: TSubscriptionCallback<T>) => {
       return apiSubscribe(endpoint, (event: TEvent) => {
@@ -273,6 +269,7 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
   return (
     <SBPBitboxContext.Provider
       value={{
+        setIsBitboxServerRunning: _setIsBitboxServerRunning,
         pushNotificationListener,
         subscribeEndpoint: _subscribeEndpoint,
         subscribeLegacy,
@@ -286,21 +283,22 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
       }}
     >
       {children}
-      <Webview
-        ref={ref}
-        androidWebviewId="sbp_bitbox_webview"
-        source={{ html: "" }}
-        containerStyle={{
-          position: "static",
-          maxHeight: 0,
-          maxWidth: 0,
-          height: 0,
-          width: 0,
-          flex: 0
-        }}
-        onLoad={onLoad}
-        onMessage={onMessage}
-      />
+      {isBitboxServerRunning && (
+        <Webview
+          ref={ref}
+          androidWebviewId="sbp_bitbox_webview"
+          source={{ html: "" }}
+          containerStyle={{
+            position: "static",
+            maxHeight: 0,
+            maxWidth: 0,
+            height: 0,
+            width: 0,
+            flex: 0
+          }}
+          onMessage={onMessage}
+        />
+      )}
     </SBPBitboxContext.Provider>
   );
 };

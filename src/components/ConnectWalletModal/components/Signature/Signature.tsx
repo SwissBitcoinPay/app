@@ -66,6 +66,7 @@ export const Signature = ({
           error(t("signatureError"));
 
           if (signatureData.errorCode !== "userAbort") {
+            setAttentionToBitbox(false);
             return;
           }
         }

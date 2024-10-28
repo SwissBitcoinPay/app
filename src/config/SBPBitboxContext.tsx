@@ -12,6 +12,7 @@ import { BitBox, PairedBitBox, PairingBitBox } from "bitbox-api";
 import { TStatus } from "@utils/Bitbox/api/bitbox02";
 
 export type SBPBitboxContextType = {
+  setIsBitboxServerRunning: (value: boolean) => void;
   setAttentionToBitbox: (value: boolean) => void;
 } & XOR<
   {

@@ -37,9 +37,12 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
+  const setIsBitboxServerRunning = useCallback(() => {}, []);
+
   return (
     <SBPBitboxContext.Provider
       value={{
+        setIsBitboxServerRunning,
         unpaired,
         pairedBitbox,
         status,

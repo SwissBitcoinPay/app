@@ -12,8 +12,8 @@ import { UseFormSetValue, useForm } from "react-hook-form";
 import { useToast } from "react-native-toast-notifications";
 import { AsyncStorage } from "@utils";
 import {
-  keyStoreIsBitboxWallet,
   keyStoreUserType,
+  keyStoreWalletType,
   keyStoreZpub
 } from "@config/settingsKeys";
 import { UserType } from "@types";
@@ -66,14 +66,19 @@ export enum WalletConnectState {
 }
 
 export const ConnectWalletModal = ({
+  isOpen,
   onClose,
   ...props
 }: ConnectWalletModalProps) => {
   const toast = useToast();
   const { t } = useTranslation(undefined, { keyPrefix: "connectWalletModal" });
   const { deviceId, deviceMode, status } = useBitboxBridge();
-  const { setAfterSetupMode, isAfterUpgradeScreen, afterSetupMode } =
-    useContext(SBPBitboxContext);
+  const {
+    setIsBitboxServerRunning,
+    setAfterSetupMode,
+    isAfterUpgradeScreen,
+    afterSetupMode
+  } = useContext(SBPBitboxContext);
   const [state, setState] = useState(WalletConnectState.Connect);
 
   useEffect(() => {
@@ -155,7 +160,7 @@ export const ConnectWalletModal = ({
           ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE
         );
         await AsyncStorage.setItem(keyStoreUserType, UserType.Wallet);
-        await AsyncStorage.setItem(keyStoreIsBitboxWallet, "true");
+        await AsyncStorage.setItem(keyStoreWalletType, "bitbox02");
         onClose({ ...data, walletType: "bitbox02" });
         toast.show(t("connectionSuccess"), {
           type: "success"
@@ -171,8 +176,17 @@ export const ConnectWalletModal = ({
     [onClose, reset, t, toast, watch]
   );
 
+  useEffect(() => {
+    setIsBitboxServerRunning(isOpen);
+  }, [isOpen]);
+
   return (
-    <Modal {...props} submitButton={buttonProps} onClose={handleOnClose}>
+    <Modal
+      {...props}
+      isOpen={isOpen}
+      submitButton={buttonProps}
+      onClose={handleOnClose}
+    >
       <Component
         deviceId={deviceId}
         status={status}
