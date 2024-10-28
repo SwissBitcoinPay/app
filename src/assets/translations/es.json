@@ -335,7 +335,7 @@
     "connectionSuccess": "Tu BitBox02 se ha conectado correctamente. Puede desconectarla.",
     "afterUpgrade": {
       "title": "Abre tu BitBox02",
-      "instruction": "Toca uno de los 2 lados marcados con \"Tab this side\"",
+      "instruction": "Toca uno de los 2 lados marcados con \"Tap this side\"",
       "rebooting": "Reiniciando tu BitBox02"
     },
     "afterSetup": {
