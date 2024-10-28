@@ -20,4 +20,4 @@ export const keyStoreTransactionsHistory = "data.transactionsHistory";
 // Local wallet config
 export const keyStoreZpub = "settings.wallet.zPub";
 export const keyStoreMnemonicWords = "settings.wallet.mnemonicWords";
-export const keyStoreIsBitboxWallet = "settings.wallet.isBitboxWallet";
+export const keyStoreWalletType = "settings.wallet.type";

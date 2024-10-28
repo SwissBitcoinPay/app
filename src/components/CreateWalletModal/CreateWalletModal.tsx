@@ -14,9 +14,9 @@ import { useToast } from "react-native-toast-notifications";
 import axios from "axios";
 import { AsyncStorage } from "@utils";
 import {
-  keyStoreIsBitboxWallet,
   keyStoreMnemonicWords,
   keyStoreUserType,
+  keyStoreWalletType,
   keyStoreZpub
 } from "@config/settingsKeys";
 import { ACCESS_CONTROL } from "react-native-keychain";
@@ -132,7 +132,7 @@ export const CreateWalletModal = ({
             ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE
           );
           await AsyncStorage.setItem(keyStoreUserType, UserType.Wallet);
-          await AsyncStorage.setItem(keyStoreIsBitboxWallet, "false");
+          await AsyncStorage.setItem(keyStoreWalletType, "local");
 
           onClose({ zPub: data.zPub, message, signature, walletType: "local" });
         } catch (e) {

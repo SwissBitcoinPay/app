@@ -146,6 +146,21 @@ public class BitBoxBridgeModule extends ReactContextBaseJavaModule implements Li
         }
     }
 
+    @ReactMethod
+    public void stopBitBoxBridge(Promise promise) {
+        try {
+            Util.log("Shutdown server...");
+            
+            Activity currentActivity = getCurrentActivity();
+            currentActivity.unbindService(this.connection);
+            Mobileserver.shutdown();
+            
+            promise.resolve(true);
+        } catch (Exception e) {
+            promise.reject("Error", e);
+        }
+    }
+
     private void startServer() {
         Activity currentActivity = getCurrentActivity();
 

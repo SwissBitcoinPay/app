@@ -393,11 +393,11 @@
     "signature": {
       "title": "Signature",
       "getAccount": "Récupération de votre compte",
-      "prepareSignature": "Préparer la signature",
+      "prepareSignature": "Préparation de la signature",
       "waitingForSignature": "Veuillez signer le message sur votre BitBox02",
       "verifySignature": "Vérification de la signature",
       "cannotGetAccount": "Impossible d'obtenir un compte",
-      "cannotGetXpub": "Impossible d'obtenir xpub",
+      "cannotGetXpub": "Impossible d'obtenir la xpub",
       "signatureError": "Message d'erreur lors de la signature. Veuillez réessayer"
     }
   }
