@@ -1,0 +1,40 @@
+diff --git a/node_modules/react-native-vision-camera/android/CMakeLists.txt b/node_modules/react-native-vision-camera/android/CMakeLists.txt
+index 1460dbd..cabc3c4 100644
+--- a/node_modules/react-native-vision-camera/android/CMakeLists.txt
++++ b/node_modules/react-native-vision-camera/android/CMakeLists.txt
+@@ -49,9 +49,9 @@ target_include_directories(
+         "src/main/cpp"
+         "src/main/cpp/frameprocessors"
+         "src/main/cpp/frameprocessors/java-bindings"
+-        "${NODE_MODULES_DIR}/react-native/ReactCommon"
+-        "${NODE_MODULES_DIR}/react-native/ReactCommon/callinvoker"
+-        "${NODE_MODULES_DIR}/react-native/ReactAndroid/src/main/jni/react/turbomodule" # <-- CallInvokerHolder JNI wrapper
++        "${REACT_NATIVE_DIR}/ReactCommon"
++        "${REACT_NATIVE_DIR}/ReactCommon/callinvoker"
++        "${REACT_NATIVE_DIR}/ReactAndroid/src/main/jni/react/turbomodule" # <-- CallInvokerHolder JNI wrapper
+ )
+ 
+ # Link everything together
+@@ -60,7 +60,7 @@ target_link_libraries(
+         ${LOG_LIB}                          # <-- Logcat logger
+         android                             # <-- Android JNI core
+         ReactAndroid::jsi                   # <-- RN: JSI
+-        ReactAndroid::reactnativejni        # <-- RN: React Native JNI bindings
++        ReactAndroid::reactnative           # <-- RN: React Native JNI bindings
+         fbjni::fbjni                        # <-- fbjni
+ )
+ 
+diff --git a/node_modules/react-native-vision-camera/android/build.gradle b/node_modules/react-native-vision-camera/android/build.gradle
+index 21f7066..58b6477 100644
+--- a/node_modules/react-native-vision-camera/android/build.gradle
++++ b/node_modules/react-native-vision-camera/android/build.gradle
+@@ -172,7 +172,8 @@ android {
+             "**/libreactnativejni.so",
+             "**/libturbomodulejsijni.so",
+             "**/libreact_nativemodule_core.so",
+-            "**/libjscexecutor.so"
++            "**/libjscexecutor.so",
++            "**/libreactnative.so"
+     ]
+   }
+ }

@@ -332,7 +332,7 @@
     "connectionSuccess": "Votre BitBox02 a été connecté avec succès. Vous pouvez le débrancher.",
     "afterUpgrade": {
       "title": "Ouvrez votre BitBox02",
-      "instruction": "Touchez l'un des deux côtés marqués \"Tab this side\"",
+      "instruction": "Touchez l'un des deux côtés marqués \"Tap this side\"",
       "rebooting": "Redémarrer votre BitBox02"
     },
     "afterSetup": {
@@ -372,7 +372,7 @@
       "title": "Création du portefeuille",
       "myBitbox": "Mon BitBox02",
       "instruction1": "Comment voulez-vous sauvegarder le portefeuille de votre BitBox02 ?",
-      "sdcard": "Carte SD (recommandée)",
+      "sdcard": "Carte SD (recommandé)",
       "sdcardDetectionError": "Erreur de détection de la carte SD",
       "createBackupAborted": "Création d'une sauvegarde interrompue",
       "createBackupFailed": "Échec de la création d'une sauvegarde",
@@ -392,10 +392,10 @@
     },
     "signature": {
       "title": "Signature",
-      "getAccount": "Obtenir un compte",
+      "getAccount": "Récupération de votre compte",
       "prepareSignature": "Préparer la signature",
       "waitingForSignature": "Veuillez signer le message sur votre BitBox02",
-      "verifySignature": "Vérifier la signature",
+      "verifySignature": "Vérification de la signature",
       "cannotGetAccount": "Impossible d'obtenir un compte",
       "cannotGetXpub": "Impossible d'obtenir xpub",
       "signatureError": "Message d'erreur lors de la signature. Veuillez réessayer"
