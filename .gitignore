@@ -48,7 +48,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-ios/.xcode.env.local
+**/.xcode.env.local
 ios/export
 ios/assets
 *.xcarchive
@@ -88,8 +88,16 @@ android/app/src/main/res/drawable-mdpi
 *.map
 
 # Ruby / CocoaPods
-/ios/Pods/
+**/Pods/
 /vendor/bundle/
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
 # Temporary files created by Metro to check the health of the file watcher
 .metro-health-check*

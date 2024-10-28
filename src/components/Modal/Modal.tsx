@@ -1,11 +1,17 @@
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import React, { ComponentProps, useEffect, useRef, useState } from "react";
+import React, {
+  ComponentProps,
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import { Animated, Easing, Modal as RootModal } from "react-native";
 import { ArrayOrSingle } from "ts-essentials";
 import { Button, KeyboardAvoidingView } from "@components";
 import { ScrollView } from "react-native";
 import { useIsScreenSizeMin } from "@hooks";
-import { platform } from "@config";
+import { SBPModalContext, platform } from "@config";
 import * as S from "./styled";
 
 const { isNative, isAndroid } = platform;
@@ -43,6 +49,7 @@ export const Modal = ({
 }: ModalProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const isExtraLarge = useIsScreenSizeMin("extraLarge");
+  const { overlayComponent } = useContext(SBPModalContext);
 
   const opacity = useRef(
     new Animated.Value(animationValues.opacity[+isOpen])
@@ -129,6 +136,7 @@ export const Modal = ({
               <S.SubmitButton type="bitcoin" {...submitButton} />
             )}
           </AnimatedModalContent>
+          {overlayComponent}
         </AnimatedModalBackground>
       </KeyboardAvoidingView>
     </RootModal>

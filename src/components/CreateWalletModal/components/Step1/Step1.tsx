@@ -11,7 +11,7 @@ export const Step1 = ({ setIsValid }: StepProps) => {
 
   useEffect(() => {
     setIsValid(true);
-  });
+  }, []);
 
   return (
     <ComponentStack gapSize={10}>

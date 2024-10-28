@@ -14,4 +14,5 @@ export const LottieLoader = styled(Lottie)<{ size: number }>`
 export const LoaderReason = styled(Text)`
   color: ${({ theme }) => theme.colors.white};
   margin-top: 12px;
+  align-self: center;
 `;

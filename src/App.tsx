@@ -65,7 +65,7 @@ const App = () => {
         onError={(error) => {
           if (error) {
             Sentry.captureException(error, {
-              captureContext: { user: { id: accountConfig.id } }
+              captureContext: { user: { id: accountConfig?.id } }
             });
           }
           navigate("/");

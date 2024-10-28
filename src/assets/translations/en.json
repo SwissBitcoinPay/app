@@ -202,6 +202,7 @@
       "bitcoinPayoutWallet": "Bitcoin payout wallet",
       "localWallet": "Local wallet",
       "alreadyVerifiedAddresses": "Already verified addresses",
+      "connectBitbox": "Connect BitBox02",
       "lightningAddress": "LN address",
       "nextAddresses": "Next addresses",
       "recommended": "recommended",
@@ -284,14 +285,13 @@
       "instructions4": "We store no copy of your wallet keys or your funds. We cannot access it or recover it. You are the only one responsible of the security of your wallet."
     },
     "step2": {
+      "seedPhrase": "seed phrase",
       "instructions1": "In the next step, we'll display your 12 words (also called seed phrase). This secret seed phrase is the only way to access your bitcoins.",
       "instructions2": "Your seed phrase is generated securely and localy on your device, and is never sent to our servers.",
       "instructions3": "Write it down on a durable medium and keep it in a secure place.",
       "instructions4": "If you lose your seed phrase, your funds will be lost forever. It is therefore absolutely critical to properly store and protect your seed phrase.",
-      "instructions5": "Never save it in a cloud, on your phone, or computer. Any device connected to the internet is vulnerable!",
-      "instructions6": "Never share your seed phrase to anyone. Any person that access your seed phrase will be able to steal all of your funds.",
       "agree1": "I understand that I am the only one responsible of the storage of my seed phrase.",
-      "agree2": "I understand that losing my seed phrase or a theft seeing it will result in a loss of funds.",
+      "agree2": "I understand that losing my seed phrase or a thief seeing it will result in a loss of funds.",
       "agree3": "I understand that nobody can help to recover my funds if I lose my seed phrase, not even Swiss Bitcoin Pay."
     },
     "step3": {
@@ -310,6 +310,85 @@
     "step5": {
       "instructions1": "Wallet successfully created",
       "instructions2": "Store your seed phrase in a safe place, and never show it to anyone!"
+    }
+  },
+  "secureWallet": {
+    "instructions1": "You do not depend on Swiss Bitcoin Pay to access your bitcoins, your {{backup}} can be used on any bitcoin wallet.",
+    "instructions2": "Never make a copy in a cloud, on your phone, or computer. Any device connected to the internet is vulnerable!",
+    "instructions3": "Never share your {{backup}} to anyone. Any person that access your {{backup}} will be able to steal all of your funds."
+  },
+  "connectWalletModal": {
+    "iUnderstand": "I understand",
+    "connectionSuccess": "Your BitBox02 has been connected sucessfully. You can unplug it.",
+    "afterUpgrade": {
+      "title": "Open your BitBox02",
+      "instruction": "Touch one of the 2 sides marked \"Tap this side\"",
+      "rebooting": "Rebooting your BitBox02"
+    },
+    "afterSetup": {
+      "sdcard": "SD Card",
+      "12-words": "12 words",
+      "24-words": "24 words",
+      "title": "Secure your backup",
+      "removeSdCard": "Remove the SD Card from your BitBox02 to continue.",
+      "instructions1": "Keep your {{backup}} in a secure place, where only you can access.",
+      "understand1": "You are the only one responsible of the storage of your {{backup}}.",
+      "understand2": "Losing your {{backup}} or a thief accessing it will result in a loss of funds.",
+      "understand3": "Nobody can help to recover your funds if you lose your {{backup}}, not even Swiss Bitcoin Pay."
+    },
+    "bootloader": {
+      "title": "Installing the firmware",
+      "instruction1": "We are installing the official firmware in your BitBox02",
+      "instruction2": "Do not remove the BitBox02 from your device"
+    },
+    "connect": {
+      "title": "Connect your BitBox02",
+      "connecting": "Connecting your wallet",
+      "disconnected": "Wallet disconnected",
+      "updateBitbox": "Make sure your BitBox02 have a firmware installed"
+    },
+    "connected": {
+      "title": "Unlock",
+      "instruction": "Enter BitBox02 password to unlock it"
+    },
+    "pairing": {
+      "title": "Verify pairing code",
+      "instruction": "Verify that the following pairing code is the same as displayed on your BitBox02:",
+      "confirm1": "If the codes are the same, confirm it by pressing",
+      "confirm2": "on the side of your BitBox02",
+      "pairingFailed": "Pairing failed"
+    },
+    "setup": {
+      "title": "Setup your wallet",
+      "myBitbox": "My BitBox02",
+      "instruction1": "How would you like to backup your BitBox02's wallet?",
+      "sdcard": "SD Card (recommended)",
+      "sdcardDetectionError": "SD Card detection error",
+      "createBackupAborted": "Create backup aborted",
+      "createBackupFailed": "Create backup failed",
+      "setPasswordAborted": "Setting password aborted",
+      "setPasswordFailed": "Error while setting password",
+      "advancedOptions": "Advanced options",
+      "bitboxName": "BitBox name",
+      "24words": "Recovery words (24 words)",
+      "12words": "Recovery words (12 words)",
+      "insertSdCard": "Please insert the SD card in your BitBox02",
+      "setPassword1": "Please set a password on your BitBox02.",
+      "setPassword2": "This password will be used to unlock it every time you use it.",
+      "creatingWallet": "Creating wallet",
+      "confirmName1": "Confirm the device name by pressing",
+      "confirmName2": "on the side of your BitBox02",
+      "uninitBitboxNoWeb": "Uninitlialized BitBox02 are not supported on web. Please setup your wallet using the official BitBoxApp"
+    },
+    "signature": {
+      "title": "Signature",
+      "getAccount": "Getting account",
+      "prepareSignature": "Prepare signature",
+      "waitingForSignature": "Please sign the message on your BitBox02",
+      "verifySignature": "Verify signature",
+      "cannotGetAccount": "Cannot get account",
+      "cannotGetXpub": "Cannot get xpub",
+      "signatureError": "Error signing message. Please try again"
     }
   },
   "accountConfigHook": {

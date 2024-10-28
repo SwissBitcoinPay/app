@@ -45,6 +45,8 @@ const fiatCurrencies = [
   "GBP"
 ];
 
+export type WalletType = "local" | "bitbox02";
+
 type BitcoinSettingsForm = {
   depositAddress?: string;
   btcAddressTypes: {
@@ -58,7 +60,7 @@ type BitcoinSettingsForm = {
   hash?: string;
   isPrPaid?: boolean;
   signature?: string;
-  isLocalWallet?: boolean;
+  walletType?: WalletType;
 };
 
 const bitcoinSettingsKeys: (keyof BitcoinSettingsForm)[] = [
@@ -72,7 +74,7 @@ const bitcoinSettingsKeys: (keyof BitcoinSettingsForm)[] = [
   "hash",
   "isPrPaid",
   "signature",
-  "isLocalWallet"
+  "walletType"
 ];
 
 type FiatSettingsForm = {
