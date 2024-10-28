@@ -1,0 +1,35 @@
+diff --git a/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt b/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt
+index 1b6ff7a..08ae40a 100644
+--- a/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt
++++ b/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt
+@@ -564,6 +564,14 @@ class RNCWebViewManagerImpl {
+         view.setLayerType(layerType, null)
+     }
+ 
++    fun setAndroidWebviewId(viewWrapper: RNCWebViewWrapper, value: String) {
++        val view = viewWrapper.webView
++        val context = view.themedReactContext
++        val resourceId = context.resources.getIdentifier(value, "id", context.getPackageName())
++        
++        view.id = resourceId
++    }
++
+     fun setCacheMode(viewWrapper: RNCWebViewWrapper, cacheModeString: String?) {
+         val view = viewWrapper.webView
+         view.settings.cacheMode = when (cacheModeString) {
+diff --git a/node_modules/react-native-webview/android/src/oldarch/com/reactnativecommunity/webview/RNCWebViewManager.java b/node_modules/react-native-webview/android/src/oldarch/com/reactnativecommunity/webview/RNCWebViewManager.java
+index 784b76e..ee7f2f1 100644
+--- a/node_modules/react-native-webview/android/src/oldarch/com/reactnativecommunity/webview/RNCWebViewManager.java
++++ b/node_modules/react-native-webview/android/src/oldarch/com/reactnativecommunity/webview/RNCWebViewManager.java
+@@ -76,6 +76,11 @@ public class RNCWebViewManager extends ViewGroupManager<RNCWebViewWrapper> {
+         mRNCWebViewManagerImpl.setAndroidLayerType(view, value);
+     }
+ 
++    @ReactProp(name = "androidWebviewId")
++    public void setAndroidWebviewId(RNCWebViewWrapper view, String value) {
++        mRNCWebViewManagerImpl.setAndroidWebviewId(view, value);
++    }
++
+     @ReactProp(name = "applicationNameForUserAgent")
+     public void setApplicationNameForUserAgent(RNCWebViewWrapper view, @Nullable String value) {
+         mRNCWebViewManagerImpl.setApplicationNameForUserAgent(view, value);
