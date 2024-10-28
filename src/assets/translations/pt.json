@@ -215,7 +215,7 @@
       "invoicePaid": "Endereço verificado",
       "signWithAddress": "Assinar com o endereço",
       "signWithAddressDetails": "Assinar a mensagem com este endereço Bitcoin",
-      "receiveInBtcDescription1": "{{percent}}% dos bitcoins que faturar através da Swiss Bitcoin Pay serão enviadas para o endereço que fornecer.",
+      "receiveInBtcDescription1": "{{percent}}% dos bitcoins que faturar através da Swiss Bitcoin Pay serão enviadas para a carteira de bitcoin que fornecer.",
       "receiveInBtcDescription2": "As conversões de Lightning para Onchain e as taxas de mineração são sempre gratuitas para si.",
       "receiveInBtcDescription3": "Por defeito, os pagamentos à sua carteira são efectuados todos os dias 1 de cada mês. O limite mínimo é de 1000 sats.",
       "receiveInBtcDescription3Lightning": "As seus bitcoins serão enviadas instantaneamente para o seu endereço lightning após cada pagamento. Certifique-se de que o seu nó está bem conectado.",

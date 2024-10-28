@@ -216,7 +216,7 @@
       "invoicePaid": "Adresse geprüft",
       "signWithAddress": "Signiere mit Adresse",
       "signWithAddressDetails": "Signieren Sie die Nachricht mit dieser Bitcoin-Adresse",
-      "receiveInBtcDescription1": "{{percent}}% der Bitcoins, die Sie über Swiss Bitcoin Pay aufladen, werden an die von Ihnen angegebene Adresse gesendet.",
+      "receiveInBtcDescription1": "{{percent}}% der Bitcoins, die Sie über Swiss Bitcoin Pay aufladen, werden an die von Ihnen angegebene Bitcoin-Brieftasche.",
       "receiveInBtcDescription2": "Lightning zu Onchain Konvertierungen und Miner-Gebühren sind für Sie immer kostenlos.",
       "receiveInBtcDescription3": "Die Auszahlung erfolgt jeden Tag um 0:00 UTC. Die Mindestschwelle liegt bei 1000 Sats.",
       "receiveInBtcDescription3Lightning": "Ihre Bitcoins werden nach jeder Zahlung sofort an Ihre Lightning-Adresse gesendet. Stellen Sie sicher, dass Ihr Node gut verbunden ist.",
