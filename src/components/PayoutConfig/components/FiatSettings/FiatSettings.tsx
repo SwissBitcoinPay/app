@@ -45,6 +45,8 @@ export const FiatSettings = ({
 
   const ownerCountry = watch("ownerCountry");
 
+  const btcPercent = watch("btcPercent");
+
   const validateIban = useCallback(
     (value = "") => isValidIBAN(value) || t("ibanInvalid"),
     [t]
@@ -99,6 +101,7 @@ export const FiatSettings = ({
         <FieldDescription>
           🏦{" "}
           {t("receiveInBankDescription1", {
+            percent: 100 - btcPercent,
             currency
           })}{" "}
           <Url

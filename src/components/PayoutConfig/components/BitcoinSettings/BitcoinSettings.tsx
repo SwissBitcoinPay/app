@@ -86,6 +86,8 @@ export const BitcoinSettings = ({
   const isPrPaid = watch("isPrPaid");
   const signature = watch("signature");
 
+  const btcPercent = watch("btcPercent");
+
   const alreadyVerifiedAddresses = useMemo(
     () => accountConfig?.verifiedAddresses || [],
     [accountConfig?.verifiedAddresses]
@@ -371,7 +373,7 @@ export const BitcoinSettings = ({
             </DescriptionLine>
           </ComponentStack>
           <FieldDescription>
-            🔐 {t("receiveInBtcDescription1")}
+            🔐 {t("receiveInBtcDescription1", { percent: btcPercent })}
           </FieldDescription>
           <FieldDescription>
             💵 {t("receiveInBtcDescription2")}
