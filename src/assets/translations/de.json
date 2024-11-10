@@ -10,6 +10,7 @@
     "edit": "Bearbeiten",
     "submit": "Absenden",
     "confirm": "Bestätigen",
+    "cancel": "Abbrechen",
     "wallet": "Brieftasche",
     "admin": "Verwaltung",
     "employee": "Mitarbeiter",
@@ -254,6 +255,7 @@
     },
     "wallet": {
       "title": "Onchain-Wallet",
+      "unlockYourWallet": "Entsperre dein Portemonnaie",
       "balance": "Bilanz",
       "pending": "Anhängig",
       "transactions": "Transaktionen",

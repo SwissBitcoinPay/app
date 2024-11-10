@@ -76,6 +76,7 @@ export type WalletTransaction = {
 } & ConfirmedWithBlockTime;
 
 export const Wallet = () => {
+  const { t: tRoot } = useTranslation();
   const { t } = useTranslation(undefined, {
     keyPrefix: "screens.wallet"
   });
@@ -266,7 +267,12 @@ export const Wallet = () => {
 
     if (!zPub) {
       (async () => {
-        setZpub(await AsyncStorage.getItem(keyStoreZpub));
+        setZpub(
+          await AsyncStorage.getItem(keyStoreZpub, {
+            title: t("unlockYourWallet"),
+            cancel: tRoot("common.cancel")
+          })
+        );
       })();
     }
   }, [zPub]);

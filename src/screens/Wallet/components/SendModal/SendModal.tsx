@@ -316,7 +316,7 @@ export const SendModal = ({
                   label={t("destinationAddress")}
                   autoCorrect={false}
                   onChangeText={(newValue) => {
-                    if (newValue !== undefined) {
+                    if (newValue !== undefined && newValue !== null) {
                       let bitcoinAddress = newValue;
                       if (newValue.startsWith("bitcoin:")) {
                         const { url, query } = queryString.parseUrl(newValue);
