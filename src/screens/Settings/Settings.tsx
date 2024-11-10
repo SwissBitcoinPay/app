@@ -187,7 +187,10 @@ export const Settings = () => {
   }, [t, accountConfig]);
 
   const activationCodeData = useMemo<`https://${string}`>(
-    () => `${appRootUrl}/connect/${accountConfig?.apiKey}`,
+    () =>
+      `${
+        window?.location?.origin || appRootUrl
+      }/connect/${accountConfig?.apiKey}`,
     [accountConfig?.apiKey]
   );
 

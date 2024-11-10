@@ -1,6 +1,10 @@
 import { useCallback, useContext, useEffect, useMemo } from "react";
 import { useSync } from "./bitbox/api";
-import { TProductName, getDeviceList } from "@utils/Bitbox/api/devices";
+import {
+  TDevices,
+  TProductName,
+  getDeviceList
+} from "@utils/Bitbox/api/devices";
 import { useDefault } from "./bitbox/default";
 import { SBPBitboxContext, platform } from "@config";
 import { getStatus } from "@utils/Bitbox/api/bitbox02";
@@ -14,11 +18,9 @@ const { isBitcoinize } = platform;
 export const useBitboxBridge = () => {
   const { subscribeEndpoint, subscribeLegacy } = useContext(SBPBitboxContext);
 
-  const syncDeviceList = useCallback(
-    (cb: (accounts: TDevices) => void) =>
-      subscribeEndpoint("devices/registered", cb),
-    [subscribeEndpoint]
-  );
+  const syncDeviceList = useCallback<
+    (cb: (accounts: TDevices) => void) => TDevices
+  >((cb) => subscribeEndpoint("devices/registered", cb), [subscribeEndpoint]);
 
   const devices = useDefault(useSync(getDeviceList, syncDeviceList), {});
 
