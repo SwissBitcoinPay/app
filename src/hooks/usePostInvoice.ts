@@ -167,7 +167,7 @@ export const usePostInvoice = () => {
             {
               id: id,
               status: "open",
-              time: new Date().getTime() / 1000,
+              time: Math.round(new Date().getTime() / 1000),
               input: {
                 unit: currency,
                 amount: decimalFiat

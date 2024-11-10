@@ -192,6 +192,28 @@ export const Invoice = () => {
 
   const [isInitialPaid, setIsInitialPaid] = useState(false);
 
+  const getProgress = useCallback(() => {
+    const now = Math.round(Date.now() / 1000);
+    const timeElapsed = now - createdAt;
+    const newProgress = timeElapsed / delay;
+
+    return 1 - newProgress;
+  }, [createdAt, delay]);
+
+  const [progress, setProgress] = useState<number>(1);
+
+  useEffect(() => {
+    if (isInit) {
+      const intervalId = setInterval(() => {
+        setProgress(getProgress());
+      }, 1000);
+
+      return () => {
+        clearInterval(intervalId);
+      };
+    }
+  }, [isInit]);
+
   // Paid data
   const [status, setStatus] = useState<Status>("draft");
   const [paymentMethod, setPaymentMethod] = useState<"onchain" | "lightning">();
@@ -801,9 +823,8 @@ export const Invoice = () => {
               )}
               {createdAt && delay && isAlive && !isExternalInvoice && (
                 <S.ProgressBar
-                  createdAt={createdAt}
-                  delay={delay}
-                  timer={timer}
+                  progress={progress}
+                  text={timer}
                   colorConfig={{
                     10: colors.error,
                     30: colors.warning

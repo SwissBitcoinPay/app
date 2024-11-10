@@ -11,13 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import { AsyncStorage, Linking, bcrypt, isApiError } from "@utils";
-import {
-  SBPBitboxContext,
-  SBPContext,
-  apiRootUrl,
-  currencies,
-  platform
-} from "@config";
+import { SBPContext, apiRootUrl, currencies, platform } from "@config";
 import LocaleCurrency from "locale-currency";
 import {
   ComponentStack,

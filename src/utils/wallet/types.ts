@@ -1,3 +1,4 @@
+import { WalletTransaction } from "@screens/Wallet/Wallet";
 import { Bip84PrivateAccount } from "@types";
 import { PairedBitBox } from "bitbox-api";
 import { Psbt } from "bitcoinjs-lib";

@@ -55,15 +55,13 @@ export const History = () => {
   });
   const { accountConfig } = useAccountConfig({ refresh: true });
   const { userType } = useContext(SBPContext);
-  const { colors, borderRadius } = useTheme();
+  const { colors } = useTheme();
   const rates = useRates();
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLocal, setIsLocal] = useState(true);
   const [localIds, setLocalIds] = useState<string[]>([]);
   const [transactions, setTransactions] = useState<InvoiceWithLnurlUrl[]>([]);
-
-  const now = useMemo(() => new Date().getTime() / 1000, []);
 
   const getTransactions = useCallback(async () => {
     let transactionsDetails: InvoiceWithLnurlUrl[] = [];
@@ -76,22 +74,25 @@ export const History = () => {
     setLocalIds(localTransactionsHistory.map((item) => item.id));
 
     if (!accountConfig?.isAtm) {
-      transactionsDetails = (
-        await Promise.all(
-          localTransactionsHistory.map((transaction) => {
-            return !["settled", "expired", "canceled"].includes(
-              transaction.status
-            ) && transaction.expiry > now
-              ? axios.get<InvoiceType>(
-                  `${apiRootUrl}/checkout/${transaction.id}`
-                )
-              : { data: transaction };
-          })
-        )
-      ).map(({ data }) => ({
-        ...data,
-        status: data.expiry <= now ? "expired" : data.status
-      }));
+      transactionsDetails = await Promise.all(
+        localTransactionsHistory.map((transaction) => {
+          return !["settled", "expired", "canceled"].includes(
+            transaction.status
+          )
+            ? axios
+                .get<InvoiceType>(`${apiRootUrl}/checkout/${transaction.id}`)
+                .then((response) => {
+                  if (response.data.status) {
+                    return response.data;
+                  } else {
+                    // Legacy
+                    return { ...transaction, status: "expired" };
+                  }
+                })
+                .catch(() => ({ ...transaction, status: "expired" }))
+            : transaction;
+        })
+      );
     } else {
       const lnurlList = localTransactionsHistory.map((v) => {
         if (v.status !== "settled") {
@@ -176,7 +177,7 @@ export const History = () => {
 
     setTransactions([...transactionsDetails].reverse());
     setIsLoading(false);
-  }, [accountConfig?.apiKey, accountConfig?.isAtm, now, t, userType]);
+  }, [accountConfig?.apiKey, accountConfig?.isAtm, t, userType]);
 
   useEffect(() => {
     getTransactions();

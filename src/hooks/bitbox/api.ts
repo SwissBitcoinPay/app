@@ -15,8 +15,9 @@
  */
 
 import { DependencyList, useCallback, useEffect, useState } from "react";
-import { TSubscriptionCallback, TUnsubscribe } from "../api/subscribe";
 import { useMountedRef } from "./mount";
+import { TSubscriptionCallback } from "@utils/Bitbox/api/subscribe";
+import { TUnsubscribe } from "@utils/Bitbox/api/transport-common";
 
 /**
  * useSubscribeReset is a hook to subscribe to a subscription function.
@@ -40,7 +41,7 @@ export const useSubscribeReset = <T>(
   useEffect(
     () => subscribe(),
     // empty dependencies because it's only subscribed once
-    [] // eslint-disable-line react-hooks/exhaustive-deps
+    []
   );
   return [response, () => setResponse(undefined)];
 };
@@ -82,7 +83,7 @@ export const useLoad = <T>(
   useEffect(
     () => load(),
     // By default no dependencies are passed to only query once
-    dependencies || [] // eslint-disable-line react-hooks/exhaustive-deps
+    dependencies || []
   );
   return response;
 };
@@ -117,6 +118,6 @@ export const useSync = <T>(
       }
     }, // we pass no dependencies because it's only queried once
     [disabled]
-  ); // eslint-disable-line react-hooks/exhaustive-deps
+  );
   return response;
 };
