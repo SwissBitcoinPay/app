@@ -56,9 +56,11 @@ export const Step3 = ({ setIsValid, setValue, watch }: StepProps) => {
 
   useEffect(() => {
     if (!isWeb) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       ScreenGuardModule.register("#000000");
 
       return () => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         ScreenGuardModule.unregister();
       };
     } else {

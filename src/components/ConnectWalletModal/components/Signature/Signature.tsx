@@ -7,10 +7,12 @@ import axios from "axios";
 import { SBPBitboxContext, apiRootUrl } from "@config";
 import { useSignature } from "./hook";
 import * as ConnectStyled from "../../styled";
+import { DEFAULT_SCRIPT_TYPE } from "@config";
 
 export const Signature = ({
   setValue,
-  onClose
+  onClose,
+  customFunction
 }: ConnectWalletComponentProps) => {
   const toast = useToast();
   const { t } = useTranslation(undefined, {
@@ -18,13 +20,10 @@ export const Signature = ({
   });
 
   const [state, setState] = useState<
-    | "getAccount"
-    | "prepareSignature"
-    | "waitingForSignature"
-    | "verifySignature"
+    "getAccount" | "prepareSignature" | "waitingForSignature"
   >("getAccount");
 
-  const { setAttentionToBitbox } = useContext(SBPBitboxContext);
+  const { setAttentionToBitbox, pairedBitbox } = useContext(SBPBitboxContext);
 
   const error = useCallback(
     (msg: string) => {
@@ -39,53 +38,68 @@ export const Signature = ({
     (async () => {
       const accounts = await getAccounts();
       setState("prepareSignature");
-      const accountXpub = await getAccountXpub(accounts[0]);
+      const account = accounts[0];
+
+      const accountXpub = await getAccountXpub(account);
       setValue("zPub", accountXpub);
 
-      const { data: verifyData } = await axios.post<{
-        message: string;
-        signAddress?: string;
-      }>(`${apiRootUrl}/verify-address`, {
-        depositAddress: accountXpub
-      });
-
+      let success = false;
+      let messageToSign: string;
       let signature: string;
 
-      setState("waitingForSignature");
-      setAttentionToBitbox(true);
-      while (!signature) {
-        const signatureData = await signMessage(
-          "p2wpkh",
-          verifyData.message,
-          accounts[0]
-        );
+      if (!customFunction) {
+        const { data: verifyData } = await axios.post<{
+          message: string;
+        }>(`${apiRootUrl}/verify-address`, {
+          depositAddress: accountXpub
+        });
+        messageToSign = verifyData.message;
+      } else {
+        setState("waitingForSignature");
+        setAttentionToBitbox(true);
 
-        if (signatureData.success) {
-          signature = signatureData.signature;
-        } else {
-          error(t("signatureError"));
-
-          if (signatureData.errorCode !== "userAbort") {
-            setAttentionToBitbox(false);
-            return;
-          }
+        const customSignatureData = await customFunction({
+          bitbox: pairedBitbox,
+          account,
+          xPub: accountXpub
+        });
+        if (customSignatureData) {
+          messageToSign = customSignatureData.messageToSign;
         }
       }
 
+      try {
+        if (messageToSign) {
+          setState("waitingForSignature");
+          setAttentionToBitbox(true);
+          while (!signature) {
+            const signatureData = await signMessage(
+              DEFAULT_SCRIPT_TYPE,
+              messageToSign,
+              accounts[0]
+            );
+
+            if (signatureData.success) {
+              signature = signatureData.signature;
+            } else {
+              error(t("signatureError"));
+
+              if (signatureData.errorCode !== "userAbort") {
+                setAttentionToBitbox(false);
+                return;
+              }
+            }
+          }
+
+          setValue("message", messageToSign);
+          setValue("signature", signature);
+
+          success = true;
+        }
+      } catch (e) {}
+
       setAttentionToBitbox(false);
-      setState("verifySignature");
-
-      const message = verifyData.message;
-
-      setValue("message", message);
-      setValue("signature", signature);
-
-      await axios.post(`${apiRootUrl}/verify-signature`, {
-        message,
-        signature
-      });
-
-      onClose(true);
+      onClose(success);
     })();
   }, []);
 

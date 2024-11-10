@@ -36,6 +36,24 @@ export const useSignature = (error: (msg: string) => void) => {
     [error, pairedBitbox, t]
   );
 
+  const getAccountFirstAddress = useCallback(
+    async (format: ScriptType, account: string) => {
+      try {
+        if (pairedBitbox) {
+          const firstAddress = await pairedBitbox.btcAddress(
+            "btc",
+            `${account}/0/0`,
+            { simpleType: format },
+            false
+          );
+          return firstAddress;
+        }
+      } catch (e) {}
+      error(t("cannotGetAccount"));
+    },
+    [error, pairedBitbox, t]
+  );
+
   const signMessage = useCallback(
     async (format: ScriptType, message: string, account: string) => {
       try {
@@ -59,5 +77,10 @@ export const useSignature = (error: (msg: string) => void) => {
     [pairedBitbox]
   );
 
-  return { getAccounts, getAccountXpub, signMessage };
+  return {
+    getAccounts,
+    getAccountXpub,
+    getAccountFirstAddress,
+    signMessage
+  };
 };

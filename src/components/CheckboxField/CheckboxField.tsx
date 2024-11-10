@@ -22,16 +22,23 @@ export const CheckboxField = ({
   disabled,
   onChange,
   value,
+  style,
   ...props
 }: CheckboxFieldProps) => {
   const theme = useTheme();
 
   const onChangeHandler = useCallback(() => {
-    onChange?.({ nativeEvent: { value: !value } });
-  }, [onChange, value]);
+    if (!disabled) {
+      onChange?.({ nativeEvent: { value: !value } });
+    }
+  }, [disabled, onChange, value]);
 
   return (
-    <S.PressableContainer onPress={onChangeHandler}>
+    <S.PressableContainer
+      style={style}
+      disabled={disabled}
+      onPress={onChangeHandler}
+    >
       <Checkbox
         {...props}
         value={value}
@@ -42,8 +49,9 @@ export const CheckboxField = ({
         style={{
           margin: isNative ? -6 : 0
         }}
+        onChange={onChangeHandler}
       />
-      <S.LabelText weight={600} h5>
+      <S.LabelText weight={600} h5 onPress={onChangeHandler}>
         {label}
       </S.LabelText>
     </S.PressableContainer>

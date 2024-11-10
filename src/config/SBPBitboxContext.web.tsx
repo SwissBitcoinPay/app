@@ -2,6 +2,9 @@ import React, { PropsWithChildren, useCallback, useState } from "react";
 import { SBPBitboxContextType } from "./SBPBitboxContext";
 import { BitBox, PairedBitBox, PairingBitBox } from "bitbox-api";
 import { TStatus } from "@utils/Bitbox/api/bitbox02";
+import { sleep } from "@utils";
+
+export const IS_BITBOX_SUPPORTED = true;
 
 // @ts-ignore
 export const SBPBitboxContext = React.createContext<SBPBitboxContextType>({});
@@ -37,7 +40,20 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
-  const setIsBitboxServerRunning = useCallback(() => {}, []);
+  const setIsBitboxServerRunning = useCallback(
+    async (isRunning: boolean) => {
+      if (!isRunning) {
+        try {
+          pairedBitbox?.close();
+        } catch (e) {}
+        await sleep(1000);
+        setPairedBitbox(undefined);
+        setPairingBitbox(undefined);
+        setUnpaired(undefined);
+      }
+    },
+    [pairedBitbox]
+  );
 
   return (
     <SBPBitboxContext.Provider

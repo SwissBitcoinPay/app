@@ -37,5 +37,6 @@ export const platform = {
   bottomSafeAreaHeight: 0,
   deviceName: DeviceInfo.getDeviceNameSync(),
   deviceLocale: getLocale(),
-  isBitcoinize: getDeviceSync() === "BTC21PRO"
+  isBitcoinize:
+    getDeviceSync() === "BTC21PRO" || getDeviceSync() === "Bitcoinize Machine"
 };

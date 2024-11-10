@@ -12,7 +12,7 @@ import {
 import { Step1, Step2, Step3, Step4, Step5 } from "./components";
 import { useToast } from "react-native-toast-notifications";
 import axios from "axios";
-import { AsyncStorage } from "@utils";
+import { AsyncStorage, sleep } from "@utils";
 import {
   keyStoreMnemonicWords,
   keyStoreUserType,
@@ -141,11 +141,10 @@ export const CreateWalletModal = ({
       } else {
         onClose();
       }
-      setTimeout(() => {
-        reset();
-        setStep(0);
-        setIsButtonLoading(false);
-      }, 500);
+      await sleep(500);
+      reset();
+      setStep(0);
+      setIsButtonLoading(false);
     },
     [onClose, reset, t, toast, watch]
   );

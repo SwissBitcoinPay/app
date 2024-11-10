@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState
 } from "react";
-import { Bitbox } from "@utils";
+import { Bitbox, sleep } from "@utils";
 import {
   TEvent,
   TMsgCallback,
@@ -27,6 +27,8 @@ import { platform } from "@config";
 import { BackupMode } from "@components/ConnectWalletModal/components/Setup/Setup";
 import { useTheme } from "styled-components";
 import { SBPBitboxContextType } from "./SBPBitboxContext";
+
+export const IS_BITBOX_SUPPORTED = true;
 
 const { isBitcoinize } = platform;
 
@@ -129,14 +131,8 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
       observers.push(observer);
 
       return () => {
-        if (!observers.includes(observer)) {
-          console.warn("!observers.includes(observer)");
-        }
         const index = observers.indexOf(observer);
         observers.splice(index, 1);
-        if (observers.includes(observer)) {
-          console.warn("observers.includes(observer)");
-        }
       };
     },
     [handleEvent, isSubscriberSet, pushNotificationListener]
@@ -168,14 +164,8 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
         legacySubscriptions.current[subject] = [];
       }
       const observers = legacySubscriptions.current[subject];
-      if (observers.includes(observer)) {
-        console.error(`observer already registered for ${subject}`);
-      }
       observers.push(observer);
       return () => {
-        if (!observers.includes(observer)) {
-          console.error("!observers.includes(observer)");
-        }
         const index = observers.indexOf(observer);
         observers.splice(index, 1);
       };
@@ -193,10 +183,12 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
     async (value: boolean) => {
       setIsBitboxServerRunning(value);
       if (value) {
+        await sleep(1);
         await Bitbox.startBitBoxBridge();
       } else if (!value && isBitboxServerRunning) {
         await Bitbox.stopBitBoxBridge();
       }
+      await sleep(1);
     },
     [isBitboxServerRunning]
   );
@@ -221,7 +213,7 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
           }
         }
       } catch (e) {
-        toast.show(`Error: ${eventData}`, { type: "error" });
+        toast.show(`Bitbox error: ${eventData}`, { type: "error" });
       }
     },
     [onNotification, toast]
@@ -254,9 +246,7 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
             cb(event.object);
             break;
           case "reload":
-            apiGet(event.subject)
-              .then((object) => cb(object))
-              .catch(console.error);
+            apiGet(event.subject).then((object) => cb(object));
             break;
           default:
             throw new Error(`Event: ${event.subject} not supported`);

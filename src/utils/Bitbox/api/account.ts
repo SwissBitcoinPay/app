@@ -16,6 +16,8 @@
 
 import { apiGet, apiPost } from "./request";
 
+export type AccountCode = string;
+
 export type TKeystore = {
   watchonly: boolean;
   rootFingerprint: string;
@@ -39,6 +41,22 @@ export interface IAccount {
 
 export const getAccounts = (): Promise<IAccount[]> => {
   return apiGet("accounts");
+};
+
+export interface IReceiveAddress {
+  addressID: string;
+  address: string;
+}
+
+export interface ReceiveAddressList {
+  scriptType: ScriptType | null;
+  addresses: IReceiveAddress[];
+}
+
+export const getReceiveAddressList = (
+  code: AccountCode
+): Promise<ReceiveAddressList[] | null> => {
+  return apiGet(`account/${code}/receive-addresses`);
 };
 
 export type ScriptType = "p2pkh" | "p2wpkh-p2sh" | "p2wpkh" | "p2tr";
@@ -93,4 +111,57 @@ export const signAddress = (
   code: AccountCode
 ): Promise<AddressSignResponse> => {
   return apiPost(`account/${code}/sign-address`, { format, msg, code });
+};
+
+export type FeeTargetCode = "custom" | "low" | "economy" | "normal" | "high";
+
+export type TTxInput = {
+  address: string;
+  amount: string;
+  feeTarget: FeeTargetCode;
+  customFee: string;
+  sendAll: "yes" | "no";
+  selectedUTXOs: string[];
+};
+
+export interface IAmount {
+  amount: string;
+  conversions?: Conversions;
+  unit: CoinUnit;
+  estimated: boolean;
+}
+
+export type TTxProposalResult =
+  | {
+      amount: IAmount;
+      fee: IAmount;
+      success: true;
+      total: IAmount;
+    }
+  | {
+      errorCode: string;
+      success: false;
+    };
+
+export const proposeTx = (
+  accountCode: AccountCode,
+  txInput: TTxInput
+): Promise<TTxProposalResult> => {
+  return apiPost(`account/${accountCode}/tx-proposal`, txInput);
+};
+
+export type ISendTx =
+  | {
+      success: true;
+      txHex: string;
+    }
+  | {
+      success: false;
+      aborted?: boolean;
+      errorMessage?: string;
+      errorCode?: string;
+    };
+
+export const sendTx = (code: AccountCode): Promise<ISendTx> => {
+  return apiPost(`account/${code}/sendtx`);
 };
