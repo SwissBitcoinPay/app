@@ -300,7 +300,7 @@ export const Wallet = () => {
       {nextAddress && (
         <Modal
           isOpen={isReceiveModalOpen}
-          title={t("receive")}
+          title={t("receiveBitcoins")}
           onClose={() => {
             setIsReceiveModalOpen(false);
           }}
