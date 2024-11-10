@@ -10,6 +10,7 @@
     "edit": "Editar",
     "submit": "Enviar",
     "confirm": "Confirmar",
+    "cancel": "Cancelar",
     "wallet": "Carteira",
     "admin": "Administrador",
     "employee": "Empregado",
@@ -254,6 +255,7 @@
     },
     "wallet": {
       "title": "Carteira Onchain",
+      "unlockYourWallet": "Desbloqueia a tua carteira",
       "balance": "Saldo",
       "pending": "Pendente",
       "transactions": "Transacções",

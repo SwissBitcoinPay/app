@@ -10,6 +10,7 @@
     "edit": "Modifica",
     "submit": "Invia",
     "confirm": "Conferma",
+    "cancel": "Annullamento",
     "wallet": "Wallet",
     "admin": "Admin",
     "employee": "Dipendente",
@@ -254,6 +255,7 @@
     },
     "wallet": {
       "title": "Wallet Onchain",
+      "unlockYourWallet": "Sblocca il tuo portafoglio",
       "balance": "Saldo",
       "pending": "In attesa",
       "transactions": "Transazioni",

@@ -10,6 +10,7 @@
     "edit": "Editar",
     "submit": "Enviar",
     "confirm": "Confirme",
+    "cancel": "Cancelar",
     "wallet": "Cartera",
     "admin": "Admin",
     "employee": "Empleado",
@@ -254,6 +255,7 @@
     },
     "wallet": {
       "title": "Monedero Onchain",
+      "unlockYourWallet": "Desbloquea tu monedero",
       "balance": "Saldo",
       "pending": "Pendiente",
       "transactions": "Transacciones",

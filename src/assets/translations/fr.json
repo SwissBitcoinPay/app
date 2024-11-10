@@ -10,6 +10,7 @@
     "edit": "Éditer",
     "submit": "Envoyer",
     "confirm": "Confirmer",
+    "cancel": "Annuler",
     "wallet": "Portefeuille",
     "admin": "Administrateur",
     "employee": "Employé",
@@ -254,6 +255,7 @@
     },
     "wallet": {
       "title": "Portefeuille Onchain",
+      "unlockYourWallet": "Déverrouillez votre portefeuille",
       "balance": "Solde",
       "pending": "En attente",
       "transactions": "Transactions",
@@ -283,7 +285,7 @@
         "signWithBitbox": "Signer avec le BitBox02",
         "broadcast": "Envoyer"
       },
-      "errorFetchingWallet": "Erreur lors de la récupération de ton portefeuille"
+      "errorFetchingWallet": "Erreur lors de la récupération de votre portefeuille"
     }
   },
   "createWalletModal": {
