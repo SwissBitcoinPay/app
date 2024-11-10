@@ -35,7 +35,7 @@ workflows:
         script: |
           if [[ "$DEV" == "true" ]]
           then
-              zip -q -r android_symbols.zip android/app/build/intermediates/symbol_list_with_package_name/release/package-aware-r.txt
+              zip -q -r android_symbols.zip android/app/build/intermediates/symbol_list_with_package_name/release/processReleaseResources/package-aware-r.txt
               ./scripts/upload-to-testfairy.sh android/app/build/swiss-bitcoin-pay.apk android_symbols.zip
           fi
     artifacts:

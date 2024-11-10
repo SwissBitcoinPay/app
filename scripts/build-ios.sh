@@ -22,7 +22,7 @@ cd ios
 
 # Sourcemaps uploading
 
-ios/Pods/hermes-engine/destroot/bin/hermesc \
+Pods/hermes-engine/destroot/bin/hermesc \
   -O -emit-binary \
   -output-source-map \
   -out=main.jsbundle.hbc \
