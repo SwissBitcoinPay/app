@@ -37,7 +37,7 @@
       "orConnectBy": "oder verbinden durch",
       "scanActivationQRcode": "QR-Code zur Aktivierung scannen",
       "email": "E-Mail",
-      "12words": "12 Wörter"
+      "signature": "Unterschrift"
     },
     "emailLogin": {
       "title": "Anmeldung per E-Mail",
@@ -50,7 +50,6 @@
       }
     },
     "signatureLogin": {
-      "title": "Anmeldung zur Signaturmethode",
       "word": "Wort {{number}}",
       "enter12wordsDescription1": "Ihre 12 Wörter verbleiben auf Ihrem Gerät, um eine Nachricht zu signieren und Sie zu authentifizieren.",
       "enter12wordsDescription2": "Bitte stellen Sie sicher, dass Sie Ihre Seed-Phrase auf einem verifizierten Open-Source-Build eingeben.",
@@ -58,7 +57,9 @@
       "error": {
         "invalidSignature": "Ungültige Signatur",
         "invalidWord": "Ungültiges Wort"
-      }
+      },
+      "titleWallet": "Unterschrift mit Hardware-Geldbörse",
+      "titleWords": "Unterschrift mit 12 Wörtern"
     },
     "signup": {
       "title": "Anmelden",
@@ -76,7 +77,6 @@
       "currency": "Währung",
       "currencyDescription": "Die Standardwährung für Ihr Unternehmen",
       "referralCode": "Empfehlungscode",
-      "optionnal": "Optional",
       "referralCodeDescription": "Wenn Sie jemand zu Swiss Bitcoin Pay gebracht hat, geben Sie bitte den Empfehlungscode hier ein",
       "submitDescription1": "Mit der Erstellung Ihres Kontos akzeptieren Sie unsere",
       "submitDescription2": "und",
@@ -216,12 +216,12 @@
       "invoicePaid": "Adresse geprüft",
       "signWithAddress": "Signiere mit Adresse",
       "signWithAddressDetails": "Signieren Sie die Nachricht mit dieser Bitcoin-Adresse",
-      "receiveInBtcDescription1": "{{percent}}% der Bitcoins, die Sie über Swiss Bitcoin Pay aufladen, werden an die von Ihnen angegebene Bitcoin-Brieftasche.",
+      "receiveInBtcDescription1": "{{percent}}% der Bitcoins, die Sie über Swiss Bitcoin Pay aufladen, werden an die von Ihnen angegebene Bitcoin-Wallet gesendet.",
       "receiveInBtcDescription2": "Lightning zu Onchain Konvertierungen und Miner-Gebühren sind für Sie immer kostenlos.",
       "receiveInBtcDescription3": "Die Auszahlung erfolgt jeden Tag um 0:00 UTC. Die Mindestschwelle liegt bei 1000 Sats.",
       "receiveInBtcDescription3Lightning": "Ihre Bitcoins werden nach jeder Zahlung sofort an Ihre Lightning-Adresse gesendet. Stellen Sie sicher, dass Ihr Node gut verbunden ist.",
       "receiveInBtcDescription4": "Eine kryptografische Signatur Ihrer Bitcoin-Wallet ist erforderlich, um den Besitz nachzuweisen.",
-      "receiveInBankDescription1": "{{percent}}% der Bitcoins, die Sie über Swiss Bitcoin Pay aufladen, werden für {{currency}} verkauft und dann automatisch durch unseren Partner auf Ihr Bankkonto überwiesen",
+      "receiveInBankDescription1": "{{percent}}% der Bitcoins, die Sie über Swiss Bitcoin Pay aufladen, werden für {{currency}} verkauft und dann automatisch auf Ihr Bankkonto durch unseren Partner",
       "bankSettings": "Bankeinstellungen",
       "receiveInBankDescription2Instant": "Die Zahlung auf Ihr Bankkonto erfolgt automatisch, sobald Ihr Guthaben den Mindestbetrag von {{formattedAmount}} übersteigt.",
       "receiveInBankDescription2Batched": "Die Zahlung auf Ihr Bankkonto erfolgt automatisch jeden Tag um 0:00 UTC, wenn Ihr Guthaben den Mindestbetrag von {{formattedAmount}} übersteigt.",
@@ -233,7 +233,6 @@
       "createYourBitcoinWallet": "Erstellen Sie Ihre Bitcoin-Wallet",
       "iban": "IBAN",
       "bankReference": "Bankverbindung",
-      "optionnal": "Optional",
       "yourName": "Ihr Firmen- oder Personenname",
       "ownerName": "Name des Eigentümers",
       "yourAddress": "Ihre Adresse",
@@ -250,7 +249,7 @@
       "zipInvalid": "Ungültige Postleitzahl",
       "submit": "Absenden",
       "patchSettingNeedsEmailValidation": "Bestätigen Sie die neuen Einstellungen mit der E-Mail, die Sie erhalten haben.",
-      "connectBitbox": "BitBox02 anschließen",
+      "bitboxConnectSuccess": "Ihre BitBox02 wurde erfolgreich angeschlossen. Sie können sie ausstecken.",
       "optional": "Optional"
     },
     "wallet": {
@@ -258,18 +257,32 @@
       "balance": "Bilanz",
       "pending": "Anhängig",
       "transactions": "Transaktionen",
-      "send": "Senden (demnächst)",
+      "send": "Senden Sie",
       "receive": "Empfangen",
       "sent": "Gesendet",
       "received": "Empfangen",
       "receiveInfo": "Mit dieser unbenutzten Adresse erhalten Sie Bitcoins direkt auf Ihr lokales Wallet. Zahlungen, die direkt auf diese Adresse eingehen, werden von Swiss Bitcoin Pay nicht verfolgt und sind daher nicht gebührenpflichtig und nicht im Export enthalten.",
-      "sendAddress": "An folgende Adresse senden",
       "btcAmount": "Betrag",
       "fees": "Gebühren",
-      "fastestFee": "Schnellste",
-      "halfHourFee": "Mittel",
-      "hourFee": "Langsam",
-      "economyFee": "Sparsam"
+      "sendModal": {
+        "send": "Senden Sie Ihre Bitcoins",
+        "fastestFee": "Schnellste",
+        "halfHourFee": "Mittel",
+        "hourFee": "Langsam",
+        "economyFee": "Wirtschaft",
+        "transactionSent": "Transaktion gesendet!",
+        "errorBroadcast": "Fehler beim Übertragen einer Transaktion",
+        "sendInfo": "Senden Sie Geld von Ihrer selbstverwalteten Geldbörse an eine Bitcoin-Adresse",
+        "destinationAddress": "Zieladresse",
+        "amount": "Betrag",
+        "max": "Max",
+        "balance": "Bilanz",
+        "fees": "Gebühren",
+        "sendLastInfo": "Ihre Transaktion wird vollständig von Ihrem lokalen Gerät aus generiert und übertragen. Keine privaten Informationen gehen durch die Swiss Bitcoin Pay Server",
+        "signWithBitbox": "Unterschreiben mit BitBox02",
+        "broadcast": "Senden Sie"
+      },
+      "errorFetchingWallet": "Fehler beim Abrufen Ihrer Brieftasche"
     }
   },
   "createWalletModal": {
@@ -330,8 +343,8 @@
     "instructions3": "Geben Sie Ihre {{backup}} niemals an Dritte weiter. Jede Person, die Zugriff auf Ihre {{backup}} hat, kann Ihr gesamtes Geld stehlen."
   },
   "connectWalletModal": {
+    "title": "BitBox02 anschließen",
     "iUnderstand": "Ich verstehe",
-    "connectionSuccess": "Ihre BitBox02 wurde erfolgreich angeschlossen. Sie können sie ausstecken.",
     "afterUpgrade": {
       "title": "Öffnen Sie Ihre BitBox02",
       "instruction": "Berühren Sie eine der 2 Seiten, die mit \"Tap this side\" markiert sind.",

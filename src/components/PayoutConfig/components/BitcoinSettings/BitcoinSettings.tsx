@@ -50,6 +50,8 @@ import {
 } from "@components/PayoutConfig/PayoutConfig";
 import * as S from "./styled";
 import { faUsb } from "@fortawesome/free-brands-svg-icons";
+import { useToast } from "react-native-toast-notifications";
+import { IS_BITBOX_SUPPORTED } from "@config/SBPBitboxContext";
 
 export type SignatureData = {
   zPub: string;
@@ -68,6 +70,7 @@ export const BitcoinSettings = ({
     keyPrefix: "screens.payoutConfig"
   });
   const { t: tRoot } = useTranslation();
+  const toast = useToast();
   const theme = useTheme();
   const { accountConfig } = useContext(SBPContext);
 
@@ -281,15 +284,28 @@ export const BitcoinSettings = ({
   );
 
   const validateSignature = useCallback(
-    async (value?: string) => {
+    async (value?: string | { message: string; signature: string }) => {
       if (signature === "paid") return true;
-      try {
-        await axios.post(`${apiRootUrl}/verify-signature`, {
-          message: messageToSign,
-          signature: value
-        });
-        return true;
-      } catch (e) {}
+      if (value) {
+        try {
+          let message: string;
+          let _signature: string;
+
+          if (typeof value === "object") {
+            message = value.message;
+            _signature = value.signature;
+          } else {
+            message = messageToSign;
+            _signature = value;
+          }
+
+          await axios.post(`${apiRootUrl}/verify-signature`, {
+            message,
+            signature: _signature
+          });
+          return true;
+        } catch (e) {}
+      }
       return t("invalidSignature");
     },
     [messageToSign, t, signature]
@@ -342,9 +358,32 @@ export const BitcoinSettings = ({
         setValue("signature", signatureData.signature);
       }
       setIsCreateWalletModalOpen(false);
-      setIsConnectWalletModalOpen(false);
     },
     [setValue]
+  );
+
+  const onBitboxWalletModalClose = useCallback<
+    ComponentProps<typeof CreateWalletModal>["onClose"]
+  >(
+    async (signatureData) => {
+      setIsConnectWalletModalOpen(false);
+      if (signatureData) {
+        const verifySignatureData = await validateSignature(signatureData);
+
+        if (verifySignatureData === true) {
+          toast.show(t("bitboxConnectSuccess"), {
+            type: "success"
+          });
+        } else {
+          toast.show(verifySignatureData, {
+            type: "error"
+          });
+        }
+
+        onWalletModalsClose(signatureData);
+      }
+    },
+    [onWalletModalsClose, t, toast, validateSignature]
   );
 
   return (
@@ -355,9 +394,8 @@ export const BitcoinSettings = ({
         onClose={onWalletModalsClose}
       />
       <ConnectWalletModal
-        title={t("connectBitbox")}
         isOpen={isConnectWalletModalOpen}
-        onClose={onWalletModalsClose}
+        onClose={onBitboxWalletModalClose}
       />
       <ComponentStack>
         <ComponentStack gapSize={14}>
@@ -472,11 +510,13 @@ export const BitcoinSettings = ({
                     </ComponentStack>
                   )}
                 </FieldContainer>
-                <Button
-                  title={t("connectBitbox")}
-                  icon={faUsb}
-                  onPress={onPressConnectWallet}
-                />
+                {IS_BITBOX_SUPPORTED && (
+                  <Button
+                    title={tRoot("connectWalletModal.title")}
+                    icon={faUsb}
+                    onPress={onPressConnectWallet}
+                  />
+                )}
                 {!walletType && (
                   <ComponentStack direction="horizontal" gapSize={10}>
                     {[

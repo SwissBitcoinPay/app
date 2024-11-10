@@ -9,8 +9,7 @@ import React, {
 import { useTranslation } from "react-i18next";
 import { Modal } from "@components";
 import { UseFormSetValue, useForm } from "react-hook-form";
-import { useToast } from "react-native-toast-notifications";
-import { AsyncStorage } from "@utils";
+import { AsyncStorage, sleep } from "@utils";
 import {
   keyStoreUserType,
   keyStoreWalletType,
@@ -42,11 +41,22 @@ type ConnectWalletForm = {
   signature: string;
 };
 
+export type CustomFunctionType = (
+  params: BitboxReadyFunctionParams
+) => Promise<{ messageToSign: string } | void>;
+
 type ConnectWalletModalProps = Omit<
   ComponentProps<typeof Modal>,
-  "children" | "onClose"
+  "children" | "onClose" | "title"
 > & {
   onClose: (signatureData?: SignatureData) => void;
+  customFunction?: CustomFunctionType;
+};
+
+export type BitboxReadyFunctionParams = {
+  account: string;
+  xPub: string;
+  bitbox?: PairedBitBox;
 };
 
 export type ConnectWalletComponentProps = {
@@ -54,6 +64,8 @@ export type ConnectWalletComponentProps = {
   status: XOR<BootloaderStatus, Status>;
   onClose: (isFinished: boolean) => void;
   setValue: UseFormSetValue<ConnectWalletForm>;
+  setState: (value: WalletConnectState) => void;
+  customFunction?: CustomFunctionType;
 };
 
 export enum WalletConnectState {
@@ -68,18 +80,18 @@ export enum WalletConnectState {
 export const ConnectWalletModal = ({
   isOpen,
   onClose,
+  customFunction,
   ...props
 }: ConnectWalletModalProps) => {
-  const toast = useToast();
   const { t } = useTranslation(undefined, { keyPrefix: "connectWalletModal" });
   const { deviceId, deviceMode, status } = useBitboxBridge();
+  const [state, setState] = useState<WalletConnectState>();
   const {
     setIsBitboxServerRunning,
     setAfterSetupMode,
     isAfterUpgradeScreen,
     afterSetupMode
   } = useContext(SBPBitboxContext);
-  const [state, setState] = useState(WalletConnectState.Connect);
 
   useEffect(() => {
     if (deviceMode === "bitbox02-bootloader") {
@@ -101,12 +113,16 @@ export const ConnectWalletModal = ({
           setState(WalletConnectState.Signature);
           break;
       }
-    } else if (!status) {
+    } else if (!status && !!state) {
       setState(WalletConnectState.Connect);
     }
   }, [deviceMode, status]);
 
-  const { Component, buttonProps } = useMemo<{
+  const {
+    Component,
+    componentProps = {},
+    buttonProps
+  } = useMemo<{
     Component: React.ElementType<ConnectWalletComponentProps>;
     buttonProps?: Omit<ComponentProps<typeof Modal>["submitButton"], "onPress">;
   }>(() => {
@@ -140,11 +156,23 @@ export const ConnectWalletModal = ({
                 : {})
             };
           } else {
-            return { Component: SignatureScreen };
+            return {
+              Component: SignatureScreen,
+              componentProps: { customFunction }
+            };
           }
+        default:
+          return {};
       }
     }
-  }, [afterSetupMode, isAfterUpgradeScreen, setAfterSetupMode, state, t]);
+  }, [
+    afterSetupMode,
+    customFunction,
+    isAfterUpgradeScreen,
+    setAfterSetupMode,
+    state,
+    t
+  ]);
 
   const { watch, setValue, reset } = useForm<ConnectWalletForm>({
     mode: "onTouched"
@@ -162,22 +190,23 @@ export const ConnectWalletModal = ({
         await AsyncStorage.setItem(keyStoreUserType, UserType.Wallet);
         await AsyncStorage.setItem(keyStoreWalletType, "bitbox02");
         onClose({ ...data, walletType: "bitbox02" });
-        toast.show(t("connectionSuccess"), {
-          type: "success"
-        });
       } else {
         onClose();
       }
-      setTimeout(() => {
-        setState(WalletConnectState.Connect);
-        reset();
-      }, 500);
+      await sleep(500);
+      setState(WalletConnectState.Connect);
+      reset();
     },
-    [onClose, reset, t, toast, watch]
+    [onClose, reset, watch]
   );
 
   useEffect(() => {
-    setIsBitboxServerRunning(isOpen);
+    (async () => {
+      await setIsBitboxServerRunning(isOpen);
+      if (isOpen) {
+        setState(WalletConnectState.Connect);
+      }
+    })();
   }, [isOpen]);
 
   return (
@@ -186,13 +215,18 @@ export const ConnectWalletModal = ({
       isOpen={isOpen}
       submitButton={buttonProps}
       onClose={handleOnClose}
+      title={t("title")}
     >
-      <Component
-        deviceId={deviceId}
-        status={status}
-        onClose={handleOnClose}
-        setValue={setValue}
-      />
+      {Component && (
+        <Component
+          deviceId={deviceId}
+          status={status}
+          onClose={handleOnClose}
+          setValue={setValue}
+          setState={setState}
+          {...componentProps}
+        />
+      )}
     </Modal>
   );
 };

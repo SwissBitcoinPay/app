@@ -10,7 +10,7 @@ import {
   PageContainer,
   Text
 } from "@components";
-import { getFormattedUnit } from "@utils";
+import { getFormattedUnit, sleep } from "@utils";
 // @ts-ignore
 import BIP84 from "bip84";
 import {
@@ -27,8 +27,11 @@ import { useTheme } from "styled-components";
 import { XOR } from "ts-essentials";
 import * as S from "./styled";
 import { useAccountConfig, useRates } from "@hooks";
+import { SendModal } from "./components";
+import { useToast } from "react-native-toast-notifications";
+import { Platform, RefreshControl } from "react-native";
 
-const ADDRESS_GAP = 3;
+export const ADDRESS_GAP = 1;
 
 type ConfirmedWithBlockTime = XOR<
   { confirmed: true; block_time: number },
@@ -38,16 +41,38 @@ type ConfirmedWithBlockTime = XOR<
 type MempoolTX = {
   txid: string;
   status: ConfirmedWithBlockTime;
-  vout: { scriptpubkey_address: string; value: number }[];
+  vout: {
+    scriptpubkey: string;
+    scriptpubkey_address: string;
+    value: number;
+  }[];
   vin: {
     txid: string;
-    prevout: { scriptpubkey_address: string; value: number };
+    prevout: {
+      scriptpubkey: string;
+      scriptpubkey_address: string;
+      value: number;
+    };
   }[];
 };
 
-type TransactionUTXO = {
+export type AddressDetail = {
+  address: string;
+  index: number;
+};
+
+export type WalletTransaction = {
   txid: string;
+  voutIndex: number;
+  vinIndex: number;
+  scriptPubKey: string;
+  address: string;
+  addressIndex: number;
+  receiveValue?: number;
   value: number;
+  isSpent: boolean;
+  change: boolean;
+  fees: number;
 } & ConfirmedWithBlockTime;
 
 export const Wallet = () => {
@@ -55,117 +80,215 @@ export const Wallet = () => {
     keyPrefix: "screens.wallet"
   });
   const { colors } = useTheme();
+  const toast = useToast();
   const { accountConfig } = useAccountConfig();
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const rates = useRates();
 
-  const [nextAddress, setNextAddress] = useState<string>();
-  const [utxos, setUtxos] = useState<TransactionUTXO[]>([]);
+  const [zPub, setZpub] = useState<string>();
+
+  const [nextAddress, setNextAddress] = useState<AddressDetail>();
+  const [nextChangeAddress, setNextChangeAddress] = useState<AddressDetail>();
+  const [txs, setTxs] = useState<WalletTransaction[]>([]);
   const [balance, setBalance] = useState(0);
   const [pendingBalance, setPendingBalance] = useState(0);
 
   const [isReceiveModalOpen, setIsReceiveModalOpen] = useState(false);
+  const [isSendModalOpen, setIsSendModalOpen] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      let currentBalance = 0;
-      let currentPendingBalance = 0;
+  const updateWallet = useCallback(async () => {
+    if (!zPub) {
+      return;
+    }
+    if (!isInitialLoading) {
+      setIsRefreshing(true);
+    }
+    let currentBalance = 0;
+    let currentPendingBalance = 0;
 
-      const currentUtxos: TransactionUTXO[] = [];
+    const currentTxs: WalletTransaction[] = [];
 
-      let receiveAddressIndex = 0;
-      let changeAddressIndex = 0;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const account = new BIP84.fromZPub(zPub);
 
-      const zPub = await AsyncStorage.getItem(keyStoreZpub);
+    let txsByAddress: {
+      [k in string]: {
+        addressIndex: number;
+        change: boolean;
+        txs: MempoolTX[];
+      };
+    } = {};
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      const account = new BIP84.fromZPub(zPub);
+    try {
+      for (const change of [false, true]) {
+        let addressIndex = 0;
 
-      for (let index = 0; index < ADDRESS_GAP; index++) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        const address: string = account.getAddress(receiveAddressIndex);
+        for (let gapIndex = 0; gapIndex < ADDRESS_GAP; gapIndex++) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+          const address: string = account.getAddress(addressIndex, change);
 
-        const { data: addressUtxos } = await axios.get<MempoolTX[]>(
-          `https://mempool.space/api/address/${address}/txs`
-        );
+          const { data: addressTxs } = await axios.get<MempoolTX[]>(
+            `https://mempool.space/api/address/${address}/txs`
+          );
 
-        if (addressUtxos.length) {
-          addressUtxos.forEach((utxo) => {
-            const value =
-              utxo.vout.find((v) => v.scriptpubkey_address === address)
-                ?.value ||
-              (utxo.vin.find((v) => v.prevout.scriptpubkey_address === address)
-                ?.prevout.value || 0) * -1;
-
-            if (utxo.status.confirmed || value < 0) {
-              currentBalance += value;
+          txsByAddress = {
+            ...txsByAddress,
+            [address]: { addressIndex, change, txs: addressTxs }
+          };
+          if (addressTxs.length) {
+            gapIndex = -1;
+          } else if (gapIndex === 0) {
+            if (!change) {
+              setNextAddress({ address, index: addressIndex });
             } else {
-              currentPendingBalance += value;
+              setNextChangeAddress({ address, index: addressIndex });
             }
+          }
 
-            currentUtxos.push({
-              txid: utxo.txid,
-              value,
-              ...(utxo.status.confirmed
-                ? { confirmed: true, block_time: utxo.status.block_time || 0 }
-                : { confirmed: false })
-            });
-          });
-          index = -1;
-        } else if (index === 0) {
-          setNextAddress(address);
+          addressIndex++;
         }
-
-        receiveAddressIndex++;
       }
 
-      for (let index = 0; index < ADDRESS_GAP; index++) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        const address: string = account.getAddress(changeAddressIndex, true);
+      const ourAddresses = Object.keys(txsByAddress);
 
-        const { data: addressUtxos } = await axios.get<MempoolTX[]>(
-          `https://mempool.space/api/address/${address}/txs`
-        );
+      ourAddresses.forEach((address) => {
+        const { txs: addressTxs, change, addressIndex } = txsByAddress[address];
+        for (const tx of addressTxs) {
+          const voutIndex = tx.vout.findIndex(
+            (v) => v.scriptpubkey_address === address
+          );
 
-        if (addressUtxos.length) {
-          addressUtxos.forEach((utxo) => {
-            const value =
-              utxo.vout.find((v) => v.scriptpubkey_address === address)
-                ?.value ||
-              (utxo.vin.find((v) => v.prevout.scriptpubkey_address === address)
-                ?.prevout.value || 0) * -1;
+          const vinIndex = tx.vin.findIndex(
+            (v) => v.prevout.scriptpubkey_address === address
+          );
 
-            if (utxo.status.confirmed || value < 0) {
-              currentBalance += value;
+          const isSelfSend = tx.vout.every((v) =>
+            ourAddresses.includes(v.scriptpubkey_address)
+          );
+
+          const isMultipleInputs =
+            vinIndex !== -1 && !!currentTxs.find((v) => v.txid === tx.txid);
+
+          let receiveValue: number;
+          let value: number;
+          let fees = 0;
+
+          if (voutIndex !== -1) {
+            value = tx.vout[voutIndex].value;
+          } else {
+            const totalInputAmount = tx.vin.reduce(
+              (result, v) => result + v.prevout.value,
+              0
+            );
+
+            fees = Math.abs(
+              totalInputAmount -
+                tx.vout.reduce((result, v) => result + v.value, 0)
+            );
+
+            const sentValue = Math.abs(
+              totalInputAmount -
+                fees -
+                tx.vout
+                  .filter(
+                    (v) =>
+                      ourAddresses.includes(v.scriptpubkey_address) ||
+                      isSelfSend
+                  )
+                  .reduce((result, v) => result + v.value, 0)
+            );
+
+            value = -sentValue;
+          }
+
+          const scriptPubKey =
+            voutIndex !== -1
+              ? tx.vout[voutIndex].scriptpubkey
+              : vinIndex !== -1
+              ? tx.vin[vinIndex].prevout.scriptpubkey
+              : undefined;
+
+          const isSpent = !!addressTxs.find((_tx) =>
+            _tx.vin.find((vin) => vin.txid === tx.txid)
+          );
+
+          if ((isSelfSend && value > 0) || isMultipleInputs) {
+            continue;
+          }
+
+          const confirmed = tx.status.confirmed;
+
+          if (!change || (change && value < 0)) {
+            if (confirmed || value < 0) {
+              currentBalance += value - fees;
             } else {
-              currentPendingBalance += value;
+              currentPendingBalance += value - fees;
             }
+          }
 
-            currentUtxos.push({
-              txid: utxo.txid,
-              value,
-              ...(utxo.status.confirmed
-                ? { confirmed: true, block_time: utxo.status.block_time || 0 }
-                : { confirmed: false })
-            });
+          currentTxs.push({
+            txid: tx.txid,
+            voutIndex,
+            vinIndex,
+            scriptPubKey,
+            address,
+            change,
+            isSelfSend,
+            addressIndex,
+            isSpent,
+            receiveValue,
+            value,
+            fees,
+            confirmed,
+            ...(confirmed
+              ? {
+                  block_time: tx.status.block_time || 0
+                }
+              : {})
           });
-          index = -1;
         }
-
-        changeAddressIndex++;
-      }
+      });
 
       setBalance(currentBalance);
       setPendingBalance(currentPendingBalance);
-      setUtxos(currentUtxos);
-      setIsLoading(false);
-    })();
-  }, []);
+      setTxs(currentTxs);
+    } catch (e) {
+      toast.show(t("errorFetchingWallet"), { type: "error" });
+    }
+    setIsInitialLoading(false);
+    setIsRefreshing(false);
+  }, [isInitialLoading, toast, zPub, t]);
+
+  useEffect(() => {
+    void updateWallet();
+
+    if (!zPub) {
+      (async () => {
+        setZpub(await AsyncStorage.getItem(keyStoreZpub));
+      })();
+    }
+  }, [zPub]);
 
   const onReceive = useCallback(() => {
     setIsReceiveModalOpen(true);
   }, []);
+
+  const onSend = useCallback(() => {
+    setIsSendModalOpen(true);
+  }, []);
+
+  const onSendModalClose = useCallback(
+    async (success: boolean) => {
+      setIsSendModalOpen(false);
+      if (success) {
+        await sleep(1500);
+        void updateWallet();
+      }
+    },
+    [updateWallet]
+  );
 
   const fiatCurrency = useMemo(
     () => accountConfig?.currency,
@@ -183,26 +306,48 @@ export const Wallet = () => {
           }}
         >
           <ComponentStack>
-            <S.ReceiveQR size={200} value={nextAddress} />
-            <Button title={nextAddress} copyContent={nextAddress} />
+            <S.ReceiveQR size={200} value={nextAddress.address} />
+            <Button
+              title={nextAddress.address}
+              copyContent={nextAddress.address}
+            />
             <Text h4 weight={600} color={colors.white}>
               {t("receiveInfo")}
             </Text>
           </ComponentStack>
         </Modal>
       )}
+      <SendModal
+        isOpen={isSendModalOpen}
+        txs={txs}
+        nextChangeAddress={nextChangeAddress}
+        onClose={onSendModalClose}
+        zPub={zPub}
+        currentBalance={balance / 100000000}
+      />
       <PageContainer
         header={{ left: { onPress: -1, icon: faArrowLeft }, title: t("title") }}
+        {...(Platform.OS !== "web"
+          ? {
+              refreshControl: (
+                <RefreshControl
+                  onRefresh={updateWallet}
+                  refreshing={isRefreshing}
+                  progressViewOffset={100}
+                />
+              )
+            }
+          : {})}
       >
         <ComponentStack>
           <S.BalanceComponentStack gapSize={6}>
             <S.BalanceTitle h4 weight={500}>
               {t("balance")}
             </S.BalanceTitle>
-            {!isLoading ? (
+            {!isInitialLoading ? (
               <>
                 <S.Balance h2 weight={700}>
-                  {balance / 100000000} sats
+                  {balance / 100000000} BTC
                 </S.Balance>
                 {rates && fiatCurrency && (
                   <S.Balance h3 weight={600}>
@@ -216,7 +361,7 @@ export const Wallet = () => {
                   <ComponentStack direction="horizontal" gapSize={6}>
                     <Icon icon={faClock} color={colors.grey} size={16} />
                     <Text h4 weight={600} color={colors.grey}>
-                      {t("pending")}: {pendingBalance / 100000000} sats
+                      {t("pending")}: {pendingBalance / 100000000} BTC
                     </Text>
                   </ComponentStack>
                 )}
@@ -229,33 +374,49 @@ export const Wallet = () => {
             <Button
               title={t("send")}
               type="bitcoin"
-              onPress={() => null}
+              onPress={onSend}
               icon={faPaperPlane}
-              disabled
+              disabled={isInitialLoading}
             />
             <Button
               title={t("receive")}
               onPress={onReceive}
               icon={faQrcode}
-              disabled={isLoading}
+              disabled={isInitialLoading}
             />
           </S.ActionButtonsContainer>
           <ItemsList
-            items={utxos.map((utxo) => {
-              const isPositive = utxo.value > 0;
+            items={txs
+              .filter((tx) => !tx.change || tx.value < 0)
+              .sort(
+                (a, b) =>
+                  (b.block_time || Infinity) - (a.block_time || Infinity)
+              )
+              .map((tx) => {
+                const isPending = !tx.confirmed;
+                const realValue = tx.receiveValue || tx.value;
+                const isPositive = realValue > 0;
 
-              return {
-                icon: isPositive ? faPlus : faPaperPlane,
-                tags: [
-                  {
-                    value: `${Math.abs(utxo.value) / 100000000} BTC`,
-                    color: isPositive ? colors.success : colors.primaryLight
-                  }
-                ],
-                title: isPositive ? t("received") : t("sent"),
-                onPress: `https://mempool.space/tx/${utxo.txid}`
-              };
-            })}
+                return {
+                  ...(isPending
+                    ? { component: <Loader color={colors.warning} /> }
+                    : { icon: isPositive ? faPlus : faPaperPlane }),
+                  tags: [
+                    {
+                      value: `${Math.abs(realValue + tx.fees) / 100000000} BTC`,
+                      color: isPending
+                        ? colors.bitcoin
+                        : isPositive
+                        ? colors.success
+                        : colors.primaryLight
+                    }
+                  ],
+                  title: isPositive ? t("received") : t("sent"),
+                  onPress: `https://mempool.space/tx/${tx.txid}${
+                    tx.voutIndex !== -1 ? `#vout=${tx.voutIndex}` : ""
+                  }`
+                };
+              })}
           />
         </ComponentStack>
       </PageContainer>

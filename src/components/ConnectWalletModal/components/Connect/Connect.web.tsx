@@ -4,32 +4,40 @@ import { useTranslation } from "react-i18next";
 import { ComponentStack, Loader } from "@components";
 import { SBPBitboxContext } from "@config";
 import * as ConnectStyled from "../../styled";
-import { ConnectWalletComponentProps } from "@components/ConnectWalletModal/ConnectWalletModal";
+import {
+  ConnectWalletComponentProps,
+  WalletConnectState
+} from "@components/ConnectWalletModal/ConnectWalletModal";
 import { useToast } from "react-native-toast-notifications";
 
-export const Connect = ({ onClose }: ConnectWalletComponentProps) => {
+let bitbox: typeof _bitbox;
+
+export const Connect = ({ onClose, setState }: ConnectWalletComponentProps) => {
   const { t } = useTranslation(undefined, {
     keyPrefix: "connectWalletModal.connect"
   });
 
-  const { setUnpaired } = useContext(SBPBitboxContext);
+  const { setUnpaired, pairedBitbox } = useContext(SBPBitboxContext);
 
   const toast = useToast();
 
   const onDisconnect = useCallback(() => {
-    onClose();
-    toast.show(t("disconnected"), { type: "error" });
-  }, [onClose, t, toast]);
+    setState(WalletConnectState.Connect);
+  }, [setState]);
 
   useEffect(() => {
     (async () => {
       try {
-        const bitbox: typeof _bitbox = await _bitbox.default;
+        if (!bitbox) {
+          bitbox = await _bitbox.default;
+        }
         const unpaired = await bitbox.bitbox02ConnectAuto(onDisconnect);
         setUnpaired?.(unpaired);
       } catch (e) {
+        if (!pairedBitbox) {
+          toast.show(`${e.message}. ${t("updateBitbox")}.`, { type: "error" });
+        }
         onClose();
-        toast.show(`${e.message}. ${t("updateBitbox")}.`, { type: "error" });
       }
     })();
   }, []);

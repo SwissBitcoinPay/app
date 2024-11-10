@@ -37,7 +37,7 @@
       "orConnectBy": "oppure collegati con",
       "scanActivationQRcode": "Scansiona il QR code d'accesso",
       "email": "Email",
-      "12words": "12 parole"
+      "signature": "Firma"
     },
     "emailLogin": {
       "title": "Accedi con l'e-mail",
@@ -50,7 +50,6 @@
       }
     },
     "signatureLogin": {
-      "title": "Accedi con la firma",
       "word": "Parola {{number}}",
       "enter12wordsDescription1": "Le tue 12 parole rimarranno sul tuo dispositivo, per firmare un messaggio per autenticarti.",
       "enter12wordsDescription2": "Assicuratevi di inserire la vostra seed phrase in una build verificata e open-source.",
@@ -58,7 +57,9 @@
       "error": {
         "invalidSignature": "Firma non valida",
         "invalidWord": "Parola non valida"
-      }
+      },
+      "titleWallet": "Firma con portafoglio hardware",
+      "titleWords": "Firma con 12 parole"
     },
     "signup": {
       "title": "Iscriviti",
@@ -215,12 +216,12 @@
       "invoicePaid": "Indirizzo verificato",
       "signWithAddress": "Firma con l'indirizzo",
       "signWithAddressDetails": "Firma il messaggio con questo indirizzo Bitcoin",
-      "receiveInBtcDescription1": "Il {{percent}}% dei bitcoins ricevuti tramite Swiss Bitcoin Pay saranno inviati al portafoglio bitcoin indicato.",
+      "receiveInBtcDescription1": "{{percent}}La percentuale dei bitcoin caricati tramite Swiss Bitcoin Pay sarà inviata al portafoglio bitcoin da voi indicato.",
       "receiveInBtcDescription2": "Le conversioni da Lightning a Onchain e le commissioni dei miner sono sempre gratuite per te.",
       "receiveInBtcDescription3": "I pagamenti al vostro portafoglio vengono effettuati di default ogni 1° del mese. La soglia minima è di 1000 sats.",
       "receiveInBtcDescription3Lightning": "I tuoi bitcoin saranno inviati subito al tuo indirizzo lightning dopo ogni pagamento. Assicurati che il tuo nodo sia ben collegato.",
       "receiveInBtcDescription4": "Per dimostrarne la proprietà è necessaria una firma crittografica del wallet Bitcoin.",
-      "receiveInBankDescription1": "Il {{percent}}% dei bitcoins ricevuti tramite Swiss Bitcoin Pay saranno convertiti in {{currency}} e inviati automaticamente al tuo conto bancario tramite il nostro partner.",
+      "receiveInBankDescription1": "{{percent}}La % dei bitcoin caricati tramite Swiss Bitcoin Pay sarà venduta a {{currency}} e inviata automaticamente al vostro conto bancario tramite il nostro partner.",
       "bankSettings": "Impostazioni Bancarie",
       "receiveInBankDescription2Instant": "Il pagamento al tuo conto corrente viene effettuato automaticamente non appena il tuo saldo supera il minimo di {{formattedAmount}}.",
       "receiveInBankDescription2Batched": "Il pagamento al tuo conto corrente avviene automaticamente ogni giorno alle 0:00 UTC se il tuo saldo supera il minimo di {{formattedAmount}}.",
@@ -249,25 +250,39 @@
       "zipInvalid": "CAP non valido",
       "submit": "Invia",
       "patchSettingNeedsEmailValidation": "Conferma le nuove impostazioni tramite l'e-mail ricevuta",
-      "connectBitbox": "Collegare BitBox02"
+      "bitboxConnectSuccess": "Il BitBox02 è stato collegato con successo. È possibile scollegarlo."
     },
     "wallet": {
       "title": "Wallet Onchain",
       "balance": "Saldo",
       "pending": "In attesa",
       "transactions": "Transazioni",
-      "send": "Invia (in arrivo)",
+      "send": "Inviare",
       "receive": "Ricevi",
       "sent": "Inviati",
       "received": "Ricevuti",
       "receiveInfo": "Ricevi bitcoin direttamente nel tuo wallet locale con questo indirizzo inutilizzato.\nI pagamenti ricevuti direttamente a questo indirizzo non sono tracciati da Swiss Bitcoin Pay e pertanto non sono soggetti a commissioni ne sono inclusi nelle esportazioni.",
-      "sendAddress": "Invia all'indirizzo",
       "btcAmount": "Importo",
       "fees": "Commissione",
-      "fastestFee": "La più veloce",
-      "halfHourFee": "Media",
-      "hourFee": "Lenta",
-      "economyFee": "Economica"
+      "sendModal": {
+        "send": "Invia i tuoi bitcoin",
+        "fastestFee": "Il più veloce",
+        "halfHourFee": "Medio",
+        "hourFee": "Lento",
+        "economyFee": "Economia",
+        "transactionSent": "Transazione inviata!",
+        "errorBroadcast": "Errore durante la trasmissione della transazione",
+        "sendInfo": "Inviare fondi dal proprio portafoglio autodepositato a un indirizzo Bitcoin",
+        "destinationAddress": "Indirizzo di destinazione",
+        "amount": "Importo",
+        "max": "Massimo",
+        "balance": "Equilibrio",
+        "fees": "Tasse",
+        "sendLastInfo": "La transazione viene generata e trasmessa interamente dal vostro dispositivo locale. Nessuna informazione privata passa attraverso i server di Swiss Bitcoin Pay.",
+        "signWithBitbox": "Firma con BitBox02",
+        "broadcast": "Inviare"
+      },
+      "errorFetchingWallet": "Errore durante il recupero del portafoglio"
     }
   },
   "createWalletModal": {
@@ -329,7 +344,6 @@
   },
   "connectWalletModal": {
     "iUnderstand": "Capisco",
-    "connectionSuccess": "Il BitBox02 è stato collegato con successo. È possibile scollegarlo.",
     "afterUpgrade": {
       "title": "Aprire il BitBox02",
       "instruction": "Toccare uno dei 2 lati contrassegnati da \"Tap this side\".",
@@ -399,6 +413,7 @@
       "cannotGetAccount": "Impossibile ottenere l'account",
       "cannotGetXpub": "Impossibile ottenere xpub",
       "signatureError": "Messaggio di errore nella firma. Riprovare"
-    }
+    },
+    "title": "Collegare BitBox02"
   }
 }

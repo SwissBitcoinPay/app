@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useCallback } from "react";
 import { TDevices } from "@utils/Bitbox/api/devices";
 import {
   TMsgCallback,
@@ -11,8 +11,10 @@ import { XOR } from "ts-essentials";
 import { BitBox, PairedBitBox, PairingBitBox } from "bitbox-api";
 import { TStatus } from "@utils/Bitbox/api/bitbox02";
 
+export const IS_BITBOX_SUPPORTED: boolean = false;
+
 export type SBPBitboxContextType = {
-  setIsBitboxServerRunning: (value: boolean) => void;
+  setIsBitboxServerRunning: (value: boolean) => Promise<void>;
   setAttentionToBitbox: (value: boolean) => void;
 } & XOR<
   {
@@ -53,7 +55,13 @@ export type SBPBitboxContextType = {
 export const SBPBitboxContext = React.createContext<SBPBitboxContextType>({});
 
 export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
+  const setIsBitboxServerRunning = useCallback(() => {}, []);
+  const setAttentionToBitbox = useCallback(() => {}, []);
   return (
-    <SBPBitboxContext.Provider value={{}}>{children}</SBPBitboxContext.Provider>
+    <SBPBitboxContext.Provider
+      value={{ setIsBitboxServerRunning, setAttentionToBitbox }}
+    >
+      {children}
+    </SBPBitboxContext.Provider>
   );
 };

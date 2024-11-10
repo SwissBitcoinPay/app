@@ -35,6 +35,7 @@ type TextFieldProps = TextInputProps & {
   qrScannable?: boolean;
   deletable?: boolean | (() => void);
   suggestions?: string[];
+  charMask?: RegExp;
 } & Pick<BaseFieldProps, "label" | "left" | "right" | "error" | "disabled">;
 
 export const TextField = forwardRef<TextInput, TextFieldProps>(
@@ -59,6 +60,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
       disabled,
       multiline,
       onSubmitEditing,
+      charMask,
       ...props
     },
     ref
@@ -99,6 +101,14 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
       [onBlur]
     );
 
+    const _onChangeText = useCallback(
+      (v: string) => {
+        if (charMask && v.length > 0 && !v.match(charMask)) return;
+        onChangeText?.(v);
+      },
+      [charMask, onChangeText]
+    );
+
     const onCopy = useCallback(() => {
       setIsCopied(true);
       Clipboard.setString(value || "");
@@ -109,11 +119,11 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
 
     const onPaste = useCallback(async () => {
       setIsPasted(true);
-      onChangeText?.(await Clipboard.getString());
+      _onChangeText(await Clipboard.getString());
       setTimeout(() => {
         setIsPasted(false);
       }, 1500);
-    }, [onChangeText]);
+    }, [_onChangeText]);
 
     const onToggleScanQrModal = useCallback(() => {
       setIsScanModalOpen(!isScanModalOpen);
@@ -121,9 +131,9 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
 
     const onScanQr = useCallback(
       (qrValue: string) => {
-        onChangeText?.(qrValue);
+        _onChangeText(qrValue);
       },
-      [onChangeText]
+      [_onChangeText]
     );
 
     const onToggleQrDisplayModal = useCallback(() => {
@@ -132,14 +142,14 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
 
     const onDelete = useCallback(() => {
       setIsDeleted(true);
-      onChangeText?.("");
+      _onChangeText("");
       if (typeof deletable === "function") {
         deletable();
       }
       setTimeout(() => {
         setIsDeleted(false);
       }, 1500);
-    }, [onChangeText, deletable]);
+    }, [_onChangeText, deletable]);
 
     return (
       <S.TextFieldContainer style={style}>
@@ -169,7 +179,12 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
           right={[
             ...(right ? tupulize(right) : []),
             ...(qrScannable && isCameraAvailable
-              ? [{ icon: faCamera, onPress: onToggleScanQrModal }]
+              ? [
+                  {
+                    icon: !qrDisplayable ? faQrcode : faCamera,
+                    onPress: onToggleScanQrModal
+                  }
+                ]
               : []),
             ...(qrDisplayable
               ? [
@@ -211,7 +226,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
               ref={ref}
               value={value}
               editable={!disabled}
-              onChangeText={onChangeText}
+              onChangeText={_onChangeText}
               multiline={multiline}
               style={{ height: contentHeight }}
               onContentSizeChange={(e) => {
@@ -236,7 +251,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
               }}
               onSubmitEditing={(e) => {
                 if (suggestions && suggestions.length > 0) {
-                  onChangeText?.(suggestions[suggestedIndex]);
+                  _onChangeText(suggestions[suggestedIndex]);
                   setSuggestedIndex(0);
                 }
                 onSubmitEditing?.(e);
@@ -252,7 +267,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
                 key={index}
                 isHighlighted={index === suggestedIndex}
                 onPress={() => {
-                  onChangeText?.(suggestionValue);
+                  _onChangeText(suggestionValue);
                   setSuggestedIndex(0);
                 }}
               >

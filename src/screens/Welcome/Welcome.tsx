@@ -10,7 +10,7 @@ import {
 } from "@components";
 import {
   faAt,
-  faListOl,
+  faKey,
   faQrcode,
   faUserPlus
 } from "@fortawesome/free-solid-svg-icons";
@@ -108,8 +108,8 @@ export const Welcome = () => {
             <Button
               style={{ flex: 1 }}
               size="small"
-              title={t("12words")}
-              icon={faListOl}
+              title={t("signature")}
+              icon={faKey}
               onPress="/signature-login"
             />
           </ComponentStack>

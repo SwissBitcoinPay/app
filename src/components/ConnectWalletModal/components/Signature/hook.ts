@@ -5,7 +5,8 @@ import {
   getAccounts as getBitboxAccounts,
   getInfo,
   signAddress as bitboxSignMessage,
-  AddressSignResponse
+  AddressSignResponse,
+  getReceiveAddressList
 } from "@utils/Bitbox/api/account";
 import { useTranslation } from "react-i18next";
 
@@ -52,14 +53,24 @@ export const useSignature = (error: (msg: string) => void) => {
     [error, t]
   );
 
+  const getAccountFirstAddress = useCallback(
+    async (scriptType: ScriptType, account: string) => {
+      try {
+        const receiveAddressList = await getReceiveAddressList(account);
+        if (receiveAddressList) {
+          return receiveAddressList.find((v) => v.scriptType === scriptType)
+            .addresses[0].address;
+        }
+      } catch (e) {}
+      error(t("cannotGetAccount"));
+    },
+    [error, t]
+  );
+
   const signMessage = useCallback(
     async (format: ScriptType, message: string, account: string) => {
       try {
-        const signatureData = await bitboxSignMessage(
-          "p2wpkh",
-          message,
-          account
-        );
+        const signatureData = await bitboxSignMessage(format, message, account);
         return signatureData;
       } catch (e) {
         return { success: false } as AddressSignResponse;
@@ -68,5 +79,5 @@ export const useSignature = (error: (msg: string) => void) => {
     []
   );
 
-  return { getAccounts, getAccountXpub, signMessage };
+  return { getAccounts, getAccountXpub, getAccountFirstAddress, signMessage };
 };

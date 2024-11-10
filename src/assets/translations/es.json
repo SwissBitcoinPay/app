@@ -37,7 +37,7 @@
       "orConnectBy": "o conectarse con",
       "scanActivationQRcode": "Código QR de activación",
       "email": "Correo electrónico",
-      "12words": "12 palabras"
+      "signature": "Firma"
     },
     "emailLogin": {
       "title": "inicio de sesión",
@@ -50,7 +50,6 @@
       }
     },
     "signatureLogin": {
-      "title": "Inicio de sesión mediante firma",
       "word": "Palabra {{number}}",
       "enter12wordsDescription1": "Sus 12 palabras se quedarán en su dispositivo, para firmar un mensaje de autenticación.",
       "enter12wordsDescription2": "Asegúrese de introducir su frase de contraseña en un software de código abierto y verificado.",
@@ -58,7 +57,9 @@
       "error": {
         "invalidSignature": "Firma no válida",
         "invalidWord": "Palabra no válida"
-      }
+      },
+      "titleWallet": "Firma con monedero de herrajes",
+      "titleWords": "Firma con 12 palabras"
     },
     "signup": {
       "title": "Crear una cuenta",
@@ -76,7 +77,6 @@
       "currency": "Moneda",
       "currencyDescription": "La moneda por defecto de su empresa",
       "referralCode": "Código de referencia",
-      "optionnal": "Opcional",
       "referralCodeDescription": "Si alguien le trajo a Swiss Bitcoin Pay, por favor escriba su código de referencia aquí",
       "submitDescription1": "Al crear su cuenta, está aceptando nuestra",
       "submitDescription2": "y",
@@ -131,7 +131,6 @@
       "redirectingYou": "Redirigiendole",
       "invalidInvoiceId": "ID de factura no válido",
       "paidWith": "Pagado con",
-      ">transactionId": "ID de la transacción",
       "openWallet": "Abrir Cartera",
       "copy": "Copia",
       "pendingConfirmations": "Confirmaciones pendientes",
@@ -217,12 +216,12 @@
       "invoicePaid": "Dirección verificada",
       "signWithAddress": "Firme con la dirección",
       "signWithAddressDetails": "Firme el mensaje con esta dirección Bitcoin",
-      "receiveInBtcDescription1": "El {{percent}}% de los bitcoins que cobre a través de Swiss Bitcoin Pay se enviarán a la monedero bitcoin que indique.",
+      "receiveInBtcDescription1": "{{percent}}El % de los bitcoins que cargue a través de Swiss Bitcoin Pay se enviará al monedero de bitcoins que proporcione.",
       "receiveInBtcDescription2": "Las conversiones de Lightning a Onchain y las comisiones de minero son siempre gratuitas para usted.",
       "receiveInBtcDescription3": "Die Einzahlung auf Ihr Portfolio erfolgt standardmäßig an jedem 1. des Monats. El umbral mínimo es de 1000 sats.",
       "receiveInBtcDescription3Lightning": "Tus bitcoins serán enviados instantáneamente a tu dirección lightning después de cada pago. Asegúrate de que tu nodo está bien conectado.",
       "receiveInBtcDescription4": "Se requiere una firma criptográfica de su monedero Bitcoin para demostrar que usted es el propietario.",
-      "receiveInBankDescription1": "El {{percent}}% de los bitcoins que cobre a través de Swiss Bitcoin Pay se venderán por {{currency}} y luego se enviarán automáticamente a su cuenta bancaria a través de nuestro partner",
+      "receiveInBankDescription1": "{{percent}}% de los bitcoins que cargue a través de Swiss Bitcoin Pay se venderán por {{currency}} y luego se enviarán automáticamente a su cuenta bancaria a través de nuestro socio",
       "bankSettings": "Ajustes bancarios",
       "receiveInBankDescription2Instant": "El abono en su cuenta bancaria se realiza automáticamente en cuanto su saldo supera el mínimo de {{formattedAmount}}.",
       "receiveInBankDescription2Batched": "El pago a su cuenta bancaria se realiza automáticamente todos los días a las 0:00 UTC si su saldo supera el mínimo de {{formattedAmount}}.",
@@ -234,7 +233,6 @@
       "createYourBitcoinWallet": "Cree su monedero Bitcoin",
       "iban": "IBAN",
       "bankReference": "Referencia bancaria",
-      "optionnal": "Opcional",
       "yourName": "Su nombre comercial o personal",
       "ownerName": "Nombre del propietario",
       "yourAddress": "Su dirección",
@@ -251,7 +249,7 @@
       "zipInvalid": "Código postal no válido",
       "submit": "Enviar",
       "patchSettingNeedsEmailValidation": "Confirme la nueva configuración a través del correo electrónico que ha recibido",
-      "connectBitbox": "Conectar BitBox02",
+      "bitboxConnectSuccess": "Tu BitBox02 se ha conectado correctamente. Puede desconectarla.",
       "optional": "Opcional"
     },
     "wallet": {
@@ -259,18 +257,32 @@
       "balance": "Saldo",
       "pending": "Pendiente",
       "transactions": "Transacciones",
-      "send": "Enviar (próximamente)",
+      "send": "Enviar",
       "receive": "Reciba",
       "sent": "Enviado",
       "received": "Recibido",
       "receiveInfo": "Reciba bitcoins directamente en su monedero local con esta dirección no utilizada. Los pagos recibidos directamente en esta dirección no son rastreados por Swiss Bitcoin Pay, por lo que no están sujetos a comisiones y no se incluyen en las exportaciones.",
-      "sendAddress": "Enviar a la dirección",
       "btcAmount": "Importe",
       "fees": "Comisiones",
-      "fastestFee": "Más rápido",
-      "halfHourFee": "Medio",
-      "hourFee": "Lento",
-      "economyFee": "Economico"
+      "sendModal": {
+        "send": "Envía tus bitcoins",
+        "fastestFee": "Más rápido",
+        "halfHourFee": "Medio",
+        "hourFee": "Lento",
+        "economyFee": "Economía",
+        "transactionSent": "Transacción enviada.",
+        "errorBroadcast": "Error al emitir la transacción",
+        "sendInfo": "Envíe fondos desde su monedero de autocustodia a una dirección Bitcoin",
+        "destinationAddress": "Dirección de destino",
+        "amount": "Importe",
+        "max": "Max",
+        "balance": "Saldo",
+        "fees": "Tarifas",
+        "sendLastInfo": "Su transacción se genera y transmite íntegramente desde su dispositivo local. Ninguna información privada pasa por los servidores de Swiss Bitcoin Pay.",
+        "signWithBitbox": "Firmar con BitBox02",
+        "broadcast": "Enviar"
+      },
+      "errorFetchingWallet": "Error al recuperar su monedero"
     }
   },
   "createWalletModal": {
@@ -331,8 +343,8 @@
     "instructions3": "Nunca compartas tu {{backup}} con nadie. Cualquier persona que acceda a tu {{backup}} podrá robarte todos tus fondos."
   },
   "connectWalletModal": {
+    "title": "Conectar BitBox02",
     "iUnderstand": "Comprendo",
-    "connectionSuccess": "Tu BitBox02 se ha conectado correctamente. Puede desconectarla.",
     "afterUpgrade": {
       "title": "Abre tu BitBox02",
       "instruction": "Toca uno de los 2 lados marcados con \"Tap this side\"",

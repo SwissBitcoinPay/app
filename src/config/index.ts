@@ -8,6 +8,7 @@ export { routesList } from "./routesList";
 export { apiRootUrl, apiRootDomain } from "./apiRootUrl";
 export { appRootUrl } from "./appRootUrl";
 export { screenSizes } from "./screenSizes";
+export { DEFAULT_NETWORK, DEFAULT_SCRIPT_TYPE } from "./bitcoin";
 export { SBPContext, SBPContextProvider } from "./SBPContext";
 export { SBPThemeContext, SBPThemeContextProvider } from "./SBPThemeContext";
 export { SBPBitboxContext, SBPBitboxContextProvider } from "./SBPBitboxContext";

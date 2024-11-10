@@ -8,11 +8,12 @@ import React, {
 } from "react";
 import { Animated, Easing, Modal as RootModal } from "react-native";
 import { ArrayOrSingle } from "ts-essentials";
-import { Button, KeyboardAvoidingView } from "@components";
+import { Button, KeyboardAvoidingView, Pressable } from "@components";
 import { ScrollView } from "react-native";
 import { useIsScreenSizeMin } from "@hooks";
 import { SBPModalContext, platform } from "@config";
 import * as S from "./styled";
+import { useTheme } from "styled-components";
 
 const { isNative, isAndroid } = platform;
 
@@ -50,6 +51,7 @@ export const Modal = ({
   const [isVisible, setIsVisible] = useState(false);
   const isExtraLarge = useIsScreenSizeMin("extraLarge");
   const { overlayComponent } = useContext(SBPModalContext);
+  const { colors } = useTheme();
 
   const opacity = useRef(
     new Animated.Value(animationValues.opacity[+isOpen])
@@ -114,9 +116,9 @@ export const Modal = ({
           >
             <S.ModalHeader>
               <S.HeaderText weight={700}>{title}</S.HeaderText>
-              <S.HeaderIconPressable onPress={onClose}>
-                <S.HeaderIcon size={24} icon={faTimes} />
-              </S.HeaderIconPressable>
+              <Pressable onPress={onClose}>
+                <S.HeaderIcon size={24} icon={faTimes} color={colors.white} />
+              </Pressable>
             </S.ModalHeader>
             {!noScrollView ? (
               <ScrollView

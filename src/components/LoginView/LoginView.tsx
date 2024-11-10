@@ -5,7 +5,7 @@ import * as S from "./styled";
 
 type LoginViewProps = PropsWithChildren<{
   title: string;
-  button: ComponentProps<typeof Button>;
+  button?: ComponentProps<typeof Button>;
 }>;
 
 export const LoginView = ({ title, button, children }: LoginViewProps) => {
@@ -19,7 +19,7 @@ export const LoginView = ({ title, button, children }: LoginViewProps) => {
         </Text>
         <ComponentStack gapSize={12}>{children}</ComponentStack>
       </S.ContentContainer>
-      <S.LoginViewButton type="bitcoin" {...button} />
+      {button && <S.LoginViewButton type="bitcoin" {...button} />}
     </S.LoginViewComponentStack>
   );
 };

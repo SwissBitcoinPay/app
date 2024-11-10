@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button, Icon, Pressable, Text, View } from "@components";
+import { Button, Icon, Text, View } from "@components";
 
 export const ModalBackground = styled(View)`
   height: 100%;
@@ -29,12 +29,6 @@ export const ModalHeader = styled(View)`
 
 export const HeaderText = styled(Text)`
   color: ${({ theme }) => theme.colors.white};
-`;
-
-export const HeaderIconPressable = styled(Pressable)`
-  background-color: ${({ theme }) => theme.colors.white};
-  border-radius: 6px;
-  padding: 2px;
 `;
 
 export const HeaderIcon = styled(Icon)`

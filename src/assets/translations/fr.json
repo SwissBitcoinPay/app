@@ -37,7 +37,7 @@
       "orConnectBy": "ou se connecter",
       "scanActivationQRcode": "Scanner le code QR d'activation",
       "email": "E-mail",
-      "12words": "12 mots"
+      "signature": "Signature"
     },
     "emailLogin": {
       "title": "Connexion e-mail",
@@ -50,7 +50,8 @@
       }
     },
     "signatureLogin": {
-      "title": "Login par signature",
+      "titleWallet": "Signature avec portefeuille matériel",
+      "titleWords": "Signature avec 12 mots",
       "word": "Mot {{number}}",
       "enter12wordsDescription1": "Vos 12 mots resteront sur votre appareil, pour signer un message d'authentification.",
       "enter12wordsDescription2": "Veuillez vous assurer que vous saisissez votre phrase secrète sur une version open-source et vérifiée.",
@@ -248,26 +249,40 @@
       "ibanInvalid": "IBAN non valide",
       "zipInvalid": "Code postal invalide",
       "submit": "Soumettre",
-      "patchSettingNeedsEmailValidation": "Confirmez les nouveaux paramètres via le mail que vous avez reçu",
-      "connectBitbox": "Connecter BitBox02"
+      "bitboxConnectSuccess": "Votre BitBox02 a été connecté avec succès. Vous pouvez le débrancher.",
+      "patchSettingNeedsEmailValidation": "Confirmez les nouveaux paramètres via le mail que vous avez reçu"
     },
     "wallet": {
       "title": "Portefeuille Onchain",
       "balance": "Solde",
       "pending": "En attente",
       "transactions": "Transactions",
-      "send": "Envoyer (bientôt)",
+      "send": "Envoyer",
       "receive": "Recevoir",
       "sent": "Envoyé",
       "received": "Reçu",
       "receiveInfo": "Les paiements reçus directement à cette adresse ne sont pas suivis par Swiss Bitcoin Pay et ne sont donc pas soumis à des frais et ne sont pas inclus dans les exports.",
-      "sendAddress": "Envoyer à l'adresse",
       "btcAmount": "Montant",
       "fees": "Frais",
-      "fastestFee": "Rapide",
-      "halfHourFee": "Moyen",
-      "hourFee": "Lent",
-      "economyFee": "Économique"
+      "sendModal": {
+        "send": "Envoyer vos bitcoins",
+        "fastestFee": "Rapide",
+        "halfHourFee": "Moyen",
+        "hourFee": "Lent",
+        "economyFee": "Économique",
+        "sendInfo": "Envoyez des fonds depuis votre portefeuille self-custodial vers une adresse Bitcoin",
+        "sendLastInfo": "Votre transaction est générée et diffusée intégralement depuis votre appareil local. Aucune information privée ne transite par les serveurs de Swiss Bitcoin Pay",
+        "transactionSent": "Transaction envoyée !",
+        "errorBroadcast": "Erreur lors de la diffusion de la transaction",
+        "destinationAddress": "Adresse de destination",
+        "amount": "Montant",
+        "max": "Max",
+        "balance": "Solde",
+        "fees": "Frais",
+        "signWithBitbox": "Signer avec le BitBox02",
+        "broadcast": "Envoyer"
+      },
+      "errorFetchingWallet": "Erreur lors de la récupération de ton portefeuille"
     }
   },
   "createWalletModal": {
@@ -328,8 +343,8 @@
     "instructions3": "Ne partagez jamais votre {{backup}} à qui que ce soit. Toute personne qui accède à votre {{backup}} pourra voler tous vos fonds."
   },
   "connectWalletModal": {
+    "title": "Connecter BitBox02",
     "iUnderstand": "Je comprends",
-    "connectionSuccess": "Votre BitBox02 a été connecté avec succès. Vous pouvez le débrancher.",
     "afterUpgrade": {
       "title": "Ouvrez votre BitBox02",
       "instruction": "Touchez l'un des deux côtés marqués \"Tap this side\"",
@@ -355,7 +370,7 @@
       "title": "Connectez votre BitBox02",
       "connecting": "Connecter votre portefeuille",
       "disconnected": "Portefeuille déconnecté",
-      "updateBitbox": "Assurez-vous que votre BitBox02 dispose d'un firmware installé."
+      "updateBitbox": "Assurez-vous que votre BitBox02 dispose d'un firmware installé"
     },
     "connected": {
       "title": "Déverrouiller",
