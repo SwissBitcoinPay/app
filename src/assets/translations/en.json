@@ -259,6 +259,7 @@
       "transactions": "Transactions",
       "send": "Send",
       "receive": "Receive",
+      "receiveBitcoins": "Receive bitcoins",
       "sent": "Sent",
       "received": "Received",
       "receiveInfo": "Receive bitcoins directly to your local wallet with this unused address.\nPayments received directly to this address are not tracked by Swiss Bitcoin Pay and therefore are not subject to fees and are not included in exports.",

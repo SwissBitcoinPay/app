@@ -259,6 +259,7 @@
       "transactions": "Transacções",
       "send": "Enviar",
       "receive": "Receber",
+      "receiveBitcoins": "Recebe bitcoins",
       "sent": "Enviado",
       "received": "Recebido",
       "receiveInfo": "Receba bitcoins diretamente para a sua carteira local com este endereço.\nOs pagamentos recebidos diretamente para este endereço não são controlados pela Swiss Bitcoin Pay, pelo que não estão sujeitos a taxas e não estão incluídos nas exportações.",

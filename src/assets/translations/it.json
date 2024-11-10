@@ -259,6 +259,7 @@
       "transactions": "Transazioni",
       "send": "Inviare",
       "receive": "Ricevi",
+      "receiveBitcoins": "Ricevere bitcoin",
       "sent": "Inviati",
       "received": "Ricevuti",
       "receiveInfo": "Ricevi bitcoin direttamente nel tuo wallet locale con questo indirizzo inutilizzato.\nI pagamenti ricevuti direttamente a questo indirizzo non sono tracciati da Swiss Bitcoin Pay e pertanto non sono soggetti a commissioni ne sono inclusi nelle esportazioni.",
