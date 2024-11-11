@@ -1,7 +1,7 @@
 import { platform } from "@config";
 import { bech32 } from "bech32";
 import { useCallback, useEffect, useState } from "react";
-import { NFC, isApiError } from "@utils";
+import { NFC } from "@utils";
 import { useToast } from "react-native-toast-notifications";
 import { useTranslation } from "react-i18next";
 import axios, { AxiosError } from "axios";
@@ -121,6 +121,10 @@ export const useNfc = () => {
               k1: string;
             }>(cardData);
 
+            if (cardDataResponse.tag !== "withdrawRequest") {
+              throw { response: { data: cardDataResponse } };
+            }
+
             const { data: callbackResponseData } = await axios.get<{
               reason?: string;
               status: "OK";
@@ -186,16 +190,15 @@ export const useNfc = () => {
             debitCardData = withdrawCallbackRequest;
           }
         } catch (e) {
-          if (isApiError(e)) {
-            error = e.response.data;
-          }
+          error = e?.response?.data;
         }
 
         await NFC.stopRead();
 
         if (debitCardData?.status !== "OK" || error) {
           setIsNfcLoading(false);
-          toast.show(error?.reason || t("errors.unknown"), {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          toast.show((error || debitCardData)?.reason || t("errors.unknown"), {
             type: "error"
           });
 
