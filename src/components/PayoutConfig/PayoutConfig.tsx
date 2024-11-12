@@ -218,7 +218,11 @@ export const PayoutConfig = ({
     (value: number) => {
       const newValue = 100 - value;
 
-      Vibration.vibrate(newValue % 100 === 0 ? 50 : !isIos ? 15 : undefined);
+      const isOneSide = newValue % 100 === 0;
+
+      if ((isIos && isOneSide) || !isIos) {
+        Vibration.vibrate(isOneSide ? 50 : 15);
+      }
       setValue("btcPercent", newValue, {
         shouldDirty: newValue !== btcPercent
       });

@@ -409,7 +409,7 @@ export const Wallet = () => {
                     : { icon: isPositive ? faPlus : faPaperPlane }),
                   tags: [
                     {
-                      value: `${Math.abs(realValue + tx.fees) / 100000000} BTC`,
+                      value: `${Math.abs(realValue) / 100000000} BTC`,
                       color: isPending
                         ? colors.bitcoin
                         : isPositive
