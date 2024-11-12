@@ -9,5 +9,4 @@ export const LabelText = styled(Text)`
   font-size: 16px;
   position: absolute;
   transform-origin: top left;
-  background-color: blue;
 `;

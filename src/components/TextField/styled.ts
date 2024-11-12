@@ -22,6 +22,8 @@ export const TextInput = styled(RootTextInput)<{ hasRightBadge?: boolean }>`
   justify-content: flex-start;
   font-size: 16px;
   font-family: Poppins-Medium;
+  background-color: transparent;
+  z-index: 1;
 `;
 
 export const SuggestionsComponentStack = styled(ComponentStack)`
