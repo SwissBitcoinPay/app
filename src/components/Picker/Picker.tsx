@@ -11,7 +11,7 @@ type PickerRootProps = Omit<PickerSelectProps, "style"> & {
 };
 
 export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
-  ({ style, onValueChange, ...props }, ref) => {
+  ({ style, value, onValueChange, ...props }, ref) => {
     const [tmpValue, setTmpValue] = useState<{
       value: string;
       index: string;
@@ -21,17 +21,19 @@ export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
       () =>
         isIos
           ? {
+              value: tmpValue?.value || value,
               onValueChange: (v, i) => setTmpValue({ value: v, index: i }),
               onClose: () => {
                 if (tmpValue) {
-                  onValueChange(tmpValue?.value, tmpValue?.index);
+                  onValueChange(tmpValue.value, tmpValue.index);
+                  setTmpValue(undefined);
                 }
               }
             }
           : {
               onValueChange
             },
-      [onValueChange, tmpValue]
+      [onValueChange, tmpValue, value]
     );
 
     return (
