@@ -94,7 +94,7 @@ export const BaseField = <T extends FieldProps>({
         label={error || label || "fallback"}
         isTop={isPlaceholderTop}
         color={
-          isError ? colors.error : disabled ? colors.primaryLight : undefined
+          "red" //  isError ? colors.error : disabled ? colors.primaryLight : undefined
         }
       />
       {typeof value === "string" && (
