@@ -1,8 +1,12 @@
 import styled from "styled-components";
 import { Picker as RootPicker } from "@components";
+import { platform } from "@config";
+
+const { isWeb } = platform;
 
 export const Picker = styled(RootPicker)`
   position: absolute;
+  ${isWeb ? "opacity: 0;" : ""}
   opacity: 0;
   height: 100%;
   width: 100%;
