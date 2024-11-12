@@ -11,7 +11,11 @@ export { screenSizes } from "./screenSizes";
 export { DEFAULT_NETWORK, DEFAULT_SCRIPT_TYPE } from "./bitcoin";
 export { SBPContext, SBPContextProvider } from "./SBPContext";
 export { SBPThemeContext, SBPThemeContextProvider } from "./SBPThemeContext";
-export { SBPBitboxContext, SBPBitboxContextProvider } from "./SBPBitboxContext";
+export {
+  IS_BITBOX_SUPPORTED,
+  SBPBitboxContext,
+  SBPBitboxContextProvider
+} from "./SBPBitboxContext";
 export { SBPModalContext, SBPModalContextProvider } from "./SBPModalContext";
 
 export { i18n };

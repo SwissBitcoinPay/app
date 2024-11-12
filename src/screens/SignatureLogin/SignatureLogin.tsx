@@ -34,7 +34,7 @@ import {
   BitboxReadyFunctionParams,
   CustomFunctionType
 } from "@components/ConnectWalletModal/ConnectWalletModal";
-import { IS_BITBOX_SUPPORTED } from "@config/SBPBitboxContext";
+import { IS_BITBOX_SUPPORTED } from "@config";
 
 const wordsList = BIP39.wordlists.english;
 
@@ -272,11 +272,13 @@ export const SignatureLogin = () => {
         title: tRoot("common.login")
       }}
     >
-      <ConnectWalletModal
-        isOpen={!!customBitboxFunction}
-        onClose={onConnectBitboxModalClose}
-        customFunction={customBitboxFunction}
-      />
+      {IS_BITBOX_SUPPORTED && (
+        <ConnectWalletModal
+          isOpen={!!customBitboxFunction}
+          onClose={onConnectBitboxModalClose}
+          customFunction={customBitboxFunction}
+        />
+      )}
       <ComponentStack>
         {IS_BITBOX_SUPPORTED && (
           <LoginView title={t("titleWallet")}>

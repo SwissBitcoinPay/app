@@ -51,7 +51,7 @@ import {
 import * as S from "./styled";
 import { faUsb } from "@fortawesome/free-brands-svg-icons";
 import { useToast } from "react-native-toast-notifications";
-import { IS_BITBOX_SUPPORTED } from "@config/SBPBitboxContext";
+import { IS_BITBOX_SUPPORTED } from "@config";
 
 export type SignatureData = {
   zPub: string;
@@ -393,10 +393,12 @@ export const BitcoinSettings = ({
         isOpen={isCreateWalletModalOpen}
         onClose={onWalletModalsClose}
       />
-      <ConnectWalletModal
-        isOpen={isConnectWalletModalOpen}
-        onClose={onBitboxWalletModalClose}
-      />
+      {IS_BITBOX_SUPPORTED && (
+        <ConnectWalletModal
+          isOpen={isConnectWalletModalOpen}
+          onClose={onBitboxWalletModalClose}
+        />
+      )}
       <ComponentStack>
         <ComponentStack gapSize={14}>
           <FieldDescription>💶 {t("feesDetails1")}</FieldDescription>

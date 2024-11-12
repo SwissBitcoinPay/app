@@ -32,6 +32,7 @@ import { BitboxReadyFunctionParams } from "@components/ConnectWalletModal/Connec
 import { PrepareTransactionParams } from "@utils/wallet/prepare-transaction";
 import { Platform } from "react-native";
 import { faUsb } from "@fortawesome/free-brands-svg-icons";
+import { IS_BITBOX_SUPPORTED } from "@config";
 
 type SendForm = {
   address: string;
@@ -509,11 +510,13 @@ export const SendModal = ({
           </Text>
         </ComponentStack>
       </Modal>
-      <ConnectWalletModal
-        isOpen={!!customWalletFunction}
-        customFunction={customWalletFunction}
-        onClose={onCloseBitboxModal}
-      />
+      {IS_BITBOX_SUPPORTED && (
+        <ConnectWalletModal
+          isOpen={!!customWalletFunction}
+          customFunction={customWalletFunction}
+          onClose={onCloseBitboxModal}
+        />
+      )}
     </>
   );
 };
