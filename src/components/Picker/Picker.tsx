@@ -4,6 +4,7 @@ import RNPickerSelect, {
   PickerSelectProps,
   PickerStyle
 } from "react-native-picker-select";
+import { useTheme } from "styled-components";
 
 const { isIos } = platform;
 type PickerRootProps = Omit<PickerSelectProps, "style"> & {
@@ -11,7 +12,8 @@ type PickerRootProps = Omit<PickerSelectProps, "style"> & {
 };
 
 export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
-  ({ style, value, onValueChange, ...props }, ref) => {
+  ({ style, value, onValueChange, items, ...props }, ref) => {
+    const { colors } = useTheme();
     const [tmpValue, setTmpValue] = useState<{
       value: string;
       index: string;
@@ -36,11 +38,17 @@ export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
       [onValueChange, tmpValue, value]
     );
 
+    const itemsWithColor = useMemo(
+      () => items.map((i) => ({ ...i, color: colors.primary })),
+      [colors.primary, items]
+    );
+
     return (
       <RNPickerSelect
         ref={ref}
         {...props}
         {...selectProps}
+        items={itemsWithColor}
         style={{
           inputAndroid: {
             opacity: 0

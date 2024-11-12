@@ -3,6 +3,7 @@ import { Picker as RootPicker } from "@components";
 
 export const Picker = styled(RootPicker)`
   position: absolute;
+  opacity: 0;
   height: 100%;
   width: 100%;
   border: 0px;
