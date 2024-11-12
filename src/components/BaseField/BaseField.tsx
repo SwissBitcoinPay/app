@@ -90,7 +90,7 @@ export const BaseField = <T extends FieldProps>({
 
   return (
     <S.BaseFieldContainer {...props} disabled={disabled} error={isError}>
-      {/* {label && (
+      {label && (
         <Label
           label={error || label}
           isTop={isPlaceholderTop}
@@ -98,17 +98,17 @@ export const BaseField = <T extends FieldProps>({
             isError ? colors.error : disabled ? colors.primaryLight : undefined
           }
         />
-      )} */}
-      {/* {typeof value === "string" && (
+      )}
+      {typeof value === "string" && (
         <S.ValueText numberOfLines={2}>{value}</S.ValueText>
-      )} */}
-      {/* {left && (
+      )}
+      {left && (
         <S.BadgeContainer>
           {tupulize(left).map((b, i) => (
             <Badge key={i} badge={b} error={isError} disabled={disabled} />
           ))}
         </S.BadgeContainer>
-      )} */}
+      )}
       {cloneElement<FieldProps>(component, {
         onFocus,
         onBlur,
@@ -116,13 +116,13 @@ export const BaseField = <T extends FieldProps>({
         hasRightBadge: !!right,
         isFocused
       })}
-      {/* {right && (
+      {right && (
         <S.BadgeContainer>
           {tupulize(right).map((b, i) => (
             <Badge key={i} badge={b} error={!!error} disabled={disabled} />
           ))}
         </S.BadgeContainer>
-      )} */}
+      )}
     </S.BaseFieldContainer>
   );
 };

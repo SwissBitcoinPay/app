@@ -28,7 +28,12 @@ import {
 import axios from "axios";
 import { validate as isEmail } from "email-validator";
 import { useSearchParams } from "../../components/Router";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import {
+  Controller,
+  ControllerProps,
+  SubmitHandler,
+  useForm
+} from "react-hook-form";
 import { keyStoreRefCode } from "@config/settingsKeys";
 import { PayoutConfigForm } from "@components/PayoutConfig/PayoutConfig";
 import { useToast } from "react-native-toast-notifications";
@@ -273,6 +278,154 @@ export const Signup = () => {
     [t]
   );
 
+  const NameField = useCallback<ControllerProps<SignupForm, "name">["render"]>(
+    ({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
+      return (
+        <TextField
+          label={t("accountName")}
+          value={value}
+          onChangeText={onChange}
+          onBlur={onBlur}
+          error={error?.message}
+          pastable
+        />
+      );
+    },
+    [t]
+  );
+
+  const EmailField = useCallback<
+    ControllerProps<SignupForm, "email">["render"]
+  >(
+    ({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
+      return (
+        <TextField
+          label={t("email")}
+          autoCapitalize="none"
+          inputMode="email"
+          value={value}
+          onChangeText={onChange}
+          onBlur={onBlur}
+          error={error?.message}
+          pastable
+        />
+      );
+    },
+    [t]
+  );
+
+  const PasswordField = useCallback<
+    ControllerProps<SignupForm, "password">["render"]
+  >(
+    ({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
+      return (
+        <TextField
+          label={t("password")}
+          value={value}
+          autoCapitalize="none"
+          secureTextEntry
+          onChangeText={(v) => {
+            onChange(v);
+            validatePassword(v);
+          }}
+          onBlur={onBlur}
+          error={error?.message}
+        />
+      );
+    },
+    [t, validatePassword]
+  );
+
+  const CurrencyField = useCallback<
+    ControllerProps<SignupForm, "currency">["render"]
+  >(
+    ({ field: { onChange, value }, fieldState: { error } }) => {
+      return (
+        <SelectField
+          value={value}
+          key={value} // key is important to avoid a re-render bug on Android : https://github.com/lawnstarter/react-native-picker-select/issues/112#issuecomment-640180303
+          label={t("currency")}
+          items={currencies}
+          onValueChange={onChange}
+          error={error?.message}
+          placeholder={{}}
+        />
+      );
+    },
+    [t]
+  );
+
+  const ReferralCodeField = useCallback<
+    ControllerProps<SignupForm, "referralCode">["render"]
+  >(
+    ({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
+      return (
+        <TextField
+          label={t("optional")}
+          value={value}
+          onChangeText={onChange}
+          onBlur={onBlur}
+          autoCapitalize="characters"
+          error={error?.message}
+          disabled={isRefCodePrefilled}
+          pastable
+          deletable={() => {
+            setIsRefCodePrefilled(false);
+            void AsyncStorage.removeItem(keyStoreRefCode);
+          }}
+        />
+      );
+    },
+    [isRefCodePrefilled, t]
+  );
+
+  const passwordChecksComponent = useMemo(
+    () =>
+      [
+        {
+          value: passwordCheck1,
+          label: t("letter")
+        },
+        {
+          value: passwordCheck2,
+          label: t("number")
+        },
+        {
+          value: passwordCheck3,
+          label: t("size8to64")
+        }
+      ].map(({ value, label: passLabel }, passIndex) => {
+        const color = value
+          ? colors.success
+          : formState.errors.password
+          ? colors.error
+          : colors.grey;
+
+        return (
+          <ComponentStack key={passIndex} direction="horizontal" gapSize={6}>
+            <Icon
+              icon={value ? faCheckCircle : faTimesCircle}
+              size={18}
+              color={color}
+            />
+            <Text h5 color={color} weight={600}>
+              {passLabel}
+            </Text>
+          </ComponentStack>
+        );
+      }),
+    [
+      colors.error,
+      colors.grey,
+      colors.success,
+      formState.errors.password,
+      passwordCheck1,
+      passwordCheck2,
+      passwordCheck3,
+      t
+    ]
+  );
+
   return (
     <PageContainer
       header={{
@@ -295,21 +448,7 @@ export const Signup = () => {
               required: true,
               validate: validateName
             }}
-            render={({
-              field: { onChange, onBlur, value },
-              fieldState: { error }
-            }) => {
-              return (
-                <TextField
-                  label={t("accountName")}
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  error={error?.message}
-                  pastable
-                />
-              );
-            }}
+            render={NameField}
           />
         </FieldContainer>
         <FieldContainer icon={faAt} title={t("yourEmail")}>
@@ -320,23 +459,7 @@ export const Signup = () => {
               required: true,
               validate: validateEmail
             }}
-            render={({
-              field: { onChange, onBlur, value },
-              fieldState: { error }
-            }) => {
-              return (
-                <TextField
-                  label={t("email")}
-                  autoCapitalize="none"
-                  inputMode="email"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  error={error?.message}
-                  pastable
-                />
-              );
-            }}
+            render={EmailField}
           />
           <FieldDescription>🔒 {t("emailDescription")}</FieldDescription>
         </FieldContainer>
@@ -348,64 +471,10 @@ export const Signup = () => {
               required: true,
               validate: validatePassword
             }}
-            render={({
-              field: { onChange, onBlur, value },
-              fieldState: { error }
-            }) => {
-              return (
-                <TextField
-                  label={t("password")}
-                  value={value}
-                  autoCapitalize="none"
-                  secureTextEntry
-                  onChangeText={(v) => {
-                    onChange(v);
-                    validatePassword(v);
-                  }}
-                  onBlur={onBlur}
-                  error={error?.message}
-                />
-              );
-            }}
+            render={PasswordField}
           />
           <ComponentStack direction="horizontal" gapSize={12}>
-            {[
-              {
-                value: passwordCheck1,
-                label: t("letter")
-              },
-              {
-                value: passwordCheck2,
-                label: t("number")
-              },
-              {
-                value: passwordCheck3,
-                label: t("size8to64")
-              }
-            ].map(({ value, label: passLabel }, passIndex) => {
-              const color = value
-                ? colors.success
-                : formState.errors.password
-                ? colors.error
-                : colors.grey;
-
-              return (
-                <ComponentStack
-                  key={passIndex}
-                  direction="horizontal"
-                  gapSize={6}
-                >
-                  <Icon
-                    icon={value ? faCheckCircle : faTimesCircle}
-                    size={18}
-                    color={color}
-                  />
-                  <Text h5 color={color} weight={600}>
-                    {passLabel}
-                  </Text>
-                </ComponentStack>
-              );
-            })}
+            {passwordChecksComponent}
           </ComponentStack>
         </FieldContainer>
         <FieldContainer icon={faDollar} title={t("yourCurrency")}>
@@ -415,18 +484,7 @@ export const Signup = () => {
             rules={{
               required: true
             }}
-            render={({ field: { onChange, value }, fieldState: { error } }) => {
-              return (
-                <SelectField
-                  label={t("currency")}
-                  items={currencies}
-                  value={value}
-                  onValueChange={onChange}
-                  error={error?.message}
-                  placeholder={{}}
-                />
-              );
-            }}
+            render={CurrencyField}
           />
         </FieldContainer>
         {!isAtm && (
@@ -451,27 +509,7 @@ export const Signup = () => {
             <Controller
               name="referralCode"
               control={control}
-              render={({
-                field: { onChange, onBlur, value },
-                fieldState: { error }
-              }) => {
-                return (
-                  <TextField
-                    label={t("optional")}
-                    value={value}
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                    autoCapitalize="characters"
-                    error={error?.message}
-                    disabled={isRefCodePrefilled}
-                    pastable
-                    deletable={() => {
-                      setIsRefCodePrefilled(false);
-                      void AsyncStorage.removeItem(keyStoreRefCode);
-                    }}
-                  />
-                );
-              }}
+              render={ReferralCodeField}
             />
           </FieldContainer>
         )}

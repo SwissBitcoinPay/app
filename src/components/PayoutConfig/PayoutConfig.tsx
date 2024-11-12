@@ -23,6 +23,9 @@ import { Vibration } from "react-native";
 import { useRates } from "@hooks";
 import { RatesType } from "@hooks/useRates";
 import * as S from "./styled";
+import { platform } from "@config";
+
+const { isIos } = platform;
 
 const fiatCurrencies = [
   "CHF",
@@ -215,7 +218,7 @@ export const PayoutConfig = ({
     (value: number) => {
       const newValue = 100 - value;
 
-      Vibration.vibrate(newValue % 100 === 0 ? 50 : 15);
+      Vibration.vibrate(newValue % 100 === 0 ? 50 : !isIos ? 15 : undefined);
       setValue("btcPercent", newValue, {
         shouldDirty: newValue !== btcPercent
       });
@@ -236,6 +239,14 @@ export const PayoutConfig = ({
     }),
     [rates, control, watch, resetField, setValue, setError]
   );
+
+  const onFullBtc = useCallback(() => {
+    onSliderValueChange(0);
+  }, [onSliderValueChange]);
+
+  const onFullFiat = useCallback(() => {
+    onSliderValueChange(100);
+  }, [onSliderValueChange]);
 
   if (!currency) {
     return <Loader />;
@@ -263,9 +274,7 @@ export const PayoutConfig = ({
             <S.SliderContentSide isTranslucent={btcPercent === 0}>
               <S.ValueContent
                 bgColor={theme.colors.bitcoin}
-                onPress={() => {
-                  onSliderValueChange(0);
-                }}
+                onPress={onFullBtc}
               >
                 <S.PercentageText>{btcPercent}%</S.PercentageText>
                 <S.SubPercentageView>
@@ -285,12 +294,7 @@ export const PayoutConfig = ({
               </S.SliderDetailsText>
             </S.SliderContentSide>
             <S.SliderContentSide isRight isTranslucent={btcPercent === 100}>
-              <S.ValueContent
-                bgColor={theme.colors.grey}
-                onPress={() => {
-                  onSliderValueChange(100);
-                }}
-              >
+              <S.ValueContent bgColor={theme.colors.grey} onPress={onFullFiat}>
                 <S.PercentageText>{100 - btcPercent}%</S.PercentageText>
                 <S.SubPercentageView>
                   <S.FiatIcon
