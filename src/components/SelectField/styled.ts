@@ -14,4 +14,5 @@ export const Picker = styled(RootPicker)`
   font-family: Poppins-Medium;
   color: ${({ theme }) => theme.colors.primary};
   z-index: 10;
+  border: 2px solid red;
 `;

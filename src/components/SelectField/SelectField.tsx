@@ -51,23 +51,31 @@ export const SelectField = forwardRef<RNPickerSelect, SelectFieldProps>(
     );
 
     return (
-      <BaseField
-        style={style}
-        value={value}
-        label={label}
-        disabled={props.disabled}
-        left={left}
-        right={right}
-        error={error}
-        component={
-          <S.Picker
-            ref={ref}
-            value={value}
-            {...props}
-            onValueChange={onValueChange}
-          />
-        }
-      />
+      <>
+        <S.Picker
+          ref={ref}
+          value={value}
+          {...props}
+          onValueChange={onValueChange}
+        />
+        <BaseField
+          style={style}
+          value={value}
+          label={label}
+          disabled={props.disabled}
+          left={left}
+          right={right}
+          error={error}
+          component={
+            <S.Picker
+              ref={ref}
+              value={value}
+              {...props}
+              onValueChange={onValueChange}
+            />
+          }
+        />
+      </>
     );
   }
 );
