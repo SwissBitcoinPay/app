@@ -12,10 +12,10 @@ import { Button, KeyboardAvoidingView, Pressable } from "@components";
 import { ScrollView } from "react-native";
 import { useIsScreenSizeMin } from "@hooks";
 import { SBPModalContext, platform } from "@config";
-import * as S from "./styled";
 import { useTheme } from "styled-components";
+import * as S from "./styled";
 
-const { isNative, isAndroid } = platform;
+const { isNative } = platform;
 
 const ANIMATION_DURATION = 250;
 
@@ -124,7 +124,7 @@ export const Modal = ({
               <ScrollView
                 keyboardShouldPersistTaps="always"
                 style={{
-                  overflow: isNative && isAndroid ? "hidden" : undefined,
+                  overflow: isNative ? "hidden" : undefined,
                   zIndex: 1
                 }}
                 contentContainerStyle={{ overflow: "hidden" }}

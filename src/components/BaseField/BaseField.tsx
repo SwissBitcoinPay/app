@@ -90,15 +90,13 @@ export const BaseField = <T extends FieldProps>({
 
   return (
     <S.BaseFieldContainer {...props} disabled={disabled} error={isError}>
-      {label && (
-        <Label
-          label={error || label}
-          isTop={isPlaceholderTop}
-          color={
-            isError ? colors.error : disabled ? colors.primaryLight : undefined
-          }
-        />
-      )}
+      <Label
+        label={error || label || "fallback"}
+        isTop={isPlaceholderTop}
+        color={
+          isError ? colors.error : disabled ? colors.primaryLight : undefined
+        }
+      />
       {typeof value === "string" && (
         <S.ValueText numberOfLines={2}>{value}</S.ValueText>
       )}
