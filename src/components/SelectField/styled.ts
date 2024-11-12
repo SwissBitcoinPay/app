@@ -3,7 +3,7 @@ import { Picker as RootPicker } from "@components";
 
 export const Picker = styled(RootPicker)`
   position: absolute;
-  opacity: 0;
+  opacity: 0.5;
   height: 100%;
   width: 100%;
   border: 0px;
@@ -13,5 +13,5 @@ export const Picker = styled(RootPicker)`
   font-size: 16px;
   font-family: Poppins-Medium;
   color: ${({ theme }) => theme.colors.primary};
-  z-index: 1;
+  z-index: 10;
 `;
