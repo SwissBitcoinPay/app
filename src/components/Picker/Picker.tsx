@@ -14,6 +14,12 @@ export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
       ref={ref}
       {...props}
       style={{
+        inputAndroid: {
+          opacity: 0
+        },
+        inputIOS: {
+          opacity: 0
+        },
         viewContainer: style,
         inputWeb: style
       }}
