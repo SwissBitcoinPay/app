@@ -1,0 +1,5 @@
+- BitBox02 integration
+- Send transactions directly from the in-app wallet screen, using your BitBox02 or local wallet
+- Fixed wrongly "expired" displayed invoices in History tab
+- Improved BoltCards errors handling
+- Various upgrades and fixes

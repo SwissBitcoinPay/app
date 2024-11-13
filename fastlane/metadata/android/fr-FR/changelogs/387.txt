@@ -1,0 +1,5 @@
+- Intégration du BitBox02
+- Envoyez des transactions directement depuis l'écran du portefeuille in-app, en utilisant votre BitBox02 ou votre portefeuille local.
+- Correction des factures affichées « expirées » de manière erronée dans l'onglet Historique
+- Amélioration de la gestion des erreurs BoltCards
+- Diverses mises à jour et corrections
