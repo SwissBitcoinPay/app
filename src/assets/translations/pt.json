@@ -10,6 +10,7 @@
     "edit": "Editar",
     "submit": "Enviar",
     "confirm": "Confirmar",
+    "cancel": "Cancelar",
     "wallet": "Carteira",
     "admin": "Administrador",
     "employee": "Empregado",
@@ -37,7 +38,7 @@
       "orConnectBy": "ou ligue-se através de",
       "scanActivationQRcode": "Digitalizar o código QR de ativação",
       "email": "E-mail",
-      "12words": "12 palavras"
+      "signature": "Assinatura"
     },
     "emailLogin": {
       "title": "Início de sessão por e-mail",
@@ -50,7 +51,6 @@
       }
     },
     "signatureLogin": {
-      "title": "Início de sessão com método de assinatura",
       "word": "Palavra {{number}}",
       "enter12wordsDescription1": "As suas 12 palavras ficarão no seu dispositivo, para assinar uma mensagem que o autentique.",
       "enter12wordsDescription2": "Certifique-se de que introduz as suas 12 palavras num software verificado e de código aberto.",
@@ -58,7 +58,9 @@
       "error": {
         "invalidSignature": "Assinatura inválida",
         "invalidWord": "Palavra inválida"
-      }
+      },
+      "titleWallet": "Assinatura com carteira de ferragens",
+      "titleWords": "Assinatura com 12 palavras"
     },
     "signup": {
       "title": "Registo",
@@ -108,7 +110,8 @@
       "atmAccount": "Conta multibanco",
       "allowWithdraw": "Permitir o levantamento",
       "cannotGoHigher": "O montante máximo é de {{maxAmount}}",
-      "addToHomeScreen": "Adicionar ao ecrã inicial"
+      "addToHomeScreen": "Adicionar ao ecrã inicial",
+      "guestMode": "Modo de convidado"
     },
     "invoice": {
       "creatingInvoice": "A criar fatura",
@@ -214,12 +217,12 @@
       "invoicePaid": "Endereço verificado",
       "signWithAddress": "Assinar com o endereço",
       "signWithAddressDetails": "Assinar a mensagem com este endereço Bitcoin",
-      "receiveInBtcDescription1": "Todas as bitcoins que faturar através da Swiss Bitcoin Pay serão enviadas para o endereço que fornecer.",
+      "receiveInBtcDescription1": "{{percent}}% dos bitcoins que cobrar através do Swiss Bitcoin Pay serão enviados para a carteira de bitcoins que fornecer.",
       "receiveInBtcDescription2": "As conversões de Lightning para Onchain e as taxas de mineração são sempre gratuitas para si.",
       "receiveInBtcDescription3": "Por defeito, os pagamentos à sua carteira são efectuados todos os dias 1 de cada mês. O limite mínimo é de 1000 sats.",
       "receiveInBtcDescription3Lightning": "As seus bitcoins serão enviadas instantaneamente para o seu endereço lightning após cada pagamento. Certifique-se de que o seu nó está bem conectado.",
       "receiveInBtcDescription4": "É necessária uma assinatura criptográfica da sua carteira Bitcoin para provar a propriedade.",
-      "receiveInBankDescription1": "Todas as bitcoins que faturar através da Swiss Bitcoin Pay serão vendidas por {{currency}} e depois enviados automaticamente para a sua conta bancária através do nosso parceiro",
+      "receiveInBankDescription1": "{{percent}}% dos bitcoins que carregar através da Swiss Bitcoin Pay serão vendidos por {{currency}} e depois enviados automaticamente para a sua conta bancária através do nosso parceiro",
       "bankSettings": "Definições Bancárias",
       "receiveInBankDescription2Instant": "O pagamento para a sua conta bancária é efectuado automaticamente assim que o seu saldo excede o mínimo de {{formattedAmount}}.",
       "receiveInBankDescription2Batched": "O pagamento para a sua conta bancária é efectuado automaticamente todos os dias às 0:00 UTC quando o seu saldo exceder o mínimo de {{formattedAmount}}.",
@@ -247,25 +250,42 @@
       "ibanInvalid": "IBAN inválido",
       "zipInvalid": "Código postal inválido",
       "submit": "Enviar",
-      "patchSettingNeedsEmailValidation": "Confirmar as novas definições através da mensagem de e-mail recebida"
+      "patchSettingNeedsEmailValidation": "Confirmar as novas definições através da mensagem de e-mail recebida",
+      "bitboxConnectSuccess": "A sua BitBox02 foi ligada com sucesso. Pode desligá-la."
     },
     "wallet": {
       "title": "Carteira Onchain",
+      "unlockYourWallet": "Desbloqueia a tua carteira",
       "balance": "Saldo",
       "pending": "Pendente",
       "transactions": "Transacções",
-      "send": "Enviar (brevemente)",
+      "send": "Enviar",
       "receive": "Receber",
+      "receiveBitcoins": "Recebe bitcoins",
       "sent": "Enviado",
       "received": "Recebido",
       "receiveInfo": "Receba bitcoins diretamente para a sua carteira local com este endereço.\nOs pagamentos recebidos diretamente para este endereço não são controlados pela Swiss Bitcoin Pay, pelo que não estão sujeitos a taxas e não estão incluídos nas exportações.",
-      "sendAddress": "Enviar para o endereço",
       "btcAmount": "Montante",
       "fees": "Taxas",
-      "fastestFee": "Rápido",
-      "halfHourFee": "Médio",
-      "hourFee": "Lento",
-      "economyFee": "Económico"
+      "sendModal": {
+        "send": "Enviar os seus bitcoins",
+        "fastestFee": "Mais rápido",
+        "halfHourFee": "Médio",
+        "hourFee": "Lento",
+        "economyFee": "Economia",
+        "transactionSent": "Transação enviada!",
+        "errorBroadcast": "Erro durante a transmissão da transação",
+        "sendInfo": "Enviar fundos da sua carteira de auto-custódia para um endereço Bitcoin",
+        "destinationAddress": "Endereço de destino",
+        "amount": "Montante",
+        "max": "Máximo",
+        "balance": "Equilíbrio",
+        "fees": "Taxas",
+        "sendLastInfo": "A sua transação é gerada e transmitida inteiramente a partir do seu dispositivo local. Nenhuma informação privada passa pelos servidores da Swiss Bitcoin Pay",
+        "signWithBitbox": "Assinar com BitBox02",
+        "broadcast": "Enviar"
+      },
+      "errorFetchingWallet": "Erro ao obter a sua carteira"
     }
   },
   "createWalletModal": {
@@ -287,11 +307,10 @@
       "instructions2": "A sua frase secreta é gerada de forma segura e localmente no seu dispositivo e nunca é enviada para os nossos servidores.",
       "instructions3": "Escreva-a em algo duradouro e guarde-a num local seguro.",
       "instructions4": "Se perder a sua frase secreta, os seus fundos perder-se-ão para sempre. Por conseguinte, é absolutamente essencial armazenar e proteger corretamente a sua frase secreta.",
-      "instructions5": "Nunca o guarde numa nuvem, no seu telemóvel ou computador. Qualquer dispositivo ligado à Internet é vulnerável!",
-      "instructions6": "Nunca partilhe a sua frase secreta com ninguém. Qualquer pessoa que aceda à sua frase secreta poderá roubar todos os seus fundos.",
       "agree1": "Compreendo que sou o único responsável pelo armazenamento da minha frase secreta.",
       "agree2": "Compreendo que a perda da minha frase secreta ou o roubo da mesma resultará numa perda de fundos.",
-      "agree3": "Compreendo que ninguém pode ajudar a recuperar os meus fundos se eu perder a minha frase secreta, nem mesmo a Swiss Bitcoin Pay."
+      "agree3": "Compreendo que ninguém pode ajudar a recuperar os meus fundos se eu perder a minha frase secreta, nem mesmo a Swiss Bitcoin Pay.",
+      "seedPhrase": "seed phrase"
     },
     "step3": {
       "instructions1": "Escreva as suas 12 palavras e certifique-se de que são claramente legíveis.",
@@ -320,5 +339,84 @@
     "serverInMaintenance": "Servidor em manutenção. Por favor, tente novamente mais tarde",
     "noKycLimit": "Atingiu o limite de não-KYC",
     "accountNotVerified": "Verifique o seu endereço de depósito no seu painel de controlo"
+  },
+  "secureWallet": {
+    "instructions1": "Não depende do Swiss Bitcoin Pay para aceder aos seus bitcoins, o seu {{backup}} pode ser utilizado em qualquer carteira de bitcoins.",
+    "instructions2": "Nunca faça uma cópia numa nuvem, no seu telemóvel ou computador. Qualquer dispositivo ligado à Internet é vulnerável!",
+    "instructions3": "Nunca partilhe o seu {{backup}} com ninguém. Qualquer pessoa que aceda ao seu {{backup}} poderá roubar todos os seus fundos."
+  },
+  "connectWalletModal": {
+    "title": "Ligar a BitBox02",
+    "iUnderstand": "Compreendo",
+    "afterUpgrade": {
+      "title": "Abra a sua BitBox02",
+      "instruction": "Tocar num dos 2 lados marcados com \"Tap this side\"",
+      "rebooting": "Reiniciar a sua BitBox02"
+    },
+    "afterSetup": {
+      "sdcard": "Cartão SD",
+      "12-words": "12 palavras",
+      "24-words": "24 palavras",
+      "title": "Proteja a sua cópia de segurança",
+      "removeSdCard": "Remova o cartão SD da sua BitBox02 para continuar.",
+      "instructions1": "Guarde o seu {{backup}} num local seguro, onde só você possa aceder.",
+      "understand1": "O utilizador é o único responsável pelo armazenamento do seu {{backup}}.",
+      "understand2": "A perda do seu {{backup}} ou o acesso a ele por parte de um ladrão resultará na perda de fundos.",
+      "understand3": "Ninguém pode ajudar a recuperar seus fundos se você perder seu {{backup}}, nem mesmo o Swiss Bitcoin Pay."
+    },
+    "bootloader": {
+      "title": "Instalar o firmware",
+      "instruction1": "Estamos a instalar o firmware oficial na sua BitBox02",
+      "instruction2": "Não remova a BitBox02 do seu dispositivo"
+    },
+    "connect": {
+      "title": "Ligue a sua BitBox02",
+      "connecting": "Ligar a sua carteira",
+      "disconnected": "Carteira desligada",
+      "updateBitbox": "Certifique-se de que a sua BitBox02 tem um firmware instalado"
+    },
+    "connected": {
+      "title": "Desbloquear",
+      "instruction": "Introduzir a palavra-passe da BitBox02 para a desbloquear"
+    },
+    "pairing": {
+      "title": "Verificar o código de emparelhamento",
+      "instruction": "Verifique se o seguinte código de emparelhamento é o mesmo que aparece na sua BitBox02:",
+      "confirm1": "Se os códigos forem os mesmos, confirme-o premindo",
+      "confirm2": "no lado da sua BitBox02",
+      "pairingFailed": "Falha no emparelhamento"
+    },
+    "setup": {
+      "title": "Configurar a sua carteira",
+      "myBitbox": "A minha BitBox02",
+      "instruction1": "Como gostaria de fazer o backup da sua carteira BitBox02?",
+      "sdcard": "Cartão SD (recomendado)",
+      "sdcardDetectionError": "Erro de deteção do cartão SD",
+      "createBackupAborted": "Criar cópia de segurança abortada",
+      "createBackupFailed": "Falha ao criar cópia de segurança",
+      "setPasswordAborted": "Definição da palavra-passe abortada",
+      "setPasswordFailed": "Erro ao definir a palavra-passe",
+      "advancedOptions": "Opções avançadas",
+      "bitboxName": "Nome da BitBox",
+      "24words": "Palavras de recuperação (24 palavras)",
+      "12words": "Palavras de recuperação (12 palavras)",
+      "insertSdCard": "Insira o cartão SD na sua BitBox02",
+      "setPassword1": "Por favor, defina uma palavra-passe na sua BitBox02.",
+      "setPassword2": "Esta palavra-passe será utilizada para o desbloquear sempre que o utilizar.",
+      "creatingWallet": "Criar uma carteira",
+      "confirmName1": "Confirmar o nome do dispositivo premindo",
+      "confirmName2": "no lado da sua BitBox02",
+      "uninitBitboxNoWeb": "BitBox02 não-initlializadas não são suportadas na web. Por favor, configure sua carteira usando o BitBoxApp oficial"
+    },
+    "signature": {
+      "title": "Assinatura",
+      "getAccount": "Obter uma conta",
+      "prepareSignature": "Preparar a assinatura",
+      "waitingForSignature": "Por favor, assine a mensagem na sua BitBox02",
+      "verifySignature": "Verificar a assinatura",
+      "cannotGetAccount": "Não é possível obter uma conta",
+      "cannotGetXpub": "Não é possível obter o xpub",
+      "signatureError": "Mensagem de erro de assinatura. Por favor, tente novamente"
+    }
   }
 }

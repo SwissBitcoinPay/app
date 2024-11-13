@@ -28,6 +28,7 @@ const babelLoaderConfiguration = {
     path.resolve(__dirname, "node_modules/react-native-screenguard"),
     path.resolve(__dirname, "node_modules/react-native-qrcode-svg"),
     path.resolve(__dirname, "node_modules/react-native-progress"),
+    path.resolve(__dirname, "node_modules/@react-native/assets-registry"),
     path.resolve(__dirname, "node_modules/react-native-error-boundary")
   ],
   exclude: [/\.native.[jt]sx$/, /\.ios.[jt]sx$/, /\.android.[jt]sx$/],
@@ -46,7 +47,7 @@ const babelLoaderConfiguration = {
 };
 
 const assetLoaderConfiguration = {
-  test: /\.(ico|png|jpe?g|gif|ttf|woff2|svg|mp4|lottie)$/i,
+  test: /\.(ico|png|jpe?g|gif|ttf|woff2|svg|mp4|webm|lottie)$/i,
   type: "asset/resource"
 };
 

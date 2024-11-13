@@ -1,8 +1,8 @@
-import { ACCESS_CONTROL } from "react-native-keychain";
+import { ACCESS_CONTROL, AuthenticationPrompt } from "react-native-keychain";
 import secureLocalStorage from "react-secure-storage";
 
 // eslint-disable-next-line @typescript-eslint/require-await
-const getItem = async (key: string) => {
+const getItem = async (key: string, _prompt?: AuthenticationPrompt) => {
   return secureLocalStorage.getItem(key)?.toString();
 };
 

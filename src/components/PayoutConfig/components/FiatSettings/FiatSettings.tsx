@@ -16,13 +16,16 @@ import {
   faLocationDot,
   faShop
 } from "@fortawesome/free-solid-svg-icons";
-import { Controller } from "react-hook-form";
+import { Controller, ControllerProps } from "react-hook-form";
 import { useCallback, useMemo } from "react";
 import { getFormattedUnit } from "@utils";
 import { countries } from "@config";
 import { DescriptionLine } from "../DescriptionLine";
 import isValidZipcode from "is-valid-zipcode";
-import { BitcoinFiatFormSettings } from "@components/PayoutConfig/PayoutConfig";
+import {
+  BitcoinFiatFormSettings,
+  PayoutConfigForm
+} from "@components/PayoutConfig/PayoutConfig";
 import { useTheme } from "styled-components";
 
 type FiatSettingsProps = BitcoinFiatFormSettings & {
@@ -44,6 +47,8 @@ export const FiatSettings = ({
   });
 
   const ownerCountry = watch("ownerCountry");
+
+  const btcPercent = watch("btcPercent");
 
   const validateIban = useCallback(
     (value = "") => isValidIBAN(value) || t("ibanInvalid"),
@@ -82,6 +87,181 @@ export const FiatSettings = ({
     [currency, isSwift]
   );
 
+  const OwnerCountryField = useCallback<
+    ControllerProps<PayoutConfigForm, "ownerCountry">["render"]
+  >(
+    ({ field: { onChange, value }, fieldState: { error } }) => {
+      return (
+        <SelectField
+          label={t("ownerCountry")}
+          items={countries}
+          value={value}
+          onValueChange={onChange}
+          error={error?.message}
+        />
+      );
+    },
+    [t]
+  );
+
+  const IbanField = useCallback<
+    ControllerProps<PayoutConfigForm, "iban">["render"]
+  >(
+    ({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
+      return (
+        <FieldContainer icon={faBuildingColumns} title={t("yourIban")}>
+          <TextField
+            label={t("iban")}
+            value={value}
+            onChangeText={(newIbanValue) =>
+              onChange(newIbanValue.toUpperCase())
+            }
+            onBlur={onBlur}
+            autoCorrect={false}
+            error={error?.message}
+            autoCapitalize="characters"
+            pastable
+          />
+        </FieldContainer>
+      );
+    },
+    [t]
+  );
+
+  const OwnerNameField = useCallback<
+    ControllerProps<PayoutConfigForm, "ownerName">["render"]
+  >(
+    ({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
+      return (
+        <FieldContainer icon={faShop} title={t("yourName")}>
+          <TextField
+            label={t("ownerName")}
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            autoCorrect={false}
+            error={error?.message}
+            pastable
+          />
+        </FieldContainer>
+      );
+    },
+    [t]
+  );
+
+  const OwnerAddressField = useCallback<
+    ControllerProps<PayoutConfigForm, "ownerAddress">["render"]
+  >(
+    ({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
+      return (
+        <FieldContainer icon={faLocationDot} title={t("yourAddress")}>
+          <TextField
+            label={t("ownerAddress")}
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            autoCorrect={false}
+            error={error?.message}
+            pastable
+          />
+        </FieldContainer>
+      );
+    },
+    [t]
+  );
+
+  const OwnerComplementField = useCallback<
+    ControllerProps<PayoutConfigForm, "ownerComplement">["render"]
+  >(
+    ({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
+      return (
+        <FieldContainer
+          icon={faLocationDot}
+          title={t("ownerComplement")}
+          isOptionnal
+        >
+          <TextField
+            label={t("optional")}
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            autoCorrect={false}
+            error={error?.message}
+            pastable
+          />
+        </FieldContainer>
+      );
+    },
+    [t]
+  );
+
+  const OwnerZipField = useCallback<
+    ControllerProps<PayoutConfigForm, "ownerZip">["render"]
+  >(
+    ({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
+      return (
+        <FieldContainer icon={faLocationDot} title={t("yourZip")}>
+          <TextField
+            label={t("ownerZip")}
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            autoCorrect={false}
+            error={error?.message}
+            pastable
+          />
+        </FieldContainer>
+      );
+    },
+    [t]
+  );
+
+  const OwnerCityField = useCallback<
+    ControllerProps<PayoutConfigForm, "ownerCity">["render"]
+  >(
+    ({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
+      return (
+        <FieldContainer icon={faCity} title={t("yourCity")}>
+          <TextField
+            label={t("ownerCity")}
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            autoCorrect={false}
+            error={error?.message}
+            pastable
+          />
+        </FieldContainer>
+      );
+    },
+    [t]
+  );
+
+  const ReferenceField = useCallback<
+    ControllerProps<PayoutConfigForm, "reference">["render"]
+  >(
+    ({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
+      return (
+        <FieldContainer
+          icon={faCommentDots}
+          title={t("bankReference")}
+          isOptionnal
+        >
+          <TextField
+            label={t("optional")}
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            autoCorrect={false}
+            error={error?.message}
+            pastable
+          />
+        </FieldContainer>
+      );
+    },
+    [t]
+  );
+
   return (
     <ComponentStack>
       <ComponentStack gapSize={14}>
@@ -99,6 +279,7 @@ export const FiatSettings = ({
         <FieldDescription>
           🏦{" "}
           {t("receiveInBankDescription1", {
+            percent: 100 - btcPercent,
             currency
           })}{" "}
           <Url
@@ -171,20 +352,8 @@ export const FiatSettings = ({
           <Controller
             name="ownerCountry"
             control={control}
-            rules={{
-              required: true
-            }}
-            render={({ field: { onChange, value }, fieldState: { error } }) => {
-              return (
-                <SelectField
-                  label={t("ownerCountry")}
-                  items={countries}
-                  value={value}
-                  onValueChange={onChange}
-                  error={error?.message}
-                />
-              );
-            }}
+            rules={{ required: true }}
+            render={OwnerCountryField}
           />
         </FieldContainer>
       </ComponentStack>
@@ -195,27 +364,7 @@ export const FiatSettings = ({
           required: true,
           validate: validateIban
         }}
-        render={({
-          field: { onChange, onBlur, value },
-          fieldState: { error }
-        }) => {
-          return (
-            <FieldContainer icon={faBuildingColumns} title={t("yourIban")}>
-              <TextField
-                label={t("iban")}
-                value={value}
-                onChangeText={(newIbanValue) =>
-                  onChange(newIbanValue.toUpperCase())
-                }
-                onBlur={onBlur}
-                autoCorrect={false}
-                error={error?.message}
-                autoCapitalize="characters"
-                pastable
-              />
-            </FieldContainer>
-          );
-        }}
+        render={IbanField}
       />
       <Controller
         name="ownerName"
@@ -223,24 +372,7 @@ export const FiatSettings = ({
         rules={{
           required: true
         }}
-        render={({
-          field: { onChange, onBlur, value },
-          fieldState: { error }
-        }) => {
-          return (
-            <FieldContainer icon={faShop} title={t("yourName")}>
-              <TextField
-                label={t("ownerName")}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                autoCorrect={false}
-                error={error?.message}
-                pastable
-              />
-            </FieldContainer>
-          );
-        }}
+        render={OwnerNameField}
       />
       <Controller
         name="ownerAddress"
@@ -248,50 +380,12 @@ export const FiatSettings = ({
         rules={{
           required: true
         }}
-        render={({
-          field: { onChange, onBlur, value },
-          fieldState: { error }
-        }) => {
-          return (
-            <FieldContainer icon={faLocationDot} title={t("yourAddress")}>
-              <TextField
-                label={t("ownerAddress")}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                autoCorrect={false}
-                error={error?.message}
-                pastable
-              />
-            </FieldContainer>
-          );
-        }}
+        render={OwnerAddressField}
       />
       <Controller
         name="ownerComplement"
         control={control}
-        render={({
-          field: { onChange, onBlur, value },
-          fieldState: { error }
-        }) => {
-          return (
-            <FieldContainer
-              icon={faLocationDot}
-              title={t("ownerComplement")}
-              isOptionnal
-            >
-              <TextField
-                label={t("optional")}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                autoCorrect={false}
-                error={error?.message}
-                pastable
-              />
-            </FieldContainer>
-          );
-        }}
+        render={OwnerComplementField}
       />
       <Controller
         name="ownerZip"
@@ -300,24 +394,7 @@ export const FiatSettings = ({
           required: true,
           validate: validateZipcode
         }}
-        render={({
-          field: { onChange, onBlur, value },
-          fieldState: { error }
-        }) => {
-          return (
-            <FieldContainer icon={faLocationDot} title={t("yourZip")}>
-              <TextField
-                label={t("ownerZip")}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                autoCorrect={false}
-                error={error?.message}
-                pastable
-              />
-            </FieldContainer>
-          );
-        }}
+        render={OwnerZipField}
       />
       <Controller
         name="ownerCity"
@@ -325,52 +402,9 @@ export const FiatSettings = ({
         rules={{
           required: true
         }}
-        render={({
-          field: { onChange, onBlur, value },
-          fieldState: { error }
-        }) => {
-          return (
-            <FieldContainer icon={faCity} title={t("yourCity")}>
-              <TextField
-                label={t("ownerCity")}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                autoCorrect={false}
-                error={error?.message}
-                pastable
-              />
-            </FieldContainer>
-          );
-        }}
+        render={OwnerCityField}
       />
-
-      <Controller
-        name="reference"
-        control={control}
-        render={({
-          field: { onChange, onBlur, value },
-          fieldState: { error }
-        }) => {
-          return (
-            <FieldContainer
-              icon={faCommentDots}
-              title={t("bankReference")}
-              isOptionnal
-            >
-              <TextField
-                label={t("optional")}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                autoCorrect={false}
-                error={error?.message}
-                pastable
-              />
-            </FieldContainer>
-          );
-        }}
-      />
+      <Controller name="reference" control={control} render={ReferenceField} />
     </ComponentStack>
   );
 };

@@ -19,4 +19,8 @@ export { validateBitcoinAddress } from "./validateBitcoinAddress";
 export { hexToRgb } from "./hexToRgb";
 export { mergeDeep } from "./mergeDeep";
 export { isMinUserType } from "./isMinUserType";
+export { sleep } from "./sleep";
+export { Bitbox } from "./Bitbox";
 export { numberWithSpaces } from "./numberWithSpaces";
+export { prepareTransaction } from "./wallet";
+export { useErrorBoundary } from "./useErrorBoundary";

@@ -1,14 +1,21 @@
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import React, { ComponentProps, useEffect, useRef, useState } from "react";
+import React, {
+  ComponentProps,
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import { Animated, Easing, Modal as RootModal } from "react-native";
 import { ArrayOrSingle } from "ts-essentials";
-import { Button, KeyboardAvoidingView } from "@components";
+import { Button, KeyboardAvoidingView, Pressable } from "@components";
 import { ScrollView } from "react-native";
 import { useIsScreenSizeMin } from "@hooks";
-import { platform } from "@config";
+import { SBPModalContext, platform } from "@config";
+import { useTheme } from "styled-components";
 import * as S from "./styled";
 
-const { isNative, isAndroid } = platform;
+const { isNative } = platform;
 
 const ANIMATION_DURATION = 250;
 
@@ -43,6 +50,8 @@ export const Modal = ({
 }: ModalProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const isExtraLarge = useIsScreenSizeMin("extraLarge");
+  const { overlayComponent } = useContext(SBPModalContext);
+  const { colors } = useTheme();
 
   const opacity = useRef(
     new Animated.Value(animationValues.opacity[+isOpen])
@@ -107,15 +116,15 @@ export const Modal = ({
           >
             <S.ModalHeader>
               <S.HeaderText weight={700}>{title}</S.HeaderText>
-              <S.HeaderIconPressable onPress={onClose}>
-                <S.HeaderIcon size={24} icon={faTimes} />
-              </S.HeaderIconPressable>
+              <Pressable onPress={onClose}>
+                <S.HeaderIcon size={24} icon={faTimes} color={colors.white} />
+              </Pressable>
             </S.ModalHeader>
             {!noScrollView ? (
               <ScrollView
                 keyboardShouldPersistTaps="always"
                 style={{
-                  overflow: isNative && isAndroid ? "hidden" : undefined,
+                  overflow: isNative ? "hidden" : undefined,
                   zIndex: 1
                 }}
                 contentContainerStyle={{ overflow: "hidden" }}
@@ -129,6 +138,7 @@ export const Modal = ({
               <S.SubmitButton type="bitcoin" {...submitButton} />
             )}
           </AnimatedModalContent>
+          {overlayComponent}
         </AnimatedModalBackground>
       </KeyboardAvoidingView>
     </RootModal>

@@ -20,9 +20,11 @@ npm run bundle:ios -- --dev "$DEV"
 
 cd ios
 
+pod install --repo-update
+
 # Sourcemaps uploading
 
-ios/Pods/hermes-engine/destroot/bin/hermesc \
+Pods/hermes-engine/destroot/bin/hermesc \
   -O -emit-binary \
   -output-source-map \
   -out=main.jsbundle.hbc \
@@ -49,8 +51,6 @@ rm -f main.jsbundle.packager.map
   main.jsbundle main.jsbundle.map
 
 ###
-
-pod install --repo-update
 
 xcodebuild -quiet archive -workspace SwissBitcoinPay.xcworkspace -scheme SwissBitcoinPay -configuration "$CONFIGURATION" -archivePath SwissBitcoinPay.xcarchive
 xcodebuild -quiet -exportArchive -archivePath SwissBitcoinPay.xcarchive -exportOptionsPlist "$EXPORT_OPTIONS_FILE" -exportPath "export"

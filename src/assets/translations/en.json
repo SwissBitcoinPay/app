@@ -10,6 +10,7 @@
     "edit": "Edit",
     "submit": "Submit",
     "confirm": "Confirm",
+    "cancel": "Cancel",
     "wallet": "Wallet",
     "admin": "Admin",
     "employee": "Employee",
@@ -37,7 +38,7 @@
       "orConnectBy": "or connect by",
       "scanActivationQRcode": "Scan activation QR code",
       "email": "Email",
-      "12words": "12 words"
+      "signature": "Signature"
     },
     "emailLogin": {
       "title": "Email login",
@@ -50,7 +51,8 @@
       }
     },
     "signatureLogin": {
-      "title": "Signature method login",
+      "titleWallet": "Signature with hardware wallet",
+      "titleWords": "Signature with 12 words",
       "word": "Word {{number}}",
       "enter12wordsDescription1": "Your 12 words will stay on your device, to sign a message to authenticate you.",
       "enter12wordsDescription2": "Please make sure that you enter your seed phrase on a verified, open-source build.",
@@ -215,12 +217,12 @@
       "invoicePaid": "Address verified",
       "signWithAddress": "Sign with address",
       "signWithAddressDetails": "Sign the message with this Bitcoin address",
-      "receiveInBtcDescription1": "All the bitcoins that you charge via Swiss Bitcoin Pay will be sent to the address you provide.",
+      "receiveInBtcDescription1": "{{percent}}% of the bitcoins that you charge via Swiss Bitcoin Pay will be sent to the bitcoin wallet you provide.",
       "receiveInBtcDescription2": "Lightning to Onchain conversions and miner fees are always free of charge for you.",
       "receiveInBtcDescription3": "Payments to your wallet are made by default every 1st of the month. Minimum threshold is 1000 sats.",
       "receiveInBtcDescription3Lightning": "Your bitcoins will be instantly sent to your lightning address after each payment. Make sure that your node is well connected.",
       "receiveInBtcDescription4": "A cryptographic signature of your Bitcoin wallet is required to prove ownership.",
-      "receiveInBankDescription1": "All the bitcoins that you charge via Swiss Bitcoin Pay will be sold for {{currency}} then sent automatically to your bank account through our partner",
+      "receiveInBankDescription1": "{{percent}}% of the bitcoins that you charge via Swiss Bitcoin Pay will be sold for {{currency}} then sent automatically to your bank account through our partner",
       "bankSettings": "Bank settings",
       "receiveInBankDescription2Instant": "The payment to your bank account is made automatically as soon as your balance exceeds the minimum of {{formattedAmount}}.",
       "receiveInBankDescription2Batched": "The payment to your bank account is automatically done everyday at 0:00 UTC once your balance exceeds the minimum of {{formattedAmount}}.",
@@ -248,25 +250,42 @@
       "ibanInvalid": "Invalid IBAN",
       "zipInvalid": "Invalid ZIP code",
       "submit": "Submit",
+      "bitboxConnectSuccess": "Your BitBox02 has been connected sucessfully. You can unplug it.",
       "patchSettingNeedsEmailValidation": "Confirm the new settings via the email you received"
     },
     "wallet": {
       "title": "Onchain wallet",
+      "unlockYourWallet": "Unlock your wallet",
       "balance": "Balance",
       "pending": "Pending",
       "transactions": "Transactions",
-      "send": "Send (coming soon)",
+      "send": "Send",
       "receive": "Receive",
+      "receiveBitcoins": "Receive bitcoins",
       "sent": "Sent",
       "received": "Received",
       "receiveInfo": "Receive bitcoins directly to your local wallet with this unused address.\nPayments received directly to this address are not tracked by Swiss Bitcoin Pay and therefore are not subject to fees and are not included in exports.",
-      "sendAddress": "Send to address",
       "btcAmount": "Amount",
       "fees": "Fees",
-      "fastestFee": "Fastest",
-      "halfHourFee": "Medium",
-      "hourFee": "Slow",
-      "economyFee": "Economy"
+      "errorFetchingWallet": "Error while fetching your wallet",
+      "sendModal": {
+        "send": "Send your bitcoins",
+        "fastestFee": "Fastest",
+        "halfHourFee": "Medium",
+        "hourFee": "Slow",
+        "economyFee": "Economy",
+        "transactionSent": "Transaction sent!",
+        "errorBroadcast": "Error while broadcasting transaction",
+        "sendInfo": "Send funds from your self-custodial wallet to a Bitcoin address",
+        "destinationAddress": "Destination address",
+        "amount": "Amount",
+        "max": "Max",
+        "balance": "Balance",
+        "fees": "Fees",
+        "sendLastInfo": "Your transaction is generated and broadcast entirely from your local device. No private information passes through Swiss Bitcoin Pay servers",
+        "signWithBitbox": "Sign with BitBox02",
+        "broadcast": "Send"
+      }
     }
   },
   "createWalletModal": {
@@ -284,14 +303,13 @@
       "instructions4": "We store no copy of your wallet keys or your funds. We cannot access it or recover it. You are the only one responsible of the security of your wallet."
     },
     "step2": {
+      "seedPhrase": "seed phrase",
       "instructions1": "In the next step, we'll display your 12 words (also called seed phrase). This secret seed phrase is the only way to access your bitcoins.",
       "instructions2": "Your seed phrase is generated securely and localy on your device, and is never sent to our servers.",
       "instructions3": "Write it down on a durable medium and keep it in a secure place.",
       "instructions4": "If you lose your seed phrase, your funds will be lost forever. It is therefore absolutely critical to properly store and protect your seed phrase.",
-      "instructions5": "Never save it in a cloud, on your phone, or computer. Any device connected to the internet is vulnerable!",
-      "instructions6": "Never share your seed phrase to anyone. Any person that access your seed phrase will be able to steal all of your funds.",
       "agree1": "I understand that I am the only one responsible of the storage of my seed phrase.",
-      "agree2": "I understand that losing my seed phrase or a theft seeing it will result in a loss of funds.",
+      "agree2": "I understand that losing my seed phrase or a thief seeing it will result in a loss of funds.",
       "agree3": "I understand that nobody can help to recover my funds if I lose my seed phrase, not even Swiss Bitcoin Pay."
     },
     "step3": {
@@ -310,6 +328,85 @@
     "step5": {
       "instructions1": "Wallet successfully created",
       "instructions2": "Store your seed phrase in a safe place, and never show it to anyone!"
+    }
+  },
+  "secureWallet": {
+    "instructions1": "You do not depend on Swiss Bitcoin Pay to access your bitcoins, your {{backup}} can be used on any bitcoin wallet.",
+    "instructions2": "Never make a copy in a cloud, on your phone, or computer. Any device connected to the internet is vulnerable!",
+    "instructions3": "Never share your {{backup}} to anyone. Any person that access your {{backup}} will be able to steal all of your funds."
+  },
+  "connectWalletModal": {
+    "title": "Connect BitBox02",
+    "iUnderstand": "I understand",
+    "afterUpgrade": {
+      "title": "Open your BitBox02",
+      "instruction": "Touch one of the 2 sides marked \"Tap this side\"",
+      "rebooting": "Rebooting your BitBox02"
+    },
+    "afterSetup": {
+      "sdcard": "SD Card",
+      "12-words": "12 words",
+      "24-words": "24 words",
+      "title": "Secure your backup",
+      "removeSdCard": "Remove the SD Card from your BitBox02 to continue.",
+      "instructions1": "Keep your {{backup}} in a secure place, where only you can access.",
+      "understand1": "You are the only one responsible of the storage of your {{backup}}.",
+      "understand2": "Losing your {{backup}} or a thief accessing it will result in a loss of funds.",
+      "understand3": "Nobody can help to recover your funds if you lose your {{backup}}, not even Swiss Bitcoin Pay."
+    },
+    "bootloader": {
+      "title": "Installing the firmware",
+      "instruction1": "We are installing the official firmware in your BitBox02",
+      "instruction2": "Do not remove the BitBox02 from your device"
+    },
+    "connect": {
+      "title": "Connect your BitBox02",
+      "connecting": "Connecting your wallet",
+      "disconnected": "Wallet disconnected",
+      "updateBitbox": "Make sure your BitBox02 have a firmware installed"
+    },
+    "connected": {
+      "title": "Unlock",
+      "instruction": "Enter BitBox02 password to unlock it"
+    },
+    "pairing": {
+      "title": "Verify pairing code",
+      "instruction": "Verify that the following pairing code is the same as displayed on your BitBox02:",
+      "confirm1": "If the codes are the same, confirm it by pressing",
+      "confirm2": "on the side of your BitBox02",
+      "pairingFailed": "Pairing failed"
+    },
+    "setup": {
+      "title": "Setup your wallet",
+      "myBitbox": "My BitBox02",
+      "instruction1": "How would you like to backup your BitBox02's wallet?",
+      "sdcard": "SD Card (recommended)",
+      "sdcardDetectionError": "SD Card detection error",
+      "createBackupAborted": "Create backup aborted",
+      "createBackupFailed": "Create backup failed",
+      "setPasswordAborted": "Setting password aborted",
+      "setPasswordFailed": "Error while setting password",
+      "advancedOptions": "Advanced options",
+      "bitboxName": "BitBox name",
+      "24words": "Recovery words (24 words)",
+      "12words": "Recovery words (12 words)",
+      "insertSdCard": "Please insert the SD card in your BitBox02",
+      "setPassword1": "Please set a password on your BitBox02.",
+      "setPassword2": "This password will be used to unlock it every time you use it.",
+      "creatingWallet": "Creating wallet",
+      "confirmName1": "Confirm the device name by pressing",
+      "confirmName2": "on the side of your BitBox02",
+      "uninitBitboxNoWeb": "Uninitlialized BitBox02 are not supported on web. Please setup your wallet using the official BitBoxApp"
+    },
+    "signature": {
+      "title": "Signature",
+      "getAccount": "Getting account",
+      "prepareSignature": "Prepare signature",
+      "waitingForSignature": "Please sign the message on your BitBox02",
+      "verifySignature": "Verify signature",
+      "cannotGetAccount": "Cannot get account",
+      "cannotGetXpub": "Cannot get xpub",
+      "signatureError": "Error signing message. Please try again"
     }
   },
   "accountConfigHook": {

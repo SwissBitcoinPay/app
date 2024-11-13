@@ -33,5 +33,5 @@ export const platform = {
   bottomSafeAreaHeight: 0,
   deviceName: `${osName} | ${browserName}`,
   deviceLocale: getLocale(),
-  isPrinterSupported: false
+  isBitcoinize: false
 };

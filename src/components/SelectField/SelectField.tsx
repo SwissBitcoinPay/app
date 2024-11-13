@@ -1,4 +1,4 @@
-import { forwardRef, useCallback } from "react";
+import { forwardRef, useCallback, useMemo } from "react";
 import { BaseField } from "@components";
 import { BaseFieldProps } from "@components/BaseField";
 import { StyledComponentComponentProps } from "@types";
@@ -21,8 +21,8 @@ export const SelectField = forwardRef<RNPickerSelect, SelectFieldProps>(
   (
     {
       style,
-      label,
-      value,
+      label: labelProps,
+      value: valueProps,
       left,
       right,
       error,
@@ -40,11 +40,21 @@ export const SelectField = forwardRef<RNPickerSelect, SelectFieldProps>(
       [propsOnValueChange, onChange]
     );
 
+    const value = useMemo(
+      () => props.items.find((i) => i.value === valueProps)?.label || "",
+      [props.items, valueProps]
+    );
+
+    const label = useMemo(
+      () => (labelProps !== undefined ? labelProps : ""),
+      [labelProps]
+    );
+
     return (
       <BaseField
         style={style}
-        value={props.items.find((i) => i.value === value)?.label || ""}
-        label={label !== undefined ? label : ""}
+        value={value}
+        label={label}
         disabled={props.disabled}
         left={left}
         right={right}

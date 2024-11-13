@@ -17,6 +17,9 @@
       "@types": ["types"],
       "@types/*": ["types/*"]
     },
+    "types": [
+      "react-native-web"
+    ],
     "target": "ES2022",
     "module": "esnext",
     "lib": ["es2022", "dom"],

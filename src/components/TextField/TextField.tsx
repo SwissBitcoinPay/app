@@ -3,9 +3,16 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState
 } from "react";
-import { TextInput } from "react-native";
+import {
+  NativeSyntheticEvent,
+  TextInput,
+  TextInputContentSizeChangeEventData,
+  TextInputKeyPressEventData,
+  TextInputSubmitEditingEventData
+} from "react-native";
 import { BaseField, QrScanWindow, QrModal, Text } from "@components";
 import { BaseFieldProps } from "@components/BaseField";
 import { StyledComponentComponentProps } from "@types";
@@ -35,17 +42,18 @@ type TextFieldProps = TextInputProps & {
   qrScannable?: boolean;
   deletable?: boolean | (() => void);
   suggestions?: string[];
+  charMask?: RegExp;
 } & Pick<BaseFieldProps, "label" | "left" | "right" | "error" | "disabled">;
 
 export const TextField = forwardRef<TextInput, TextFieldProps>(
   (
     {
       style,
-      label,
+      label: labelProps,
       value,
       onChangeText,
       left,
-      right,
+      right: rightProps,
       error,
       onFocus,
       onBlur,
@@ -58,7 +66,8 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
       suggestions,
       disabled,
       multiline,
-      onSubmitEditing,
+      onSubmitEditing: onSubmitEditingProps,
+      charMask,
       ...props
     },
     ref
@@ -99,6 +108,14 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
       [onBlur]
     );
 
+    const _onChangeText = useCallback(
+      (v: string) => {
+        if (charMask && v.length > 0 && !v.match(charMask)) return;
+        onChangeText?.(v);
+      },
+      [charMask, onChangeText]
+    );
+
     const onCopy = useCallback(() => {
       setIsCopied(true);
       Clipboard.setString(value || "");
@@ -109,11 +126,11 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
 
     const onPaste = useCallback(async () => {
       setIsPasted(true);
-      onChangeText?.(await Clipboard.getString());
+      _onChangeText(await Clipboard.getString());
       setTimeout(() => {
         setIsPasted(false);
       }, 1500);
-    }, [onChangeText]);
+    }, [_onChangeText]);
 
     const onToggleScanQrModal = useCallback(() => {
       setIsScanModalOpen(!isScanModalOpen);
@@ -121,9 +138,9 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
 
     const onScanQr = useCallback(
       (qrValue: string) => {
-        onChangeText?.(qrValue);
+        _onChangeText(qrValue);
       },
-      [onChangeText]
+      [_onChangeText]
     );
 
     const onToggleQrDisplayModal = useCallback(() => {
@@ -132,18 +149,134 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
 
     const onDelete = useCallback(() => {
       setIsDeleted(true);
-      onChangeText?.("");
+      _onChangeText("");
       if (typeof deletable === "function") {
         deletable();
       }
       setTimeout(() => {
         setIsDeleted(false);
       }, 1500);
-    }, [onChangeText, deletable]);
+    }, [_onChangeText, deletable]);
+
+    const qrProps = useMemo(
+      () => ({
+        value: qrDisplayValue || value || ""
+      }),
+      [qrDisplayValue, value]
+    );
+
+    const withScan = useMemo(
+      () => isCameraAvailable && qrScannable,
+      [isCameraAvailable, qrScannable]
+    );
+
+    const label = useMemo(
+      () => (labelProps !== undefined ? labelProps : ""),
+      [labelProps]
+    );
+
+    const right = useMemo(
+      () => [
+        ...(rightProps ? tupulize(rightProps) : []),
+        ...(qrScannable && isCameraAvailable
+          ? [
+              {
+                icon: !qrDisplayable ? faQrcode : faCamera,
+                onPress: onToggleScanQrModal
+              }
+            ]
+          : []),
+        ...(qrDisplayable
+          ? [
+              {
+                icon: faQrcode,
+                onPress: onToggleQrDisplayModal,
+                isAlwaysClickable: true
+              }
+            ]
+          : []),
+        ...(copyable
+          ? [
+              {
+                icon: isCopied ? faCheck : faCopy,
+                onPress: onCopy,
+                isAlwaysClickable: true
+              }
+            ]
+          : []),
+        ...(pastable && isPasteAvailable
+          ? [{ icon: isPasted ? faCheck : faClipboard, onPress: onPaste }]
+          : []),
+        ...(deletable && value
+          ? [
+              {
+                icon: isDeleted ? faCheck : faTrash,
+                onPress: onDelete,
+                isAlwaysClickable: true
+              }
+            ]
+          : [])
+      ],
+      [
+        copyable,
+        deletable,
+        isCameraAvailable,
+        isCopied,
+        isDeleted,
+        isPasteAvailable,
+        isPasted,
+        onCopy,
+        onDelete,
+        onPaste,
+        onToggleQrDisplayModal,
+        onToggleScanQrModal,
+        pastable,
+        qrDisplayable,
+        qrScannable,
+        rightProps,
+        value
+      ]
+    );
+
+    const onContentSizeChange = useCallback(
+      (e: NativeSyntheticEvent<TextInputContentSizeChangeEventData>) => {
+        if (multiline) {
+          setContentHeight(e.nativeEvent.contentSize.height);
+        }
+      },
+      [multiline]
+    );
+
+    const onKeyPress = useCallback(
+      (e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+        const { nativeEvent } = e;
+        if (!suggestions) return;
+        if (
+          nativeEvent?.key === "ArrowDown" &&
+          suggestedIndex + 1 < suggestions?.length
+        ) {
+          setSuggestedIndex(suggestedIndex + 1);
+        } else if (nativeEvent?.key === "ArrowUp" && suggestedIndex - 1 >= 0) {
+          setSuggestedIndex(suggestedIndex - 1);
+        }
+      },
+      [suggestedIndex, suggestions]
+    );
+
+    const onSubmitEditing = useCallback(
+      (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+        if (suggestions && suggestions.length > 0) {
+          _onChangeText(suggestions[suggestedIndex]);
+          setSuggestedIndex(0);
+        }
+        onSubmitEditingProps?.(e);
+      },
+      [_onChangeText, onSubmitEditingProps, suggestedIndex, suggestions]
+    );
 
     return (
       <S.TextFieldContainer style={style}>
-        {isCameraAvailable && qrScannable && (
+        {withScan && (
           <QrScanWindow
             isOpen={isScanModalOpen}
             onClose={onToggleScanQrModal}
@@ -155,53 +288,16 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
             title={label}
             isOpen={isQrDisplayModalOpen}
             onClose={onToggleQrDisplayModal}
-            qrProps={{
-              value: qrDisplayValue || value || ""
-            }}
+            qrProps={qrProps}
           />
         )}
         <BaseField
           value={!!value}
-          label={label !== undefined ? label : ""}
+          label={label}
           disabled={disabled}
           isFlexHeight={multiline}
           left={left}
-          right={[
-            ...(right ? tupulize(right) : []),
-            ...(qrScannable && isCameraAvailable
-              ? [{ icon: faCamera, onPress: onToggleScanQrModal }]
-              : []),
-            ...(qrDisplayable
-              ? [
-                  {
-                    icon: faQrcode,
-                    onPress: onToggleQrDisplayModal,
-                    isAlwaysClickable: true
-                  }
-                ]
-              : []),
-            ...(copyable
-              ? [
-                  {
-                    icon: isCopied ? faCheck : faCopy,
-                    onPress: onCopy,
-                    isAlwaysClickable: true
-                  }
-                ]
-              : []),
-            ...(pastable && isPasteAvailable
-              ? [{ icon: isPasted ? faCheck : faClipboard, onPress: onPaste }]
-              : []),
-            ...(deletable && value
-              ? [
-                  {
-                    icon: isDeleted ? faCheck : faTrash,
-                    onPress: onDelete,
-                    isAlwaysClickable: true
-                  }
-                ]
-              : [])
-          ]}
+          right={right}
           error={error}
           onFocus={onFocusHandler}
           onBlur={onBlurHandler}
@@ -211,36 +307,12 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
               ref={ref}
               value={value}
               editable={!disabled}
-              onChangeText={onChangeText}
+              onChangeText={_onChangeText}
               multiline={multiline}
               style={{ height: contentHeight }}
-              onContentSizeChange={(e) => {
-                if (multiline) {
-                  setContentHeight(e.nativeEvent.contentSize.height);
-                }
-              }}
-              onKeyPress={(e) => {
-                const { nativeEvent } = e;
-                if (!suggestions) return;
-                if (
-                  nativeEvent?.key === "ArrowDown" &&
-                  suggestedIndex + 1 < suggestions?.length
-                ) {
-                  setSuggestedIndex(suggestedIndex + 1);
-                } else if (
-                  nativeEvent?.key === "ArrowUp" &&
-                  suggestedIndex - 1 >= 0
-                ) {
-                  setSuggestedIndex(suggestedIndex - 1);
-                }
-              }}
-              onSubmitEditing={(e) => {
-                if (suggestions && suggestions.length > 0) {
-                  onChangeText?.(suggestions[suggestedIndex]);
-                  setSuggestedIndex(0);
-                }
-                onSubmitEditing?.(e);
-              }}
+              onContentSizeChange={onContentSizeChange}
+              onKeyPress={onKeyPress}
+              onSubmitEditing={onSubmitEditing}
               {...props}
             />
           }
@@ -252,7 +324,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
                 key={index}
                 isHighlighted={index === suggestedIndex}
                 onPress={() => {
-                  onChangeText?.(suggestionValue);
+                  _onChangeText(suggestionValue);
                   setSuggestedIndex(0);
                 }}
               >

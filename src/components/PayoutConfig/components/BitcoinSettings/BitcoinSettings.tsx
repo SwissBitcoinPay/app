@@ -8,6 +8,7 @@ import {
   Icon,
   FieldDescription,
   CreateWalletModal,
+  ConnectWalletModal,
   FieldContainer,
   Text
 } from "@components";
@@ -25,7 +26,13 @@ import {
 import { decodelnurl } from "js-lnurl";
 // @ts-ignore
 import xpubConverter from "xpub-converter";
-import { Controller } from "react-hook-form";
+import {
+  Controller,
+  ControllerProps,
+  ControllerRenderProps,
+  UseControllerReturn,
+  Validate
+} from "react-hook-form";
 import { validate as isEmail } from "email-validator";
 import { useTheme } from "styled-components";
 import {
@@ -43,8 +50,22 @@ import { faCircle } from "@fortawesome/free-regular-svg-icons";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { SBPContext, apiRootUrl } from "@config";
 import { DescriptionLine } from "../DescriptionLine";
-import { BitcoinFiatFormSettings } from "@components/PayoutConfig/PayoutConfig";
+import {
+  BitcoinFiatFormSettings,
+  PayoutConfigForm,
+  WalletType
+} from "@components/PayoutConfig/PayoutConfig";
 import * as S from "./styled";
+import { faUsb } from "@fortawesome/free-brands-svg-icons";
+import { useToast } from "react-native-toast-notifications";
+import { IS_BITBOX_SUPPORTED } from "@config";
+
+export type SignatureData = {
+  zPub: string;
+  message: string;
+  signature: string;
+  walletType: WalletType;
+};
 
 export const BitcoinSettings = ({
   setValue,
@@ -56,6 +77,7 @@ export const BitcoinSettings = ({
     keyPrefix: "screens.payoutConfig"
   });
   const { t: tRoot } = useTranslation();
+  const toast = useToast();
   const theme = useTheme();
   const { accountConfig } = useContext(SBPContext);
 
@@ -64,7 +86,7 @@ export const BitcoinSettings = ({
   const btcAddressTypes = watch("btcAddressTypes");
   const nextAddresses = watch("nextAddresses");
   const finalDepositAddress = watch("finalDepositAddress");
-  const isLocalWallet = watch("isLocalWallet");
+  const walletType = watch("walletType");
 
   // Signature stuff
   const messageToSign = watch("messageToSign");
@@ -73,6 +95,8 @@ export const BitcoinSettings = ({
   const hash = watch("hash");
   const isPrPaid = watch("isPrPaid");
   const signature = watch("signature");
+
+  const btcPercent = watch("btcPercent");
 
   const alreadyVerifiedAddresses = useMemo(
     () => accountConfig?.verifiedAddresses || [],
@@ -124,7 +148,6 @@ export const BitcoinSettings = ({
   }, [finalDepositAddress]);
 
   const onChangeDepositAddress = useCallback(() => {
-    setValue("isLocalWallet", false);
     setValue("signature", undefined);
     setValue("messageToSign", undefined);
     setValue("nextAddresses", undefined);
@@ -137,7 +160,7 @@ export const BitcoinSettings = ({
     setValue("prToPay", undefined);
     setValue("hash", undefined);
     setValue("finalDepositAddress", undefined);
-    setValue("isLocalWallet", undefined);
+    setValue("walletType", undefined);
 
     resetField("signature");
     resetField("messageToSign");
@@ -147,8 +170,12 @@ export const BitcoinSettings = ({
     resetField("prToPay");
     resetField("hash");
     resetField("finalDepositAddress");
-    resetField("isLocalWallet");
+    resetField("walletType");
   }, [resetField, setValue]);
+
+  const onPressConnectWallet = useCallback(() => {
+    setIsConnectWalletModalOpen(true);
+  }, []);
 
   const validateDepositAddress = useCallback(
     async (value = "") => {
@@ -264,15 +291,28 @@ export const BitcoinSettings = ({
   );
 
   const validateSignature = useCallback(
-    async (value?: string) => {
+    async (value?: string | { message: string; signature: string }) => {
       if (signature === "paid") return true;
-      try {
-        await axios.post(`${apiRootUrl}/verify-signature`, {
-          message: messageToSign,
-          signature: value
-        });
-        return true;
-      } catch (e) {}
+      if (value) {
+        try {
+          let message: string;
+          let _signature: string;
+
+          if (typeof value === "object") {
+            message = value.message;
+            _signature = value.signature;
+          } else {
+            message = messageToSign;
+            _signature = value;
+          }
+
+          await axios.post(`${apiRootUrl}/verify-signature`, {
+            message,
+            signature: _signature
+          });
+          return true;
+        } catch (e) {}
+      }
       return t("invalidSignature");
     },
     [messageToSign, t, signature]
@@ -309,13 +349,15 @@ export const BitcoinSettings = ({
   }, [readyState, hash]);
 
   const [isCreateWalletModalOpen, setIsCreateWalletModalOpen] = useState(false);
+  const [isConnectWalletModalOpen, setIsConnectWalletModalOpen] =
+    useState(false);
 
-  const onCreateWalletModalClose = useCallback<
+  const onWalletModalsClose = useCallback<
     ComponentProps<typeof CreateWalletModal>["onClose"]
   >(
     (signatureData) => {
       if (signatureData) {
-        setValue("isLocalWallet", true);
+        setValue("walletType", signatureData.walletType);
         setValue("depositAddress", signatureData.zPub, {
           shouldValidate: false
         });
@@ -327,13 +369,345 @@ export const BitcoinSettings = ({
     [setValue]
   );
 
+  const onBitboxWalletModalClose = useCallback<
+    ComponentProps<typeof CreateWalletModal>["onClose"]
+  >(
+    async (signatureData) => {
+      setIsConnectWalletModalOpen(false);
+      if (signatureData) {
+        const verifySignatureData = await validateSignature(signatureData);
+
+        if (verifySignatureData === true) {
+          toast.show(t("bitboxConnectSuccess"), {
+            type: "success"
+          });
+        } else {
+          toast.show(verifySignatureData, {
+            type: "error"
+          });
+        }
+
+        onWalletModalsClose(signatureData);
+      }
+    },
+    [onWalletModalsClose, t, toast, validateSignature]
+  );
+
+  const validateDepositAddressField = useCallback<
+    Validate<string, PayoutConfigForm>
+  >(
+    async (value = "", formValues) => {
+      if (
+        formValues.messageToSign ||
+        Object.values(formValues.btcAddressTypes).some((v) => v)
+      )
+        return true;
+
+      return await validateDepositAddress(value);
+    },
+    [validateDepositAddress]
+  );
+
+  const walletTypeInfoComponent = useMemo(
+    () => (
+      <ComponentStack direction="horizontal" gapSize={10}>
+        {[
+          {
+            value: btcAddressTypes.onchain,
+            label: "Onchain"
+          },
+          {
+            value: btcAddressTypes.xpub,
+            label: "x/y/zPub"
+          },
+          {
+            value: btcAddressTypes.lightning,
+            label: t("lightningAddress")
+          }
+        ].map(({ value: addressTypeValue, label }) => {
+          const isLoading = addressTypeValue === "loading";
+
+          const color =
+            addressTypeValue === false
+              ? theme.colors.primary
+              : addressTypeValue === "error"
+              ? theme.colors.error
+              : isLoading
+              ? theme.colors.warning
+              : theme.colors.success;
+
+          return (
+            <S.PassCheckContainer key={label}>
+              {isLoading ? (
+                <Loader size={58} />
+              ) : (
+                <Icon
+                  color={!addressTypeValue ? theme.colors.grey : color}
+                  icon={
+                    addressTypeValue === false
+                      ? faCircle
+                      : addressTypeValue === "error"
+                      ? faTimesCircle
+                      : faCheckCircle
+                  }
+                  size={20}
+                />
+              )}
+              <S.PassCheckText
+                h4
+                color={!addressTypeValue ? theme.colors.grey : color}
+                weight={600}
+              >
+                {label}
+              </S.PassCheckText>
+            </S.PassCheckContainer>
+          );
+        })}
+      </ComponentStack>
+    ),
+    [
+      btcAddressTypes.lightning,
+      btcAddressTypes.onchain,
+      btcAddressTypes.xpub,
+      t,
+      theme.colors.error,
+      theme.colors.grey,
+      theme.colors.primary,
+      theme.colors.success,
+      theme.colors.warning
+    ]
+  );
+
+  const DepositAddressField = useCallback<
+    ControllerProps<PayoutConfigForm, "depositAddress">["render"]
+  >(
+    ({ field: { onChange, value }, fieldState: { error } }) => {
+      return (
+        <ComponentStack>
+          <FieldContainer
+            icon={faWallet}
+            title={t("yourWallet")}
+            buttonProps={{
+              title: t("createWallet"),
+              icon: faAdd,
+              onPress: () => {
+                setIsCreateWalletModalOpen(true);
+              }
+            }}
+          >
+            <TextField
+              label={t("bitcoinPayoutWallet")}
+              value={
+                walletType === "local"
+                  ? t("localWallet")
+                  : walletType === "bitbox02"
+                  ? "BitBox02"
+                  : value
+              }
+              onChangeText={(newValue) => {
+                if (newValue) {
+                  onChange(
+                    newValue.replace("bitcoin:", "").replace("lightning:", "")
+                  );
+                }
+              }}
+              autoCorrect={false}
+              error={error?.type === "validate" ? error?.message : undefined}
+              disabled={!!walletType}
+              qrScannable
+              pastable
+            />
+            {alreadyVerifiedAddresses.filter((address) => address !== value)
+              .length > 0 && (
+              <ComponentStack gapSize={10}>
+                <Text h4 weight={600} color={theme.colors.white}>
+                  {t("alreadyVerifiedAddresses")}
+                </Text>
+                <ScrollView horizontal>
+                  <ComponentStack direction="horizontal">
+                    {alreadyVerifiedAddresses
+                      .filter((address) => address !== value)
+                      .map((address, index) => (
+                        <Button
+                          key={index}
+                          title={address}
+                          size="small"
+                          onPress={() => {
+                            onChangeDepositAddress();
+                            setValue("depositAddress", address, {
+                              shouldDirty: true
+                            });
+                          }}
+                        />
+                      ))}
+                  </ComponentStack>
+                </ScrollView>
+              </ComponentStack>
+            )}
+          </FieldContainer>
+          {IS_BITBOX_SUPPORTED && (
+            <Button
+              title={tRoot("connectWalletModal.title")}
+              icon={faUsb}
+              onPress={onPressConnectWallet}
+            />
+          )}
+          {!walletType && walletTypeInfoComponent}
+          {!walletType && btcAddressTypes.xpub === true && (
+            <ComponentStack>
+              <ComponentStack direction="horizontal" gapSize={10}>
+                {[
+                  {
+                    label: `Bech32 (${t("recommended")})`,
+                    value: "zpub"
+                  },
+                  {
+                    label: "Segwit",
+                    value: "ypub"
+                  },
+                  {
+                    label: "Legacy",
+                    value: "xpub"
+                  }
+                ].map(({ label, value: xPubType }) => {
+                  const isSelected =
+                    watch("depositAddress")?.startsWith(xPubType);
+
+                  return (
+                    <Button
+                      key={label}
+                      size="small"
+                      mode={!isSelected ? "outline" : "normal"}
+                      onPress={() => {
+                        if (isSelected) return;
+                        try {
+                          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+                          const newAddress: string = xpubConverter(
+                            value,
+                            xPubType
+                          );
+
+                          onChange(newAddress);
+                        } catch (e) {}
+                      }}
+                      title={label}
+                    />
+                  );
+                })}
+              </ComponentStack>
+              <FieldContainer icon={faListOl} title={t("nextAddresses")}>
+                <S.NextAddressesContainer>
+                  {nextAddresses?.map((nextAddr) => (
+                    <S.NextAddress key={nextAddr}>{nextAddr}</S.NextAddress>
+                  ))}
+                </S.NextAddressesContainer>
+              </FieldContainer>
+            </ComponentStack>
+          )}
+        </ComponentStack>
+      );
+    },
+    [
+      alreadyVerifiedAddresses,
+      btcAddressTypes.xpub,
+      nextAddresses,
+      onChangeDepositAddress,
+      onPressConnectWallet,
+      setValue,
+      t,
+      tRoot,
+      theme.colors.white,
+      walletType,
+      walletTypeInfoComponent,
+      watch
+    ]
+  );
+
+  const SignatureField = useCallback<
+    ControllerProps<PayoutConfigForm, "signature">["render"]
+  >(
+    ({
+      field: { onChange, onBlur, value },
+      fieldState: { error, isDirty, invalid },
+      formState: { isValidating }
+    }) => {
+      if (!messageToSign && !prToPay) return <></>;
+      const isSignatureValid = isDirty && !invalid;
+
+      if (prToPay) {
+        return (
+          <>
+            {!isPrPaid ? (
+              <ComponentStack>
+                <S.PayInvoiceText>{t("payInvoiceToCertify")}</S.PayInvoiceText>
+                <S.PayInvoiceQr size={300} value={prToPay} />
+                <Button
+                  title={t("openWallet")}
+                  icon={faWallet}
+                  onPress={`lightning:${prToPay}`}
+                />
+              </ComponentStack>
+            ) : (
+              <ComponentStack>
+                <S.PayInvoiceText color={theme.colors.success}>
+                  {t("invoicePaid")}
+                </S.PayInvoiceText>
+                <Lottie
+                  autoPlay
+                  loop={false}
+                  style={{ height: 120 }}
+                  source={require("@assets/animations/success.json")}
+                />
+              </ComponentStack>
+            )}
+          </>
+        );
+      } else {
+        return (
+          <FieldContainer
+            icon={faEnvelopeOpenText}
+            title={t("yourSignatureDetails")}
+          >
+            <TextField
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              label={t("yourSignature")}
+              error={error?.message}
+              pastable
+              qrScannable
+              {...(isSignatureValid
+                ? {
+                    right: isValidating ? (
+                      <S.LoaderContainer>
+                        <Loader size={60} />
+                      </S.LoaderContainer>
+                    ) : (
+                      { icon: faCheck, color: theme.colors.success }
+                    )
+                  }
+                : {})}
+            />
+          </FieldContainer>
+        );
+      }
+    },
+    [isPrPaid, messageToSign, prToPay, t, theme.colors.success]
+  );
+
   return (
     <>
       <CreateWalletModal
         title={t("createYourBitcoinWallet")}
         isOpen={isCreateWalletModalOpen}
-        onClose={onCreateWalletModalClose}
+        onClose={onWalletModalsClose}
       />
+      {IS_BITBOX_SUPPORTED && (
+        <ConnectWalletModal
+          isOpen={isConnectWalletModalOpen}
+          onClose={onBitboxWalletModalClose}
+        />
+      )}
       <ComponentStack>
         <ComponentStack gapSize={14}>
           <FieldDescription>💶 {t("feesDetails1")}</FieldDescription>
@@ -348,7 +722,7 @@ export const BitcoinSettings = ({
             </DescriptionLine>
           </ComponentStack>
           <FieldDescription>
-            🔐 {t("receiveInBtcDescription1")}
+            🔐 {t("receiveInBtcDescription1", { percent: btcPercent })}
           </FieldDescription>
           <FieldDescription>
             💵 {t("receiveInBtcDescription2")}
@@ -368,197 +742,11 @@ export const BitcoinSettings = ({
           rules={{
             required: true,
             onChange: onChangeDepositAddress,
-            validate: async (value = "", formValues) => {
-              if (
-                formValues.messageToSign ||
-                Object.values(formValues.btcAddressTypes).some((v) => v)
-              )
-                return true;
-
-              return await validateDepositAddress(value);
-            }
+            validate: validateDepositAddressField
           }}
-          render={({ field: { onChange, value }, fieldState: { error } }) => {
-            return (
-              <ComponentStack>
-                <FieldContainer
-                  icon={faWallet}
-                  title={t("yourWallet")}
-                  buttonProps={{
-                    title: t("createWallet"),
-                    icon: faAdd,
-                    onPress: () => {
-                      setIsCreateWalletModalOpen(true);
-                    }
-                  }}
-                >
-                  <TextField
-                    label={t("bitcoinPayoutWallet")}
-                    value={isLocalWallet ? t("localWallet") : value}
-                    onChangeText={(newValue) => {
-                      if (newValue) {
-                        onChange(
-                          newValue
-                            .replace("bitcoin:", "")
-                            .replace("lightning:", "")
-                        );
-                      }
-                    }}
-                    autoCorrect={false}
-                    error={
-                      error?.type === "validate" ? error?.message : undefined
-                    }
-                    disabled={isLocalWallet}
-                    qrScannable
-                    pastable
-                  />
-                  {alreadyVerifiedAddresses.filter(
-                    (address) => address !== value
-                  ).length > 0 && (
-                    <ComponentStack gapSize={10}>
-                      <Text h4 weight={600} color={theme.colors.white}>
-                        {t("alreadyVerifiedAddresses")}
-                      </Text>
-                      <ScrollView horizontal>
-                        <ComponentStack direction="horizontal">
-                          {alreadyVerifiedAddresses
-                            .filter((address) => address !== value)
-                            .map((address, index) => (
-                              <Button
-                                key={index}
-                                title={address}
-                                size="small"
-                                onPress={() => {
-                                  onChangeDepositAddress();
-                                  setValue("depositAddress", address, {
-                                    shouldDirty: true
-                                  });
-                                }}
-                              />
-                            ))}
-                        </ComponentStack>
-                      </ScrollView>
-                    </ComponentStack>
-                  )}
-                </FieldContainer>
-                {!isLocalWallet && (
-                  <ComponentStack direction="horizontal" gapSize={10}>
-                    {[
-                      {
-                        value: btcAddressTypes.onchain,
-                        label: "Onchain"
-                      },
-                      {
-                        value: btcAddressTypes.xpub,
-                        label: "x/y/zPub"
-                      },
-                      {
-                        value: btcAddressTypes.lightning,
-                        label: t("lightningAddress")
-                      }
-                    ].map(({ value: addressTypeValue, label }) => {
-                      const isLoading = addressTypeValue === "loading";
-
-                      const color =
-                        addressTypeValue === false
-                          ? theme.colors.primary
-                          : addressTypeValue === "error"
-                          ? theme.colors.error
-                          : isLoading
-                          ? theme.colors.warning
-                          : theme.colors.success;
-
-                      return (
-                        <S.PassCheckContainer key={label}>
-                          {isLoading ? (
-                            <Loader size={58} />
-                          ) : (
-                            <Icon
-                              color={
-                                !addressTypeValue ? theme.colors.grey : color
-                              }
-                              icon={
-                                addressTypeValue === false
-                                  ? faCircle
-                                  : addressTypeValue === "error"
-                                  ? faTimesCircle
-                                  : faCheckCircle
-                              }
-                              size={20}
-                            />
-                          )}
-                          <S.PassCheckText
-                            h4
-                            color={
-                              !addressTypeValue ? theme.colors.grey : color
-                            }
-                            weight={600}
-                          >
-                            {label}
-                          </S.PassCheckText>
-                        </S.PassCheckContainer>
-                      );
-                    })}
-                  </ComponentStack>
-                )}
-                {!isLocalWallet && btcAddressTypes.xpub === true && (
-                  <ComponentStack>
-                    <ComponentStack direction="horizontal" gapSize={10}>
-                      {[
-                        {
-                          label: `Bech32 (${t("recommended")})`,
-                          value: "zpub"
-                        },
-                        {
-                          label: "Segwit",
-                          value: "ypub"
-                        },
-                        {
-                          label: "Legacy",
-                          value: "xpub"
-                        }
-                      ].map(({ label, value: xPubType }) => {
-                        const isSelected =
-                          watch("depositAddress")?.startsWith(xPubType);
-
-                        return (
-                          <Button
-                            key={label}
-                            size="small"
-                            mode={!isSelected ? "outline" : "normal"}
-                            onPress={() => {
-                              if (isSelected) return;
-                              try {
-                                // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-                                const newAddress: string = xpubConverter(
-                                  value,
-                                  xPubType
-                                );
-
-                                onChange(newAddress);
-                              } catch (e) {}
-                            }}
-                            title={label}
-                          />
-                        );
-                      })}
-                    </ComponentStack>
-                    <FieldContainer icon={faListOl} title={t("nextAddresses")}>
-                      <S.NextAddressesContainer>
-                        {nextAddresses?.map((nextAddr) => (
-                          <S.NextAddress key={nextAddr}>
-                            {nextAddr}
-                          </S.NextAddress>
-                        ))}
-                      </S.NextAddressesContainer>
-                    </FieldContainer>
-                  </ComponentStack>
-                )}
-              </ComponentStack>
-            );
-          }}
+          render={DepositAddressField}
         />
-        {messageToSign && !prToPay && !isLocalWallet && (
+        {messageToSign && !prToPay && !walletType && (
           <ComponentStack>
             {signWithAddress && (
               <FieldContainer
@@ -587,7 +775,7 @@ export const BitcoinSettings = ({
             </FieldContainer>
           </ComponentStack>
         )}
-        {!isLocalWallet && !isAddressAlreadyVerified && (
+        {!walletType && !isAddressAlreadyVerified && (
           <Controller
             name="signature"
             control={control}
@@ -595,74 +783,7 @@ export const BitcoinSettings = ({
               required: true,
               validate: validateSignature
             }}
-            render={({
-              field: { onChange, onBlur, value },
-              fieldState: { error, isDirty, invalid },
-              formState: { isValidating }
-            }) => {
-              if (!messageToSign && !prToPay) return <></>;
-              const isSignatureValid = isDirty && !invalid;
-
-              if (prToPay) {
-                return (
-                  <>
-                    {!isPrPaid ? (
-                      <ComponentStack>
-                        <S.PayInvoiceText>
-                          {t("payInvoiceToCertify")}
-                        </S.PayInvoiceText>
-                        <S.PayInvoiceQr size={300} value={prToPay} />
-                        <Button
-                          title={t("openWallet")}
-                          icon={faWallet}
-                          onPress={`lightning:${prToPay}`}
-                        />
-                      </ComponentStack>
-                    ) : (
-                      <ComponentStack>
-                        <S.PayInvoiceText color={theme.colors.success}>
-                          {t("invoicePaid")}
-                        </S.PayInvoiceText>
-                        <Lottie
-                          autoPlay
-                          loop={false}
-                          style={{ height: 120 }}
-                          source={require("@assets/animations/success.json")}
-                        />
-                      </ComponentStack>
-                    )}
-                  </>
-                );
-              } else {
-                return (
-                  <FieldContainer
-                    icon={faEnvelopeOpenText}
-                    title={t("yourSignatureDetails")}
-                  >
-                    <TextField
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      label={t("yourSignature")}
-                      error={error?.message}
-                      pastable
-                      qrScannable
-                      {...(isSignatureValid
-                        ? {
-                            right: isValidating ? (
-                              <S.LoaderContainer>
-                                <Loader size={60} />
-                              </S.LoaderContainer>
-                            ) : (
-                              { icon: faCheck, color: theme.colors.success }
-                            )
-                          }
-                        : {})}
-                    />
-                  </FieldContainer>
-                );
-              }
-            }}
+            render={SignatureField}
           />
         )}
       </ComponentStack>

@@ -23,6 +23,7 @@ export const Button = styled(Pressable)<{
   primaryColor: string;
   isRound: boolean;
   isWhiteBackground?: boolean;
+  noShadow?: boolean;
 }>`
   ${({
     theme,
@@ -31,7 +32,8 @@ export const Button = styled(Pressable)<{
     primaryColor,
     isRound,
     disabled,
-    isWhiteBackground
+    isWhiteBackground,
+    noShadow
   }) => {
     const height = (() => {
       switch (size) {
@@ -69,10 +71,10 @@ export const Button = styled(Pressable)<{
       ${size !== "small" ? "width: 100%; flex-shrink: 1;" : ""}
       ${isRound ? `width: ${height}px; border-radius: ${height / 2}px;` : ""}
       ${disabled ? "opacity: 1;" : "cursor: pointer;"}
+      ${!noShadow ? getShadow() : ""}
     `;
   }}
-  ${getShadow()}
-  
+
   display: flex;
   align-items: center;
   justify-content: center;
