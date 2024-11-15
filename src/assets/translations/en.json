@@ -401,6 +401,8 @@
     "signature": {
       "title": "Signature",
       "getAccount": "Getting account",
+      "selectAccount": "Select the account you want to use",
+      "select": "Select",
       "prepareSignature": "Prepare signature",
       "waitingForSignature": "Please sign the message on your BitBox02",
       "verifySignature": "Verify signature",

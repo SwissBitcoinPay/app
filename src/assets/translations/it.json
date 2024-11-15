@@ -415,7 +415,9 @@
       "verifySignature": "Verifica della firma",
       "cannotGetAccount": "Impossibile ottenere l'account",
       "cannotGetXpub": "Impossibile ottenere xpub",
-      "signatureError": "Messaggio di errore nella firma. Riprovare"
+      "signatureError": "Messaggio di errore nella firma. Riprovare",
+      "selectAccount": "Selezionare l'account che si desidera utilizzare",
+      "select": "Selezionare"
     },
     "title": "Collegare BitBox02"
   }

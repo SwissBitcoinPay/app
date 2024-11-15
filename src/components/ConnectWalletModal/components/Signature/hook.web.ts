@@ -3,10 +3,19 @@ import jseu from "js-encoding-utils";
 import { useCallback, useContext } from "react";
 import { ScriptType } from "@utils/Bitbox/api/account";
 import { useTranslation } from "react-i18next";
+// @ts-ignore
+import BIP84 from "bip84";
+import {
+  AccountsWithBalances,
+} from "./get-accounts-with-balances";
+import axios from "axios";
+import { Bip84Account, MempoolTX } from "@types";
 
 const uint8ArrayToBase64 = (uint8Array: Uint8Array) => {
   return Buffer.from(uint8Array).toString("base64");
 };
+
+const ROOT_PATH = `m/84'/0'`;
 
 export const useSignature = (error: (msg: string) => void) => {
   const { pairedBitbox } = useContext(SBPBitboxContext);
@@ -14,27 +23,43 @@ export const useSignature = (error: (msg: string) => void) => {
     keyPrefix: "connectWalletModal.signature"
   });
 
-  const getAccounts = useCallback(() => {
-    return [`m/84'/0'/0'`];
-  }, []);
+  const getAccounts = useCallback(async () => {
+    const accounts: AccountsWithBalances = [];
+    let index = 0;
 
-  const getAccountXpub = useCallback(
-    async (account: string) => {
-      try {
-        if (pairedBitbox) {
-          const accountXpub = await pairedBitbox.btcXpub(
-            "btc",
-            account,
-            "zpub",
-            false
-          );
-          return accountXpub;
-        }
-      } catch (e) {}
-      error(t("cannotGetAccount"));
-    },
-    [error, pairedBitbox, t]
-  );
+    while (true) {
+      const path = `${ROOT_PATH}/${index}'`;
+
+      const accountXpub = await pairedBitbox.btcXpub(
+        "btc",
+        path,
+        "zpub",
+        false
+      );
+
+      accounts.push({
+        label: `Bitcoin ${index + 1}`,
+        account: path,
+        path,
+        zpub: accountXpub
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      const bip84Account: Bip84Account = new BIP84.fromZPub(accountXpub);
+
+      const firstAddress = bip84Account.getAddress(0);
+
+      const { data: addressTxs } = await axios.get<MempoolTX[]>(
+        `https://mempool.space/api/address/${firstAddress}/txs`
+      );
+
+      if (addressTxs.length === 0) {
+        return accounts;
+      }
+
+      index += 1;
+    }
+  }, [pairedBitbox]);
 
   const getAccountFirstAddress = useCallback(
     async (format: ScriptType, account: string) => {
@@ -79,7 +104,6 @@ export const useSignature = (error: (msg: string) => void) => {
 
   return {
     getAccounts,
-    getAccountXpub,
     getAccountFirstAddress,
     signMessage
   };

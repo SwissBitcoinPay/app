@@ -16,7 +16,6 @@ import {
   useErrorBoundary,
   validateBitcoinAddress
 } from "@utils";
-
 import { AsyncStorage } from "@utils";
 import { keyStoreWalletType } from "@config/settingsKeys";
 import { CreateTransactionReturn } from "@utils/wallet/types";

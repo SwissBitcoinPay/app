@@ -416,7 +416,9 @@
       "verifySignature": "Verificar a assinatura",
       "cannotGetAccount": "Não é possível obter uma conta",
       "cannotGetXpub": "Não é possível obter o xpub",
-      "signatureError": "Mensagem de erro de assinatura. Por favor, tente novamente"
+      "signatureError": "Mensagem de erro de assinatura. Por favor, tente novamente",
+      "selectAccount": "Selecionar a conta que pretende utilizar",
+      "select": "Selecionar"
     }
   }
 }
