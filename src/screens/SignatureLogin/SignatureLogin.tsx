@@ -210,11 +210,6 @@ export const SignatureLogin = () => {
     async (data?: SignatureData) => {
       setCustomBitboxFunction(undefined);
       if (data) {
-        await AsyncStorage.setItem(
-          keyStoreZpub,
-          data.zPub,
-          ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE
-        );
         const signatureLoginData = {
           messageToSign: data.message,
           signature: data.signature

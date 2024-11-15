@@ -24,37 +24,14 @@ import { AsyncStorage } from "@utils";
 import { keyStoreZpub } from "@config/settingsKeys";
 import axios from "axios";
 import { useTheme } from "styled-components";
-import { XOR } from "ts-essentials";
 import * as S from "./styled";
 import { useAccountConfig, useRates } from "@hooks";
 import { SendModal } from "./components";
 import { useToast } from "react-native-toast-notifications";
 import { Platform, RefreshControl } from "react-native";
+import { ConfirmedWithBlockTime, MempoolTX } from "@types";
 
 export const ADDRESS_GAP = 1;
-
-type ConfirmedWithBlockTime = XOR<
-  { confirmed: true; block_time: number },
-  { confirmed: false }
->;
-
-type MempoolTX = {
-  txid: string;
-  status: ConfirmedWithBlockTime;
-  vout: {
-    scriptpubkey: string;
-    scriptpubkey_address: string;
-    value: number;
-  }[];
-  vin: {
-    txid: string;
-    prevout: {
-      scriptpubkey: string;
-      scriptpubkey_address: string;
-      value: number;
-    };
-  }[];
-};
 
 export type AddressDetail = {
   address: string;
@@ -165,9 +142,9 @@ export const Wallet = () => {
             (v) => v.prevout.scriptpubkey_address === address
           );
 
-          const isSelfSend = tx.vout.every((v) =>
-            ourAddresses.includes(v.scriptpubkey_address)
-          );
+          const isSelfSend =
+            vinIndex !== -1 &&
+            tx.vout.every((v) => ourAddresses.includes(v.scriptpubkey_address));
 
           const isMultipleInputs =
             vinIndex !== -1 && !!currentTxs.find((v) => v.txid === tx.txid);

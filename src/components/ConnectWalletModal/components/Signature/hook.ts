@@ -16,42 +16,39 @@ export const useSignature = (error: (msg: string) => void) => {
   });
 
   const getAccounts = useCallback(async () => {
-    let accountCode: string;
+    try {
+      while (true) {
+        await sleep(500);
+        const accounts = await getBitboxAccounts();
 
-    while (!accountCode) {
-      await sleep(500);
-      const accounts = await getBitboxAccounts();
+        if (accounts.length > 0) {
+          const accountsPromises = accounts.map((a) => getInfo(a.code));
 
-      // TODO: Ask which account to use if have multiple ones already registered
-      if (accounts.length > 0) {
-        accountCode = accounts[0].code;
+          const accountsInfo = await Promise.all(accountsPromises);
+
+          const allAccountsWithZpub = accountsInfo
+            .map((a, i) => {
+              const signingConfiguration = a.signingConfigurations.find(
+                (e) => e.bitcoinSimple?.keyInfo.keypath.startsWith("m/84'/0'")
+              );
+              return {
+                label: accounts[i].name,
+                account: accounts[i].code,
+                path: signingConfiguration?.bitcoinSimple.keyInfo.keypath,
+                zpub: signingConfiguration?.bitcoinSimple.keyInfo.xpub
+              };
+            })
+            .filter((v) => v.zpub);
+
+          return allAccountsWithZpub;
+        }
       }
+    } catch (e) {
+      console.error(e);
     }
 
-    return [accountCode];
+    return [];
   }, []);
-
-  const getAccountXpub = useCallback(
-    async (account: string) => {
-      const accountInfo = await getInfo(account);
-      if (!accountInfo?.signingConfigurations) {
-        error(t("cannotGetAccount"));
-        return;
-      }
-
-      const accountZpub = accountInfo.signingConfigurations.find(
-        (e) => e.bitcoinSimple?.keyInfo.keypath.startsWith("m/84'/0'")
-      )?.bitcoinSimple?.keyInfo.xpub;
-
-      if (!accountZpub) {
-        error(t("cannotGetXpub"));
-        return;
-      }
-
-      return accountZpub;
-    },
-    [error, t]
-  );
 
   const getAccountFirstAddress = useCallback(
     async (scriptType: ScriptType, account: string) => {
@@ -79,5 +76,5 @@ export const useSignature = (error: (msg: string) => void) => {
     []
   );
 
-  return { getAccounts, getAccountXpub, getAccountFirstAddress, signMessage };
+  return { getAccounts, getAccountFirstAddress, signMessage };
 };

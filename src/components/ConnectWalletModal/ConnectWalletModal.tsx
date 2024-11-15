@@ -12,6 +12,7 @@ import { UseFormSetValue, useForm } from "react-hook-form";
 import { AsyncStorage, sleep } from "@utils";
 import {
   keyStoreUserType,
+  keyStoreWalletPath,
   keyStoreWalletType,
   keyStoreZpub
 } from "@config/settingsKeys";
@@ -37,6 +38,7 @@ import { ACCESS_CONTROL } from "react-native-keychain";
 
 type ConnectWalletForm = {
   zPub: string;
+  path: string;
   message: string;
   signature: string;
 };
@@ -187,6 +189,7 @@ export const ConnectWalletModal = ({
           data.zPub,
           ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE
         );
+        await AsyncStorage.setItem(keyStoreWalletPath, data.path);
         await AsyncStorage.setItem(keyStoreUserType, UserType.Wallet);
         await AsyncStorage.setItem(keyStoreWalletType, "bitbox02");
         onClose({ ...data, walletType: "bitbox02" });

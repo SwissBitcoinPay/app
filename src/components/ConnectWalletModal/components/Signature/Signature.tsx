@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ComponentStack, FieldDescription, Loader } from "@components";
+import { Button, ComponentStack, FieldDescription, Loader } from "@components";
 import { ConnectWalletComponentProps } from "../../ConnectWalletModal";
 import { useToast } from "react-native-toast-notifications";
 import axios from "axios";
@@ -8,6 +8,18 @@ import { SBPBitboxContext, apiRootUrl } from "@config";
 import { useSignature } from "./hook";
 import * as ConnectStyled from "../../styled";
 import { DEFAULT_SCRIPT_TYPE } from "@config";
+import * as S from "./styled";
+import { AccountBalance } from "./components/AccountBalance";
+import { keyStoreWalletPath } from "@config/settingsKeys";
+import { AsyncStorage } from "@utils";
+
+export type Account = {
+  label: string;
+  account: string;
+  path: string;
+  zpub: string;
+  balance: number;
+};
 
 export const Signature = ({
   setValue,
@@ -20,7 +32,7 @@ export const Signature = ({
   });
 
   const [state, setState] = useState<
-    "getAccount" | "prepareSignature" | "waitingForSignature"
+    "getAccount" | "selectAccount" | "prepareSignature" | "waitingForSignature"
   >("getAccount");
 
   const { setAttentionToBitbox, pairedBitbox } = useContext(SBPBitboxContext);
@@ -32,16 +44,41 @@ export const Signature = ({
     [toast]
   );
 
-  const { getAccounts, getAccountXpub, signMessage } = useSignature(error);
+  const [promiseResolver, setPromiseResolver] = useState<Promise<string>>();
+
+  const [accounts, setAccounts] = useState<Account[]>();
+
+  const { getAccounts, signMessage } = useSignature(error);
 
   useEffect(() => {
     (async () => {
-      const accounts = await getAccounts();
-      setState("prepareSignature");
-      const account = accounts[0];
+      const _accounts = await getAccounts();
 
-      const accountXpub = await getAccountXpub(account);
-      setValue("zPub", accountXpub);
+      const walletPath = await AsyncStorage.getItem(keyStoreWalletPath);
+
+      let finalAccount: Account;
+
+      if (walletPath) {
+        finalAccount = _accounts.find((a) => a.path === walletPath);
+      } else if (_accounts.length > 1) {
+        const promise = new Promise<Account>((resolve) => {
+          setPromiseResolver(() => resolve);
+        });
+
+        setAccounts(_accounts);
+        setState("selectAccount");
+
+        const result = await promise;
+
+        finalAccount = result;
+      } else {
+        finalAccount = _accounts[0];
+      }
+
+      const { zpub: accountZpub, account, path } = finalAccount;
+      setState("prepareSignature");
+      setValue("zPub", accountZpub);
+      setValue("path", path);
 
       let success = false;
       let messageToSign: string;
@@ -51,7 +88,7 @@ export const Signature = ({
         const { data: verifyData } = await axios.post<{
           message: string;
         }>(`${apiRootUrl}/verify-address`, {
-          depositAddress: accountXpub
+          depositAddress: accountZpub
         });
         messageToSign = verifyData.message;
       } else {
@@ -61,7 +98,7 @@ export const Signature = ({
         const customSignatureData = await customFunction({
           bitbox: pairedBitbox,
           account,
-          xPub: accountXpub
+          xPub: accountZpub
         });
         if (customSignatureData) {
           messageToSign = customSignatureData.messageToSign;
@@ -76,7 +113,7 @@ export const Signature = ({
             const signatureData = await signMessage(
               DEFAULT_SCRIPT_TYPE,
               messageToSign,
-              accounts[0]
+              account
             );
 
             if (signatureData.success) {
@@ -106,7 +143,35 @@ export const Signature = ({
   return (
     <ComponentStack gapSize={10} style={{ alignItems: "center" }}>
       <ConnectStyled.Title>{t("title")}</ConnectStyled.Title>
-      {state !== "waitingForSignature" ? (
+      {state === "selectAccount" && accounts ? (
+        <ComponentStack>
+          <FieldDescription style={{ textAlign: "center" }}>
+            {t("selectAccount")}
+          </FieldDescription>
+          <ComponentStack gapSize={16}>
+            {accounts.map((a, i) => (
+              <S.AccountContainer key={i}>
+                <S.AccountInfoContainer>
+                  <S.AccountTitle>
+                    {a.label} <S.AccountSubTitle>{a.path}</S.AccountSubTitle>
+                  </S.AccountTitle>
+                  <AccountBalance xpub={a.zpub} />
+                </S.AccountInfoContainer>
+                <Button
+                  size="small"
+                  type="bitcoin"
+                  title={t("select")}
+                  onPress={() => {
+                    if (promiseResolver) {
+                      promiseResolver(a);
+                    }
+                  }}
+                />
+              </S.AccountContainer>
+            ))}
+          </ComponentStack>
+        </ComponentStack>
+      ) : state !== "waitingForSignature" ? (
         <Loader reason={t(state)} />
       ) : (
         <FieldDescription style={{ textAlign: "center" }}>

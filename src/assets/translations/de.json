@@ -416,7 +416,9 @@
       "verifySignature": "Überprüfung der Unterschrift",
       "cannotGetAccount": "Kann kein Konto erhalten",
       "cannotGetXpub": "Kann xpub nicht erhalten",
-      "signatureError": "Fehlermeldung beim Signieren. Bitte versuchen Sie es erneut"
+      "signatureError": "Fehlermeldung beim Signieren. Bitte versuchen Sie es erneut",
+      "selectAccount": "Wählen Sie das Konto, das Sie verwenden möchten",
+      "select": "Wählen Sie"
     }
   }
 }

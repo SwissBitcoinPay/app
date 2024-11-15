@@ -15,6 +15,8 @@ import { BitboxReadyFunctionParams } from "@components/ConnectWalletModal/Connec
 import { Wallet } from "./types";
 import { Bip84Account } from "@types";
 import { DEFAULT_NETWORK } from "@config";
+import { AsyncStorage } from "@utils/AsyncStorage";
+import { keyStoreWalletPath } from "@config/settingsKeys";
 
 const types = {
   // MULTISIG-* do not include pubkeys or signatures yet (this is calculated at runtime)
@@ -138,6 +140,9 @@ export const prepareTransaction = async ({
     };
   }
 
+  const rootPath =
+    (await AsyncStorage.getItem(keyStoreWalletPath)) || "m/84'/0'/0'";
+
   const usedUtxos: WalletTransaction[] = [];
   let inputAmount = 0;
   let finalFee = 0;
@@ -153,7 +158,7 @@ export const prepareTransaction = async ({
       `https://mempool.space/api/tx/${utxo.txid}/hex`
     );
 
-    const path = `m/84'/0'/0'/${utxo.change ? "1" : "0"}/${utxo.addressIndex}`;
+    const path = `${rootPath}/${utxo.change ? "1" : "0"}/${utxo.addressIndex}`;
 
     try {
       psbt.addInput({
@@ -214,7 +219,7 @@ export const prepareTransaction = async ({
             bipPublicAccount.getPublicKey(changeAddress.index, true),
             "hex"
           ),
-          path: `m/84'/0'/0'/1/${changeAddress.index}`
+          path: `${rootPath}/1/${changeAddress.index}`
         }
       ]
     });
