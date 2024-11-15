@@ -106,3 +106,5 @@ android/app/src/main/res/drawable-mdpi
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+scripts/bitbox-wallet-app
