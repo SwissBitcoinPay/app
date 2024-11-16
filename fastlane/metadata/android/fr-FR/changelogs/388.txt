@@ -1,0 +1,1 @@
+- Support de plusieurs comptes sur BitBox02
