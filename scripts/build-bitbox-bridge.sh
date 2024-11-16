@@ -13,6 +13,10 @@ git clone --depth 1 https://github.com/$ORG/$REPO.git
 
 cd $REPO
 
+BITBOX_BRIDGE_COMMIT=$(cat ../../android/app/libs/BITBOX_BRIDGE_COMMIT)
+git fetch origin $BITBOX_BRIDGE_COMMIT
+git checkout $BITBOX_BRIDGE_COMMIT
+
 # make dockerinit
 docker build --pull --force-rm -t shiftcrypto/bitbox-wallet-app .
 
