@@ -445,8 +445,12 @@ export const Invoice = () => {
       onChainAddr
         ? `bitcoin:${onChainAddr}?amount=${
             btcAmount || ""
-          }&label=${encodeURIComponent(title || "")}&lightning=${pr || ""}`
-        : `lightning:${pr || ""}`,
+          }&label=${encodeURIComponent(title || "")}${
+            pr ? `&lightning=${pr}` : ""
+          }`
+        : pr
+        ? `lightning:${pr || ""}`
+        : "",
     [pr, onChainAddr, btcAmount, title]
   );
 
@@ -576,12 +580,15 @@ export const Invoice = () => {
                     {t(!isWithdraw ? "scanToPayIn" : "scanToWithdraw")}
                   </S.TypeText>
                   <S.TypeText>
-                    <S.PayByIcon
-                      icon={faBolt}
-                      color={colors.lightning}
-                      size={TEXT_ICON_SIZE}
-                    />
-                    Lightning{onChainAddr ? ` ${t("or")}` : ""}
+                    {pr && (
+                      <S.PayByIcon
+                        icon={faBolt}
+                        color={colors.lightning}
+                        size={TEXT_ICON_SIZE}
+                      />
+                    )}
+                    {pr ? "Lightning" : ""}
+                    {pr && onChainAddr ? ` ${t("or")}` : ""}
                     {onChainAddr && (
                       <>
                         <S.PayByIcon>
