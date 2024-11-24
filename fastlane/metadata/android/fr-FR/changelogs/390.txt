@@ -1,0 +1,1 @@
+- Ajout de la mention de la licence FINMA
