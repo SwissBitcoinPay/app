@@ -6,12 +6,18 @@ const {
 
 const defaultConfig = getDefaultConfig(__dirname);
 
+const { assetExts, sourceExts } = defaultConfig.resolver;
+
 const config = {
   resolver: {
-    assetExts: [...defaultConfig.resolver.assetExts, "lottie"],
+    assetExts: [...assetExts.filter((ext) => ext !== "svg"), "lottie"],
+    sourceExts: [...sourceExts, "svg"],
     extraNodeModules: require("node-libs-react-native")
   },
   transformer: {
+    babelTransformerPath: require.resolve(
+      "react-native-svg-transformer/react-native"
+    ),
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,

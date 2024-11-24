@@ -38,7 +38,8 @@
       "orConnectBy": "oder verbinden durch",
       "scanActivationQRcode": "QR-Code zur Aktivierung scannen",
       "email": "E-Mail",
-      "signature": "Unterschrift"
+      "signature": "Unterschrift",
+      "licensedBy": "lizenziert durch die"
     },
     "emailLogin": {
       "title": "Anmeldung per E-Mail",

@@ -20,7 +20,13 @@ import { colors } from "./gradient-config";
 import { useWindowDimensions } from "react-native";
 import { useTheme } from "styled-components";
 import { useMemo } from "react";
-import { useQrLoginScan, useScanQr, useVersionTag } from "@hooks";
+import {
+  useIsScreenSizeMin,
+  useQrLoginScan,
+  useScanQr,
+  useVersionTag
+} from "@hooks";
+import FinmaSvg from "@assets/images/finma.svg";
 import * as S from "./styled";
 
 export const Welcome = () => {
@@ -30,6 +36,7 @@ export const Welcome = () => {
   const { height, width } = useWindowDimensions();
   const qrLoginScan = useQrLoginScan();
   const startQrScan = useScanQr({ onScan: qrLoginScan });
+  const isLarge = useIsScreenSizeMin("large");
 
   const higherWindowSize = useMemo(
     () => (height > width ? height : width),
@@ -40,6 +47,33 @@ export const Welcome = () => {
     () => t("introTitle").split("{{bitcoin}}"),
     [t]
   );
+
+  const finmaSizes /* hopefully never too big */ = useMemo(() => {
+    const ORIGINAL_LOGO_SIZE = [192.25, 80];
+    if (isLarge) {
+      return {
+        container: { style: { marginBottom: 14 } },
+        textsContainer: {
+          style: { marginTop: 1, marginRight: 6 }
+        },
+        text: { h5: true },
+        logo: {
+          width: ORIGINAL_LOGO_SIZE[0] / 1.13,
+          height: ORIGINAL_LOGO_SIZE[1] / 1.13
+        }
+      };
+    } else {
+      return {
+        container: { style: { marginBottom: 12 } },
+        textsContainer: { style: { marginRight: 3 } },
+        text: { h8: true },
+        logo: {
+          width: ORIGINAL_LOGO_SIZE[0] / 1.8,
+          height: ORIGINAL_LOGO_SIZE[1] / 1.8
+        }
+      };
+    }
+  }, [isLarge]);
 
   return (
     <>
@@ -73,13 +107,23 @@ export const Welcome = () => {
             </Text>
             {introTextParts[1]}.
           </S.TagLine>
-
           <S.SubTagLine>😎 {t("easily")}.</S.SubTagLine>
           <S.SubTagLine>🌎 {t("worldwide")}.</S.SubTagLine>
           <S.SubTagLine>🔒 {t("nonCustodial")}.</S.SubTagLine>
           <S.SubTagLine>🛡️ {t("noKyc")}.</S.SubTagLine>
           <S.SubTagLine>⚡ {t("in1minute")}.</S.SubTagLine>
         </S.FirstPart>
+        <S.FinmaContainer {...finmaSizes.container}>
+          <S.FinmaTextsContainer {...finmaSizes.textsContainer}>
+            <S.FinmaText {...finmaSizes.text}>
+              {t("licensedBy")} FINMA
+            </S.FinmaText>
+            <S.FinmaText {...finmaSizes.text}>
+              Swiss Financial Market Supervisory Authority
+            </S.FinmaText>
+          </S.FinmaTextsContainer>
+          <FinmaSvg {...finmaSizes.logo} />
+        </S.FinmaContainer>
         <Button
           title={t("createAccount")}
           icon={faUserPlus}
