@@ -1,0 +1,1 @@
+- Don't display lightning invoice for very high invoices (100'000+ CHF-equivalent)
