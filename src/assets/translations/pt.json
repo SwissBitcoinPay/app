@@ -38,7 +38,8 @@
       "orConnectBy": "ou ligue-se através de",
       "scanActivationQRcode": "Digitalizar o código QR de ativação",
       "email": "E-mail",
-      "signature": "Assinatura"
+      "signature": "Assinatura",
+      "licensedBy": "Aprovado pela"
     },
     "emailLogin": {
       "title": "Início de sessão por e-mail",

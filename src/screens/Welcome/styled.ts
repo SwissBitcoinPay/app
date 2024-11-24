@@ -32,6 +32,27 @@ export const FirstPart = styled(View)`
   justify-content: center;
 `;
 
+export const FinmaContainer = styled(View)`
+  margin-top: -30px;
+  width: 100%;
+  flex-direction: row;
+  align-items: flex-start;
+  opacity: 0.55;
+`;
+
+export const FinmaTextsContainer = styled(View)`
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-end;
+`;
+
+export const FinmaText = styled(Text).attrs(() => ({
+  weight: 500
+}))`
+  text-align: right;
+  color: ${({ theme }) => theme.colors.white};
+`;
+
 export const TagLine = styled(Text).attrs(() => ({ h2: true, weight: 700 }))`
   color: ${({ theme }) => theme.colors.white};
   line-height: 34px;
