@@ -38,7 +38,7 @@ import {
 import { useToast } from "react-native-toast-notifications";
 import { faBitcoin } from "@fortawesome/free-brands-svg-icons";
 import { platform } from "../../config/platform";
-import { Linking, getFormattedUnit, isApiError } from "../../utils";
+import { Linking, Printer, getFormattedUnit, isApiError } from "../../utils";
 import {
   useIsScreenSizeMin,
   useNfc,
@@ -63,12 +63,18 @@ import LottieView from "lottie-react-native";
 import * as S from "./styled";
 import { XOR } from "ts-essentials";
 import { numberWithSpaces } from "@utils/numberWithSpaces";
+import { AlignValue } from "@heasy/react-native-sunmi-printer";
+import { intlFormat } from "date-fns";
+import * as SunmiPrinterLibrary from "@mitsuharu/react-native-sunmi-printer-library";
+import SunmiV2Printer from "react-native-sunmi-v2-printer";
+import PrinterSunmi from "react-native-printer-sunmi";
+import { Sunmi } from "@bistroo/capacitor-plugin-sunmi";
 
 const PAID_ANIMATION_DURATION = 350;
 
 const getTrue = () => true;
 
-const { isWeb, isIos } = platform;
+const { isWeb, isIos, isBitcoinize } = platform;
 
 type Status =
   | "draft"
@@ -133,6 +139,11 @@ export type InvoiceType = {
   redirectUrl: `http://${string}`;
 };
 
+type FiatData = {
+  fiatAmount: number;
+  fiatUnit: string;
+};
+
 const truncate = (str: string, length: number, separator = "...") => {
   const pad = Math.round(length - separator.length) / 2;
   const start = str.substr(0, pad);
@@ -151,7 +162,9 @@ export const Invoice = () => {
   const { colors, gridSize } = useTheme();
   const toast = useToast();
   const versionTag = useVersionTag();
-  const { t } = useTranslation(undefined, { keyPrefix: "screens.invoice" });
+  const { t, i18n } = useTranslation(undefined, {
+    keyPrefix: "screens.invoice"
+  });
   const { t: tRoot } = useTranslation();
   const { bottom: bottomInset } = useSafeAreaInsets();
   const { width: windowWidth } = useWindowDimensions();
@@ -263,18 +276,127 @@ export const Invoice = () => {
 
   const successLottieRef = useRef<LottieView>(null);
 
-  const onPaid = useCallback(() => {
-    Vibration.vibrate(50);
-    if (!isExternalInvoice) {
-      setBackgroundColor(colors.success, PAID_ANIMATION_DURATION);
-    }
-    setTimeout(
-      () => {
-        successLottieRef.current?.play();
-      },
-      isExternalInvoice ? 0 : 350
-    );
-  }, [colors.success, isExternalInvoice, setBackgroundColor]);
+  const printTicket = useCallback(
+    async (invoiceType: InvoiceType) => {
+      // Ticket if Sunmi
+
+      // const hasPrinter = await Printer.hasPrinter();
+
+      // await SunmiV2Printer.setFontSize(40);
+      // await SunmiV2Printer.printOriginalText("Title name\n");
+
+      const hasPrinter = PrinterSunmi.getInfo();
+      console.log({ hasPrinter });
+      console.log("step 1");
+      await PrinterSunmi.connect();
+      console.log("step 2");
+
+      PrinterSunmi.enableTransMode(true);
+      console.log("step 3");
+
+      PrinterSunmi.initLine({ align: "CENTER" });
+      console.log("step 4");
+
+      PrinterSunmi.printText("测试小票打印", { textSize: 32, bold: true });
+      console.log("step 5");
+
+      PrinterSunmi.printTrans();
+
+      console.log("step 6");
+      // console.log("step 1");
+
+      // Sunmi.start();
+      // console.log("step 2");
+
+      // Sunmi.line("Super long text cool");
+      // console.log("step 3");
+
+      // await Sunmi.print();
+      // console.log("step 4");
+
+      // console.log({ hasPrinter });
+      // Printer.printerInit();
+
+      // try {
+      //   // await SunmiPrinterLibrary.prepare();
+      //   // await SunmiPrinterLibrary.printText("Hello World");
+      // } catch (error: any) {
+      //   console.warn("This device is not supported.");
+      //   console.log(error);
+      // }
+
+      // Printer.setFontName("Poppins-SemiBold");
+      // Printer.setFontSize(30);
+      // Printer.lineWrap(1);
+      // Printer.setAlignment(AlignValue.CENTER);
+      // Printer.printerText();
+      // Printer.printBitmap(printLogo, 384);
+      // Printer.lineWrap(1);
+      // Printer.setAlignment(AlignValue.CENTER);
+      // Printer.printerText("Bitcoin payment");
+      // Printer.lineWrap(2);
+      // Printer.printerText(
+      //   intlFormat(
+      //     new Date(),
+      //     {
+      //       day: "numeric",
+      //       month: "long",
+      //       year: "numeric",
+      //       hour: "numeric",
+      //       minute: "numeric",
+      //       formatMatcher: "basic"
+      //     },
+      //     { locale: i18n.language }
+      //   )
+      // );
+      // Printer.lineWrap(3);
+      // Printer.printColumnsString(
+      //   [
+      //     "Amount",
+      //     getFormattedUnit(invoiceType.input.amount, invoiceType.input.unit)
+      //   ],
+      //   [60, 120],
+      //   [AlignValue.LEFT, AlignValue.RIGHT]
+      // );
+      // Printer.lineWrap(1);
+      // Printer.printColumnsString(
+      //   ["BTC Amount", `${getInvoiceData.amount} sats`],
+      //   [80, 100],
+      //   [AlignValue.LEFT, AlignValue.RIGHT]
+      // );
+      // Printer.lineWrap(1);
+      // Printer.setAlignment(AlignValue.CENTER);
+      // Printer.lineWrap(1);
+      // Printer.setAlignment(AlignValue.CENTER);
+      // Printer.printerText("Thanks for your visit !");
+      // Printer.lineWrap(3);
+      // Printer.printerText("");
+    },
+    [i18n.language]
+  );
+
+  useEffect(() => {
+    printTicket({ input: { amount: 1, unit: "CHF" } });
+  }, []);
+
+  const onPaid = useCallback(
+    (invoiceType: InvoiceType) => {
+      Vibration.vibrate(50);
+      if (!isExternalInvoice) {
+        if (isBitcoinize) {
+          printTicket(invoiceType);
+        }
+        setBackgroundColor(colors.success, PAID_ANIMATION_DURATION);
+      }
+      setTimeout(
+        () => {
+          successLottieRef.current?.play();
+        },
+        isExternalInvoice ? 0 : 350
+      );
+    },
+    [colors.success, isExternalInvoice, printTicket, setBackgroundColor]
+  );
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -391,7 +513,7 @@ export const Invoice = () => {
         setIsInit(true);
 
         if (getInvoiceData.status === "settled" && status !== "settled") {
-          onPaid();
+          onPaid(getInvoiceData);
         }
 
         if (getInvoiceData.redirectUrl) {
