@@ -118,9 +118,7 @@ export const Welcome = () => {
             <S.FinmaText {...finmaSizes.text}>
               {t("licensedBy")} FINMA
             </S.FinmaText>
-            <S.FinmaText {...finmaSizes.text}>
-              Swiss Financial Market Supervisory Authority
-            </S.FinmaText>
+            <S.FinmaText {...finmaSizes.text}>{t("finma")}</S.FinmaText>
           </S.FinmaTextsContainer>
           <FinmaSvg {...finmaSizes.logo} />
         </S.FinmaContainer>
