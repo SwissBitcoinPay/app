@@ -39,7 +39,8 @@
       "scanActivationQRcode": "Scanner le code QR d'activation",
       "email": "E-mail",
       "signature": "Signature",
-      "licensedBy": "Agréé par la"
+      "licensedBy": "Agréé par la",
+      "finma": "Autorité fédérale de surveillance des marchés financiers"
     },
     "emailLogin": {
       "title": "Connexion e-mail",
