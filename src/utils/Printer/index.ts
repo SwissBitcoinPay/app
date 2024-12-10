@@ -1,1 +1,1 @@
-export { Printer, PrinterAlignValue } from "./Printer";
+export { Printer } from "./Printer";

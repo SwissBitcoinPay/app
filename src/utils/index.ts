@@ -24,4 +24,5 @@ export { Bitbox } from "./Bitbox";
 export { numberWithSpaces } from "./numberWithSpaces";
 export { prepareTransaction } from "./wallet";
 export { useErrorBoundary } from "./useErrorBoundary";
-export { Printer, PrinterAlignValue } from "./Printer";
+export { Printer } from "./Printer";
+export { printInvoiceTicket } from "./printInvoiceTicket";

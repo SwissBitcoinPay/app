@@ -38,7 +38,13 @@ import {
 import { useToast } from "react-native-toast-notifications";
 import { faBitcoin } from "@fortawesome/free-brands-svg-icons";
 import { platform } from "../../config/platform";
-import { Linking, Printer, getFormattedUnit, isApiError } from "../../utils";
+import {
+  Linking,
+  Printer,
+  getFormattedUnit,
+  isApiError,
+  printInvoiceTicket
+} from "../../utils";
 import {
   useIsScreenSizeMin,
   useNfc,
@@ -69,6 +75,7 @@ import * as SunmiPrinterLibrary from "@mitsuharu/react-native-sunmi-printer-libr
 import SunmiV2Printer from "react-native-sunmi-v2-printer";
 import PrinterSunmi from "react-native-printer-sunmi";
 import { Sunmi } from "@bistroo/capacitor-plugin-sunmi";
+import { printText, printTable, paperOut } from "react-native-nyx-printer";
 
 const PAID_ANIMATION_DURATION = 350;
 
@@ -277,53 +284,37 @@ export const Invoice = () => {
   const successLottieRef = useRef<LottieView>(null);
 
   const printTicket = useCallback(
-    async (invoiceType: InvoiceType) => {
-      // Ticket if Sunmi
+    async (invoice: InvoiceType) => {
+      if (!isBitcoinize) return;
 
-      // const hasPrinter = await Printer.hasPrinter();
+      const labelTextStyle = {
+        textSize: 24,
+        letterSpacing: 0,
+        align: 0, // left
+        style: 1, // bold
+        font: 0 // default font
+      };
+      const valueTextStyle = {
+        textSize: 24,
+        letterSpacing: 0,
+        align: 2, // right
+        style: 1, // bold
+        font: 0 // default font
+      };
 
-      // await SunmiV2Printer.setFontSize(40);
-      // await SunmiV2Printer.printOriginalText("Title name\n");
+      printInvoiceTicket(invoice);
 
-      const hasPrinter = PrinterSunmi.getInfo();
-      console.log({ hasPrinter });
-      console.log("step 1");
-      await PrinterSunmi.connect();
-      console.log("step 2");
+      // printText("Label A");
+      // printText("Value A");
+      // paperOut();
 
-      PrinterSunmi.enableTransMode(true);
-      console.log("step 3");
+      // printText("Label B", labelTextStyle);
+      // printText("Value B", valueTextStyle);
+      // paperOut();
 
-      PrinterSunmi.initLine({ align: "CENTER" });
-      console.log("step 4");
-
-      PrinterSunmi.printText("测试小票打印", { textSize: 32, bold: true });
-      console.log("step 5");
-
-      PrinterSunmi.printTrans();
-
-      console.log("step 6");
-      // console.log("step 1");
-
-      // Sunmi.start();
-      // console.log("step 2");
-
-      // Sunmi.line("Super long text cool");
-      // console.log("step 3");
-
-      // await Sunmi.print();
-      // console.log("step 4");
-
-      // console.log({ hasPrinter });
-      // Printer.printerInit();
-
-      // try {
-      //   // await SunmiPrinterLibrary.prepare();
-      //   // await SunmiPrinterLibrary.printText("Hello World");
-      // } catch (error: any) {
-      //   console.warn("This device is not supported.");
-      //   console.log(error);
-      // }
+      // printText("Label C", labelTextStyle);
+      // printText("Value C", valueTextStyle);
+      // paperOut();
 
       // Printer.setFontName("Poppins-SemiBold");
       // Printer.setFontSize(30);

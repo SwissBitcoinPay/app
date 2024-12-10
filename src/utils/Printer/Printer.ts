@@ -1,4 +1,5 @@
 import SunmiPrinter from "@heasy/react-native-sunmi-printer";
+import * as PrinterNative from "./Printer.native";
 
 export enum PrinterAlignValue {
   LEFT = 0,
@@ -6,9 +7,20 @@ export enum PrinterAlignValue {
   RIGHT = 2
 }
 
-export const Printer = {} as unknown as Omit<
-  typeof SunmiPrinter,
-  "setAlignment"
-> & {
-  setAlignment: (a: PrinterAlignValue) => void;
+type PrinterType = (typeof PrinterNative)["Printer"];
+
+const printLabelValue: PrinterType["printLabelValue"] = () => {};
+const printText: PrinterType["printText"] = () => {};
+const printQrCode: PrinterType["printQrCode"] = () => {};
+const paperOut: PrinterType["paperOut"] = () => {};
+
+const Printer = {
+  printLabelValue,
+  printText,
+  printQrCode,
+  paperOut
 };
+
+export { Printer };
+
+// export const Printer = {};

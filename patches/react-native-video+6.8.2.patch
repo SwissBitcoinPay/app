@@ -1,8 +1,8 @@
 diff --git a/node_modules/react-native-video/lib/Video.web.js b/node_modules/react-native-video/lib/Video.web.js
-index 85fc7ed..fbb4b6f 100644
+index b86108f..f762ffa 100644
 --- a/node_modules/react-native-video/lib/Video.web.js
 +++ b/node_modules/react-native-video/lib/Video.web.js
-@@ -241,7 +241,6 @@ const Video = (0, react_1.forwardRef)(({ source, paused, muted, volume, rate, re
+@@ -273,7 +273,6 @@ const Video = (0, react_1.forwardRef)(({ source, paused, muted, volume, rate, re
          }, onEnded: onEnd, style: videoStyle }));
  });
  const videoStyle = {
@@ -11,10 +11,10 @@ index 85fc7ed..fbb4b6f 100644
      objectFit: 'contain',
      width: '100%',
 diff --git a/node_modules/react-native-video/src/Video.web.tsx b/node_modules/react-native-video/src/Video.web.tsx
-index 85f71a9..9b3957a 100644
+index a8b5a21..309e13f 100644
 --- a/node_modules/react-native-video/src/Video.web.tsx
 +++ b/node_modules/react-native-video/src/Video.web.tsx
-@@ -323,7 +323,6 @@ const Video = forwardRef<VideoRef, ReactVideoProps>(
+@@ -366,7 +366,6 @@ const Video = forwardRef<VideoRef, ReactVideoProps>(
  );
  
  const videoStyle = {
