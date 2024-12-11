@@ -23,7 +23,6 @@ export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
       () =>
         isIos
           ? {
-              value: tmpValue?.value || value,
               onValueChange: (v, i) => setTmpValue({ value: v, index: i }),
               onClose: () => {
                 if (tmpValue) {
@@ -35,11 +34,11 @@ export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
           : {
               onValueChange
             },
-      [onValueChange, tmpValue, value]
+      [onValueChange, tmpValue]
     );
 
     const itemsWithColor = useMemo(
-      () => items.map((i) => ({ ...i, color: colors.primary })),
+      () => items.map((i) => ({ ...i, color: colors.primary, key: i.value })),
       [colors.primary, items]
     );
 
@@ -48,6 +47,7 @@ export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
         ref={ref}
         {...props}
         {...selectProps}
+        itemKey={tmpValue?.value || value}
         items={itemsWithColor}
         style={{
           inputAndroid: {
