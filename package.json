@@ -30,7 +30,7 @@
     "@react-native-clipboard/clipboard": "1.13.2",
     "@react-native-community/checkbox": "0.5.17",
     "@react-native-community/slider": "4.5.0",
-    "@react-native-picker/picker": "2.9.0",
+    "@react-native-picker/picker": "2.10.2",
     "@react-native/assets-registry": "0.76.3",
     "@react-spring/native": "9.7.5",
     "@react-spring/web": "9.7.5",
