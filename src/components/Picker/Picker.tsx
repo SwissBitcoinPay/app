@@ -6,7 +6,7 @@ import RNPickerSelect, {
 } from "react-native-picker-select";
 import { useTheme } from "styled-components";
 
-const { isIos } = platform;
+const { isIos, isNative } = platform;
 type PickerRootProps = Omit<PickerSelectProps, "style"> & {
   style?: PickerStyle["viewContainer"];
 };
@@ -21,7 +21,7 @@ export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
 
     const selectProps = useMemo<Partial<PickerSelectProps>>(
       () =>
-        isIos
+        isIos && isNative
           ? {
               onValueChange: (v, i) => setTmpValue({ value: v, index: i }),
               onClose: () => {
