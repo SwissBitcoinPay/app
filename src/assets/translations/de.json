@@ -39,7 +39,8 @@
       "scanActivationQRcode": "QR-Code zur Aktivierung scannen",
       "email": "E-Mail",
       "signature": "Unterschrift",
-      "licensedBy": "lizenziert durch die"
+      "licensedBy": "lizenziert durch die",
+      "finma": "Eidgenössische Finanzmarktaufsicht"
     },
     "emailLogin": {
       "title": "Anmeldung per E-Mail",

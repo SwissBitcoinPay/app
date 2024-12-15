@@ -62,7 +62,7 @@ export const SelectField = forwardRef<RNPickerSelect, SelectFieldProps>(
         component={
           <S.Picker
             ref={ref}
-            value={value}
+            value={valueProps}
             {...props}
             onValueChange={onValueChange}
           />

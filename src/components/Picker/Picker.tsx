@@ -6,7 +6,7 @@ import RNPickerSelect, {
 } from "react-native-picker-select";
 import { useTheme } from "styled-components";
 
-const { isIos } = platform;
+const { isIos, isNative } = platform;
 type PickerRootProps = Omit<PickerSelectProps, "style"> & {
   style?: PickerStyle["viewContainer"];
 };
@@ -21,9 +21,8 @@ export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
 
     const selectProps = useMemo<Partial<PickerSelectProps>>(
       () =>
-        isIos
+        isIos && isNative
           ? {
-              value: tmpValue?.value || value,
               onValueChange: (v, i) => setTmpValue({ value: v, index: i }),
               onClose: () => {
                 if (tmpValue) {
@@ -35,11 +34,11 @@ export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
           : {
               onValueChange
             },
-      [onValueChange, tmpValue, value]
+      [onValueChange, tmpValue]
     );
 
     const itemsWithColor = useMemo(
-      () => items.map((i) => ({ ...i, color: colors.primary })),
+      () => items.map((i) => ({ ...i, color: colors.primary, key: i.value })),
       [colors.primary, items]
     );
 
@@ -48,6 +47,7 @@ export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
         ref={ref}
         {...props}
         {...selectProps}
+        itemKey={tmpValue?.value || value}
         items={itemsWithColor}
         style={{
           inputAndroid: {

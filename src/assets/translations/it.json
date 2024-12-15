@@ -39,7 +39,8 @@
       "scanActivationQRcode": "Scansiona il QR code d'accesso",
       "email": "Email",
       "signature": "Firma",
-      "licensedBy": "Approvato dalla"
+      "licensedBy": "Approvato dalla",
+      "finma": "Autorità federale di vigilanza sui mercati finanziari"
     },
     "emailLogin": {
       "title": "Accedi con l'e-mail",
