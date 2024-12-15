@@ -17,6 +17,7 @@
     "clean": "react-native clean-project-auto"
   },
   "dependencies": {
+    "@bam.tech/react-native-image-resizer": "3.0.11",
     "@bitcoinerlab/secp256k1": "1.1.1",
     "@dotlottie/react-player": "1.6.6",
     "@fortawesome/fontawesome-svg-core": "6.6.0",
@@ -84,9 +85,11 @@
     "react-native-encrypted-storage": "4.0.3",
     "react-native-error-boundary": "1.2.5",
     "react-native-fast-image": "8.6.3",
+    "react-native-fs": "2.20.0",
     "react-native-keychain": "8.1.2",
     "react-native-linear-gradient": "2.8.3",
     "react-native-nfc-manager": "3.14.12",
+    "react-native-nyx-printer": "github:SwissBitcoinPay/react-native-nyx-printer#4b31680",
     "react-native-picker-select": "9.3.1",
     "react-native-progress": "5.0.1",
     "react-native-qrcode-svg": "6.3.0",
@@ -98,7 +101,7 @@
     "react-native-svg": "15.9.0",
     "react-native-toast-notifications": "3.4.0",
     "react-native-use-keyboard": "1.0.0",
-    "react-native-video": "github:zoriya/react-native-video#feat/web",
+    "react-native-video": "6.8.2",
     "react-native-vision-camera": "4.5.3",
     "react-native-web": "0.19.13",
     "react-native-web-linear-gradient": "1.1.2",

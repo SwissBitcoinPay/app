@@ -147,7 +147,8 @@
       "scanToYourPhone": "Scannez pour accéder à cette page sur votre téléphone",
       "scanToPayIn": "Scanner pour payer en Bitcoin par",
       "or": "ou",
-      "scanToWithdraw": "Scanner pour recevoir des bitcoins via"
+      "scanToWithdraw": "Scanner pour recevoir des bitcoins via",
+      "printReceipt": "Imprimer reçu"
     },
     "history": {
       "title": "Historique des transactions",
@@ -168,6 +169,10 @@
       "userType": "Type d'utilisateur",
       "patchSettingSuccessful": "Paramètre mis à jour avec succès",
       "patchSettingError": "Erreur lors de la mise à jour du paramètre",
+      "tickets": "Reçus automatiques",
+      "ticketsPrinting": "Impression automatique des reçus",
+      "testPrint": "Test d'impression",
+      "ticketsPrintingDescription": "Les reçus de paiement peuvent être imprimés automatiquement après le paiement de chaque facture.",
       "merchantName": "Nom du commerce",
       "merchantNameDescription": "Le nom du commerce est présent sur toutes les factures que vous et vos employés générez.",
       "currency": "Devise",
@@ -422,5 +427,16 @@
       "selectAccount": "Sélectionnez le compte que vous souhaitez utiliser",
       "select": "Sélectionner"
     }
+  },
+  "printTicket": {
+    "paidInBitcoin": "Payé en bitcoins",
+    "amount": "Montant",
+    "fiatAmount": "Montant en Fiat",
+    "paidVia": "Payé via",
+    "paidAt": "Payé le",
+    "note": "Note",
+    "invoiceId": "ID de la facture",
+    "thanks": "Merci d'acheter avec ₿itcoin",
+    "poweredBy": "Propulsé par"
   }
 }

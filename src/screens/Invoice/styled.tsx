@@ -219,8 +219,7 @@ export const TapAnywhereCatcher = styled(Pressable)`
 `;
 
 export const TapAnywhereStack = styled(ComponentStack)`
-  width: auto;
-  align-items: center;
+  ${({ theme }) => `padding-horizontal: ${theme.gridSize}px;`}
 `;
 
 export const PoweredContainer = styled(ComponentStack)`

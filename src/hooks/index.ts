@@ -14,3 +14,4 @@ export { useTimer } from "./useTimer";
 export { useVersionTag } from "./useVersionTag";
 export { useScanQr } from "./useScanQr";
 export { useQrLoginScan } from "./useQrLoginScan";
+export { usePrintInvoiceTicket } from "./usePrintInvoiceTicket";

@@ -147,7 +147,8 @@
       "scanToYourPhone": "Scan to access this page on your phone",
       "scanToPayIn": "Scan to pay in Bitcoin by",
       "or": "or",
-      "scanToWithdraw": "Scan to receive bitcoin via"
+      "scanToWithdraw": "Scan to receive bitcoin via",
+      "printReceipt": "Print receipt"
     },
     "history": {
       "title": "Transaction history",
@@ -168,6 +169,10 @@
       "userType": "User type",
       "patchSettingSuccessful": "Setting successfully updated",
       "patchSettingError": "Error updating setting",
+      "tickets": "Automatic receipts",
+      "ticketsPrinting": "Automatic receipt printing",
+      "testPrint": "Test print",
+      "ticketsPrintingDescription": "Payment receipts can be printed automatically after each invoice is paid",
       "merchantName": "Merchant name",
       "merchantNameDescription": "The merchant name is present in all invoices you and your employees generates",
       "currency": "Currency",
@@ -422,5 +427,16 @@
     "serverInMaintenance": "Server in maintenance. Please try again later",
     "noKycLimit": "You have reached the non-KYC limit",
     "accountNotVerified": "Verify your deposit address on your dashboard"
+  },
+  "printTicket": {
+    "paidInBitcoin": "Paid in Bitcoin",
+    "amount": "Amount",
+    "fiatAmount": "Fiat amount",
+    "paidVia": "Paid via",
+    "paidAt": "Paid at",
+    "note": "Note",
+    "invoiceId": "Invoice ID",
+    "thanks": "Thanks for buying with ₿itcoin",
+    "poweredBy": "Powered by"
   }
 }

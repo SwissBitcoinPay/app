@@ -9,6 +9,7 @@ export type AccountConfigType = {
   isOnchainAvailable: boolean;
   isAtm: boolean;
   hasKyc: boolean;
+  logoUrl?: string;
 
   // Visible by admin only
   mail?: string;

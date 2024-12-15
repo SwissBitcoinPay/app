@@ -60,7 +60,7 @@ export const Button = styled(Pressable)<{
         mode === "normal"
           ? `background-color: ${!disabled ? primaryColor : disabledColor};`
           : `
-            background-color: ${theme.colors.primary};
+            background-color: transparent;
             border: ${borderSize}px solid ${
               !disabled ? primaryColor : disabledColor
             };`
@@ -71,7 +71,7 @@ export const Button = styled(Pressable)<{
       ${size !== "small" ? "width: 100%; flex-shrink: 1;" : ""}
       ${isRound ? `width: ${height}px; border-radius: ${height / 2}px;` : ""}
       ${disabled ? "opacity: 1;" : "cursor: pointer;"}
-      ${!noShadow ? getShadow() : ""}
+      ${!noShadow && mode !== "outline" ? getShadow() : ""}
     `;
   }}
 

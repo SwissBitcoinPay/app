@@ -37,6 +37,7 @@ export const Button = ({
   copyContent,
   secondaryColor: propsSecondaryColor,
   icon = copyContent ? faCopy : undefined,
+  android_ripple,
   ...props
 }: ButtonProps) => {
   const theme = useTheme();
@@ -109,10 +110,14 @@ export const Button = ({
       primaryColor={primaryColor}
       disabled={disabled || isLoading}
       isRound={!!icon && !title}
-      android_ripple={{
-        color: "rgba(0, 0, 0, 0.2)",
-        foreground: true
-      }}
+      android_ripple={
+        android_ripple !== undefined
+          ? android_ripple
+          : {
+              color: "rgba(0, 0, 0, 0.2)",
+              foreground: true
+            }
+      }
     >
       {(icon || isContentCopied) && (
         <S.ButtonIcon

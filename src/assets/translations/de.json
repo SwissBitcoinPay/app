@@ -147,7 +147,8 @@
       "scanToYourPhone": "Scannen, um diese Seite auf Ihrem Handy aufzurufen",
       "scanToPayIn": "Scannen, um in Bitcoin zu bezahlen mit",
       "or": "oder",
-      "scanToWithdraw": "Scannen, um Bitcoin zu empfangen über"
+      "scanToWithdraw": "Scannen, um Bitcoin zu empfangen über",
+      "printReceipt": "Beleg drucken"
     },
     "history": {
       "title": "Verlauf der Transaktionen",
@@ -187,7 +188,11 @@
       "logout": "Abmelden",
       "confirmLogout": "Bestätigen Sie die Abmeldung",
       "confirmLogoutDescription": "Nach der Abmeldung müssen Sie den Aktivierungscode erneut einscannen oder eine Verbindung mit den Anmeldedaten herstellen",
-      "logoutSuccessful": "Erfolgreiche Trennung der Verbindung"
+      "logoutSuccessful": "Erfolgreiche Trennung der Verbindung",
+      "tickets": "Automatische Quittungen",
+      "ticketsPrinting": "Automatischer Belegdruck",
+      "testPrint": "Testdruck",
+      "ticketsPrintingDescription": "Zahlungsbelege können automatisch gedruckt werden, nachdem jede Rechnung bezahlt wurde"
     },
     "payoutConfig": {
       "title": "Konfiguration der Auszahlung",
@@ -422,5 +427,16 @@
       "selectAccount": "Wählen Sie das Konto, das Sie verwenden möchten",
       "select": "Wählen Sie"
     }
+  },
+  "printTicket": {
+    "paidInBitcoin": "Bezahlt in Bitcoin",
+    "amount": "Betrag",
+    "fiatAmount": "Fiat-Betrag",
+    "paidVia": "Bezahlt über",
+    "paidAt": "Bezahlt am",
+    "note": "Hinweis",
+    "invoiceId": "Rechnungs-ID",
+    "thanks": "Danke für den Kauf mit ₿itcoin",
+    "poweredBy": "Angetrieben durch"
   }
 }

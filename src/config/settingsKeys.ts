@@ -16,6 +16,7 @@ export const keyStoreDeviceName = "settings.deviceName";
 export const keyStoreHmac = "settings.hmac";
 export const keyStoreIsGuest = "settings.isGuest";
 export const keyStoreTransactionsHistory = "data.transactionsHistory";
+export const keyStoreTicketsAutoPrint = "settings.ticketsAutoPrint";
 
 // Local wallet config
 export const keyStoreZpub = "settings.wallet.zPub";

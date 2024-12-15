@@ -39,7 +39,8 @@
       "scanActivationQRcode": "Digitalizar o código QR de ativação",
       "email": "E-mail",
       "signature": "Assinatura",
-      "licensedBy": "Aprovado pela"
+      "licensedBy": "Aprovado pela",
+      "finma": "Swiss Financial Market Supervisory Authority"
     },
     "emailLogin": {
       "title": "Início de sessão por e-mail",
@@ -146,7 +147,8 @@
       "scanToYourPhone": "Digitalize para aceder a esta página no seu telemóvel",
       "scanToPayIn": "Digitalizar para pagar em Bitcoin por",
       "or": "ou",
-      "scanToWithdraw": "Digitalizar para receber bitcoin através de"
+      "scanToWithdraw": "Digitalizar para receber bitcoin através de",
+      "printReceipt": "Imprimir recibo"
     },
     "history": {
       "title": "Histórico de transações",
@@ -186,7 +188,11 @@
       "logout": "Terminar sessão",
       "confirmLogout": "Confirmar terminar sessão",
       "confirmLogoutDescription": "Depois de terminar a sessão, terá de digitalizar novamente o código de ativação ou entrar com as credenciais",
-      "logoutSuccessful": "Sessão terminada com sucesso"
+      "logoutSuccessful": "Sessão terminada com sucesso",
+      "tickets": "Recibos automáticos",
+      "ticketsPrinting": "Impressão automática de recibos",
+      "testPrint": "Impressão de teste",
+      "ticketsPrintingDescription": "Os recibos de pagamento podem ser impressos automaticamente após o pagamento de cada fatura"
     },
     "payoutConfig": {
       "title": "Configurações de pagamento",
@@ -421,5 +427,16 @@
       "selectAccount": "Selecionar a conta que pretende utilizar",
       "select": "Selecionar"
     }
+  },
+  "printTicket": {
+    "paidInBitcoin": "Pago em Bitcoin",
+    "amount": "Montante",
+    "fiatAmount": "Montante Fiat",
+    "paidVia": "Pago através de",
+    "paidAt": "Pago em",
+    "note": "Nota",
+    "invoiceId": "ID da fatura",
+    "thanks": "Obrigado por comprar com ₿itcoin",
+    "poweredBy": "Alimentado por"
   }
 }

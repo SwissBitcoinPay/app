@@ -32,19 +32,20 @@ import {
   faClock,
   faHandPointer,
   faPen,
+  faPrint,
   faQrcode,
   faWallet
 } from "@fortawesome/free-solid-svg-icons";
 import { useToast } from "react-native-toast-notifications";
 import { faBitcoin } from "@fortawesome/free-brands-svg-icons";
 import { platform } from "../../config/platform";
-import { Linking, getFormattedUnit, isApiError } from "../../utils";
 import {
   useIsScreenSizeMin,
   useNfc,
   useSafeAreaInsets,
   useTimer,
-  useVersionTag
+  useVersionTag,
+  usePrintInvoiceTicket
 } from "@hooks";
 import {
   ActivityIndicator,
@@ -62,13 +63,20 @@ import {
 import LottieView from "lottie-react-native";
 import * as S from "./styled";
 import { XOR } from "ts-essentials";
-import { numberWithSpaces } from "@utils/numberWithSpaces";
+import {
+  numberWithSpaces,
+  Linking,
+  getFormattedUnit,
+  isApiError,
+  AsyncStorage
+} from "@utils";
+import { keyStoreTicketsAutoPrint } from "@config/settingsKeys";
 
 const PAID_ANIMATION_DURATION = 350;
 
 const getTrue = () => true;
 
-const { isWeb, isIos } = platform;
+const { isWeb, isIos, isBitcoinize } = platform;
 
 type Status =
   | "draft"
@@ -111,6 +119,11 @@ type Input = {
   amount: number;
 };
 
+type Device = {
+  name: string;
+  type: "mobile" | "tablet" | "desktop";
+};
+
 export type InvoiceType = {
   id: string;
   tag: string;
@@ -125,10 +138,7 @@ export type InvoiceType = {
 
   input: Input;
   paymentDetails: PaymentDetail[];
-  device?: {
-    name: string;
-    type: "mobile" | "tablet" | "desktop";
-  };
+  device?: Device;
   // paymentMethod: "lightning" | "onchain";
   redirectUrl: `http://${string}`;
 };
@@ -151,7 +161,10 @@ export const Invoice = () => {
   const { colors, gridSize } = useTheme();
   const toast = useToast();
   const versionTag = useVersionTag();
-  const { t } = useTranslation(undefined, { keyPrefix: "screens.invoice" });
+  const printInvoiceTicket = usePrintInvoiceTicket();
+  const { t } = useTranslation(undefined, {
+    keyPrefix: "screens.invoice"
+  });
   const { t: tRoot } = useTranslation();
   const { bottom: bottomInset } = useSafeAreaInsets();
   const { width: windowWidth } = useWindowDimensions();
@@ -181,9 +194,11 @@ export const Invoice = () => {
   const [createdAt, setCreatedAt] = useState<number>();
   const [delay, setDelay] = useState<number>();
   const [amount, setAmount] = useState<number>();
+  const [paymentDetails, setPaymentDetails] = useState<PaymentDetail[]>();
   const [pr, setPr] = useState<string>();
   const [onChainAddr, setOnChainAddr] = useState<string>();
   const [invoiceCurrency, setInvoiceCurrency] = useState<string>();
+  const [device, setDevice] = useState<Device>();
   const [invoiceFiatAmount, setInvoiceFiatAmount] = useState(0);
   const [isInvalidInvoice, setIsInvalidInvoice] = useState(false);
   const [redirectUrl, setRedirectUrl] = useState<`http://${string}`>();
@@ -263,18 +278,28 @@ export const Invoice = () => {
 
   const successLottieRef = useRef<LottieView>(null);
 
-  const onPaid = useCallback(() => {
-    Vibration.vibrate(50);
-    if (!isExternalInvoice) {
-      setBackgroundColor(colors.success, PAID_ANIMATION_DURATION);
-    }
-    setTimeout(
-      () => {
-        successLottieRef.current?.play();
-      },
-      isExternalInvoice ? 0 : 350
-    );
-  }, [colors.success, isExternalInvoice, setBackgroundColor]);
+  const onPaid = useCallback(
+    (invoiceData: InvoiceType) => {
+      Vibration.vibrate(50);
+      if (!isExternalInvoice) {
+        if (isBitcoinize) {
+          AsyncStorage.getItem(keyStoreTicketsAutoPrint).then((value) => {
+            if (value === "true") {
+              void printInvoiceTicket(invoiceData);
+            }
+          });
+        }
+        setBackgroundColor(colors.success, PAID_ANIMATION_DURATION);
+      }
+      setTimeout(
+        () => {
+          successLottieRef.current?.play();
+        },
+        isExternalInvoice ? 0 : 250
+      );
+    },
+    [colors.success, isExternalInvoice, printInvoiceTicket, setBackgroundColor]
+  );
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -354,16 +379,20 @@ export const Invoice = () => {
   const updateInvoice = useCallback(
     (getInvoiceData: InvoiceType, isInitialData?: boolean) => {
       try {
-        const _pr =
-          getInvoiceData.paymentDetails.find(
-            (p) => p.network === "lightning" && p.paidAt
-          )?.paymentRequest ||
-          getInvoiceData.paymentDetails.find((p) => p.network === "lightning")
-            ?.paymentRequest;
-
-        const unpaidOnchain = getInvoiceData.paymentDetails.find(
-          (p) => p.network === "onchain" && !p.paidAt
+        const lightningPayments = getInvoiceData.paymentDetails.filter(
+          (p) => p.network === "lightning"
         );
+
+        const onchainPayments = getInvoiceData.paymentDetails.filter(
+          (p) => p.network === "onchain"
+        );
+
+        const lightningPaymentDetails =
+          lightningPayments.find((p) => !!p.paidAt) || lightningPayments[0];
+
+        const _pr = lightningPaymentDetails.paymentRequest;
+
+        const unpaidOnchain = onchainPayments.find((p) => !p.paidAt);
 
         const _paymentMethod = getInvoiceData.paymentDetails.find(
           (p) => p.paidAt
@@ -373,25 +402,23 @@ export const Invoice = () => {
         setDescription(getInvoiceData.description);
         setCreatedAt(getInvoiceData.time);
         setDelay(getInvoiceData.expiry - getInvoiceData.time);
+        setPaymentDetails(getInvoiceData.paymentDetails);
         setPr(_pr);
         setReadingNfcData(_pr);
         setOnChainAddr(unpaidOnchain?.address);
         setAmount(getInvoiceData.amount * 1000);
         setInvoiceCurrency(getInvoiceData.input.unit || "CHF");
         setInvoiceFiatAmount(getInvoiceData.input.amount);
+        setDevice(getInvoiceData.device);
         setStatus(getInvoiceData.status);
         setPaymentMethod(_paymentMethod);
-        setOnchainTxs(
-          getInvoiceData.paymentDetails.filter(
-            (p) => p.network === "onchain" && p.paidAt
-          )
-        );
+        setOnchainTxs(onchainPayments.filter((p) => !!p.paidAt));
         setPaidAt(getInvoiceData.paidAt);
 
         setIsInit(true);
 
         if (getInvoiceData.status === "settled" && status !== "settled") {
-          onPaid();
+          onPaid(getInvoiceData);
         }
 
         if (getInvoiceData.redirectUrl) {
@@ -511,6 +538,31 @@ export const Invoice = () => {
   const onCloseQrModal = useCallback(() => {
     setIsQrModalOpen(false);
   }, []);
+
+  const printReceipt = useCallback(() => {
+    void printInvoiceTicket({
+      id: invoiceId,
+      description: description,
+      amount: amount,
+      paidAt: paidAt,
+      input: {
+        unit: invoiceCurrency,
+        amount: invoiceFiatAmount
+      },
+      paymentDetails,
+      device
+    });
+  }, [
+    amount,
+    description,
+    device,
+    invoiceCurrency,
+    invoiceFiatAmount,
+    invoiceId,
+    paidAt,
+    paymentDetails,
+    printInvoiceTicket
+  ]);
 
   return (
     <>
@@ -688,6 +740,14 @@ export const Invoice = () => {
                         : t("withdrawSuccess")}
                     </Text>
                   </ComponentStack>
+                )}
+                {isBitcoinize && !isAlive && isExternalInvoice && (
+                  <Button
+                    icon={faPrint}
+                    mode="outline"
+                    title={t("printReceipt")}
+                    onPress={printReceipt}
+                  />
                 )}
               </S.MainContentStack>
               {status === "settled" && !isInitialPaid && redirect && (
@@ -967,13 +1027,28 @@ export const Invoice = () => {
           onPress={redirect}
           style={{ paddingBottom: gridSize + bottomInset }}
         >
-          <S.TapAnywhereStack gapSize={40}>
-            <S.TapAnywhereAction direction="horizontal" gapSize={12}>
-              <Icon icon={faHandPointer} color={colors.white} size={24} />
-              <Text weight={600} color={colors.white}>
-                {t("tapAnywhereToSkip")}
-              </Text>
-            </S.TapAnywhereAction>
+          <S.TapAnywhereStack>
+            {isBitcoinize && (
+              <Button
+                icon={faPrint}
+                mode="outline"
+                size="large"
+                title={t("printReceipt")}
+                onPress={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  printReceipt();
+                }}
+              />
+            )}
+            <Button
+              icon={faHandPointer}
+              mode="outline"
+              size="large"
+              title={t("tapAnywhereToSkip")}
+              onPress={redirect}
+              android_ripple={null}
+            />
           </S.TapAnywhereStack>
         </S.TapAnywhereCatcher>
       )}
