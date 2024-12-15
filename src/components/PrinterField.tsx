@@ -31,7 +31,7 @@ export const PrinterField = (props: PrinterFieldProps) => {
     void printInvoiceTicket({
       id: "26da573c-4316-481b-a0c8-d5e6810776e6",
       description: "2 Pizzas",
-      amount: 0.00000021,
+      amount: 21,
       paidAt: now,
       input: {
         unit: accountConfig?.currency,
