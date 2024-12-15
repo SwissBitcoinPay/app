@@ -1,6 +1,9 @@
 import { InvoiceType } from "@screens/Invoice/Invoice";
 import { MarkOptional } from "ts-essentials";
-import { NyxAlign, NyxFontStyle } from "react-native-nyx-printer";
+import {
+  NyxAlign,
+  NyxFontStyle
+} from "react-native-nyx-printer/src/NyxTextFormat";
 import {
   AsyncStorage,
   getImageSize,
@@ -8,12 +11,12 @@ import {
   base64ToBitmapArray,
   base64ToHex,
   getFormattedUnit,
-  Printer
+  Printer,
+  FS
 } from "@utils";
 import { keyStoreAccountConfig } from "@config/settingsKeys";
 import { AccountConfigType } from "@types";
 import ImageResizer from "@bam.tech/react-native-image-resizer";
-import RNFS from "react-native-fs";
 import axios from "axios";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
@@ -70,7 +73,7 @@ export const usePrintInvoiceTicket = () => {
         );
         if (accountConfig.logoUrl) {
           const response = await axios.get<ArrayBuffer>(accountConfig.logoUrl, {
-            responseType: "arraybuffer" 
+            responseType: "arraybuffer"
           });
 
           const buffer = response.data;
@@ -98,7 +101,7 @@ export const usePrintInvoiceTicket = () => {
           );
 
           const resizedImagePath = resizedImage.uri.replace("file://", "");
-          const resizedBuffer = await RNFS.readFile(resizedImagePath, "base64");
+          const resizedBuffer = await FS.readFile(resizedImagePath, "base64");
 
           const inputBytes = new Uint8Array(
             Buffer.from(resizedBuffer, "base64")

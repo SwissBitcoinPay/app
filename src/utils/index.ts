@@ -29,3 +29,4 @@ export { Printer } from "./Printer";
 export { getImageSize } from "./getImageSize";
 export { scaleDimensions } from "./scaleDimensions";
 export { base64ToHex } from "./base64ToHex";
+export { FS } from "./FS";
