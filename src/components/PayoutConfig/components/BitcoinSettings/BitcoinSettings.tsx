@@ -26,13 +26,7 @@ import {
 import { decodelnurl } from "js-lnurl";
 // @ts-ignore
 import xpubConverter from "xpub-converter";
-import {
-  Controller,
-  ControllerProps,
-  ControllerRenderProps,
-  UseControllerReturn,
-  Validate
-} from "react-hook-form";
+import { Controller, ControllerProps, Validate } from "react-hook-form";
 import { validate as isEmail } from "email-validator";
 import { useTheme } from "styled-components";
 import {

@@ -5,9 +5,6 @@ import { ScriptType } from "@utils/Bitbox/api/account";
 import { useTranslation } from "react-i18next";
 // @ts-ignore
 import BIP84 from "bip84";
-import {
-  AccountsWithBalances,
-} from "./get-accounts-with-balances";
 import axios from "axios";
 import { Bip84Account, MempoolTX } from "@types";
 
@@ -24,7 +21,7 @@ export const useSignature = (error: (msg: string) => void) => {
   });
 
   const getAccounts = useCallback(async () => {
-    const accounts: AccountsWithBalances = [];
+    const accounts = [];
     let index = 0;
 
     while (true) {
