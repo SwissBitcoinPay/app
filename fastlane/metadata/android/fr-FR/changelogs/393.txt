@@ -1,0 +1,2 @@
+- Le PoS Bitcoinize peut désormais imprimer les reçus
+- Ajouté un bouton de partage pour le lien d'activation
