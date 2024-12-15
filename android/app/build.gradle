@@ -183,7 +183,6 @@ dependencies {
     implementation (project(':react-native-device-info')) {
         exclude group: 'com.google.android.gms'
     }
-    // implementation("com.sunmi:printerlibrary:1.0.23")
 }
 
 private Integer generateVersionCode() {
