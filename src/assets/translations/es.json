@@ -192,7 +192,11 @@
       "tickets": "Recibos automáticos",
       "ticketsPrinting": "Impresión automática de recibos",
       "testPrint": "Impresión de prueba",
-      "ticketsPrintingDescription": "Los recibos de pago pueden imprimirse automáticamente tras el pago de cada factura."
+      "ticketsPrintingDescription": "Los recibos de pago pueden imprimirse automáticamente tras el pago de cada factura.",
+      "shareMyLink": "Compartir mi enlace de activación",
+      "copyMyLink": "Copiar mi enlace de activación",
+      "acceptBitcoinPayments": "Aceptar pagos con Bitcoin",
+      "invitationText": "Utilice mi enlace para aceptar pagos Bitcoin para {{merchantName}}:"
     },
     "payoutConfig": {
       "title": "Configuración de pago",
