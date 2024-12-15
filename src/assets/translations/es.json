@@ -186,7 +186,11 @@
       "logout": "Cerrar sesión",
       "confirmLogout": "Confirmar cierre de sesión",
       "confirmLogoutDescription": "Después de cerrar la sesión, tendrás que volver a escanear el código de activación o conectarte con las credenciales",
-      "logoutSuccessful": "Sesión cerrada con éxito"
+      "logoutSuccessful": "Sesión cerrada con éxito",
+      "tickets": "Recibos automáticos",
+      "ticketsPrinting": "Impresión automática de recibos",
+      "testPrint": "Impresión de prueba",
+      "ticketsPrintingDescription": "Los recibos de pago pueden imprimirse automáticamente tras el pago de cada factura."
     },
     "payoutConfig": {
       "title": "Configuración de pago",
@@ -421,5 +425,16 @@
       "selectAccount": "Seleccione la cuenta que desea utilizar",
       "select": "Seleccione"
     }
+  },
+  "printTicket": {
+    "paidInBitcoin": "Pagado en Bitcoin",
+    "amount": "Importe",
+    "fiatAmount": "Importe Fiat",
+    "paidVia": "Pagado a través de",
+    "paidAt": "Pagado en",
+    "note": "Nota",
+    "invoiceId": "ID de factura",
+    "thanks": "Gracias por comprar con ₿itcoin",
+    "poweredBy": "Desarrollado por"
   }
 }

@@ -80,7 +80,7 @@ export const useModalInput = <T extends string | number | boolean>({
   const modal = useMemo(
     () => (
       <Modal
-        title={`${t("common.edit")} ${label}`}
+        title={label}
         isOpen={isOpen}
         onClose={() => {
           setIsOpen(false);

@@ -19,7 +19,8 @@ import {
   Modal,
   FieldDescription,
   Callout,
-  ItemsList
+  ItemsList,
+  PrinterField
 } from "@components";
 import { useNavigate } from "@components/Router";
 import {
@@ -28,6 +29,7 @@ import {
   faCoins,
   faDollarSign,
   faEnvelope,
+  faReceipt,
   faRightFromBracket,
   faStore,
   faUser,
@@ -48,9 +50,12 @@ import { AsyncStorage, isMinUserType } from "@utils";
 import { useToast } from "react-native-toast-notifications";
 import { ModalInputDescription } from "@hooks/useModalInput/useModalInput";
 import * as S from "./styled";
-import { keyStoreIsGuest } from "@config/settingsKeys";
+import {
+  keyStoreIsGuest,
+  keyStoreTicketsAutoPrint
+} from "@config/settingsKeys";
 
-const { isWeb } = platform;
+const { isWeb, isBitcoinize } = platform;
 
 export const Settings = () => {
   const { colors } = useTheme();
@@ -101,6 +106,7 @@ export const Settings = () => {
   const [isLogoutLoading, setIsLogoutLoading] = useState(false);
 
   const [isGuestMode, setIsGuestMode] = useState(false);
+  const [isTicketsPrinted, setIsTicketsPrinted] = useState(false);
 
   const onLogout = useCallback(async () => {
     try {
@@ -159,14 +165,37 @@ export const Settings = () => {
       onChange: onPatchSetting("currency")
     });
 
-  const { modal: onOnchainModal, onPressElement: onPressOnChain } =
-    useModalInput({
+  const { modal: onchainModal, onPressElement: onPressOnChain } = useModalInput(
+    {
       element: <CheckboxField />,
       defaultValue: accountConfig?.isOnchainAvailable || false,
       label: t("onchainAvailable"),
       description: t("onchainAvailableDescription"),
       onChange: onPatchSetting("isOnchainAvailable")
-    });
+    }
+  );
+
+  const onUpdateTicket = useCallback(
+    (newValue: boolean) => {
+      setIsTicketsPrinted(newValue);
+      void AsyncStorage.setItem(keyStoreTicketsAutoPrint, newValue.toString());
+      toast.show(t("patchSettingSuccessful"), {
+        type: "success"
+      });
+      return true;
+    },
+    [t, toast]
+  );
+
+  const { modal: ticketsModal, onPressElement: onPressTickets } = useModalInput(
+    {
+      element: <PrinterField />,
+      defaultValue: isTicketsPrinted,
+      label: t("ticketsPrinting"),
+      description: t("ticketsPrintingDescription"),
+      onChange: onUpdateTicket
+    }
+  );
 
   const formattedBtcPayout = useMemo(() => {
     const { btcPercent, currency } = accountConfig || {};
@@ -197,8 +226,16 @@ export const Settings = () => {
   useEffect(() => {
     (async () => {
       setIsGuestMode((await AsyncStorage.getItem(keyStoreIsGuest)) === "true");
+      setIsTicketsPrinted(
+        (await AsyncStorage.getItem(keyStoreTicketsAutoPrint)) === "true"
+      );
     })();
   }, []);
+
+  const isMinAdmin = useMemo(
+    () => isMinUserType({ userType, minUserType: UserType.Admin }),
+    [userType]
+  );
 
   return (
     <PageContainer
@@ -231,7 +268,7 @@ export const Settings = () => {
                   {accountConfig.name}
                 </Text>
               </Text>
-              {isMinUserType({ userType, minUserType: UserType.Admin }) && (
+              {(isMinAdmin || isBitcoinize) && (
                 <ItemsList
                   headerComponent={
                     <S.EditableLine>
@@ -246,48 +283,62 @@ export const Settings = () => {
                     </S.EditableLine>
                   }
                   items={[
-                    {
-                      icon: faStore,
-                      title: t("merchantName"),
-                      tags: [{ value: accountConfig.name }],
-                      onPress: onPressMerchantName
-                    },
-                    {
-                      icon: faDollarSign,
-                      title: t("currency"),
-                      tags: [{ value: settingsValues.currency?.label }],
-                      onPress: onPressCurrency
-                    },
-                    {
-                      icon: faChain,
-                      title: t("onchainAvailable"),
-                      tags: [{ value: accountConfig.isOnchainAvailable }],
-                      onPress: onPressOnChain
-                    },
-                    {
-                      icon: faEnvelope,
-                      title: t("email"),
-                      tags: [{ value: accountConfig.mail }],
-                      onPress: () => null,
-                      disabled: true
-                    },
-                    {
-                      icon: faCoins,
-                      title: t("payout"),
-                      tags: [{ value: formattedBtcPayout }],
-                      onPress: "/payout-config"
-                    },
-                    ...(isMinUserType({
-                      userType,
-                      minUserType: UserType.Wallet
-                    })
+                    ...(isBitcoinize
                       ? [
                           {
-                            icon: faWallet,
-                            title: t("wallet"),
-                            tags: [{ value: t("accessWallet") }],
-                            onPress: "/wallet" as const
+                            icon: faReceipt,
+                            title: t("tickets"),
+                            tags: [{ value: isTicketsPrinted }],
+                            onPress: onPressTickets
                           }
+                        ]
+                      : []),
+                    ...(isMinAdmin
+                      ? [
+                          {
+                            icon: faStore,
+                            title: t("merchantName"),
+                            tags: [{ value: accountConfig.name }],
+                            onPress: onPressMerchantName
+                          },
+                          {
+                            icon: faDollarSign,
+                            title: t("currency"),
+                            tags: [{ value: settingsValues.currency?.label }],
+                            onPress: onPressCurrency
+                          },
+                          {
+                            icon: faChain,
+                            title: t("onchainAvailable"),
+                            tags: [{ value: accountConfig.isOnchainAvailable }],
+                            onPress: onPressOnChain
+                          },
+                          {
+                            icon: faEnvelope,
+                            title: t("email"),
+                            tags: [{ value: accountConfig.mail }],
+                            onPress: () => null,
+                            disabled: true
+                          },
+                          {
+                            icon: faCoins,
+                            title: t("payout"),
+                            tags: [{ value: formattedBtcPayout }],
+                            onPress: "/payout-config"
+                          },
+                          ...(isMinUserType({
+                            userType,
+                            minUserType: UserType.Wallet
+                          })
+                            ? [
+                                {
+                                  icon: faWallet,
+                                  title: t("wallet"),
+                                  tags: [{ value: t("accessWallet") }],
+                                  onPress: "/wallet" as const
+                                }
+                              ]
+                            : [])
                         ]
                       : [])
                   ]}
@@ -315,9 +366,10 @@ export const Settings = () => {
                 </S.ConnectedAsContainerLine>
               </S.ConnectedAsContainer>
               <>
+                {ticketsModal}
                 {merchantNameModal}
                 {currencyModal}
-                {onOnchainModal}
+                {onchainModal}
               </>
             </S.FlexComponentStack>
           )

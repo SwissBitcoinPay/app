@@ -186,7 +186,11 @@
       "logout": "Disconnessione",
       "confirmLogout": "Confermare il logout",
       "confirmLogoutDescription": "Dopo il logout, dovrai eseguire nuovamente la scansione del QR code d'accesso o connetterti con le credenziali.",
-      "logoutSuccessful": "Disconnessione riuscita"
+      "logoutSuccessful": "Disconnessione riuscita",
+      "tickets": "Ricevute automatiche",
+      "ticketsPrinting": "Stampa automatica delle ricevute",
+      "testPrint": "Stampa di prova",
+      "ticketsPrintingDescription": "Le ricevute di pagamento possono essere stampate automaticamente dopo il pagamento di ogni fattura."
     },
     "payoutConfig": {
       "title": "Configurazione dei pagamenti",
@@ -421,5 +425,16 @@
       "select": "Selezionare"
     },
     "title": "Collegare BitBox02"
+  },
+  "printTicket": {
+    "paidInBitcoin": "Pagato in Bitcoin",
+    "amount": "Importo",
+    "fiatAmount": "Importo Fiat",
+    "paidVia": "Pagato tramite",
+    "paidAt": "Pagato a",
+    "note": "Nota",
+    "invoiceId": "ID fattura",
+    "thanks": "Grazie per aver acquistato con ₿itcoin",
+    "poweredBy": "Alimentato da"
   }
 }

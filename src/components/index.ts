@@ -34,6 +34,7 @@ export { BaseField } from "./BaseField";
 export { TextInput } from "./TextInput";
 export { TextField } from "./TextField";
 export { CheckboxField } from "./CheckboxField";
+export { PrinterField } from "./PrinterField";
 export { SelectField } from "./SelectField";
 export { CreateWalletModal } from "./CreateWalletModal";
 export { ConnectWalletModal } from "./ConnectWalletModal";
