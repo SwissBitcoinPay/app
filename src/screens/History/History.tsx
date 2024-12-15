@@ -261,7 +261,7 @@ export const History = () => {
                   : colors.warning;
                 const valueBase = getFormattedUnit(
                   transaction.input?.amount || 0,
-                  transaction.input?.unit || "?"
+                  transaction.input?.unit
                 );
 
                 const deviceType = transaction.device?.type;
