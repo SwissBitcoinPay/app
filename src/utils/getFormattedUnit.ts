@@ -13,6 +13,8 @@ export const getFormattedUnit = (
 
   if (unit === "sat" || unit === "sats") {
     return `${prefix}${numberWithSpaces(amount)} sats`;
+  } else if (!unit) {
+    return `${prefix}${amount}`
   }
 
   return `${prefix}${Intl.NumberFormat(undefined, {
