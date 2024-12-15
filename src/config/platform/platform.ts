@@ -33,5 +33,6 @@ export const platform = {
   bottomSafeAreaHeight: 0,
   deviceName: `${osName} | ${browserName}`,
   deviceLocale: getLocale(),
-  isBitcoinize: false
+  isBitcoinize: false,
+  isShareAvailable: navigator.share !== undefined
 };

@@ -27,10 +27,12 @@ import {
   faArrowLeft,
   faChain,
   faCoins,
+  faCopy,
   faDollarSign,
   faEnvelope,
   faReceipt,
   faRightFromBracket,
+  faShareNodes,
   faStore,
   faUser,
   faUserTie,
@@ -54,8 +56,9 @@ import {
   keyStoreIsGuest,
   keyStoreTicketsAutoPrint
 } from "@config/settingsKeys";
+import { Share } from "react-native";
 
-const { isWeb, isBitcoinize } = platform;
+const { isWeb, isBitcoinize, isShareAvailable } = platform;
 
 export const Settings = () => {
   const { colors } = useTheme();
@@ -237,6 +240,24 @@ export const Settings = () => {
     [userType]
   );
 
+  const shareMessage = useMemo(
+    () =>
+      [
+        t("invitationText", { merchantName: accountConfig?.name }),
+        "",
+        activationCodeData
+      ].join("\n"),
+    [accountConfig?.name, activationCodeData, t]
+  );
+
+  const shareActivationLink = useCallback(async () => {
+    await Share.share({
+      title: t("acceptBitcoinPayments"),
+      url: activationCodeData,
+      message: shareMessage
+    });
+  }, [activationCodeData, shareMessage, t]);
+
   return (
     <PageContainer
       header={{
@@ -268,6 +289,21 @@ export const Settings = () => {
                   {accountConfig.name}
                 </Text>
               </Text>
+              <Button
+                size="small"
+                style={{ alignSelf: "center" }}
+                {...(isShareAvailable
+                  ? {
+                      icon: faShareNodes,
+                      title: t("shareMyLink"),
+                      onPress: shareActivationLink
+                    }
+                  : {
+                      icon: faCopy,
+                      title: t("copyMyLink"),
+                      copyContent: shareMessage
+                    })}
+              />
               {(isMinAdmin || isBitcoinize) && (
                 <ItemsList
                   headerComponent={

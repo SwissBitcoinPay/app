@@ -192,7 +192,11 @@
       "tickets": "Automaattiset kuitit",
       "ticketsPrinting": "Automaattinen kuitin tulostus",
       "testPrint": "Testitulostus",
-      "ticketsPrintingDescription": "Maksukuitit voidaan tulostaa automaattisesti jokaisen laskun maksamisen jälkeen."
+      "ticketsPrintingDescription": "Maksukuitit voidaan tulostaa automaattisesti jokaisen laskun maksamisen jälkeen.",
+      "shareMyLink": "Jaa aktivointilinkkini",
+      "copyMyLink": "Kopioi aktivointilinkki",
+      "acceptBitcoinPayments": "Hyväksy Bitcoin-maksut",
+      "invitationText": "Käytä linkkiä hyväksyä Bitcoin maksut {{merchantName}}:"
     },
     "payoutConfig": {
       "title": "Tilitys määrittelyt",

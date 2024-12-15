@@ -192,7 +192,11 @@
       "logout": "Se déconnecter",
       "confirmLogout": "Confirmer la déconnexion",
       "confirmLogoutDescription": "Après la déconnexion, vous devrez scanner à nouveau le code d'activation ou vous connecter avec des informations d'identification.",
-      "logoutSuccessful": "Déconnexion avec succès"
+      "logoutSuccessful": "Déconnexion avec succès",
+      "shareMyLink": "Partager mon lien d'activation",
+      "copyMyLink": "Copier mon lien d'activation",
+      "acceptBitcoinPayments": "Accepter les paiements en bitcoins",
+      "invitationText": "Utilisez mon lien pour accepter les paiements en bitcoins pour {{merchantName}}:"
     },
     "payoutConfig": {
       "title": "Configuration des paiements",

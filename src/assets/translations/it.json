@@ -192,7 +192,11 @@
       "tickets": "Ricevute automatiche",
       "ticketsPrinting": "Stampa automatica delle ricevute",
       "testPrint": "Stampa di prova",
-      "ticketsPrintingDescription": "Le ricevute di pagamento possono essere stampate automaticamente dopo il pagamento di ogni fattura."
+      "ticketsPrintingDescription": "Le ricevute di pagamento possono essere stampate automaticamente dopo il pagamento di ogni fattura.",
+      "shareMyLink": "Condividi il mio link di attivazione",
+      "copyMyLink": "Copia il mio link di attivazione",
+      "acceptBitcoinPayments": "Accettare pagamenti in Bitcoin",
+      "invitationText": "Utilizza il mio link per accettare pagamenti in Bitcoin per {{merchantName}}:"
     },
     "payoutConfig": {
       "title": "Configurazione dei pagamenti",

@@ -192,7 +192,11 @@
       "tickets": "Automatische Quittungen",
       "ticketsPrinting": "Automatischer Belegdruck",
       "testPrint": "Testdruck",
-      "ticketsPrintingDescription": "Zahlungsbelege können automatisch gedruckt werden, nachdem jede Rechnung bezahlt wurde"
+      "ticketsPrintingDescription": "Zahlungsbelege können automatisch gedruckt werden, nachdem jede Rechnung bezahlt wurde",
+      "shareMyLink": "Meinen Aktivierungslink freigeben",
+      "copyMyLink": "Kopieren Sie meinen Aktivierungslink",
+      "acceptBitcoinPayments": "Bitcoin-Zahlungen akzeptieren",
+      "invitationText": "Verwenden Sie meinen Link, um Bitcoin-Zahlungen für {{merchantName}} zu akzeptieren:"
     },
     "payoutConfig": {
       "title": "Konfiguration der Auszahlung",

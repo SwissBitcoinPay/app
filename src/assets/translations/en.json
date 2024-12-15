@@ -192,7 +192,11 @@
       "logout": "Logout",
       "confirmLogout": "Confirm logout",
       "confirmLogoutDescription": "After logout, you will need to re-scan the activation code or connect with credentials",
-      "logoutSuccessful": "Successfully disconnected"
+      "logoutSuccessful": "Successfully disconnected",
+      "shareMyLink": "Share my activation link",
+      "copyMyLink": "Copy my activation link",
+      "acceptBitcoinPayments": "Accept Bitcoin payments",
+      "invitationText": "Use my link to accept Bitcoin payments for {{merchantName}}:"
     },
     "payoutConfig": {
       "title": "Payout configuration",
