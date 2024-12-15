@@ -88,8 +88,8 @@ export const usePrintInvoiceTicket = () => {
           const { width: finalWidth, height: finalHeight } = scaleDimensions(
             initialWidth,
             initialHeight,
-            280,
-            200
+            360,
+            250
           );
 
           const resizedImage = await ImageResizer.createResizedImage(
@@ -108,6 +108,7 @@ export const usePrintInvoiceTicket = () => {
           );
 
           await Printer.printBitmap(Array.from(inputBytes));
+          await Printer.printText("");
         } else if (accountConfig.name) {
           await Printer.printText(accountConfig.name, {
             align: NyxAlign.center,
