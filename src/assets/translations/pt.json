@@ -39,7 +39,8 @@
       "scanActivationQRcode": "Digitalizar o código QR de ativação",
       "email": "E-mail",
       "signature": "Assinatura",
-      "licensedBy": "Aprovado pela"
+      "licensedBy": "Aprovado pela",
+      "finma": "Swiss Financial Market Supervisory Authority"
     },
     "emailLogin": {
       "title": "Início de sessão por e-mail",
@@ -146,7 +147,8 @@
       "scanToYourPhone": "Digitalize para aceder a esta página no seu telemóvel",
       "scanToPayIn": "Digitalizar para pagar em Bitcoin por",
       "or": "ou",
-      "scanToWithdraw": "Digitalizar para receber bitcoin através de"
+      "scanToWithdraw": "Digitalizar para receber bitcoin através de",
+      "printReceipt": "Imprimir recibo"
     },
     "history": {
       "title": "Histórico de transações",

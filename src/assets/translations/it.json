@@ -147,7 +147,8 @@
       "scanToYourPhone": "Scansiona per accedere a questa pagina sul tuo telefono",
       "scanToPayIn": "Scansiona per pagare in Bitcoin da",
       "or": "o",
-      "scanToWithdraw": "Scansiona per ricevere bitcoin tramite"
+      "scanToWithdraw": "Scansiona per ricevere bitcoin tramite",
+      "printReceipt": "Stampa della ricevuta"
     },
     "history": {
       "title": "Storico delle transazioni",

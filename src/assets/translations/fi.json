@@ -39,7 +39,8 @@
       "orConnectBy": "tai yhdistä käyttäen",
       "scanActivationQRcode": "Lue QR-aktivointikoodi",
       "email": "Sähköposti",
-      "signature": "Allekirjoitus"
+      "signature": "Allekirjoitus",
+      "finma": "Swiss Financial Market Supervisory Authority"
     },
     "emailLogin": {
       "title": "Sähköposti kirjautuminen",
@@ -146,7 +147,8 @@
       "scanToYourPhone": "Avaa sovellus puhelimessa scannaamalla tämä",
       "scanToPayIn": "Scannaa maksaaksesi Bitcoinille",
       "or": "tai",
-      "scanToWithdraw": "Scannaa vastaanottaaksesi bitcoinia"
+      "scanToWithdraw": "Scannaa vastaanottaaksesi bitcoinia",
+      "printReceipt": "Tulosta kuitti"
     },
     "history": {
       "title": "Tapahtuma historia",
@@ -186,7 +188,11 @@
       "logout": "Uloskirjaus",
       "confirmLogout": "Vahvista uloskirjautuminen",
       "confirmLogoutDescription": "Uloskirjauksen jälkeen tarvitset aktivointi koodin tai käyttäjätunnuksen",
-      "logoutSuccessful": "Uloskirjautuminen onnistui"
+      "logoutSuccessful": "Uloskirjautuminen onnistui",
+      "tickets": "Automaattiset kuitit",
+      "ticketsPrinting": "Automaattinen kuitin tulostus",
+      "testPrint": "Testitulostus",
+      "ticketsPrintingDescription": "Maksukuitit voidaan tulostaa automaattisesti jokaisen laskun maksamisen jälkeen."
     },
     "payoutConfig": {
       "title": "Tilitys määrittelyt",
@@ -421,5 +427,16 @@
     "serverInMaintenance": "Palvelussa on huoltokatko. Yritä myöhemmin uudelleen.",
     "noKycLimit": "Suurin ilman tunnistatumista sallittu määrä on tullut täyteen",
     "accountNotVerified": "Varmista talletusosoitteesi ohjauspanelista"
+  },
+  "printTicket": {
+    "paidInBitcoin": "Maksettu Bitcoinilla",
+    "amount": "Määrä",
+    "fiatAmount": "Fiatin määrä",
+    "paidVia": "Maksettu",
+    "paidAt": "Maksettu klo",
+    "note": "Huomautus",
+    "invoiceId": "Laskun ID",
+    "thanks": "Kiitos ostamisesta ₿itcoin kanssa",
+    "poweredBy": "Powered by"
   }
 }
