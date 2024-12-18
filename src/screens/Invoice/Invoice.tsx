@@ -390,7 +390,7 @@ export const Invoice = () => {
         const lightningPaymentDetails =
           lightningPayments.find((p) => !!p.paidAt) || lightningPayments[0];
 
-        const _pr = lightningPaymentDetails.paymentRequest;
+        const _pr = lightningPaymentDetails?.paymentRequest;
 
         const unpaidOnchain = onchainPayments.find((p) => !p.paidAt);
 
