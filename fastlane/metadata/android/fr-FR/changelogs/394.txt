@@ -1,0 +1,1 @@
+- Corrigé un problème d'affichage des invoices payées via Onchain

@@ -1,0 +1,1 @@
+- Fixed an issue where invoices paid via Onchain was not displayed
