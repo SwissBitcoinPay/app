@@ -435,12 +435,13 @@
   "printTicket": {
     "paidInBitcoin": "Payé en bitcoins",
     "amount": "Montant",
-    "fiatAmount": "Montant en Fiat",
+    "fiatAmount": "Montant fiat",
     "paidVia": "Payé via",
     "paidAt": "Payé le",
     "note": "Note",
     "invoiceId": "ID de la facture",
     "thanks": "Merci d'acheter avec ₿itcoin",
-    "poweredBy": "Propulsé par"
+    "poweredBy": "Propulsé par",
+    "rate": "Taux"
   }
 }

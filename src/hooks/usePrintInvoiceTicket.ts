@@ -20,6 +20,7 @@ import ImageResizer from "@bam.tech/react-native-image-resizer";
 import axios from "axios";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { useRates } from "./useRates";
 
 type PrintInvoiceTicketParam = MarkOptional<
   Pick<
@@ -54,6 +55,7 @@ const FOOTER_LABEL_TEXT_STYLE = {
 
 export const usePrintInvoiceTicket = () => {
   const { t } = useTranslation(undefined, { keyPrefix: "printTicket" });
+  const rates = useRates();
 
   return useCallback(
     async ({
@@ -138,6 +140,15 @@ export const usePrintInvoiceTicket = () => {
           getFormattedUnit(input.amount, input.unit)
         );
       }
+      if (rates && accountConfig.currency) {
+        await Printer.printLabelValue(
+          t("rate"),
+          getFormattedUnit(
+            rates[accountConfig.currency],
+            accountConfig.currency
+          )
+        );
+      }
 
       const payment = paymentDetails.find((v) => !!v.paidAt);
 
@@ -198,7 +209,7 @@ export const usePrintInvoiceTicket = () => {
 
       await Printer.paperOut();
     },
-    [t]
+    [rates, t]
   );
 };
 

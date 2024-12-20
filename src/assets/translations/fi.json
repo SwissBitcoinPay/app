@@ -441,6 +441,7 @@
     "note": "Huomautus",
     "invoiceId": "Laskun ID",
     "thanks": "Kiitos ostamisesta ₿itcoin kanssa",
-    "poweredBy": "Powered by"
+    "poweredBy": "Powered by",
+    "rate": "Arvioi"
   }
 }
