@@ -95,6 +95,9 @@
           "alreadyExists": "This address is already used by another account",
           "invalid": "This address is invalid"
         },
+        "iban": {
+          "blacklisted": "The bank of this IBAN is blacklisted"
+        },
         "email": {
           "alreadyExists": "This email is already used by another account"
         },
