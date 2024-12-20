@@ -267,7 +267,11 @@ export const BitcoinSettings = ({
             domain !== "swiss-bitcoin-pay.ch" &&
             domain !== "sbpc.ch"
           ) {
-            if (!isNewAddressAlreadyVerified) {
+            const actualDepositAddress = watch("depositAddress");
+            if (
+              !isNewAddressAlreadyVerified &&
+              actualDepositAddress === value
+            ) {
               setValue("finalDepositAddress", value);
             }
             return true;
@@ -281,7 +285,7 @@ export const BitcoinSettings = ({
       }
       return tRoot("common.errors.invalidBitcoinAddress");
     },
-    [alreadyVerifiedAddresses, setValue, tRoot]
+    [alreadyVerifiedAddresses, setValue, tRoot, watch]
   );
 
   const validateSignature = useCallback(
@@ -499,7 +503,7 @@ export const BitcoinSettings = ({
                   : value
               }
               onChangeText={(newValue) => {
-                if (newValue) {
+                if (newValue !== undefined) {
                   onChange(
                     newValue.replace("bitcoin:", "").replace("lightning:", "")
                   );
