@@ -99,6 +99,9 @@
         },
         "referralCode": {
           "doesntExists": "Este código de referencia no existe"
+        },
+        "iban": {
+          "blacklisted": "El banco de este IBAN está en la lista negra"
         }
       },
       "optional": "Opcional"
