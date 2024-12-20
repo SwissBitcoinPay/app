@@ -1,0 +1,2 @@
+- Ajout du taux de change sur l'impression du recu (Impression du ticket sur Bitcoinize)
+- Amélioré traductions de messages d'erreur
