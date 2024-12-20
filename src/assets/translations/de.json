@@ -441,6 +441,7 @@
     "note": "Hinweis",
     "invoiceId": "Rechnungs-ID",
     "thanks": "Danke für den Kauf mit ₿itcoin",
-    "poweredBy": "Angetrieben durch"
+    "poweredBy": "Angetrieben durch",
+    "rate": "Bewerten Sie"
   }
 }

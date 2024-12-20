@@ -436,6 +436,7 @@
     "paidInBitcoin": "Paid in Bitcoin",
     "amount": "Amount",
     "fiatAmount": "Fiat amount",
+    "rate": "Rate",
     "paidVia": "Paid via",
     "paidAt": "Paid at",
     "note": "Note",

@@ -441,6 +441,7 @@
     "note": "Nota",
     "invoiceId": "ID de factura",
     "thanks": "Gracias por comprar con ₿itcoin",
-    "poweredBy": "Desarrollado por"
+    "poweredBy": "Desarrollado por",
+    "rate": "Tarifa"
   }
 }
