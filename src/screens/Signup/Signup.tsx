@@ -42,7 +42,7 @@ import { AccountConfigType, UserType } from "@types";
 import { useAccountConfig } from "@hooks";
 import * as S from "./styled";
 
-const { deviceLocale } = platform;
+const { deviceLocale, isDesktop } = platform;
 
 const accentedCharacters =
   "àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ";
@@ -189,19 +189,21 @@ export const Signup = () => {
 
         const invoiceKey = signupResponse.data.invoiceKey;
 
-        if (invoiceKey) {
-          await AsyncStorage.removeItem(keyStoreRefCode);
+        await AsyncStorage.removeItem(keyStoreRefCode);
 
-          const emailLoginData = {
-            UserId: email,
-            Password: password
-          };
+        const emailLoginData = {
+          UserId: email,
+          Password: password
+        };
 
-          await onAuthLogin(emailLoginData, true);
+        const goToPos = !isAtm && !isDesktop;
 
-          setUserType(walletType ? UserType.Wallet : UserType.Admin);
-        } else if (isAtm) {
+        await onAuthLogin(emailLoginData, goToPos, goToPos);
+
+        if (!goToPos) {
           await Linking.openURL("https://dashboard.swiss-bitcoin-pay.ch");
+        } else if (invoiceKey) {
+          setUserType(walletType ? UserType.Wallet : UserType.Admin);
         } else {
           toast.show(tRoot("common.errors.unknown"), {
             type: "error"

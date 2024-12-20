@@ -168,7 +168,11 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
   );
 
   const onAuthLogin = useCallback(
-    async (loginData: unknown, withSuccessToast = false) => {
+    async (
+      loginData: unknown,
+      withSuccessToast = false,
+      withNavigate = true
+    ) => {
       await axios.post(`${apiRootUrl}/auth`, loginData, {
         withCredentials: true
       });
@@ -177,7 +181,9 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
       if (withSuccessToast) {
         toast.show(t("setupComplete"), { type: "success" });
       }
-      navigate("/");
+      if (withNavigate) {
+        navigate("/");
+      }
     },
     [navigate, t, toast, validateApiKey]
   );
