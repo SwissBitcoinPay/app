@@ -11,7 +11,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import { AsyncStorage, Linking, bcrypt, isApiError } from "@utils";
-import { SBPContext, apiRootUrl, currencies, platform } from "@config";
+import {
+  SBPContext,
+  apiRootUrl,
+  bankCurrencyMap,
+  currencies,
+  fiatCurrencies,
+  platform
+} from "@config";
 import LocaleCurrency from "locale-currency";
 import {
   ComponentStack,
@@ -153,6 +160,9 @@ export const Signup = () => {
       const isReceiveBitcoin = btcPercent >= 1;
       const isReceiveFiat = btcPercent <= 99;
 
+      const bankCurrency: (typeof fiatCurrencies)[number] =
+        bankCurrencyMap[currency];
+
       try {
         const signupData = {
           name,
@@ -179,7 +189,8 @@ export const Signup = () => {
                 ownerCity,
                 ownerCountry
               }
-            : {})
+            : {}),
+          ...(isReceiveFiat && bankCurrency ? { bankCurrency } : {})
         };
 
         const signupResponse = await axios.post<{

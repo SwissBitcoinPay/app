@@ -22,31 +22,10 @@ import { AccountConfigType } from "@types";
 import { Vibration } from "react-native";
 import { useRates } from "@hooks";
 import { RatesType } from "@hooks/useRates";
+import { bankCurrencyMap, fiatCurrencies, platform } from "@config";
 import * as S from "./styled";
-import { platform } from "@config";
 
 const { isIos } = platform;
-
-const fiatCurrencies = [
-  "CHF",
-  "DKK",
-  "EUR",
-  "HKD",
-  "JPY",
-  "NOK",
-  "NZD",
-  "SEK",
-  "SGD",
-  "USD",
-  "ZAR",
-  "AED",
-  "AUD",
-  "CAD",
-  "CZK",
-  "MXN",
-  "PLN",
-  "GBP"
-];
 
 export type WalletType = "local" | "bitbox02";
 
@@ -252,6 +231,12 @@ export const PayoutConfig = ({
     onSliderValueChange(100);
   }, [onSliderValueChange]);
 
+  const bankCurrency = useMemo<AccountConfigType["currency"]>(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    () => bankCurrencyMap[currency] || currency,
+    [currency]
+  );
+
   if (!currency) {
     return <Loader />;
   }
@@ -307,7 +292,7 @@ export const PayoutConfig = ({
                     color={theme.colors.white}
                   />
                   <S.PayoutTypeText color={theme.colors.grey}>
-                    {t("in")} {currency}
+                    {t("in")} {bankCurrency}
                   </S.PayoutTypeText>
                 </S.SubPercentageView>
               </S.ValueContent>
@@ -340,7 +325,7 @@ export const PayoutConfig = ({
           />
           <FiatSettings
             {...formProps}
-            currency={currency}
+            currency={bankCurrency}
             isEURInstantSEPA={isEURInstantSEPA}
             isGBPFasterPayments={isGBPFasterPayments}
           />
