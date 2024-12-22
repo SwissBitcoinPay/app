@@ -1,0 +1,21 @@
+export const fiatCurrencies = [
+  "CHF",
+  "DKK",
+  "EUR",
+  "HKD",
+  "JPY",
+  "NOK",
+  "NZD",
+  "SEK",
+  "SGD",
+  "USD",
+  "ZAR",
+  "AED",
+  "AUD",
+  "CAD",
+  "CZK",
+  "MXN",
+  "PLN",
+  "GBP",
+  "XPF"
+] as const;
