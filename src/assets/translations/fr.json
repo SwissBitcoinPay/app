@@ -34,13 +34,13 @@
       "nonCustodial": "Non-custodial",
       "noKyc": "Sans identification",
       "in1minute": "En 1 minute",
+      "licensedBy": "Agréé par la",
+      "finma": "Autorité fédérale de surveillance des marchés financiers",
       "createAccount": "Créer un compte",
       "orConnectBy": "ou se connecter",
       "scanActivationQRcode": "Scanner le code QR d'activation",
       "email": "E-mail",
-      "signature": "Signature",
-      "licensedBy": "Agréé par la",
-      "finma": "Autorité fédérale de surveillance des marchés financiers"
+      "signature": "Signature"
     },
     "emailLogin": {
       "title": "Connexion e-mail",
@@ -95,14 +95,14 @@
           "alreadyExists": "Cette adresse est déjà utilisée par un autre compte",
           "invalid": "Cette adresse n'est pas valide"
         },
+        "iban": {
+          "blacklisted": "La banque de cet IBAN est sur liste noire"
+        },
         "email": {
           "alreadyExists": "Cet email est déjà utilisé par un autre compte"
         },
         "referralCode": {
           "doesntExists": "Ce code de parrainage n'existe pas"
-        },
-        "iban": {
-          "blacklisted": "La banque de cet IBAN est sur liste noire"
         }
       }
     },
@@ -281,25 +281,25 @@
       "receiveInfo": "Les paiements reçus directement à cette adresse ne sont pas suivis par Swiss Bitcoin Pay et ne sont donc pas soumis à des frais et ne sont pas inclus dans les exports.",
       "btcAmount": "Montant",
       "fees": "Frais",
+      "errorFetchingWallet": "Erreur lors de la récupération de votre portefeuille",
       "sendModal": {
         "send": "Envoyer vos bitcoins",
         "fastestFee": "Rapide",
         "halfHourFee": "Moyen",
         "hourFee": "Lent",
         "economyFee": "Économique",
-        "sendInfo": "Envoyez des fonds depuis votre portefeuille self-custodial vers une adresse Bitcoin",
-        "sendLastInfo": "Votre transaction est générée et diffusée intégralement depuis votre appareil local. Aucune information privée ne transite par les serveurs de Swiss Bitcoin Pay",
         "transactionSent": "Transaction envoyée !",
         "errorBroadcast": "Erreur lors de la diffusion de la transaction",
+        "sendInfo": "Envoyez des fonds depuis votre portefeuille self-custodial vers une adresse Bitcoin",
         "destinationAddress": "Adresse de destination",
         "amount": "Montant",
         "max": "Max",
         "balance": "Solde",
         "fees": "Frais",
+        "sendLastInfo": "Votre transaction est générée et diffusée intégralement depuis votre appareil local. Aucune information privée ne transite par les serveurs de Swiss Bitcoin Pay",
         "signWithBitbox": "Signer avec le BitBox02",
         "broadcast": "Envoyer"
-      },
-      "errorFetchingWallet": "Erreur lors de la récupération de votre portefeuille"
+      }
     }
   },
   "createWalletModal": {
@@ -317,14 +317,14 @@
       "instructions4": "Nous ne conservons aucune copie de vos clés de portefeuille ou de vos fonds. Nous ne pouvons pas y accéder ou les récupérer. Vous êtes le seul responsable de la sécurité de votre portefeuille."
     },
     "step2": {
+      "seedPhrase": "phrase secrète",
       "instructions1": "À l'étape suivante, nous afficherons vos 12 mots (également appelés seed phrase / phrase secrète). Cette phrase secrète est le seul moyen d'accéder à vos bitcoins.",
       "instructions2": "Votre phrase secrète est générée localement et en toute sécurité sur votre appareil, et n'est jamais envoyée sur nos serveurs.",
       "instructions3": "Notez-le sur un support durable et conservez-le en lieu sûr.",
       "instructions4": "Si vous perdez votre phrase secrète, vos fonds seront perdus à jamais. Il est donc absolument essentiel de conserver et de protéger correctement votre phrase secrète.",
       "agree1": "Je comprends que je suis le seul responsable du stockage de ma phrase secrète.",
       "agree2": "Je comprends que la perte ou le vol de ma phrase secrète entraînera une perte de fonds.",
-      "agree3": "Je comprends que personne ne peut m'aider à récupérer mes fonds si je perds ma phrase secrète, pas même Swiss Bitcoin Pay.",
-      "seedPhrase": "phrase secrète"
+      "agree3": "Je comprends que personne ne peut m'aider à récupérer mes fonds si je perds ma phrase secrète, pas même Swiss Bitcoin Pay."
     },
     "step3": {
       "instructions1": "Écrivez vos 12 mots et veillez à ce qu'ils soient clairement lisibles.",
@@ -343,16 +343,6 @@
       "instructions1": "Portefeuille créé avec succès",
       "instructions2": "Conservez votre phrase secrète en lieu sûr et ne la montrez à personne !"
     }
-  },
-  "accountConfigHook": {
-    "setupComplete": "Installation terminée",
-    "checkInternet": "Veuillez vérifier votre connexion internet",
-    "invalidActivationCode": "Code d'activation invalide"
-  },
-  "errors": {
-    "serverInMaintenance": "Serveur en maintenance. Veuillez réessayer plus tard",
-    "noKycLimit": "Vous avez atteint la limite non-KYC",
-    "accountNotVerified": "Vérifiez votre adresse de dépôt sur votre dashboard"
   },
   "secureWallet": {
     "instructions1": "Vous ne dépendez pas de Swiss Bitcoin Pay pour accéder à vos bitcoins, votre {{backup}} peut être utilisé sur n'importe quel portefeuille bitcoin.",
@@ -425,26 +415,36 @@
     "signature": {
       "title": "Signature",
       "getAccount": "Récupération de votre compte",
+      "selectAccount": "Sélectionnez le compte que vous souhaitez utiliser",
+      "select": "Sélectionner",
       "prepareSignature": "Préparation de la signature",
       "waitingForSignature": "Veuillez signer le message sur votre BitBox02",
       "verifySignature": "Vérification de la signature",
       "cannotGetAccount": "Impossible d'obtenir un compte",
       "cannotGetXpub": "Impossible d'obtenir la xpub",
-      "signatureError": "Message d'erreur lors de la signature. Veuillez réessayer",
-      "selectAccount": "Sélectionnez le compte que vous souhaitez utiliser",
-      "select": "Sélectionner"
+      "signatureError": "Message d'erreur lors de la signature. Veuillez réessayer"
     }
+  },
+  "accountConfigHook": {
+    "setupComplete": "Installation terminée",
+    "checkInternet": "Veuillez vérifier votre connexion internet",
+    "invalidActivationCode": "Code d'activation invalide"
+  },
+  "errors": {
+    "serverInMaintenance": "Serveur en maintenance. Veuillez réessayer plus tard",
+    "noKycLimit": "Vous avez atteint la limite non-KYC",
+    "accountNotVerified": "Vérifiez votre adresse de dépôt sur votre dashboard"
   },
   "printTicket": {
     "paidInBitcoin": "Payé en bitcoins",
     "amount": "Montant",
     "fiatAmount": "Montant fiat",
+    "rate": "Taux",
     "paidVia": "Payé via",
     "paidAt": "Payé le",
     "note": "Note",
     "invoiceId": "ID de la facture",
     "thanks": "Merci d'acheter avec ₿itcoin",
-    "poweredBy": "Propulsé par",
-    "rate": "Taux"
+    "poweredBy": "Propulsé par"
   }
 }
