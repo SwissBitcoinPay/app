@@ -34,13 +34,13 @@
       "nonCustodial": "Sem custódia",
       "noKyc": "Sem KYC",
       "in1minute": "Em 1 minuto",
+      "licensedBy": "Aprovado pela",
+      "finma": "Swiss Financial Market Supervisory Authority",
       "createAccount": "Criar conta",
       "orConnectBy": "ou ligue-se através de",
       "scanActivationQRcode": "Digitalizar o código QR de ativação",
       "email": "E-mail",
-      "signature": "Assinatura",
-      "licensedBy": "Aprovado pela",
-      "finma": "Swiss Financial Market Supervisory Authority"
+      "signature": "Assinatura"
     },
     "emailLogin": {
       "title": "Início de sessão por e-mail",
@@ -53,6 +53,8 @@
       }
     },
     "signatureLogin": {
+      "titleWallet": "Assinatura com carteira de ferragens",
+      "titleWords": "Assinatura com 12 palavras",
       "word": "Palavra {{number}}",
       "enter12wordsDescription1": "As suas 12 palavras ficarão no seu dispositivo, para assinar uma mensagem que o autentique.",
       "enter12wordsDescription2": "Certifique-se de que introduz as suas 12 palavras num software verificado e de código aberto.",
@@ -60,9 +62,7 @@
       "error": {
         "invalidSignature": "Assinatura inválida",
         "invalidWord": "Palavra inválida"
-      },
-      "titleWallet": "Assinatura com carteira de ferragens",
-      "titleWords": "Assinatura com 12 palavras"
+      }
     },
     "signup": {
       "title": "Registo",
@@ -95,14 +95,14 @@
           "alreadyExists": "Este endereço já está a ser utilizado por outra conta",
           "invalid": "Este endereço não é válido"
         },
+        "iban": {
+          "blacklisted": "O banco deste IBAN está na lista negra"
+        },
         "email": {
           "alreadyExists": "Este e-mail já está a ser utilizado por outra conta"
         },
         "referralCode": {
           "doesntExists": "Este código de referência não existe"
-        },
-        "iban": {
-          "blacklisted": "O banco deste IBAN está na lista negra"
         }
       }
     },
@@ -113,10 +113,10 @@
       "downloadApp": "Descarregar a aplicação",
       "note": "Nota",
       "atmAccount": "Conta multibanco",
+      "guestMode": "Modo de convidado",
       "allowWithdraw": "Permitir o levantamento",
       "cannotGoHigher": "O montante máximo é de {{maxAmount}}",
-      "addToHomeScreen": "Adicionar ao ecrã inicial",
-      "guestMode": "Modo de convidado"
+      "addToHomeScreen": "Adicionar ao ecrã inicial"
     },
     "invoice": {
       "creatingInvoice": "A criar fatura",
@@ -172,6 +172,10 @@
       "userType": "Tipo de utilizador",
       "patchSettingSuccessful": "Definição actualizada com sucesso",
       "patchSettingError": "Erro ao atualizar a definição",
+      "tickets": "Recibos automáticos",
+      "ticketsPrinting": "Impressão automática de recibos",
+      "testPrint": "Impressão de teste",
+      "ticketsPrintingDescription": "Os recibos de pagamento podem ser impressos automaticamente após o pagamento de cada fatura",
       "merchantName": "Nome do comerciante",
       "merchantNameDescription": "O nome do comerciante está presente em todas as faturas geradas por si e pelos seus empregados",
       "currency": "Moeda",
@@ -192,10 +196,6 @@
       "confirmLogout": "Confirmar terminar sessão",
       "confirmLogoutDescription": "Depois de terminar a sessão, terá de digitalizar novamente o código de ativação ou entrar com as credenciais",
       "logoutSuccessful": "Sessão terminada com sucesso",
-      "tickets": "Recibos automáticos",
-      "ticketsPrinting": "Impressão automática de recibos",
-      "testPrint": "Impressão de teste",
-      "ticketsPrintingDescription": "Os recibos de pagamento podem ser impressos automaticamente após o pagamento de cada fatura",
       "shareMyLink": "Partilhar a minha ligação de ativação",
       "copyMyLink": "Copiar a minha ligação de ativação",
       "acceptBitcoinPayments": "Aceitar pagamentos em Bitcoin",
@@ -241,8 +241,8 @@
       "receiveInBankDescription2Instant": "O pagamento para a sua conta bancária é efectuado automaticamente assim que o seu saldo excede o mínimo de {{formattedAmount}}.",
       "receiveInBankDescription2Batched": "O pagamento para a sua conta bancária é efectuado automaticamente todos os dias às 0:00 UTC quando o seu saldo exceder o mínimo de {{formattedAmount}}.",
       "receiveInBankDescription2Swift": "As transferências Swift em {{currency}} estão sujeitas a taxas bancárias Swift, que não são previsíveis e podem representar {{formattedAmountLow}} a {{formattedAmountHigh}} de taxas adicionais.",
-      "receiveInBankDescription3": "Abaixo deste montante, também é possível acionar manualmente uma transferência, mediante o pagamento de uma taxa de {{formattedAmount}}.",
       "receiveInBankDescription3Swift": "Os pagamentos para a sua conta bancária são efectuados automaticamente todos os dias às 0:00 UTC quando o seu saldo excede o mínimo de {{formattedAmount}}.",
+      "receiveInBankDescription3": "Abaixo deste montante, também é possível acionar manualmente uma transferência, mediante o pagamento de uma taxa de {{formattedAmount}}.",
       "receiveInBankDescriptionInstantSepa": "Se o seu banco for compatível com Instant SEPA, receberá os seus pagamentos instantaneamente na sua conta bancária.",
       "receiveInBankDescriptionFasterPayments": "O pagamento para a sua conta bancária em GBP é efectuado instantaneamente através de Faster Payments.",
       "createYourBitcoinWallet": "Criar a sua carteira Bitcoin",
@@ -264,8 +264,8 @@
       "ibanInvalid": "IBAN inválido",
       "zipInvalid": "Código postal inválido",
       "submit": "Enviar",
-      "patchSettingNeedsEmailValidation": "Confirmar as novas definições através da mensagem de e-mail recebida",
-      "bitboxConnectSuccess": "A sua BitBox02 foi ligada com sucesso. Pode desligá-la."
+      "bitboxConnectSuccess": "A sua BitBox02 foi ligada com sucesso. Pode desligá-la.",
+      "patchSettingNeedsEmailValidation": "Confirmar as novas definições através da mensagem de e-mail recebida"
     },
     "wallet": {
       "title": "Carteira Onchain",
@@ -281,6 +281,7 @@
       "receiveInfo": "Receba bitcoins diretamente para a sua carteira local com este endereço.\nOs pagamentos recebidos diretamente para este endereço não são controlados pela Swiss Bitcoin Pay, pelo que não estão sujeitos a taxas e não estão incluídos nas exportações.",
       "btcAmount": "Montante",
       "fees": "Taxas",
+      "errorFetchingWallet": "Erro ao obter a sua carteira",
       "sendModal": {
         "send": "Enviar os seus bitcoins",
         "fastestFee": "Mais rápido",
@@ -298,8 +299,7 @@
         "sendLastInfo": "A sua transação é gerada e transmitida inteiramente a partir do seu dispositivo local. Nenhuma informação privada passa pelos servidores da Swiss Bitcoin Pay",
         "signWithBitbox": "Assinar com BitBox02",
         "broadcast": "Enviar"
-      },
-      "errorFetchingWallet": "Erro ao obter a sua carteira"
+      }
     }
   },
   "createWalletModal": {
@@ -317,14 +317,14 @@
       "instructions4": "Não armazenamos qualquer cópia das chaves da sua carteira ou dos seus fundos. Não podemos aceder a eles ou recuperá-los. O utilizador é o único responsável pela segurança da sua carteira."
     },
     "step2": {
+      "seedPhrase": "seed phrase",
       "instructions1": "No próximo passo, mostraremos as suas 12 palavras (seed phrase). Esta frase secreta é a única forma de aceder às suas bitcoins.",
       "instructions2": "A sua frase secreta é gerada de forma segura e localmente no seu dispositivo e nunca é enviada para os nossos servidores.",
       "instructions3": "Escreva-a em algo duradouro e guarde-a num local seguro.",
       "instructions4": "Se perder a sua frase secreta, os seus fundos perder-se-ão para sempre. Por conseguinte, é absolutamente essencial armazenar e proteger corretamente a sua frase secreta.",
       "agree1": "Compreendo que sou o único responsável pelo armazenamento da minha frase secreta.",
       "agree2": "Compreendo que a perda da minha frase secreta ou o roubo da mesma resultará numa perda de fundos.",
-      "agree3": "Compreendo que ninguém pode ajudar a recuperar os meus fundos se eu perder a minha frase secreta, nem mesmo a Swiss Bitcoin Pay.",
-      "seedPhrase": "seed phrase"
+      "agree3": "Compreendo que ninguém pode ajudar a recuperar os meus fundos se eu perder a minha frase secreta, nem mesmo a Swiss Bitcoin Pay."
     },
     "step3": {
       "instructions1": "Escreva as suas 12 palavras e certifique-se de que são claramente legíveis.",
@@ -343,16 +343,6 @@
       "instructions1": "Carteira criada com sucesso",
       "instructions2": "Guarde a sua frase secreta num local seguro e nunca a mostre a ninguém!"
     }
-  },
-  "accountConfigHook": {
-    "setupComplete": "Configuração concluída",
-    "checkInternet": "Verifique a sua ligação à Internet",
-    "invalidActivationCode": "Código de ativação inválido"
-  },
-  "errors": {
-    "serverInMaintenance": "Servidor em manutenção. Por favor, tente novamente mais tarde",
-    "noKycLimit": "Atingiu o limite de não-KYC",
-    "accountNotVerified": "Verifique o seu endereço de depósito no seu painel de controlo"
   },
   "secureWallet": {
     "instructions1": "Não depende do Swiss Bitcoin Pay para aceder aos seus bitcoins, o seu {{backup}} pode ser utilizado em qualquer carteira de bitcoins.",
@@ -425,26 +415,36 @@
     "signature": {
       "title": "Assinatura",
       "getAccount": "Obter uma conta",
+      "selectAccount": "Selecionar a conta que pretende utilizar",
+      "select": "Selecionar",
       "prepareSignature": "Preparar a assinatura",
       "waitingForSignature": "Por favor, assine a mensagem na sua BitBox02",
       "verifySignature": "Verificar a assinatura",
       "cannotGetAccount": "Não é possível obter uma conta",
       "cannotGetXpub": "Não é possível obter o xpub",
-      "signatureError": "Mensagem de erro de assinatura. Por favor, tente novamente",
-      "selectAccount": "Selecionar a conta que pretende utilizar",
-      "select": "Selecionar"
+      "signatureError": "Mensagem de erro de assinatura. Por favor, tente novamente"
     }
+  },
+  "accountConfigHook": {
+    "setupComplete": "Configuração concluída",
+    "checkInternet": "Verifique a sua ligação à Internet",
+    "invalidActivationCode": "Código de ativação inválido"
+  },
+  "errors": {
+    "serverInMaintenance": "Servidor em manutenção. Por favor, tente novamente mais tarde",
+    "noKycLimit": "Atingiu o limite de não-KYC",
+    "accountNotVerified": "Verifique o seu endereço de depósito no seu painel de controlo"
   },
   "printTicket": {
     "paidInBitcoin": "Pago em Bitcoin",
     "amount": "Montante",
     "fiatAmount": "Montante fiat",
+    "rate": "Taxa",
     "paidVia": "Pago através de",
     "paidAt": "Pago em",
     "note": "Nota",
     "invoiceId": "ID da fatura",
     "thanks": "Obrigado por comprar com ₿itcoin",
-    "poweredBy": "Alimentado por",
-    "rate": "Taxa"
+    "poweredBy": "Alimentado por"
   }
 }
