@@ -34,13 +34,13 @@
       "nonCustodial": "Ohne Verwahrung",
       "noKyc": "Ohne KYC",
       "in1minute": "In 1 Minute",
+      "licensedBy": "lizenziert durch die",
+      "finma": "Eidgenössische Finanzmarktaufsicht",
       "createAccount": "Konto erstellen",
       "orConnectBy": "oder verbinden durch",
       "scanActivationQRcode": "QR-Code zur Aktivierung scannen",
       "email": "E-Mail",
-      "signature": "Unterschrift",
-      "licensedBy": "lizenziert durch die",
-      "finma": "Eidgenössische Finanzmarktaufsicht"
+      "signature": "Unterschrift"
     },
     "emailLogin": {
       "title": "Anmeldung per E-Mail",
@@ -53,6 +53,8 @@
       }
     },
     "signatureLogin": {
+      "titleWallet": "Unterschrift mit Hardware-Geldbörse",
+      "titleWords": "Unterschrift mit 12 Wörtern",
       "word": "Wort {{number}}",
       "enter12wordsDescription1": "Ihre 12 Wörter verbleiben auf Ihrem Gerät, um eine Nachricht zu signieren und Sie zu authentifizieren.",
       "enter12wordsDescription2": "Bitte stellen Sie sicher, dass Sie Ihre Seed-Phrase auf einem verifizierten Open-Source-Build eingeben.",
@@ -60,9 +62,7 @@
       "error": {
         "invalidSignature": "Ungültige Signatur",
         "invalidWord": "Ungültiges Wort"
-      },
-      "titleWallet": "Unterschrift mit Hardware-Geldbörse",
-      "titleWords": "Unterschrift mit 12 Wörtern"
+      }
     },
     "signup": {
       "title": "Anmelden",
@@ -80,6 +80,7 @@
       "currency": "Währung",
       "currencyDescription": "Die Standardwährung für Ihr Unternehmen",
       "referralCode": "Empfehlungscode",
+      "optional": "Optional",
       "referralCodeDescription": "Wenn Sie jemand zu Swiss Bitcoin Pay gebracht hat, geben Sie bitte den Empfehlungscode hier ein",
       "submitDescription1": "Mit der Erstellung Ihres Kontos akzeptieren Sie unsere",
       "submitDescription2": "und",
@@ -94,17 +95,16 @@
           "alreadyExists": "Diese Adresse wird bereits von einem anderen Konto verwendet",
           "invalid": "Diese Adresse ist ungültig"
         },
+        "iban": {
+          "blacklisted": "Die Bank dieser IBAN steht auf der schwarzen Liste"
+        },
         "email": {
           "alreadyExists": "Diese E-Mail wird bereits von einem anderen Konto verwendet"
         },
         "referralCode": {
           "doesntExists": "Dieser Empfehlungscode existiert nicht"
-        },
-        "iban": {
-          "blacklisted": "Die Bank dieser IBAN steht auf der schwarzen Liste"
         }
-      },
-      "optional": "Optional"
+      }
     },
     "pos": {
       "deviceName": "Name des Geräts",
@@ -113,10 +113,10 @@
       "downloadApp": "Die App herunterladen",
       "note": "Hinweis",
       "atmAccount": "ATM-Konto",
+      "guestMode": "Gast-Modus",
       "allowWithdraw": "Abheben zulassen",
       "cannotGoHigher": "Der Höchstbetrag beträgt {{maxAmount}}",
-      "addToHomeScreen": "Zum Startbildschirm hinzufügen",
-      "guestMode": "Gast-Modus"
+      "addToHomeScreen": "Zum Startbildschirm hinzufügen"
     },
     "invoice": {
       "creatingInvoice": "Rechnung erstellen",
@@ -172,6 +172,10 @@
       "userType": "Benutzertyp",
       "patchSettingSuccessful": "Einstellung erfolgreich aktualisiert",
       "patchSettingError": "Fehler bei der Aktualisierung der Einstellung",
+      "tickets": "Automatische Quittungen",
+      "ticketsPrinting": "Automatischer Belegdruck",
+      "testPrint": "Testdruck",
+      "ticketsPrintingDescription": "Zahlungsbelege können automatisch gedruckt werden, nachdem jede Rechnung bezahlt wurde",
       "merchantName": "Name des Händlers",
       "merchantNameDescription": "Der Händlername ist in allen Rechnungen enthalten, die Sie und Ihre Mitarbeiter erstellen.",
       "currency": "Währung",
@@ -192,10 +196,6 @@
       "confirmLogout": "Bestätigen Sie die Abmeldung",
       "confirmLogoutDescription": "Nach der Abmeldung müssen Sie den Aktivierungscode erneut einscannen oder eine Verbindung mit den Anmeldedaten herstellen",
       "logoutSuccessful": "Erfolgreiche Trennung der Verbindung",
-      "tickets": "Automatische Quittungen",
-      "ticketsPrinting": "Automatischer Belegdruck",
-      "testPrint": "Testdruck",
-      "ticketsPrintingDescription": "Zahlungsbelege können automatisch gedruckt werden, nachdem jede Rechnung bezahlt wurde",
       "shareMyLink": "Meinen Aktivierungslink freigeben",
       "copyMyLink": "Kopieren Sie meinen Aktivierungslink",
       "acceptBitcoinPayments": "Bitcoin-Zahlungen akzeptieren",
@@ -241,13 +241,14 @@
       "receiveInBankDescription2Instant": "Die Zahlung auf Ihr Bankkonto erfolgt automatisch, sobald Ihr Guthaben den Mindestbetrag von {{formattedAmount}} übersteigt.",
       "receiveInBankDescription2Batched": "Die Zahlung auf Ihr Bankkonto erfolgt automatisch jeden Tag um 0:00 UTC, wenn Ihr Guthaben den Mindestbetrag von {{formattedAmount}} übersteigt.",
       "receiveInBankDescription2Swift": "Swift-Überweisungen auf {{currency}} unterliegen den Swift-Bankgebühren, die nicht vorhersehbar sind und {{formattedAmountLow}} bis {{formattedAmountHigh}} zusätzliche Gebühren ausmachen können.",
-      "receiveInBankDescription3": "Unterhalb dieses Betrags ist es auch möglich, eine Überweisung manuell auszulösen, gegen eine Gebühr von {{formattedAmount}}.",
       "receiveInBankDescription3Swift": "Die Einzahlung auf Ihr Bankkonto erfolgt automatisch an jedem 1. des Monats, sobald Ihr Kontostand den Mindestbetrag von {{formattedAmount}} überschreitet.",
+      "receiveInBankDescription3": "Unterhalb dieses Betrags ist es auch möglich, eine Überweisung manuell auszulösen, gegen eine Gebühr von {{formattedAmount}}.",
       "receiveInBankDescriptionInstantSepa": "Wenn Ihre Bank Instant SEPA-kompatibel ist, erhalten Sie Ihre Zahlungen sofort auf Ihr Bankkonto.",
       "receiveInBankDescriptionFasterPayments": "Die Zahlung auf Ihr Bankkonto in GBP erfolgt sofort über Faster Payments.",
       "createYourBitcoinWallet": "Erstellen Sie Ihre Bitcoin-Wallet",
       "iban": "IBAN",
       "bankReference": "Bankverbindung",
+      "optional": "Optional",
       "yourName": "Ihr Firmen- oder Personenname",
       "ownerName": "Name des Eigentümers",
       "yourAddress": "Ihre Adresse",
@@ -263,9 +264,8 @@
       "ibanInvalid": "Ungültige IBAN",
       "zipInvalid": "Ungültige Postleitzahl",
       "submit": "Absenden",
-      "patchSettingNeedsEmailValidation": "Bestätigen Sie die neuen Einstellungen mit der E-Mail, die Sie erhalten haben.",
       "bitboxConnectSuccess": "Ihre BitBox02 wurde erfolgreich angeschlossen. Sie können sie ausstecken.",
-      "optional": "Optional"
+      "patchSettingNeedsEmailValidation": "Bestätigen Sie die neuen Einstellungen mit der E-Mail, die Sie erhalten haben."
     },
     "wallet": {
       "title": "Onchain-Wallet",
@@ -281,6 +281,7 @@
       "receiveInfo": "Mit dieser unbenutzten Adresse erhalten Sie Bitcoins direkt auf Ihr lokales Wallet. Zahlungen, die direkt auf diese Adresse eingehen, werden von Swiss Bitcoin Pay nicht verfolgt und sind daher nicht gebührenpflichtig und nicht im Export enthalten.",
       "btcAmount": "Betrag",
       "fees": "Gebühren",
+      "errorFetchingWallet": "Fehler beim Abrufen Ihrer Brieftasche",
       "sendModal": {
         "send": "Senden Sie Ihre Bitcoins",
         "fastestFee": "Schnellste",
@@ -298,8 +299,7 @@
         "sendLastInfo": "Ihre Transaktion wird vollständig von Ihrem lokalen Gerät aus generiert und übertragen. Keine privaten Informationen gehen durch die Swiss Bitcoin Pay Server",
         "signWithBitbox": "Unterschreiben mit BitBox02",
         "broadcast": "Senden Sie"
-      },
-      "errorFetchingWallet": "Fehler beim Abrufen Ihrer Brieftasche"
+      }
     }
   },
   "createWalletModal": {
@@ -317,14 +317,14 @@
       "instructions4": "Wir speichern keine Kopie Ihrer Walletschlüssel oder Ihres Geldes. Wir können nicht auf sie zugreifen oder sie wiederherstellen. Sie sind allein für die Sicherheit Ihres Wallets verantwortlich."
     },
     "step2": {
+      "seedPhrase": "Seed-Phrase",
       "instructions1": "Im nächsten Schritt zeigen wir Ihnen Ihre 12 Wörter (auch Seed-Phrase genannt) an. Diese geheime Seed-Phrase ist der einzige Weg, um an Ihre Bitcoins zu gelangen.",
       "instructions2": "Ihre Seed-Phrase wird sicher und lokal auf Ihrem Gerät generiert und wird niemals an unsere Server gesendet.",
       "instructions3": "Schreiben Sie sie auf einen dauerhaften Datenträger und bewahren Sie sie an einem sicheren Ort auf.",
       "instructions4": "Wenn Sie Ihre Seed Phrase verlieren, ist Ihr Geld für immer verloren. Es ist daher absolut wichtig, dass Sie Ihre Seed Phrase ordnungsgemäß aufbewahren und schützen.",
       "agree1": "Mir ist klar, dass ich allein für die Aufbewahrung meiner Seed Phrase verantwortlich bin.",
       "agree2": "Mir ist bewusst, dass der Verlust oder der Diebstahl meiner Seed Phrase den Verlust von Geldern zur Folge hat.",
-      "agree3": "Ich verstehe, dass niemand mir helfen kann, mein Geld zurückzubekommen, wenn ich meine Seed Phrase verliere, nicht einmal Swiss Bitcoin Pay.",
-      "seedPhrase": "Seed-Phrase"
+      "agree3": "Ich verstehe, dass niemand mir helfen kann, mein Geld zurückzubekommen, wenn ich meine Seed Phrase verliere, nicht einmal Swiss Bitcoin Pay."
     },
     "step3": {
       "instructions1": "Schreiben Sie Ihre 12 Wörter auf und achten Sie darauf, dass sie gut lesbar sind.",
@@ -343,16 +343,6 @@
       "instructions1": "Wallet erfolgreich erstellt",
       "instructions2": "Bewahren Sie Ihre Seed Phrase an einem sicheren Ort auf und zeigen Sie sie niemandem!"
     }
-  },
-  "accountConfigHook": {
-    "setupComplete": "Einrichtung abgeschlossen",
-    "checkInternet": "Bitte überprüfen Sie Ihre Internetverbindung",
-    "invalidActivationCode": "Ungültiger Aktivierungscode"
-  },
-  "errors": {
-    "serverInMaintenance": "Server wird gewartet. Bitte versuchen Sie es später erneut",
-    "noKycLimit": "Sie haben die Nicht-KYC-Grenze erreicht",
-    "accountNotVerified": "Überprüfen Sie Ihre Einzahlungsadresse in Ihrem Dashboard"
   },
   "secureWallet": {
     "instructions1": "Sie sind nicht auf Swiss Bitcoin Pay angewiesen, um auf Ihre Bitcoins zuzugreifen, Ihre {{backup}} kann auf jeder Bitcoin-Wallet verwendet werden.",
@@ -425,26 +415,36 @@
     "signature": {
       "title": "Unterschrift",
       "getAccount": "Konto erhalten",
+      "selectAccount": "Wählen Sie das Konto, das Sie verwenden möchten",
+      "select": "Wählen Sie",
       "prepareSignature": "Unterschrift vorbereiten",
       "waitingForSignature": "Bitte unterschreiben Sie die Nachricht auf Ihrer BitBox02",
       "verifySignature": "Überprüfung der Unterschrift",
       "cannotGetAccount": "Kann kein Konto erhalten",
       "cannotGetXpub": "Kann xpub nicht erhalten",
-      "signatureError": "Fehlermeldung beim Signieren. Bitte versuchen Sie es erneut",
-      "selectAccount": "Wählen Sie das Konto, das Sie verwenden möchten",
-      "select": "Wählen Sie"
+      "signatureError": "Fehlermeldung beim Signieren. Bitte versuchen Sie es erneut"
     }
+  },
+  "accountConfigHook": {
+    "setupComplete": "Einrichtung abgeschlossen",
+    "checkInternet": "Bitte überprüfen Sie Ihre Internetverbindung",
+    "invalidActivationCode": "Ungültiger Aktivierungscode"
+  },
+  "errors": {
+    "serverInMaintenance": "Server wird gewartet. Bitte versuchen Sie es später erneut",
+    "noKycLimit": "Sie haben die Nicht-KYC-Grenze erreicht",
+    "accountNotVerified": "Überprüfen Sie Ihre Einzahlungsadresse in Ihrem Dashboard"
   },
   "printTicket": {
     "paidInBitcoin": "Bezahlt in Bitcoin",
     "amount": "Betrag",
     "fiatAmount": "Fiat-Betrag",
+    "rate": "Bewerten Sie",
     "paidVia": "Bezahlt über",
     "paidAt": "Bezahlt am",
     "note": "Hinweis",
     "invoiceId": "Rechnungs-ID",
     "thanks": "Danke für den Kauf mit ₿itcoin",
-    "poweredBy": "Angetrieben durch",
-    "rate": "Bewerten Sie"
+    "poweredBy": "Angetrieben durch"
   }
 }
