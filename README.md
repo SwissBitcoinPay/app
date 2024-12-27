@@ -6,6 +6,7 @@ Swiss Bitcoin Pay is an easy-to-use solution to accept bitcoin payments in your 
 [![MIT License](https://img.shields.io/github/license/frw/react-native-ssl-public-key-pinning)](LICENSE)
 ![Codemagic build status](https://api.codemagic.io/apps/6580220d95d4f2f104923fef/react-native-android/status_badge.svg)
 ![Netlify Status](https://api.netlify.com/api/v1/badges/0537dd5e-edb6-4a7a-ada0-0f3295e50a73/deploy-status)
+[![Crowdin](https://badges.crowdin.net/swiss-bitcoin-pay/localized.svg)](https://crowdin.com/project/swiss-bitcoin-pay)
 [![GitHub Repo stars](https://img.shields.io/github/stars/SwissBitcoinPay/app?style=social)](https://github.com/SwissBitcoinPay/app)
 
 ## 🔍 Features
