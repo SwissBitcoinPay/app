@@ -9,7 +9,12 @@ import {
   useRef,
   useState
 } from "react";
-import { getFormattedUnit, AsyncStorage } from "@utils";
+import {
+  getFormattedUnit,
+  AsyncStorage,
+  decimalSeparator,
+  decimalSeparatorNameMapping
+} from "@utils";
 import { Keyboard, Text, Loader, TextField, PageContainer } from "@components";
 import { NumberInput } from "./components";
 import { useTranslation } from "react-i18next";
@@ -31,11 +36,13 @@ import { SBPContext, apiRootUrl, currencies, platform } from "@config";
 import { keyStoreDeviceName, keyStoreIsGuest } from "@config/settingsKeys";
 import { useToast } from "react-native-toast-notifications";
 import { useTheme } from "styled-components";
-import { TextInput, TouchableOpacity } from "react-native";
+import { TextInput, Touchable, TouchableOpacity } from "react-native";
 import * as S from "./styled";
 
-const DEL_REF_INDEX = 10;
-const OK_REF_INDEX = 11;
+const DECIMAL_REF_INDEX = 10;
+const C_REF_INDEX = 11;
+const DEL_REF_INDEX = 12;
+const OK_REF_INDEX = 13;
 
 const {
   isWeb,
@@ -109,11 +116,13 @@ export const Pos = () => {
 
   const clearAmount = useCallback(() => {
     setFiatAmount(0);
+    setDecimalCount(0);
   }, []);
 
   const delAmount = useCallback(() => {
     setFiatAmount((v) => {
       if (v <= 9) {
+        setDecimalCount(0);
         return 0;
       }
       return parseInt(v.toString().slice(0, -1));
@@ -163,10 +172,18 @@ export const Pos = () => {
 
   const descriptionInputRef = useRef<TextInput>(null);
 
+  const [decimalCount, setDecimalCount] = useState(0);
+
   const onPressNumber = useCallback(
     (newNumber: number) => {
-      const newFiatAmount =
-        fiatAmount * 10 + newNumber * (haveDecimals ? 1 : 100);
+      let newFiatAmount: number;
+      if (!decimalCount) {
+        newFiatAmount = fiatAmount * 10 + newNumber * (haveDecimals ? 1 : 100);
+      } else {
+        newFiatAmount =
+          fiatAmount + newNumber * parseInt(`1${"0".repeat(decimalCount - 1)}`);
+        setDecimalCount(decimalCount - 1);
+      }
 
       if (!maxFiatAmount || newFiatAmount / 100 <= maxFiatAmount) {
         setFiatAmount(newFiatAmount);
@@ -181,7 +198,7 @@ export const Pos = () => {
         );
       }
     },
-    [unit, fiatAmount, haveDecimals, maxFiatAmount, t, toast]
+    [fiatAmount, haveDecimals, decimalCount, maxFiatAmount, toast, t, unit]
   );
 
   useEffect(() => {
@@ -192,18 +209,30 @@ export const Pos = () => {
     return () => hideSubscription.remove();
   }, []);
 
-  const inputRef = useRef<TouchableOpacity[]>([]);
+  const inputRef = useRef<Touchable[]>([]);
+
+  const onDecimalSeparator = useCallback(() => {
+    if (fiatAmount.toString().length > 0) {
+      setFiatAmount(fiatAmount * 100);
+    }
+    setDecimalCount(haveDecimals ? 2 : 0);
+  }, [fiatAmount, haveDecimals]);
 
   const handleKeyPress = useCallback<EventListener>(
     // @ts-ignore
     (e: KeyboardEvent) => {
       const pressedKey = parseInt(e?.nativeEvent?.key);
       const refs = inputRef as unknown as MutableRefObject<HTMLButtonElement[]>;
+      const pressCode = e?.nativeEvent?.code;
       if (Number.isInteger(pressedKey)) {
         refs.current[pressedKey]?.click?.();
-      } else if (e?.nativeEvent?.code === "Backspace") {
+      } else if (Object.keys(decimalSeparatorNameMapping).includes(pressCode)) {
+        refs.current[DECIMAL_REF_INDEX]?.click?.();
+      } else if (pressCode === "Delete") {
+        refs.current[C_REF_INDEX]?.click?.();
+      } else if (pressCode === "Backspace") {
         refs.current[DEL_REF_INDEX]?.click?.();
-      } else if (e?.nativeEvent?.code === "Enter") {
+      } else if (pressCode === "Enter") {
         refs.current[OK_REF_INDEX]?.click?.();
       }
     },
@@ -274,7 +303,8 @@ export const Pos = () => {
             {getFormattedUnit(
               decimalFiat,
               unit || "",
-              decimalFiat === 0 || !haveDecimals ? 0 : 2
+              decimalFiat === 0 || !haveDecimals ? 0 : 2,
+              !!decimalCount && decimalFiat === 0
             )}
           </Text>
           <S.FiatAmountDropdownIcon icon={faAngleDown} color={colors.grey} />
@@ -311,14 +341,30 @@ export const Pos = () => {
         </S.DescriptionContainer>
       </S.InfosContainer>
       <S.PadContainer>
-        {[[1, 2, 3], [4, 5, 6], [7, 8, 9], [0]].map((rowValue, rowIndex) => (
+        {[
+          [1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 9],
+          [decimalSeparator, 0, undefined]
+        ].map((rowValue, rowIndex) => (
           <S.PadLine key={rowIndex}>
             {rowValue.map((columnValue, columnIndex) => (
               <NumberInput
                 key={columnIndex}
-                ref={registerRef(columnValue)}
-                value={columnValue.toString()}
-                onPress={() => onPressNumber(columnValue)}
+                {...(columnValue !== undefined
+                  ? {
+                      value: columnValue.toString(),
+                      ...(typeof columnValue === "number"
+                        ? {
+                            ref: registerRef(columnValue),
+                            onPress: () => onPressNumber(columnValue)
+                          }
+                        : {
+                            ref: registerRef(DECIMAL_REF_INDEX),
+                            onPress: onDecimalSeparator
+                          })
+                    }
+                  : {})}
               />
             ))}
           </S.PadLine>
@@ -326,6 +372,7 @@ export const Pos = () => {
         <S.PadLine style={{ position: "relative", top: 0 }}>
           <NumberInput
             value="C"
+            ref={registerRef(C_REF_INDEX)}
             customColor={colors.error}
             disabled={isActionButtonsDisabled}
             onPress={clearAmount}

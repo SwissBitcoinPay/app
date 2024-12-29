@@ -1,3 +1,7 @@
+export {
+  decimalSeparator,
+  decimalSeparatorNameMapping
+} from "./decimalSeparator";
 export { Clipboard } from "./Clipboard";
 export { NFC } from "./NFC";
 export { AsyncStorage } from "./AsyncStorage";
