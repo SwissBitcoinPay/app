@@ -374,7 +374,7 @@ export const Pos = () => {
             value="C"
             ref={registerRef(C_REF_INDEX)}
             customColor={colors.error}
-            disabled={isActionButtonsDisabled}
+            disabled={isActionButtonsDisabled && decimalCount === 0}
             onPress={clearAmount}
             noBorderRadius
             rounded="left"
@@ -384,7 +384,7 @@ export const Pos = () => {
             value="DEL"
             ref={registerRef(DEL_REF_INDEX)}
             customColor={colors.bitcoin}
-            disabled={isActionButtonsDisabled}
+            disabled={isActionButtonsDisabled && decimalCount === 0}
             onPress={delAmount}
             noBorderRadius
             paddingBottom={insets.bottom}
