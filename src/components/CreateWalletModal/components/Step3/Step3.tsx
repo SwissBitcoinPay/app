@@ -2,7 +2,9 @@ import { useEffect } from "react";
 import { useTheme } from "styled-components";
 import { useTranslation } from "react-i18next";
 import { ComponentStack, FieldDescription, Text } from "@components";
-import ScreenGuardModule from "react-native-screenguard";
+import ScreenGuardModule, {
+  ScreenGuardConstants
+} from "react-native-screenguard";
 import { StepProps } from "../../CreateWalletModal";
 import { generateBtcAddress, getRandomNumber } from "@utils";
 import { Word } from "../Word";
@@ -61,7 +63,10 @@ export const Step3 = ({ setIsValid, setValue, watch }: StepProps) => {
         ScreenGuardModule.registerWithoutEffect();
       } else {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        ScreenGuardModule.register();
+        ScreenGuardModule.register({
+          backgroundColor: ScreenGuardConstants.BLACK_COLOR,
+          timeAfterResume: ScreenGuardConstants.TIME_DELAYED
+        });
       }
 
       return () => {

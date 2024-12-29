@@ -58,7 +58,7 @@ import {
 } from "@config/settingsKeys";
 import { Share } from "react-native";
 
-const { isWeb, isBitcoinize, isShareAvailable } = platform;
+const { isIos, isWeb, isBitcoinize, isShareAvailable } = platform;
 
 export const Settings = () => {
   const { colors } = useTheme();
@@ -240,23 +240,29 @@ export const Settings = () => {
     [userType]
   );
 
-  const shareMessage = useMemo(
-    () =>
-      [
-        t("invitationText", { merchantName: accountConfig?.name }),
-        "",
-        activationCodeData
-      ].join("\n"),
-    [accountConfig?.name, activationCodeData, t]
-  );
+  const [shareMessageShort, shareMessageFull] = useMemo(() => {
+    const initialShareMessageText = t("invitationText", {
+      merchantName: accountConfig?.name
+    });
+    return [
+      initialShareMessageText,
+      [initialShareMessageText, "", activationCodeData].join("\n")
+    ];
+  }, [accountConfig?.name, activationCodeData, t]);
 
   const shareActivationLink = useCallback(async () => {
     await Share.share({
       title: t("acceptBitcoinPayments"),
-      url: activationCodeData,
-      message: shareMessage
+      ...(isIos
+        ? {
+            message: shareMessageShort,
+            url: activationCodeData
+          }
+        : {
+            message: shareMessageFull
+          })
     });
-  }, [activationCodeData, shareMessage, t]);
+  }, [activationCodeData, shareMessageFull, shareMessageShort, t]);
 
   return (
     <PageContainer
@@ -301,7 +307,7 @@ export const Settings = () => {
                   : {
                       icon: faCopy,
                       title: t("copyMyLink"),
-                      copyContent: shareMessage
+                      copyContent: shareMessageFull
                     })}
               />
               {(isMinAdmin || isBitcoinize) && (
