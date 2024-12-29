@@ -14,6 +14,7 @@ import {
 } from "@components";
 import { platform } from "@config";
 import { Circle } from "react-native-progress";
+import { animated } from "@react-spring/native";
 
 const { isNative } = platform;
 
@@ -39,11 +40,12 @@ export const SectionsContainer = styled(ComponentStack)`
   flex-grow: 1;
 `;
 
-export const Section = styled(ComponentStack)`
-  overflow: hidden;
+export const Section = styled(ComponentStack)<{ isOverflowVisible?: boolean }>`
   align-items: center;
-  ${({ theme }) => `
+
+  ${({ theme, isOverflowVisible }) => `
     padding: ${theme.gridSize}px ${theme.gridSize * 1.25}px;
+    overflow: ${isOverflowVisible ? "visible" : "hidden"};
   `}
 `;
 
@@ -75,17 +77,18 @@ export const PayByIcon = styled(({ style, children, ...props }) => {
 export const MainContentStack = styled(ComponentStack)<{
   size: number;
   borderColor?: string;
+  isOverflowVisible?: boolean;
 }>`
   align-items: center;
   justify-content: center;
-  overflow: hidden;
 
-  ${({ theme, size, borderColor }) => `
+  ${({ theme, size, borderColor, isOverflowVisible }) => `
     background: ${!borderColor ? theme.colors.white : "transparent"};
     border: 3px solid ${borderColor || theme.colors.greyLight};
     border-radius: ${theme.borderRadius}px;
     height: ${size}px;
     width: ${size}px;
+    overflow: ${isOverflowVisible ? "visible" : "hidden"};
   `}
 `;
 
@@ -102,12 +105,24 @@ export const ConfirmationsText = styled(Text).attrs(({ theme }) => ({
   position: absolute;
 `;
 
+export const SuccessContainer = styled(View)`
+  align-items: center;
+  justify-content: center;
+`;
+
 export const SuccessLottie = styled(Lottie)<{ size: number }>`
   ${({ size }) => `
     height: ${size}px;
     width: ${size}px;
   `}
   transform: scale(1.35);
+  z-index: 1;
+`;
+
+export const GreenCircle = styled(animated.View)`
+  position: absolute;
+  border-radius: 10000px;
+  background-color: ${({ theme }) => theme.colors.success};
 `;
 
 export const TapAnywhereAction = styled(ComponentStack)`

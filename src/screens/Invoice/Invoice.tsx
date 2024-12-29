@@ -71,8 +71,7 @@ import {
   AsyncStorage
 } from "@utils";
 import { keyStoreTicketsAutoPrint } from "@config/settingsKeys";
-
-const PAID_ANIMATION_DURATION = 350;
+import { useSpring, easings } from "@react-spring/native";
 
 const getTrue = () => true;
 
@@ -167,7 +166,7 @@ export const Invoice = () => {
   });
   const { t: tRoot } = useTranslation();
   const { bottom: bottomInset } = useSafeAreaInsets();
-  const { width: windowWidth } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const { setBackgroundColor } = useContext(SBPThemeContext);
   const params = useParams<{ id: string }>();
   const location = useLocation<{ isLocalInvoice?: boolean }>();
@@ -278,9 +277,19 @@ export const Invoice = () => {
 
   const successLottieRef = useRef<LottieView>(null);
 
+  const [greenCircleProps, greenCircleApi] = useSpring(
+    () => ({
+      from: { width: 0, height: 0 }
+    }),
+    []
+  );
+
   const onPaid = useCallback(
     (invoiceData: InvoiceType) => {
       Vibration.vibrate(50);
+      const maxSize = windowWidth >= windowHeight ? windowWidth : windowHeight;
+      const circleSize = maxSize * 1.5;
+
       if (!isExternalInvoice) {
         if (isBitcoinize) {
           AsyncStorage.getItem(keyStoreTicketsAutoPrint).then((value) => {
@@ -289,16 +298,28 @@ export const Invoice = () => {
             }
           });
         }
-        setBackgroundColor(colors.success, PAID_ANIMATION_DURATION);
+
+        setTimeout(() => {
+          greenCircleApi.start({
+            to: { width: circleSize, height: circleSize },
+            config: { duration: 650, easing: easings.easeOutCubic }
+          });
+        }, 50);
       }
       setTimeout(
         () => {
           successLottieRef.current?.play();
         },
-        isExternalInvoice ? 0 : 250
+        isExternalInvoice ? 0 : 70
       );
     },
-    [colors.success, isExternalInvoice, printInvoiceTicket, setBackgroundColor]
+    [
+      greenCircleApi,
+      isExternalInvoice,
+      printInvoiceTicket,
+      windowHeight,
+      windowWidth
+    ]
   );
 
   useEffect(() => {
@@ -495,20 +516,13 @@ export const Invoice = () => {
     if (!isExternalInvoice) {
       return () => {
         navigate("/");
-        setBackgroundColor(colors.primary, 0);
       };
     } else if (redirectUrl) {
       return () => {
         void Linking.openURL(redirectUrl);
       };
     }
-  }, [
-    colors.primary,
-    isExternalInvoice,
-    navigate,
-    redirectUrl,
-    setBackgroundColor
-  ]);
+  }, [isExternalInvoice, navigate, redirectUrl]);
 
   const isFullScreenSuccess = useMemo(
     () => status === "settled" && !isExternalInvoice,
@@ -589,10 +603,7 @@ export const Invoice = () => {
                 subTitle: {
                   icon: faPen,
                   text: description || "",
-                  color:
-                    status === "settled" && !isExternalInvoice
-                      ? colors.white
-                      : undefined
+                  color: isFullScreenSuccess ? colors.white : undefined
                 }
               }
             : {}),
@@ -612,7 +623,8 @@ export const Invoice = () => {
                 }
               }
             : {}),
-          backgroundOpacity: 0
+          backgroundOpacity: 0,
+          ...(isFullScreenSuccess ? { blurRadius: 0 } : {})
         }}
         isLoading={isLoading}
       >
@@ -625,7 +637,7 @@ export const Invoice = () => {
           </>
         ) : (
           <S.SectionsContainer gapSize={2} gapColor={colors.grey}>
-            <S.Section>
+            <S.Section isOverflowVisible={isFullScreenSuccess}>
               {isAlive && (
                 <>
                   <S.TypeText>
@@ -656,6 +668,7 @@ export const Invoice = () => {
                 </>
               )}
               <S.MainContentStack
+                isOverflowVisible={isFullScreenSuccess}
                 size={qrCodeSize + gridSize * 1.25}
                 borderColor={
                   status === "settled"
@@ -700,18 +713,21 @@ export const Invoice = () => {
                     size={STATUS_ICON_SIZE}
                   />
                 ) : status === "settled" ? (
-                  <S.SuccessLottie
-                    ref={successLottieRef}
-                    {...(isInitialPaid
-                      ? {
-                          autoPlay: true,
-                          speed: 100
-                        }
-                      : {})}
-                    loop={false}
-                    source={require("@assets/animations/success.json")}
-                    size={STATUS_ICON_SIZE}
-                  />
+                  <S.SuccessContainer>
+                    <S.GreenCircle style={greenCircleProps} />
+                    <S.SuccessLottie
+                      ref={successLottieRef}
+                      {...(isInitialPaid
+                        ? {
+                            autoPlay: true,
+                            speed: 100
+                          }
+                        : {})}
+                      loop={false}
+                      source={require("@assets/animations/success.json")}
+                      size={STATUS_ICON_SIZE}
+                    />
+                  </S.SuccessContainer>
                 ) : null}
                 {!isAlive && (
                   <ComponentStack direction="horizontal" gapSize={8}>
