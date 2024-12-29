@@ -10,7 +10,7 @@ import { ActivityIndicator, Platform } from "react-native";
 import * as S from "./styled";
 import { platform } from "@config";
 
-const { isWeb } = platform;
+const { isWeb, isAndroid } = platform;
 
 export const Step3 = ({ setIsValid, setValue, watch }: StepProps) => {
   const { t } = useTranslation(undefined, {
@@ -56,9 +56,16 @@ export const Step3 = ({ setIsValid, setValue, watch }: StepProps) => {
 
   useEffect(() => {
     if (!isWeb) {
-      ScreenGuardModule.register("#000000");
+      if (isAndroid) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        ScreenGuardModule.registerWithoutEffect();
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        ScreenGuardModule.register();
+      }
 
       return () => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         ScreenGuardModule.unregister();
       };
     } else {
