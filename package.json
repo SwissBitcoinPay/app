@@ -170,7 +170,7 @@
     "babel-plugin-react-native-web": "0.19.10",
     "babel-plugin-rewrite-require": "1.14.5",
     "clean-webpack-plugin": "4.0.0",
-    "css-loader": "6.8.1",
+    "css-loader": "7.1.2",
     "dotenv": "16.4.5",
     "eslint": "8.56.0",
     "eslint-config-prettier": "9.0.0",
