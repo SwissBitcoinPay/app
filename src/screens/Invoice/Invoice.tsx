@@ -1,10 +1,13 @@
-import {
+import React, {
   useCallback,
   useEffect,
   useMemo,
   useState,
   useRef,
-  useContext
+  useContext,
+  ReactElement,
+  ReactNode,
+  cloneElement
 } from "react";
 import { bech32 } from "bech32";
 import axios from "axios";
@@ -22,7 +25,8 @@ import {
   QR,
   CircleProgress,
   Pressable,
-  Modal
+  Modal,
+  ProgressBar
 } from "@components";
 import {
   faArrowLeft,
@@ -72,6 +76,7 @@ import {
 } from "@utils";
 import { keyStoreTicketsAutoPrint } from "@config/settingsKeys";
 import { useSpring, easings } from "@react-spring/native";
+import { useSafeAreaFrame } from "react-native-safe-area-context";
 
 const getTrue = () => true;
 
@@ -166,7 +171,7 @@ export const Invoice = () => {
   });
   const { t: tRoot } = useTranslation();
   const { bottom: bottomInset } = useSafeAreaInsets();
-  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+  const { width: frameWidth, height: frameHeight } = useSafeAreaFrame();
   const { setBackgroundColor } = useContext(SBPThemeContext);
   const params = useParams<{ id: string }>();
   const location = useLocation<{ isLocalInvoice?: boolean }>();
@@ -205,6 +210,7 @@ export const Invoice = () => {
     useState<Parameters<typeof readingNfcLoop>[0]>();
 
   const [isInitialPaid, setIsInitialPaid] = useState(false);
+  const [isTimerPaused, setIsTimerPaused] = useState(false);
 
   const getProgress = useCallback(() => {
     const now = Math.round(Date.now() / 1000);
@@ -217,7 +223,7 @@ export const Invoice = () => {
   const [progress, setProgress] = useState<number>(1);
 
   useEffect(() => {
-    if (isInit) {
+    if (isInit && !isTimerPaused) {
       const intervalId = setInterval(() => {
         setProgress(getProgress());
       }, 1000);
@@ -226,7 +232,7 @@ export const Invoice = () => {
         clearInterval(intervalId);
       };
     }
-  }, [isInit]);
+  }, [isInit, isTimerPaused]);
 
   // Paid data
   const [status, setStatus] = useState<Status>("draft");
@@ -241,7 +247,7 @@ export const Invoice = () => {
     [status]
   );
 
-  const timer = useTimer({ createdAt, delay, stop: !isAlive });
+  const timer = useTimer({ createdAt, delay, stop: !isAlive || isTimerPaused });
 
   const isWithdraw = useMemo(
     () => invoiceId?.startsWith("LNURL") || false,
@@ -264,8 +270,8 @@ export const Invoice = () => {
       invoiceId === "loading"
         ? t("creatingInvoice")
         : !isInit
-        ? t("fetchingInvoice")
-        : null,
+          ? t("fetchingInvoice")
+          : null,
     [invoiceId, t, isInit]
   );
 
@@ -274,6 +280,26 @@ export const Invoice = () => {
       sendJsonMessage({ id: invoiceId });
     }
   }, [readyState]);
+
+  const fiatSatAmountComponent = useMemo(
+    () => (
+      <>
+        <S.AmountText>
+          {getFormattedUnit(
+            invoiceFiatAmount,
+            invoiceCurrency || "",
+            !invoiceFiatAmount || invoiceFiatAmount % 1 === 0 ? 0 : 2
+          )}
+        </S.AmountText>
+        {invoiceCurrency !== "sat" && (
+          <S.AmountText subAmount>
+            {amount ? numberWithSpaces(amount / 1000) : ""} sats
+          </S.AmountText>
+        )}
+      </>
+    ),
+    [invoiceFiatAmount, invoiceCurrency, amount]
+  );
 
   const successLottieRef = useRef<LottieView>(null);
 
@@ -284,43 +310,69 @@ export const Invoice = () => {
     []
   );
 
-  const onPaid = useCallback(
+  const [redirectProgressProps, redirectProgressApi] = useSpring(
+    () => ({
+      from: { left: "-100%" }
+    }),
+    []
+  );
+
+  const [toTerminalTimeout, setToTerminalTimeout] = useState<NodeJS.Timeout>();
+
+  const onFullScreenPaid = useCallback(
     (invoiceData: InvoiceType) => {
       Vibration.vibrate(50);
-      const maxSize = windowWidth >= windowHeight ? windowWidth : windowHeight;
-      const circleSize = maxSize * 1.5;
 
-      if (!isExternalInvoice) {
-        if (isBitcoinize) {
-          AsyncStorage.getItem(keyStoreTicketsAutoPrint).then((value) => {
-            if (value === "true") {
-              void printInvoiceTicket(invoiceData);
-            }
-          });
-        }
-
-        setTimeout(() => {
-          greenCircleApi.start({
-            to: { width: circleSize, height: circleSize },
-            config: { duration: 650, easing: easings.easeOutCubic }
-          });
-        }, 50);
+      setIsQrModalOpen(false);
+      setIsTimerPaused(true);
+      const maxSize = frameWidth > frameHeight ? frameWidth : frameHeight;
+      const circleSize = Math.round(maxSize * 1.55);
+      if (isBitcoinize) {
+        AsyncStorage.getItem(keyStoreTicketsAutoPrint).then((value) => {
+          if (value === "true") {
+            void printInvoiceTicket(invoiceData);
+          }
+        });
       }
-      setTimeout(
-        () => {
-          successLottieRef.current?.play();
-        },
-        isExternalInvoice ? 0 : 70
+
+      greenCircleApi.start({
+        to: { width: circleSize, height: circleSize },
+        config: { duration: 800, easing: easings.easeOutQuad }
+      });
+
+      const REDIRECT_DELAY = 7000;
+
+      redirectProgressApi.start({
+        to: { left: "0%" },
+        config: { duration: REDIRECT_DELAY }
+      });
+
+      setToTerminalTimeout(
+        setTimeout(() => {
+          redirect?.();
+        }, REDIRECT_DELAY)
       );
+
+      setTimeout(() => {
+        successLottieRef.current?.play();
+      }, 200);
     },
     [
       greenCircleApi,
       isExternalInvoice,
       printInvoiceTicket,
-      windowHeight,
-      windowWidth
+      redirect,
+      successLottieRef,
+      frameHeight,
+      frameWidth
     ]
   );
+
+  const onPaid = useCallback(() => {
+    setTimeout(() => {
+      successLottieRef.current?.play();
+    }, 0);
+  }, [successLottieRef]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -419,6 +471,23 @@ export const Invoice = () => {
           (p) => p.paidAt
         )?.network;
 
+        if (getInvoiceData.redirectUrl) {
+          setRedirectUrl(
+            getInvoiceData.redirectUrl.includes("://")
+              ? getInvoiceData.redirectUrl
+              : `http://${getInvoiceData.redirectUrl}`
+          );
+        }
+
+        if (
+          getInvoiceData.status === "settled" &&
+          status !== "settled" &&
+          !isExternalInvoice
+        ) {
+          onFullScreenPaid(getInvoiceData);
+          return;
+        }
+
         setTitle(getInvoiceData.title);
         setDescription(getInvoiceData.description);
         setCreatedAt(getInvoiceData.time);
@@ -438,18 +507,6 @@ export const Invoice = () => {
 
         setIsInit(true);
 
-        if (getInvoiceData.status === "settled" && status !== "settled") {
-          onPaid(getInvoiceData);
-        }
-
-        if (getInvoiceData.redirectUrl) {
-          setRedirectUrl(
-            getInvoiceData.redirectUrl.includes("://")
-              ? getInvoiceData.redirectUrl
-              : `http://${getInvoiceData.redirectUrl}`
-          );
-        }
-
         if (isInitialData) {
           if (status === "settled") {
             setIsInitialPaid(true);
@@ -464,7 +521,7 @@ export const Invoice = () => {
         return;
       }
     },
-    [onPaid, status]
+    [onPaid, onFullScreenPaid, status, isExternalInvoice]
   );
 
   const [isInitial, setIsInitial] = useState(true);
@@ -497,15 +554,15 @@ export const Invoice = () => {
             pr ? `&lightning=${pr}` : ""
           }`
         : pr
-        ? `lightning:${pr || ""}`
-        : "",
+          ? `lightning:${pr || ""}`
+          : "",
     [pr, onChainAddr, btcAmount, title]
   );
 
   const qrCodeSize = useMemo(() => {
-    const size = isLarge ? MAX_QR_SIZE : windowWidth - gridSize * 3.5;
+    const size = isLarge ? MAX_QR_SIZE : frameWidth - gridSize * 3.5;
     return size > MAX_QR_SIZE ? MAX_QR_SIZE : size;
-  }, [isLarge, windowWidth, gridSize]);
+  }, [isLarge, frameWidth, gridSize]);
 
   const isLoading = useMemo(
     () => isInvalidInvoice || !isInit,
@@ -515,6 +572,9 @@ export const Invoice = () => {
   const redirect = useMemo(() => {
     if (!isExternalInvoice) {
       return () => {
+        if (toTerminalTimeout) {
+          clearTimeout(toTerminalTimeout);
+        }
         navigate("/");
       };
     } else if (redirectUrl) {
@@ -522,7 +582,7 @@ export const Invoice = () => {
         void Linking.openURL(redirectUrl);
       };
     }
-  }, [isExternalInvoice, navigate, redirectUrl]);
+  }, [isExternalInvoice, navigate, redirectUrl, toTerminalTimeout]);
 
   const isFullScreenSuccess = useMemo(
     () => status === "settled" && !isExternalInvoice,
@@ -578,6 +638,57 @@ export const Invoice = () => {
     printInvoiceTicket
   ]);
 
+  const getPageContainerProps = useCallback(
+    (isSuccessScreen = false) => {
+      return {
+        header: {
+          title: title || "",
+          ...(description
+            ? {
+                subTitle: {
+                  icon: faPen,
+                  text: description || "",
+                  color: isSuccessScreen ? colors.white : undefined
+                }
+              }
+            : {}),
+          ...(!isSuccessScreen && location.key !== "default"
+            ? {
+                left: {
+                  onPress: -1,
+                  icon: faArrowLeft
+                }
+              }
+            : {}),
+          ...(!isInvoiceLoading && !isSuccessScreen
+            ? {
+                right: {
+                  onPress: onOpenQrModal,
+                  icon: faQrcode
+                }
+              }
+            : {}),
+          backgroundOpacity: 0,
+          ...(isSuccessScreen ? { blurRadius: 0 } : {})
+        },
+        isLoading
+      };
+    },
+    [
+      title,
+      description,
+      location.key,
+      isInvoiceLoading,
+      onOpenQrModal,
+      isLoading
+    ]
+  );
+
+  const mainContentStackSize = useMemo(
+    () => qrCodeSize + gridSize * 1.25,
+    [qrCodeSize, gridSize]
+  );
+
   return (
     <>
       <Modal
@@ -595,39 +706,69 @@ export const Invoice = () => {
           </Text>
         </ComponentStack>
       </Modal>
-      <S.InvoicePageContainer
-        header={{
-          title: title || "",
-          ...(description
-            ? {
-                subTitle: {
-                  icon: faPen,
-                  text: description || "",
-                  color: isFullScreenSuccess ? colors.white : undefined
-                }
-              }
-            : {}),
-          ...(!isFullScreenSuccess && location.key !== "default"
-            ? {
-                left: {
-                  onPress: -1,
-                  icon: faArrowLeft
-                }
-              }
-            : {}),
-          ...(!isInvoiceLoading && !isFullScreenSuccess
-            ? {
-                right: {
-                  onPress: onOpenQrModal,
-                  icon: faQrcode
-                }
-              }
-            : {}),
-          backgroundOpacity: 0,
-          ...(isFullScreenSuccess ? { blurRadius: 0 } : {})
-        }}
-        isLoading={isLoading}
-      >
+      <S.PaidInvoicePageContainerWrapper style={greenCircleProps}>
+        <S.PaidInvoicePageContainer
+          style={{ width: frameWidth, height: frameHeight }}
+        >
+          <S.InvoicePageContainer {...getPageContainerProps(true)}>
+            <S.SectionsContainer gapSize={2}>
+              <S.Section grow>
+                <>
+                  <S.TypeText color="transparent">_</S.TypeText>
+                  <S.TypeText color="transparent">_</S.TypeText>
+                </>
+                <S.MainContentStack
+                  size={mainContentStackSize}
+                  borderColor="transparent"
+                >
+                  <S.SuccessLottie
+                    ref={successLottieRef}
+                    loop={false}
+                    source={require("@assets/animations/success.json")}
+                    size={STATUS_ICON_SIZE}
+                  />
+                  <Text h3 weight={700} color={colors.white}>
+                    {!isWithdraw ? t("invoicePaid") : t("withdrawSuccess")}
+                  </Text>
+                </S.MainContentStack>
+                {fiatSatAmountComponent}
+              </S.Section>
+            </S.SectionsContainer>
+          </S.InvoicePageContainer>
+          <S.TapAnywhereCatcher
+            onPress={redirect}
+            style={{ paddingBottom: gridSize + bottomInset }}
+          >
+            <S.TapAnywhereStack>
+              <Button
+                icon={faHandPointer}
+                mode="outline"
+                size="large"
+                title={t("tapAnywhereToSkip")}
+                onPress={redirect}
+                android_ripple={null}
+              >
+                <S.ProgressToTerminal style={redirectProgressProps} />
+              </Button>
+              {isBitcoinize && (
+                <Button
+                  icon={faPrint}
+                  mode="normal"
+                  noShadow
+                  size="large"
+                  title={t("printReceipt")}
+                  onPress={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    printReceipt();
+                  }}
+                />
+              )}
+            </S.TapAnywhereStack>
+          </S.TapAnywhereCatcher>
+        </S.PaidInvoicePageContainer>
+      </S.PaidInvoicePageContainerWrapper>
+      <S.InvoicePageContainer {...getPageContainerProps(false)}>
         {isLoading ? (
           <>
             {isInvalidInvoice ? <></> : <BitcoinLoader />}
@@ -637,7 +778,7 @@ export const Invoice = () => {
           </>
         ) : (
           <S.SectionsContainer gapSize={2} gapColor={colors.grey}>
-            <S.Section isOverflowVisible={isFullScreenSuccess}>
+            <S.Section grow>
               {isAlive && (
                 <>
                   <S.TypeText>
@@ -668,16 +809,15 @@ export const Invoice = () => {
                 </>
               )}
               <S.MainContentStack
-                isOverflowVisible={isFullScreenSuccess}
-                size={qrCodeSize + gridSize * 1.25}
+                size={mainContentStackSize}
                 borderColor={
                   status === "settled"
                     ? "transparent"
                     : status === "unconfirmed"
-                    ? colors.warning
-                    : status === "expired"
-                    ? colors.grey
-                    : undefined
+                      ? colors.warning
+                      : status === "expired"
+                        ? colors.grey
+                        : undefined
                 }
               >
                 {status !== "expired" &&
@@ -713,21 +853,14 @@ export const Invoice = () => {
                     size={STATUS_ICON_SIZE}
                   />
                 ) : status === "settled" ? (
-                  <S.SuccessContainer>
-                    <S.GreenCircle style={greenCircleProps} />
-                    <S.SuccessLottie
-                      ref={successLottieRef}
-                      {...(isInitialPaid
-                        ? {
-                            autoPlay: true,
-                            speed: 100
-                          }
-                        : {})}
-                      loop={false}
-                      source={require("@assets/animations/success.json")}
-                      size={STATUS_ICON_SIZE}
-                    />
-                  </S.SuccessContainer>
+                  <S.SuccessLottie
+                    ref={successLottieRef}
+                    autoPlay
+                    speed={10000}
+                    loop={false}
+                    source={require("@assets/animations/success.json")}
+                    size={STATUS_ICON_SIZE}
+                  />
                 ) : null}
                 {!isAlive && (
                   <ComponentStack direction="horizontal" gapSize={8}>
@@ -740,24 +873,24 @@ export const Invoice = () => {
                       color={
                         status === "unconfirmed"
                           ? colors.warning
-                          : status === "settled" && isExternalInvoice
-                          ? colors.success
-                          : status === "expired"
-                          ? colors.grey
-                          : colors.white
+                          : status === "settled"
+                            ? colors.success
+                            : status === "expired"
+                              ? colors.grey
+                              : colors.white
                       }
                     >
                       {status === "unconfirmed"
                         ? t("pendingConfirmations")
                         : status === "expired"
-                        ? t("invoiceExpired")
-                        : !isWithdraw
-                        ? t("invoicePaid")
-                        : t("withdrawSuccess")}
+                          ? t("invoiceExpired")
+                          : !isWithdraw
+                            ? t("invoicePaid")
+                            : t("withdrawSuccess")}
                     </Text>
                   </ComponentStack>
                 )}
-                {isBitcoinize && !isAlive && isExternalInvoice && (
+                {isBitcoinize && !isAlive && (
                   <Button
                     icon={faPrint}
                     mode="outline"
@@ -769,11 +902,7 @@ export const Invoice = () => {
               {status === "settled" && !isInitialPaid && redirect && (
                 <ComponentStack direction="horizontal" gapSize={8}>
                   <Text h3 weight={600} color={colors.white}>
-                    {t(
-                      isExternalInvoice
-                        ? "redirectingYou"
-                        : "returningToTerminal"
-                    )}
+                    {t("redirectingYou")}
                   </Text>
                   <CircleProgress
                     isGrowing
@@ -781,15 +910,8 @@ export const Invoice = () => {
                     duration={7}
                     strokeWidth={5}
                     size={STATUS_ICON_SIZE / 4}
-                    {...(isExternalInvoice
-                      ? {
-                          colors: colors.white,
-                          trailColor: colors.grey
-                        }
-                      : {
-                          colors: colors.white,
-                          trailColor: colors.successLight
-                        })}
+                    colors={colors.white}
+                    trailColor={colors.grey}
                     onComplete={redirect}
                   />
                 </ComponentStack>
@@ -819,8 +941,8 @@ export const Invoice = () => {
                             isNfcNeedsPermission
                               ? require("@assets/images/bolt-card-white.png")
                               : isNfcNeedsTap
-                              ? require("@assets/images/bolt-card-black.png")
-                              : require("@assets/images/bolt-card.png")
+                                ? require("@assets/images/bolt-card-black.png")
+                                : require("@assets/images/bolt-card.png")
                           }
                         />
                       )}
@@ -832,18 +954,7 @@ export const Invoice = () => {
                     </S.AskButton>
                   </S.NFCWrapper>
                 )}
-                <S.AmountText>
-                  {getFormattedUnit(
-                    invoiceFiatAmount,
-                    invoiceCurrency || "",
-                    !invoiceFiatAmount || invoiceFiatAmount % 1 === 0 ? 0 : 2
-                  )}
-                </S.AmountText>
-                {invoiceCurrency !== "sat" && (
-                  <S.AmountText subAmount>
-                    {amount ? numberWithSpaces(amount / 1000) : ""} sats
-                  </S.AmountText>
-                )}
+                {fiatSatAmountComponent}
                 {alreadyPaidAmount > 0 && status === "underpaid" && (
                   <>
                     <S.BitcoinSlotText subAmount color={colors.warning}>
@@ -867,16 +978,13 @@ export const Invoice = () => {
                   </>
                 )}
               </>
-              {status === "settled" &&
-                isExternalInvoice &&
-                redirectUrl &&
-                isInitialPaid && (
-                  <Button
-                    title={t("returnToWebsite")}
-                    icon={faArrowUpRightFromSquare}
-                    onPress={redirectUrl}
-                  />
-                )}
+              {status === "settled" && redirectUrl && isInitialPaid && (
+                <Button
+                  title={t("returnToWebsite")}
+                  icon={faArrowUpRightFromSquare}
+                  onPress={redirectUrl}
+                />
+              )}
               {isAlive && isExternalInvoice && (
                 <ComponentStack gapSize={14}>
                   <S.ActionButton
@@ -926,24 +1034,24 @@ export const Invoice = () => {
                         prefixIcon: { icon: faCheck }
                       }
                     : status === "unconfirmed"
-                    ? {
-                        prefixComponent: (
-                          <ActivityIndicator
-                            color={colors.warning}
-                            size="small"
-                          />
-                        ),
-                        value: tRoot("common.pending"),
-                        color: colors.warning
-                      }
-                    : status === "expired"
-                    ? {
-                        value: tRoot("common.expired"),
-                        color: colors.greyLight
-                      }
-                    : {
-                        value: t("awaitingPayment")
-                      })}
+                      ? {
+                          prefixComponent: (
+                            <ActivityIndicator
+                              color={colors.warning}
+                              size="small"
+                            />
+                          ),
+                          value: tRoot("common.pending"),
+                          color: colors.warning
+                        }
+                      : status === "expired"
+                        ? {
+                            value: tRoot("common.expired"),
+                            color: colors.greyLight
+                          }
+                        : {
+                            value: t("awaitingPayment")
+                          })}
                 />
                 {btcAmount && (
                   <FooterLine
@@ -1022,7 +1130,7 @@ export const Invoice = () => {
             )}
           </S.SectionsContainer>
         )}
-        {isExternalInvoice && !isLoading && (
+        {isLarge && !isLoading && (
           <S.PoweredContainer gapSize={6}>
             <Text h5 weight={700} color={colors.white}>
               Powered by
@@ -1038,36 +1146,6 @@ export const Invoice = () => {
           </S.PoweredContainer>
         )}
       </S.InvoicePageContainer>
-      {isFullScreenSuccess && (
-        <S.TapAnywhereCatcher
-          onPress={redirect}
-          style={{ paddingBottom: gridSize + bottomInset }}
-        >
-          <S.TapAnywhereStack>
-            {isBitcoinize && (
-              <Button
-                icon={faPrint}
-                mode="outline"
-                size="large"
-                title={t("printReceipt")}
-                onPress={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  printReceipt();
-                }}
-              />
-            )}
-            <Button
-              icon={faHandPointer}
-              mode="outline"
-              size="large"
-              title={t("tapAnywhereToSkip")}
-              onPress={redirect}
-              android_ripple={null}
-            />
-          </S.TapAnywhereStack>
-        </S.TapAnywhereCatcher>
-      )}
     </>
   );
 };

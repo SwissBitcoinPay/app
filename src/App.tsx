@@ -1,5 +1,5 @@
 import { Routes, Route, useNavigate } from "@components/Router";
-import { StatusBar, TopLeftLogo } from "@components";
+import { TopLeftLogo } from "@components";
 import {
   Welcome,
   QRScanner,
@@ -55,11 +55,6 @@ const App = () => {
 
   return (
     <>
-      <StatusBar
-        barStyle="light-content"
-        translucent
-        backgroundColor="transparent"
-      />
       <ErrorBoundary
         FallbackComponent={ErrorComponent}
         onError={(error) => {

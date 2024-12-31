@@ -15,8 +15,9 @@ import {
 import { platform } from "@config";
 import { Circle } from "react-native-progress";
 import { animated } from "@react-spring/native";
+import { ColorValue } from "react-native";
 
-const { isNative } = platform;
+const { isNative, maxContentWidth } = platform;
 
 type InvoicePageContainerProps = { isLoading: boolean };
 
@@ -30,6 +31,28 @@ export const InvoicePageContainer = styled(PageContainer).attrs(
   })
 )<InvoicePageContainerProps>``;
 
+export const PaidInvoicePageContainerWrapper = styled(animated.View)`
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 10000px;
+  background-color: ${({ theme }) => theme.colors.success};
+  z-index: 1;
+`;
+
+export const PaidInvoicePageContainer = styled(View)`
+  align-items: center;
+`;
+
+export const ProgressToTerminal = styled(animated.View)`
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0px;
+  background-color: rgba(0, 0, 0, 0.15);
+`;
+
 export const LoaderText = styled(Text).attrs(({ theme }) => ({
   h4: true,
   weight: 700,
@@ -40,20 +63,21 @@ export const SectionsContainer = styled(ComponentStack)`
   flex-grow: 1;
 `;
 
-export const Section = styled(ComponentStack)<{ isOverflowVisible?: boolean }>`
+export const Section = styled(ComponentStack)<{ grow?: boolean }>`
   align-items: center;
+  overflow: hidden;
 
-  ${({ theme, isOverflowVisible }) => `
+  ${({ theme, grow }) => `
     padding: ${theme.gridSize}px ${theme.gridSize * 1.25}px;
-    overflow: ${isOverflowVisible ? "visible" : "hidden"};
+    ${grow ? "flex-grow: 1;" : ""}
   `}
 `;
 
-export const TypeText = styled(Text).attrs(({ theme }) => ({
+export const TypeText = styled(Text).attrs(({ theme, color }) => ({
   weight: 600,
   h6: true,
-  color: theme.colors.white
-}))`
+  color: color || theme.colors.white
+}))<{ color?: ColorValue }>`
   display: flex;
   text-align: center;
   justify-content: center;
@@ -77,18 +101,17 @@ export const PayByIcon = styled(({ style, children, ...props }) => {
 export const MainContentStack = styled(ComponentStack)<{
   size: number;
   borderColor?: string;
-  isOverflowVisible?: boolean;
 }>`
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 
-  ${({ theme, size, borderColor, isOverflowVisible }) => `
+  ${({ theme, size, borderColor }) => `
     background: ${!borderColor ? theme.colors.white : "transparent"};
     border: 3px solid ${borderColor || theme.colors.greyLight};
     border-radius: ${theme.borderRadius}px;
     height: ${size}px;
     width: ${size}px;
-    overflow: ${isOverflowVisible ? "visible" : "hidden"};
   `}
 `;
 
@@ -103,11 +126,6 @@ export const ConfirmationsText = styled(Text).attrs(({ theme }) => ({
   color: theme.colors.warning
 }))`
   position: absolute;
-`;
-
-export const SuccessContainer = styled(View)`
-  align-items: center;
-  justify-content: center;
 `;
 
 export const SuccessLottie = styled(Lottie)<{ size: number }>`
@@ -234,6 +252,7 @@ export const TapAnywhereCatcher = styled(Pressable)`
 `;
 
 export const TapAnywhereStack = styled(ComponentStack)`
+  max-width: ${maxContentWidth}px;
   ${({ theme }) => `padding-horizontal: ${theme.gridSize}px;`}
 `;
 
