@@ -29,6 +29,7 @@ type HeaderProps = {
   left?: IconType;
   right?: IconType;
   backgroundOpacity?: number;
+  blurRadius?: number;
 } & StyledComponentComponentProps<typeof S.Header>;
 
 export const Header = ({
@@ -37,6 +38,7 @@ export const Header = ({
   left,
   right,
   backgroundOpacity = 0.25,
+  blurRadius = 6,
   ...props
 }: HeaderProps) => {
   const isLarge = useIsScreenSizeMin("large");
@@ -49,7 +51,7 @@ export const Header = ({
         backgroundColor={`rgba(${
           hexToRgb(theme.colors.primary).formatted
         }, ${backgroundOpacity})`}
-        blurRadius={6}
+        blurRadius={blurRadius}
         zIndex={-1}
       />
       <S.HeaderButton onPress={left?.onPress} disabled={!left?.onPress}>

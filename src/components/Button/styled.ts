@@ -66,8 +66,8 @@ export const Button = styled(Pressable)<{
             };`
       }
       border-radius: ${borderRadius}px;
-      padding: 0px ${getPadding(size)}px;
       height: ${height}px;
+      min-height: ${height}px;
       ${size !== "small" ? "width: 100%; flex-shrink: 1;" : ""}
       ${isRound ? `width: ${height}px; border-radius: ${height / 2}px;` : ""}
       ${disabled ? "opacity: 1;" : "cursor: pointer;"}
@@ -75,17 +75,19 @@ export const Button = styled(Pressable)<{
     `;
   }}
 
+  overflow: hidden;
+  box-sizing: border-box;
+  justify-content: center;
+`;
+
+export const ButtonContent = styled(View)<{ size: Size }>`
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0px ${({ size }) => getPadding(size)}px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  overflow: hidden;
-  box-sizing: border-box;
-`;
-
-export const ButtonContent = styled(View)`
-  height: 100%;
-  width: 100%;
 `;
 
 const getIconSize = (size: Size) => {
@@ -147,4 +149,10 @@ export const ButtonText = styled(Text).attrs(
 export const ButtonLoader = styled(Loader)`
   position: absolute;
   opacity: 0.85;
+`;
+
+export const ButtonBackgroundContainer = styled(View)`
+  position: absolute;
+  height: 100%;
+  width: 100%;
 `;

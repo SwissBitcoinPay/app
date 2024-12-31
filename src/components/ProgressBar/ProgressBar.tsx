@@ -10,8 +10,9 @@ type Progress = IntRange<1, 101>;
 
 export type ProgressBarProps = Omit<BarPropTypes, "progress"> & {
   progress: Progress;
-  text: string;
+  text?: string;
   isTextCentered?: boolean;
+  noLoading?: boolean;
   colorConfig?: {
     [k in Progress]?: ColorValue;
   };
@@ -25,6 +26,7 @@ export const ProgressBar = ({
   colorConfig,
   text,
   isTextCentered,
+  noLoading = isTextCentered,
   ...props
 }: ProgressBarProps) => {
   const { colors } = useTheme();
@@ -59,16 +61,18 @@ export const ProgressBar = ({
           ? { style: { left: 0, width: "100%", justifyContent: "center" } }
           : {})}
       >
-        {!isTextCentered && (
+        {!noLoading && (
           <ActivityIndicator
             color={colors.white}
             size="small"
             style={{ transform: [{ scale: 0.9 }] }}
           />
         )}
-        <Text h5 weight={600} color={colors.white as string}>
-          {text}
-        </Text>
+        {text && (
+          <Text h5 weight={600} color={colors.white as string}>
+            {text}
+          </Text>
+        )}
       </S.ProgressBarContent>
     </Bar>
   );
