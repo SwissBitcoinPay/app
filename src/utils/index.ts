@@ -2,6 +2,8 @@ export {
   decimalSeparator,
   decimalSeparatorNameMapping
 } from "./decimalSeparator";
+export { diffStrings } from "./diffStrings";
+export { measureText } from "./measureText";
 export { Clipboard } from "./Clipboard";
 export { NFC } from "./NFC";
 export { AsyncStorage } from "./AsyncStorage";
