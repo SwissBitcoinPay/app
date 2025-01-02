@@ -14,7 +14,7 @@ import {
   AsyncStorage,
   decimalSeparator,
   decimalSeparatorNameMapping,
-  diffStrings,
+  formattedUnitChanges,
   countConsecutiveStringParts,
   measureText,
   sleep
@@ -55,7 +55,7 @@ import {
 } from "react-native";
 import * as S from "./styled";
 import { animated, easings, useSpring, useSprings } from "@react-spring/native";
-import { StringPart } from "@utils/diffStrings";
+import { StringPart } from "@utils/formattedUnitChanges";
 
 const DECIMAL_REF_INDEX = 10;
 const C_REF_INDEX = 11;
@@ -69,7 +69,7 @@ const {
   deviceType
 } = platform;
 
-const ANIMATION_CONFIG = { duration: 300, easing: easings.easeOutQuad };
+const ANIMATION_CONFIG = { duration: 250, easing: easings.easeOutQuad };
 
 const VISIBLE_STYLE = {
   scale: 1,
@@ -126,10 +126,7 @@ export const Pos = () => {
 
   const [fiatAmount, setFiatAmount] = useState(0);
 
-  const initialValue = useMemo(
-    () => diffStrings(getFormattedFiatAmount(0)),
-    [getFormattedFiatAmount]
-  );
+  const initialValue = useMemo(() => formattedUnitChanges(0, unit), [unit]);
 
   const [parts, setParts] = useState<StringPart[]>(initialValue);
 
@@ -224,7 +221,11 @@ export const Pos = () => {
   );
 
   const animateInput = useCallback(
-    async (newFiatAmount: number, trailingDecimal?: boolean) => {
+    async (
+      newFiatAmount: number,
+      add?: number | "delete" | "clear",
+      trailingDecimal?: boolean
+    ) => {
       if (maxFiatAmount && newFiatAmount / 100 > maxFiatAmount) {
         toast.show(
           t("cannotGoHigher", {
@@ -238,12 +239,13 @@ export const Pos = () => {
       }
 
       const previousText = getFormattedFiatAmount(fiatAmount / 100);
-      const newText = getFormattedFiatAmount(
-        newFiatAmount / 100,
-        trailingDecimal
-      );
 
-      const rawParts = diffStrings(previousText, newText);
+      const rawParts = formattedUnitChanges(
+        fiatAmount / 100,
+        unit,
+        add,
+        decimalCount
+      );
 
       const elemsWithWidths = (
         await Promise.all(
@@ -297,7 +299,7 @@ export const Pos = () => {
                   from: { ...VISIBLE_STYLE, width },
                   to: { ...VISIBLE_STYLE, width }
                 }),
-          delay: consecutiveElementsNb * 80,
+          delay: consecutiveElementsNb * 70,
           config: ANIMATION_CONFIG
         };
       });
@@ -306,13 +308,21 @@ export const Pos = () => {
 
       return true;
     },
-    [api, fiatAmount, maxFiatAmount, toast, unit, getFormattedFiatAmount]
+    [
+      api,
+      fiatAmount,
+      maxFiatAmount,
+      toast,
+      unit,
+      decimalCount,
+      getFormattedFiatAmount
+    ]
   );
 
   const onPressNumber = useCallback(
     (newNumber: number) => {
       let newFiatAmount: number;
-      if (!decimalCount) {
+      if (decimalCount === 0) {
         newFiatAmount = fiatAmount * 10 + newNumber * (haveDecimals ? 1 : 100);
       } else {
         newFiatAmount =
@@ -320,22 +330,22 @@ export const Pos = () => {
         setDecimalCount(decimalCount - 1);
       }
 
-      void animateInput(newFiatAmount);
+      void animateInput(newFiatAmount, newNumber);
     },
-    [animateInput, haveDecimals, decimalCount, maxFiatAmount, toast, t, unit]
+    [animateInput, haveDecimals, decimalCount]
   );
 
   const clearAmount = useCallback(() => {
     setDecimalCount(0);
-    void animateInput(0, false);
+    void animateInput(0, "clear");
   }, [animateInput]);
 
   const delAmount = useCallback(() => {
     if (fiatAmount <= 9) {
-      void animateInput(0);
+      void animateInput(0, "clear");
       setDecimalCount(0);
     } else {
-      void animateInput(parseInt(fiatAmount.toString().slice(0, -1)));
+      void animateInput(parseInt(fiatAmount.toString().slice(0, -1)), "delete");
     }
   }, [fiatAmount, animateInput]);
 
@@ -350,10 +360,11 @@ export const Pos = () => {
   const inputRef = useRef<Touchable[]>([]);
 
   const onDecimalSeparator = useCallback(async () => {
-    if (fiatAmount.toString().length > 0) {
-      if (!(await animateInput(fiatAmount * 100, fiatAmount === 0))) {
-        return;
-      }
+    if (
+      fiatAmount.toString().length > 0 &&
+      !(await animateInput(fiatAmount * 100, "decimal"))
+    ) {
+      return;
     }
     setDecimalCount(haveDecimals ? 2 : 0);
   }, [fiatAmount, haveDecimals]);

@@ -2,7 +2,10 @@ export {
   decimalSeparator,
   decimalSeparatorNameMapping
 } from "./decimalSeparator";
-export { diffStrings, countConsecutiveStringParts } from "./diffStrings";
+export {
+  formattedUnitChanges,
+  countConsecutiveStringParts
+} from "./formattedUnitChanges";
 export { measureText } from "./measureText";
 export { Clipboard } from "./Clipboard";
 export { NFC } from "./NFC";
