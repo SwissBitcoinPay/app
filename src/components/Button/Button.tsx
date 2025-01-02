@@ -38,6 +38,7 @@ export const Button = ({
   secondaryColor: propsSecondaryColor,
   icon = copyContent ? faCopy : undefined,
   android_ripple,
+  children,
   ...props
 }: ButtonProps) => {
   const theme = useTheme();
@@ -119,25 +120,30 @@ export const Button = ({
             }
       }
     >
-      {(icon || isContentCopied) && (
-        <S.ButtonIcon
-          icon={isContentCopied ? faCheck : (icon as IconProp)}
-          buttonSize={size}
-          color={secondaryColor}
-        />
+      {children && (
+        <S.ButtonBackgroundContainer>{children}</S.ButtonBackgroundContainer>
       )}
-      {title && (
-        <S.ButtonText
-          numberOfLines={1}
-          weight={700}
-          buttonSize={size}
-          color={!isLoading ? secondaryColor : "transparent"}
-          hasIcon={!!icon}
-        >
-          {title}
-        </S.ButtonText>
-      )}
-      {isLoading && <S.ButtonLoader size={loaderSize} />}
+      <S.ButtonContent size={size}>
+        {(icon || isContentCopied) && (
+          <S.ButtonIcon
+            icon={isContentCopied ? faCheck : (icon as IconProp)}
+            buttonSize={size}
+            color={secondaryColor}
+          />
+        )}
+        {title && (
+          <S.ButtonText
+            numberOfLines={1}
+            weight={700}
+            buttonSize={size}
+            color={!isLoading ? secondaryColor : "transparent"}
+            hasIcon={!!icon}
+          >
+            {title}
+          </S.ButtonText>
+        )}
+        {isLoading && <S.ButtonLoader size={loaderSize} />}
+      </S.ButtonContent>
     </S.Button>
   );
 };

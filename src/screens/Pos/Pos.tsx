@@ -9,8 +9,24 @@ import {
   useRef,
   useState
 } from "react";
-import { getFormattedUnit, AsyncStorage } from "@utils";
-import { Keyboard, Text, Loader, TextField, PageContainer } from "@components";
+import {
+  getFormattedUnit,
+  AsyncStorage,
+  decimalSeparator,
+  decimalSeparatorNameMapping,
+  formattedUnitChanges,
+  countConsecutiveStringParts,
+  measureText,
+  sleep
+} from "@utils";
+import {
+  Keyboard,
+  Text,
+  Loader,
+  TextField,
+  PageContainer,
+  View
+} from "@components";
 import { NumberInput } from "./components";
 import { useTranslation } from "react-i18next";
 import {
@@ -31,11 +47,20 @@ import { SBPContext, apiRootUrl, currencies, platform } from "@config";
 import { keyStoreDeviceName, keyStoreIsGuest } from "@config/settingsKeys";
 import { useToast } from "react-native-toast-notifications";
 import { useTheme } from "styled-components";
-import { TextInput, TouchableOpacity } from "react-native";
+import {
+  TextInput,
+  Touchable,
+  TouchableOpacity,
+  Text as RNText
+} from "react-native";
 import * as S from "./styled";
+import { animated, easings, useSpring, useSprings } from "@react-spring/native";
+import { StringPart } from "@utils/formattedUnitChanges";
 
-const DEL_REF_INDEX = 10;
-const OK_REF_INDEX = 11;
+const DECIMAL_REF_INDEX = 10;
+const C_REF_INDEX = 11;
+const DEL_REF_INDEX = 12;
+const OK_REF_INDEX = 13;
 
 const {
   isWeb,
@@ -43,6 +68,18 @@ const {
   deviceIcon,
   deviceType
 } = platform;
+
+const ANIMATION_CONFIG = { duration: 250, easing: easings.easeOutQuad };
+
+const VISIBLE_STYLE = {
+  scale: 1,
+  opacity: 1
+};
+
+const HIDDEN_STYLE = {
+  scale: 0.85,
+  opacity: 0
+};
 
 export const Pos = () => {
   const { colors } = useTheme();
@@ -74,7 +111,25 @@ export const Pos = () => {
 
   const [isGuestMode, setIsGuestMode] = useState(false);
 
+  const getFormattedFiatAmount = useCallback(
+    (_decimalFiat: number, trailingDecimal?: boolean) =>
+      getFormattedUnit(
+        _decimalFiat,
+        unit || "",
+        _decimalFiat === 0 || !haveDecimals ? 0 : 2,
+        trailingDecimal !== undefined
+          ? trailingDecimal
+          : !!decimalCount && _decimalFiat === 0
+      ),
+    [unit, haveDecimals, decimalCount]
+  );
+
   const [fiatAmount, setFiatAmount] = useState(0);
+
+  const initialValue = useMemo(() => formattedUnitChanges(0, unit), [unit]);
+
+  const [parts, setParts] = useState<StringPart[]>(initialValue);
+
   const [maxFiatAmount, setMaxFiatAmount] = useState<number>();
   const [deviceName, setDeviceName] = useState<string>();
   const [description, setDescription] = useState<string>();
@@ -106,19 +161,6 @@ export const Pos = () => {
       deviceType
     });
   }, [postInvoice, decimalFiat, unit, description, deviceName]);
-
-  const clearAmount = useCallback(() => {
-    setFiatAmount(0);
-  }, []);
-
-  const delAmount = useCallback(() => {
-    setFiatAmount((v) => {
-      if (v <= 9) {
-        return 0;
-      }
-      return parseInt(v.toString().slice(0, -1));
-    });
-  }, []);
 
   const saveMaxFiatAmount = useCallback(async () => {
     if (unit && !hasKyc) {
@@ -163,14 +205,28 @@ export const Pos = () => {
 
   const descriptionInputRef = useRef<TextInput>(null);
 
-  const onPressNumber = useCallback(
-    (newNumber: number) => {
-      const newFiatAmount =
-        fiatAmount * 10 + newNumber * (haveDecimals ? 1 : 100);
+  const [springs, api] = useSprings(10, () => ({
+    from: VISIBLE_STYLE
+  }));
 
-      if (!maxFiatAmount || newFiatAmount / 100 <= maxFiatAmount) {
-        setFiatAmount(newFiatAmount);
-      } else {
+  const [decimalCount, setDecimalCount] = useState(0);
+
+  const numberRef = useRef<View[]>([]);
+
+  const registerNumberRef = useCallback(
+    (index: string) => (ref: View) =>
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      (numberRef.current[index] = ref),
+    []
+  );
+
+  const animateInput = useCallback(
+    async (
+      newFiatAmount: number,
+      add?: number | "delete" | "clear",
+      trailingDecimal?: boolean
+    ) => {
+      if (maxFiatAmount && newFiatAmount / 100 > maxFiatAmount) {
         toast.show(
           t("cannotGoHigher", {
             maxAmount: getFormattedUnit(maxFiatAmount, unit || "")
@@ -179,10 +235,119 @@ export const Pos = () => {
             type: "error"
           }
         );
+        return false;
       }
+
+      const previousText = getFormattedFiatAmount(fiatAmount / 100);
+
+      const rawParts = formattedUnitChanges(
+        fiatAmount / 100,
+        unit,
+        add,
+        decimalCount
+      );
+
+      const elemsWithWidths = (
+        await Promise.all(
+          rawParts.map((e) =>
+            measureText(e.text, { fontSize: 32, fontFamily: "Poppins-Bold" })
+          )
+        )
+      ).map(({ width }, i) => {
+        const part = rawParts[i];
+        const consecutiveElementsNb = part.add
+          ? countConsecutiveStringParts(rawParts, "add", i)
+          : part.remove
+            ? countConsecutiveStringParts(rawParts, "remove", i)
+            : 0;
+
+        const initialConfig = part.add
+          ? { ...HIDDEN_STYLE, width: 0 }
+          : { ...VISIBLE_STYLE, width };
+
+        return { ...part, width, consecutiveElementsNb, initialConfig };
+      });
+
+      await api.start((springIndex) => {
+        const { initialConfig } = elemsWithWidths[springIndex] || {};
+
+        return {
+          from: initialConfig,
+          to: initialConfig,
+          immediate: true
+        };
+      });
+
+      setParts(elemsWithWidths);
+
+      await api.start((springIndex) => {
+        const { add, remove, width, consecutiveElementsNb } =
+          elemsWithWidths[springIndex] || {};
+
+        return {
+          ...(add
+            ? {
+                from: { ...HIDDEN_STYLE, width: 0 },
+                to: { ...VISIBLE_STYLE, width }
+              }
+            : remove
+              ? {
+                  from: { ...VISIBLE_STYLE, width },
+                  to: { ...HIDDEN_STYLE, width: 0 }
+                }
+              : {
+                  from: { ...VISIBLE_STYLE, width },
+                  to: { ...VISIBLE_STYLE, width }
+                }),
+          delay: consecutiveElementsNb * 70,
+          config: ANIMATION_CONFIG
+        };
+      });
+
+      setFiatAmount(newFiatAmount);
+
+      return true;
     },
-    [unit, fiatAmount, haveDecimals, maxFiatAmount, t, toast]
+    [
+      api,
+      fiatAmount,
+      maxFiatAmount,
+      toast,
+      unit,
+      decimalCount,
+      getFormattedFiatAmount
+    ]
   );
+
+  const onPressNumber = useCallback(
+    (newNumber: number) => {
+      let newFiatAmount: number;
+      if (decimalCount === 0) {
+        newFiatAmount = fiatAmount * 10 + newNumber * (haveDecimals ? 1 : 100);
+      } else {
+        newFiatAmount =
+          fiatAmount + newNumber * parseInt(`1${"0".repeat(decimalCount - 1)}`);
+        setDecimalCount(decimalCount - 1);
+      }
+
+      void animateInput(newFiatAmount, newNumber);
+    },
+    [animateInput, haveDecimals, decimalCount]
+  );
+
+  const clearAmount = useCallback(() => {
+    setDecimalCount(0);
+    void animateInput(0, "clear");
+  }, [animateInput]);
+
+  const delAmount = useCallback(() => {
+    if (fiatAmount <= 9) {
+      void animateInput(0, "clear");
+      setDecimalCount(0);
+    } else {
+      void animateInput(parseInt(fiatAmount.toString().slice(0, -1)), "delete");
+    }
+  }, [fiatAmount, animateInput]);
 
   useEffect(() => {
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
@@ -192,18 +357,33 @@ export const Pos = () => {
     return () => hideSubscription.remove();
   }, []);
 
-  const inputRef = useRef<TouchableOpacity[]>([]);
+  const inputRef = useRef<Touchable[]>([]);
+
+  const onDecimalSeparator = useCallback(async () => {
+    if (
+      fiatAmount.toString().length > 0 &&
+      !(await animateInput(fiatAmount * 100, "decimal"))
+    ) {
+      return;
+    }
+    setDecimalCount(haveDecimals ? 2 : 0);
+  }, [fiatAmount, haveDecimals]);
 
   const handleKeyPress = useCallback<EventListener>(
     // @ts-ignore
     (e: KeyboardEvent) => {
       const pressedKey = parseInt(e?.nativeEvent?.key);
       const refs = inputRef as unknown as MutableRefObject<HTMLButtonElement[]>;
+      const pressCode = e?.nativeEvent?.code;
       if (Number.isInteger(pressedKey)) {
         refs.current[pressedKey]?.click?.();
-      } else if (e?.nativeEvent?.code === "Backspace") {
+      } else if (Object.keys(decimalSeparatorNameMapping).includes(pressCode)) {
+        refs.current[DECIMAL_REF_INDEX]?.click?.();
+      } else if (pressCode === "Delete") {
+        refs.current[C_REF_INDEX]?.click?.();
+      } else if (pressCode === "Backspace") {
         refs.current[DEL_REF_INDEX]?.click?.();
-      } else if (e?.nativeEvent?.code === "Enter") {
+      } else if (pressCode === "Enter") {
         refs.current[OK_REF_INDEX]?.click?.();
       }
     },
@@ -225,6 +405,16 @@ export const Pos = () => {
       (inputRef.current[index] = ref),
     []
   );
+
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    animateInput(fiatAmount);
+  }, [unit]);
 
   return accountConfig ? (
     <PageContainer
@@ -270,13 +460,32 @@ export const Pos = () => {
         )}
         {isBackgroundLoading && <S.BackgroundLoader size={20} />}
         <S.FiatAmountComponentStack direction="horizontal" gapSize={10}>
-          <Text color={colors.white} h2 weight={700}>
-            {getFormattedUnit(
-              decimalFiat,
-              unit || "",
-              decimalFiat === 0 || !haveDecimals ? 0 : 2
-            )}
-          </Text>
+          <>
+            {parts.map((part, index) => (
+              <animated.View
+                key={part.id}
+                style={{
+                  ...(springs[index] || {}),
+                  transform: [
+                    {
+                      scale: springs[index].scale
+                    }
+                  ]
+                }}
+              >
+                <Text
+                  h2
+                  weight={700}
+                  color={colors.white}
+                  style={{
+                    width: part.width
+                  }}
+                >
+                  {part.text}
+                </Text>
+              </animated.View>
+            ))}
+          </>
           <S.FiatAmountDropdownIcon icon={faAngleDown} color={colors.grey} />
           <S.FiatUnitPicker
             value={unit}
@@ -311,14 +520,31 @@ export const Pos = () => {
         </S.DescriptionContainer>
       </S.InfosContainer>
       <S.PadContainer>
-        {[[1, 2, 3], [4, 5, 6], [7, 8, 9], [0]].map((rowValue, rowIndex) => (
+        {[
+          [1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 9],
+          [decimalSeparator, 0, undefined]
+        ].map((rowValue, rowIndex) => (
           <S.PadLine key={rowIndex}>
             {rowValue.map((columnValue, columnIndex) => (
               <NumberInput
                 key={columnIndex}
-                ref={registerRef(columnValue)}
-                value={columnValue.toString()}
-                onPress={() => onPressNumber(columnValue)}
+                {...(columnValue !== undefined
+                  ? {
+                      value: columnValue.toString(),
+                      ...(typeof columnValue === "number"
+                        ? {
+                            ref: registerRef(columnValue),
+                            onPress: () => onPressNumber(columnValue)
+                          }
+                        : {
+                            ref: registerRef(DECIMAL_REF_INDEX),
+                            onPress: onDecimalSeparator,
+                            disabled: decimalCount !== 0
+                          })
+                    }
+                  : {})}
               />
             ))}
           </S.PadLine>
@@ -326,8 +552,9 @@ export const Pos = () => {
         <S.PadLine style={{ position: "relative", top: 0 }}>
           <NumberInput
             value="C"
+            ref={registerRef(C_REF_INDEX)}
             customColor={colors.error}
-            disabled={isActionButtonsDisabled}
+            disabled={isActionButtonsDisabled && decimalCount === 0}
             onPress={clearAmount}
             noBorderRadius
             rounded="left"
@@ -337,7 +564,7 @@ export const Pos = () => {
             value="DEL"
             ref={registerRef(DEL_REF_INDEX)}
             customColor={colors.bitcoin}
-            disabled={isActionButtonsDisabled}
+            disabled={isActionButtonsDisabled && decimalCount === 0}
             onPress={delAmount}
             noBorderRadius
             paddingBottom={insets.bottom}

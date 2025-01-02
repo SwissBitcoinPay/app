@@ -1,6 +1,6 @@
 import * as S from "./styled";
 import { useIsScreenSizeMin } from "@hooks";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "@components/Router";
 import { useContext } from "react";
 import { SBPContext } from "@config";
 

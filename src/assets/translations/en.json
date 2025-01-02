@@ -265,7 +265,16 @@
       "zipInvalid": "Invalid ZIP code",
       "submit": "Submit",
       "bitboxConnectSuccess": "Your BitBox02 has been connected sucessfully. You can unplug it.",
-      "patchSettingNeedsEmailValidation": "Confirm the new settings via the email you received"
+      "patchSettingNeedsEmailValidation": "Confirm the new settings via the email you received",
+      "error": {
+        "iban": {
+          "ibanAlreadyUsed": "IBAN already used",
+          "wiseBankNotSupported": "Wise bank not supported"
+        },
+        "depositAddress": {
+          "depositAddressAlreadyUsed": "Deposit address already used"
+        }
+      }
     },
     "wallet": {
       "title": "Onchain wallet",

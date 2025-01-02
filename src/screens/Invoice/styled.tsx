@@ -14,8 +14,10 @@ import {
 } from "@components";
 import { platform } from "@config";
 import { Circle } from "react-native-progress";
+import { animated } from "@react-spring/native";
+import { ColorValue } from "react-native";
 
-const { isNative } = platform;
+const { isNative, maxContentWidth } = platform;
 
 type InvoicePageContainerProps = { isLoading: boolean };
 
@@ -29,6 +31,28 @@ export const InvoicePageContainer = styled(PageContainer).attrs(
   })
 )<InvoicePageContainerProps>``;
 
+export const PaidInvoicePageContainerWrapper = styled(animated.View)`
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 10000px;
+  background-color: ${({ theme }) => theme.colors.success};
+  z-index: 1;
+`;
+
+export const PaidInvoicePageContainer = styled(View)`
+  align-items: center;
+`;
+
+export const ProgressToTerminal = styled(animated.View)`
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0px;
+  background-color: rgba(0, 0, 0, 0.15);
+`;
+
 export const LoaderText = styled(Text).attrs(({ theme }) => ({
   h4: true,
   weight: 700,
@@ -39,19 +63,21 @@ export const SectionsContainer = styled(ComponentStack)`
   flex-grow: 1;
 `;
 
-export const Section = styled(ComponentStack)`
-  overflow: hidden;
+export const Section = styled(ComponentStack)<{ grow?: boolean }>`
   align-items: center;
-  ${({ theme }) => `
+  overflow: hidden;
+
+  ${({ theme, grow }) => `
     padding: ${theme.gridSize}px ${theme.gridSize * 1.25}px;
+    ${grow ? "flex-grow: 1;" : ""}
   `}
 `;
 
-export const TypeText = styled(Text).attrs(({ theme }) => ({
+export const TypeText = styled(Text).attrs(({ theme, color }) => ({
   weight: 600,
   h6: true,
-  color: theme.colors.white
-}))`
+  color: color || theme.colors.white
+}))<{ color?: ColorValue }>`
   display: flex;
   text-align: center;
   justify-content: center;
@@ -108,6 +134,13 @@ export const SuccessLottie = styled(Lottie)<{ size: number }>`
     width: ${size}px;
   `}
   transform: scale(1.35);
+  z-index: 1;
+`;
+
+export const GreenCircle = styled(animated.View)`
+  position: absolute;
+  border-radius: 10000px;
+  background-color: ${({ theme }) => theme.colors.success};
 `;
 
 export const TapAnywhereAction = styled(ComponentStack)`
@@ -219,6 +252,7 @@ export const TapAnywhereCatcher = styled(Pressable)`
 `;
 
 export const TapAnywhereStack = styled(ComponentStack)`
+  max-width: ${maxContentWidth}px;
   ${({ theme }) => `padding-horizontal: ${theme.gridSize}px;`}
 `;
 

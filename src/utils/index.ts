@@ -1,3 +1,12 @@
+export {
+  decimalSeparator,
+  decimalSeparatorNameMapping
+} from "./decimalSeparator";
+export {
+  formattedUnitChanges,
+  countConsecutiveStringParts
+} from "./formattedUnitChanges";
+export { measureText } from "./measureText";
 export { Clipboard } from "./Clipboard";
 export { NFC } from "./NFC";
 export { AsyncStorage } from "./AsyncStorage";
@@ -30,3 +39,4 @@ export { getImageSize } from "./getImageSize";
 export { scaleDimensions } from "./scaleDimensions";
 export { base64ToHex } from "./base64ToHex";
 export { FS } from "./FS";
+export { isNewAccount } from "./isNewAccount";

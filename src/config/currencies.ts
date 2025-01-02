@@ -649,7 +649,7 @@ export const currencies = [
     value: "XPD" as const
   },
   {
-    label: "XPF",
+    label: "XPF • Franc pacifique",
     value: "XPF" as const
   },
   {

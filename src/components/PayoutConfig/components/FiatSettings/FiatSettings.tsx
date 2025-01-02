@@ -17,9 +17,9 @@ import {
   faShop
 } from "@fortawesome/free-solid-svg-icons";
 import { Controller, ControllerProps } from "react-hook-form";
-import { useCallback, useMemo } from "react";
-import { getFormattedUnit } from "@utils";
-import { countries } from "@config";
+import { useCallback, useContext, useMemo } from "react";
+import { getFormattedUnit, isNewAccount as _isNewAccount } from "@utils";
+import { SBPContext, countries } from "@config";
 import { DescriptionLine } from "../DescriptionLine";
 import isValidZipcode from "is-valid-zipcode";
 import {
@@ -46,8 +46,9 @@ export const FiatSettings = ({
     keyPrefix: "screens.payoutConfig"
   });
 
-  const ownerCountry = watch("ownerCountry");
+  const { accountConfig } = useContext(SBPContext);
 
+  const ownerCountry = watch("ownerCountry");
   const btcPercent = watch("btcPercent");
 
   const validateIban = useCallback(
@@ -70,6 +71,11 @@ export const FiatSettings = ({
       return 0;
     },
     [rates, currency]
+  );
+
+  const isNewAccount = useMemo(
+    () => _isNewAccount(accountConfig?.createdAt),
+    [accountConfig?.createdAt]
   );
 
   const isInstant = useMemo(
@@ -266,14 +272,22 @@ export const FiatSettings = ({
     <ComponentStack>
       <ComponentStack gapSize={14}>
         <FieldDescription>💶 {t("feesDetails1")}</FieldDescription>
-        <ComponentStack gapSize={4}>
+        <ComponentStack gapSize={2}>
           <DescriptionLine>
-            <FieldDescription>{t("feesFirstYear")}</FieldDescription>
-            <FieldDescription>0.21%</FieldDescription>
+            <FieldDescription isHighlighted={isNewAccount}>
+              {t("feesFirstYear")}
+            </FieldDescription>
+            <FieldDescription isHighlighted={isNewAccount}>
+              0.21%
+            </FieldDescription>
           </DescriptionLine>
           <DescriptionLine>
-            <FieldDescription>{t("feesAfterwards")}</FieldDescription>
-            <FieldDescription>1.50%</FieldDescription>
+            <FieldDescription isHighlighted={!isNewAccount}>
+              {t("feesAfterwards")}
+            </FieldDescription>
+            <FieldDescription isHighlighted={!isNewAccount}>
+              1.5%
+            </FieldDescription>
           </DescriptionLine>
         </ComponentStack>
         <FieldDescription>

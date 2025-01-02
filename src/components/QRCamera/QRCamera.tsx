@@ -1,7 +1,7 @@
-import { CSSProperties, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
-  QrScanner,
-  QrScannerProps as RootScannerProps
+  Scanner,
+  IScannerProps as RootScannerProps
 } from "@yudiel/react-qr-scanner";
 import { PlaceholderPresetsTypes } from "./data";
 import { CamerasConfig } from "./types";
@@ -59,25 +59,40 @@ export const QRCamera = ({
     })();
   }, []);
 
+  const _onScan = useCallback(
+    (value: { rawValue: string }[]) => {
+      const v = value[0].rawValue;
+      if (v) {
+        onScan(v);
+      }
+    },
+    [onScan]
+  );
+
   return (
     deviceIndex !== undefined && (
-      <QrScanner
+      <Scanner
+        components={{ audio: false, finder: false }}
         constraints={{ deviceId: devices?.[deviceIndex]?.deviceId }}
-        containerStyle={StyleSheet.flatten([
-          style as CSSProperties,
-          {
-            height: videoHeight,
-            alignItems: "center",
-            justifyContent: "center",
-            display: "flex"
-          }
-        ])}
-        videoStyle={{
-          borderRadius: isLarge ? 40 : 0,
-          overflow: "hidden",
-          width: "fit-content"
+        styles={{
+          container: StyleSheet.flatten([
+            style,
+            {
+              height: videoHeight,
+              alignItems: "center",
+              justifyContent: "center",
+              display: "flex",
+              width: "unset"
+            }
+          ]),
+          video: {
+            borderRadius: isLarge ? 40 : 0,
+            overflow: "hidden",
+            width: "fit-content"
+          },
+          finderBorder: 3
         }}
-        onDecode={onScan}
+        onScan={_onScan}
         onError={onError}
       />
     )

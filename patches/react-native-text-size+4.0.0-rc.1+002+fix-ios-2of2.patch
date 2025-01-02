@@ -1,0 +1,5 @@
+# Inspired by https://github.com/aMarCruz/react-native-text-size/pull/45/files
+diff --git a/node_modules/react-native-text-size/ios/RNTextSize.podspec b/node_modules/react-native-text-size/RNTextSize.podspec
+similarity index 100%
+rename from node_modules/react-native-text-size/ios/RNTextSize.podspec
+rename to node_modules/react-native-text-size/RNTextSize.podspec

@@ -120,6 +120,10 @@ export const PayoutConfigScreen = () => {
 
           const errorMessage = t(`error.${errorField}.${errorKey}`);
 
+          if (errorField) {
+            setError(errorField, { message: errorMessage });
+          }
+
           toast.show(errorMessage, {
             type: "error"
           });

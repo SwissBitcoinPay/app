@@ -37,7 +37,7 @@ import {
   useMemo,
   useState
 } from "react";
-import { validateBitcoinAddress } from "@utils";
+import { validateBitcoinAddress, isNewAccount as _isNewAccount } from "@utils";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
@@ -53,6 +53,7 @@ import * as S from "./styled";
 import { faUsb } from "@fortawesome/free-brands-svg-icons";
 import { useToast } from "react-native-toast-notifications";
 import { IS_BITBOX_SUPPORTED } from "@config";
+import { addYears, isBefore } from "date-fns";
 
 export type SignatureData = {
   zPub: string;
@@ -100,6 +101,11 @@ export const BitcoinSettings = ({
   const isAddressAlreadyVerified = useMemo(
     () => !!alreadyVerifiedAddresses.includes(depositAddress || ""),
     [alreadyVerifiedAddresses, depositAddress]
+  );
+
+  const isNewAccount = useMemo(
+    () => _isNewAccount(accountConfig?.createdAt),
+    [accountConfig?.createdAt]
   );
 
   useEffect(() => {
@@ -709,14 +715,22 @@ export const BitcoinSettings = ({
       <ComponentStack>
         <ComponentStack gapSize={14}>
           <FieldDescription>💶 {t("feesDetails1")}</FieldDescription>
-          <ComponentStack gapSize={4}>
+          <ComponentStack gapSize={2}>
             <DescriptionLine>
-              <FieldDescription>{t("feesFirstYear")}</FieldDescription>
-              <FieldDescription>0.21%</FieldDescription>
+              <FieldDescription isHighlighted={isNewAccount}>
+                {t("feesFirstYear")}
+              </FieldDescription>
+              <FieldDescription isHighlighted={isNewAccount}>
+                0.21%
+              </FieldDescription>
             </DescriptionLine>
             <DescriptionLine>
-              <FieldDescription>{t("feesAfterwards")}</FieldDescription>
-              <FieldDescription>1%</FieldDescription>
+              <FieldDescription isHighlighted={!isNewAccount}>
+                {t("feesAfterwards")}
+              </FieldDescription>
+              <FieldDescription isHighlighted={!isNewAccount}>
+                1%
+              </FieldDescription>
             </DescriptionLine>
           </ComponentStack>
           <FieldDescription>

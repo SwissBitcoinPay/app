@@ -12,6 +12,7 @@ export type AccountConfigType = {
   logoUrl?: string;
 
   // Visible by admin only
+  createdAt?: number;
   mail?: string;
   verifiedAddresses?: string[];
   btcPercent?: number;

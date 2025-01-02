@@ -27,7 +27,10 @@ import {
   useVersionTag
 } from "@hooks";
 import FinmaSvg from "@assets/images/finma.svg";
+import { platform } from "@config";
 import * as S from "./styled";
+
+const { isIos } = platform;
 
 export const Welcome = () => {
   const { t } = useTranslation(undefined, { keyPrefix: "screens.welcome" });
@@ -78,16 +81,18 @@ export const Welcome = () => {
   return (
     <>
       <AnimatedLinearGradient customColors={colors} speed={6000} />
-      <S.BlurContainer>
-        <S.LightningAnimation
-          loop
-          autoPlay
-          resizeMode="contain"
-          size={higherWindowSize}
-          source={require("@assets/animations/lightning.json")}
-        />
-        <Blur blurRadius={24} />
-      </S.BlurContainer>
+      {!isIos && (
+        <S.BlurContainer>
+          <S.LightningAnimation
+            loop
+            autoPlay
+            resizeMode="contain"
+            size={higherWindowSize}
+            source={require("@assets/animations/lightning.json")}
+          />
+          <Blur blurRadius={24} />
+        </S.BlurContainer>
+      )}
 
       <PageContainer noVerticalPadding>
         <Pressable onPress="https://swiss-bitcoin-pay.ch">

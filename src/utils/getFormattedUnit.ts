@@ -1,9 +1,10 @@
-import { numberWithSpaces } from "@utils";
+import { numberWithSpaces, decimalSeparator } from "@utils";
 
 export const getFormattedUnit = (
   amount: number,
   unit: string,
-  floating = 2
+  floating = 2,
+  trailingDecimal = false
 ) => {
   let prefix = "";
   if (amount > 0 && amount < 0.01) {
@@ -14,14 +15,20 @@ export const getFormattedUnit = (
   if (unit === "sat" || unit === "sats") {
     return `${prefix}${numberWithSpaces(amount)} sats`;
   } else if (!unit) {
-    return `${prefix}${amount}`
+    return `${prefix}${amount}`;
   }
 
-  return `${prefix}${Intl.NumberFormat(undefined, {
+  let result = Intl.NumberFormat(undefined, {
     style: "currency",
     currency: unit,
     currencyDisplay: "narrowSymbol",
     minimumFractionDigits: floating,
     maximumFractionDigits: floating
-  }).format(amount)}`;
+  }).format(amount);
+
+  if (trailingDecimal) {
+    result = result.replace("0", `0${decimalSeparator}`);
+  }
+
+  return `${prefix}${result}`;
 };
