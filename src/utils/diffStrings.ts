@@ -4,14 +4,14 @@ import { v4 as uuidv4 } from "uuid";
 export interface StringPart {
   id: string;
   text: string;
-  new?: boolean;
+  add?: boolean;
   remove?: boolean;
 }
 
 export function diffStrings(oldStr: string, newStr?: string): StringPart[] {
   // If strings are identical, return single part
   if (oldStr === newStr || !newStr) {
-    return [{ id: uuidv4(), text: oldStr }];
+    return degroup([{ id: uuidv4(), text: oldStr }]);
   }
 
   const result: StringPart[] = [];
@@ -49,10 +49,10 @@ export function diffStrings(oldStr: string, newStr?: string): StringPart[] {
       });
       result.push({
         text: newStr.slice(j, newStr.length - commonSuffixLength),
-        new: true
+        add: true
       });
       result.push({ text: oldStr.slice(oldStr.length - commonSuffixLength) });
-      return result.map((part) => ({ ...part, id: uuidv4() }));
+      return degroup(result.map((part) => ({ ...part, id: uuidv4() })));
     }
   }
 
@@ -109,13 +109,13 @@ export function diffStrings(oldStr: string, newStr?: string): StringPart[] {
           result.push({ text: removedChars[k], remove: true });
         }
         if (k < addedChars.length) {
-          result.push({ text: addedChars[k], new: true });
+          result.push({ text: addedChars[k], add: true });
         }
       }
     } else if (k < removedChars.length) {
       result.push({ text: removedChars[k], remove: true });
     } else if (k < addedChars.length) {
-      result.push({ text: addedChars[k], new: true });
+      result.push({ text: addedChars[k], add: true });
     }
     k++;
   }
@@ -137,13 +137,13 @@ export function diffStrings(oldStr: string, newStr?: string): StringPart[] {
     result.push({ text: remainingText });
   }
 
-  // Optimization: Group consecutive elements with the same new/remove attributes
+  // Optimization: Group consecutive elements with the same add/remove attributes
   const optimizedResult: StringPart[] = [];
   for (let i = 0; i < result.length; i++) {
     const current = result[i];
     const last = optimizedResult[optimizedResult.length - 1];
 
-    if (last && last.new === current.new && last.remove === current.remove) {
+    if (last && last.add === current.add && last.remove === current.remove) {
       last.text += current.text;
     } else {
       optimizedResult.push({ ...current });
@@ -156,7 +156,7 @@ export function diffStrings(oldStr: string, newStr?: string): StringPart[] {
     const current = optimizedResult[i];
     const next = optimizedResult[i + 1];
 
-    if (next && current.new && next.remove && current.text === next.text) {
+    if (next && current.add && next.remove && current.text === next.text) {
       finalResult.push({ text: current.text });
       i++; // Skip the next element
     } else {
@@ -177,7 +177,7 @@ export function diffStrings(oldStr: string, newStr?: string): StringPart[] {
 
     // Handle decimal separator changes
     if (
-      current.new &&
+      current.add &&
       next.text === decimalSeparator &&
       previous?.remove === true
     ) {
@@ -190,14 +190,14 @@ export function diffStrings(oldStr: string, newStr?: string): StringPart[] {
       finalResult.splice(i + 1, 2, {
         id: uuidv4(),
         text: decimalSeparator,
-        new: true
+        add: true
       });
     }
 
     // Handle number position changes
     if (
       current.remove &&
-      next?.new &&
+      next?.add &&
       current.text.replace(/[^0-9]/g, "") === next.text.replace(/[^0-9]/g, "")
     ) {
       const nonDigits = current.text.match(/[^0-9]/g) || [];
@@ -213,7 +213,7 @@ export function diffStrings(oldStr: string, newStr?: string): StringPart[] {
         finalResult[i + 1] = {
           id: next.id,
           text: next.text,
-          new: true
+          add: true
         };
       } else {
         // Handle digits with formatting
@@ -227,5 +227,55 @@ export function diffStrings(oldStr: string, newStr?: string): StringPart[] {
     }
   }
 
-  return finalResult;
+  return degroup(finalResult);
 }
+
+const degroup = (result: StringPart[]) => {
+  const degroup: StringPart[] = [];
+  for (let i = 0; i < result.length; i++) {
+    const elem = result[i];
+
+    if (elem.add || elem.remove) {
+      degroup.push(
+        ...elem.text.split("").map((c) => ({
+          id: uuidv4(),
+          text: c,
+          add: elem.add,
+          remove: elem.remove
+        }))
+      );
+    } else {
+      degroup.push(elem);
+    }
+  }
+
+  return degroup;
+};
+
+export const countConsecutiveStringParts = (
+  array: StringPart[],
+  attribute: "add" | "remove",
+  startIndex: number
+) => {
+  let count = 0;
+
+  if (attribute === "add") {
+    for (let i = startIndex - 1; i >= 0; i--) {
+      if (array[i].add) {
+        count++;
+      } else {
+        break;
+      }
+    }
+  } else if (attribute === "remove") {
+    for (let i = startIndex + 1; i < array.length; i++) {
+      if (array[i].remove) {
+        count++;
+      } else {
+        break;
+      }
+    }
+  }
+
+  return count;
+};

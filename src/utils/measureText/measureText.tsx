@@ -12,7 +12,7 @@ export const measureText = (
   text: string,
   { fontSize, fontFamily }: MeasureTextFont
 ) => {
-  return new Promise((resolve) => {
+  return new Promise<{ width: number }>((resolve) => {
     const elem = document.createElement("div");
     ctx.font = `${fontSize}px ${fontFamily}`;
     resolve({ width: ctx?.measureText(text).width || 0 });

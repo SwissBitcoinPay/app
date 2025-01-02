@@ -15,7 +15,9 @@ import {
   decimalSeparator,
   decimalSeparatorNameMapping,
   diffStrings,
-  measureText
+  countConsecutiveStringParts,
+  measureText,
+  sleep
 } from "@utils";
 import {
   Keyboard,
@@ -67,7 +69,7 @@ const {
   deviceType
 } = platform;
 
-const ANIMATION_CONFIG = { duration: 250, easing: easings.easeOutQuad };
+const ANIMATION_CONFIG = { duration: 300, easing: easings.easeOutQuad };
 
 const VISIBLE_STYLE = {
   scale: 1,
@@ -75,7 +77,7 @@ const VISIBLE_STYLE = {
 };
 
 const HIDDEN_STYLE = {
-  scale: 0.8,
+  scale: 0.85,
   opacity: 0
 };
 
@@ -206,7 +208,7 @@ export const Pos = () => {
 
   const descriptionInputRef = useRef<TextInput>(null);
 
-  const [springs, api] = useSprings(7, () => ({
+  const [springs, api] = useSprings(10, () => ({
     from: VISIBLE_STYLE
   }));
 
@@ -243,25 +245,50 @@ export const Pos = () => {
 
       const rawParts = diffStrings(previousText, newText);
 
-      const elemsWidths = (
+      const elemsWithWidths = (
         await Promise.all(
           rawParts.map((e) =>
             measureText(e.text, { fontSize: 32, fontFamily: "Poppins-Bold" })
           )
         )
-      ).map(({ width }) => width || 0);
+      ).map(({ width }, i) => {
+        const part = rawParts[i];
+        const consecutiveElementsNb = part.add
+          ? countConsecutiveStringParts(rawParts, "add", i)
+          : part.remove
+            ? countConsecutiveStringParts(rawParts, "remove", i)
+            : 0;
+
+        const initialConfig = part.add
+          ? { ...HIDDEN_STYLE, width: 0 }
+          : { ...VISIBLE_STYLE, width };
+
+        return { ...part, width, consecutiveElementsNb, initialConfig };
+      });
 
       await api.start((springIndex) => {
-        const part = rawParts[springIndex] || {};
-        const width = elemsWidths[springIndex];
+        const { initialConfig } = elemsWithWidths[springIndex] || {};
 
         return {
-          ...(part.new
+          from: initialConfig,
+          to: initialConfig,
+          immediate: true
+        };
+      });
+
+      setParts(elemsWithWidths);
+
+      await api.start((springIndex) => {
+        const { add, remove, width, consecutiveElementsNb } =
+          elemsWithWidths[springIndex] || {};
+
+        return {
+          ...(add
             ? {
                 from: { ...HIDDEN_STYLE, width: 0 },
                 to: { ...VISIBLE_STYLE, width }
               }
-            : part.remove
+            : remove
               ? {
                   from: { ...VISIBLE_STYLE, width },
                   to: { ...HIDDEN_STYLE, width: 0 }
@@ -270,11 +297,11 @@ export const Pos = () => {
                   from: { ...VISIBLE_STYLE, width },
                   to: { ...VISIBLE_STYLE, width }
                 }),
+          delay: consecutiveElementsNb * 80,
           config: ANIMATION_CONFIG
         };
       });
 
-      setParts(rawParts);
       setFiatAmount(newFiatAmount);
 
       return true;
@@ -324,12 +351,7 @@ export const Pos = () => {
 
   const onDecimalSeparator = useCallback(async () => {
     if (fiatAmount.toString().length > 0) {
-      if (
-        !(await animateInput(
-          fiatAmount * 100,
-          fiatAmount.toString().length === 1
-        ))
-      ) {
+      if (!(await animateInput(fiatAmount * 100, fiatAmount === 0))) {
         return;
       }
     }
@@ -432,7 +454,6 @@ export const Pos = () => {
               <animated.View
                 key={part.id}
                 style={{
-                  alignItems: "center",
                   ...(springs[index] || {}),
                   transform: [
                     {
@@ -446,11 +467,7 @@ export const Pos = () => {
                   weight={700}
                   color={colors.white}
                   style={{
-                    width: part.new
-                      ? springs[index].width?.goal
-                      : part.remove
-                        ? springs[index].width?.animation.from
-                        : undefined
+                    width: part.width
                   }}
                 >
                   {part.text}
