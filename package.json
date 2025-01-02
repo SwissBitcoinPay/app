@@ -86,6 +86,7 @@
     "react-native-error-boundary": "1.2.7",
     "react-native-fast-image": "8.6.3",
     "react-native-fs": "2.20.0",
+    "react-native-get-random-values": "^1.11.0",
     "react-native-keychain": "9.2.2",
     "react-native-linear-gradient": "2.8.3",
     "react-native-nfc-manager": "3.16.1",
@@ -99,6 +100,7 @@
     "react-native-securerandom": "1.0.1",
     "react-native-ssl-public-key-pinning": "1.2.4",
     "react-native-svg": "15.10.1",
+    "react-native-text-size": "4.0.0-rc.1",
     "react-native-toast-notifications": "3.4.0",
     "react-native-use-keyboard": "1.0.0",
     "react-native-video": "6.8.2",
@@ -113,6 +115,7 @@
     "react-use-websocket": "4.11.1",
     "stream-browserify": "3.0.0",
     "styled-components": "6.1.13",
+    "uuid": "^11.0.3",
     "vm-browserify": "1.1.2",
     "xpub-converter": "1.0.2"
   },

@@ -2,6 +2,11 @@ export {
   decimalSeparator,
   decimalSeparatorNameMapping
 } from "./decimalSeparator";
+export {
+  formattedUnitChanges,
+  countConsecutiveStringParts
+} from "./formattedUnitChanges";
+export { measureText } from "./measureText";
 export { Clipboard } from "./Clipboard";
 export { NFC } from "./NFC";
 export { AsyncStorage } from "./AsyncStorage";
