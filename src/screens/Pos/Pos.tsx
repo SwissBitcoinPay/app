@@ -540,7 +540,8 @@ export const Pos = () => {
                           }
                         : {
                             ref: registerRef(DECIMAL_REF_INDEX),
-                            onPress: onDecimalSeparator
+                            onPress: onDecimalSeparator,
+                            disabled: decimalCount !== 0
                           })
                     }
                   : {})}
