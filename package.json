@@ -115,6 +115,7 @@
     "react-use-websocket": "4.11.1",
     "stream-browserify": "3.0.0",
     "styled-components": "6.1.13",
+    "use-previous": "1.2.0",
     "uuid": "^11.0.3",
     "vm-browserify": "1.1.2",
     "xpub-converter": "1.0.2"

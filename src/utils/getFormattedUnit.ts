@@ -32,3 +32,20 @@ export const getFormattedUnit = (
 
   return `${prefix}${result}`;
 };
+
+const TEST_AMOUNT = 123;
+
+export const getUnitPrefixAndSuffix = (unit: string) => {
+  let unitPrefix: string | undefined;
+  let unitSuffix: string | undefined;
+
+  const testFormattedUnit = getFormattedUnit(TEST_AMOUNT, unit, 0);
+
+  if (/^[0-9]/.test(testFormattedUnit)) {
+    unitSuffix = testFormattedUnit.replace(TEST_AMOUNT.toString(), "");
+  } else {
+    unitPrefix = testFormattedUnit.replace(TEST_AMOUNT.toString(), "");
+  }
+
+  return { unitPrefix, unitSuffix };
+};

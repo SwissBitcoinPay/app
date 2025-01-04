@@ -80,7 +80,7 @@ import { useSafeAreaFrame } from "react-native-safe-area-context";
 
 const getTrue = () => true;
 
-const { isWeb, isIos, isBitcoinize } = platform;
+const { isAndroid, isWeb, isIos, isBitcoinize } = platform;
 
 type Status =
   | "draft"
@@ -337,7 +337,8 @@ export const Invoice = () => {
 
       greenCircleApi.start({
         to: { width: circleSize, height: circleSize },
-        config: { duration: 800, easing: easings.easeOutQuad }
+        config: { duration: 800, easing: easings.easeOutQuad },
+        delay: isAndroid ? 100 : 0
       });
 
       const REDIRECT_DELAY = 7000;
