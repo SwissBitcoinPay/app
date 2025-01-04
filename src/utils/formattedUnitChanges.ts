@@ -1,48 +1,16 @@
 import { decimalSeparator } from "./decimalSeparator";
 import { v4 as uuidv4 } from "uuid";
 import { getFormattedUnit } from "./getFormattedUnit";
-
-export interface StringPart {
-  id: string;
-  text: string;
-  add?: boolean;
-  remove?: boolean;
-}
-
-const TEST_AMOUNT = 123;
+import { AddActions, StringPart } from "@hooks/useAnimateAmount";
 
 export const formattedUnitChanges = (
-  amount: number,
-  unit: string,
-  add?: number | "delete" | "clear" | "decimal",
-  decimalCount = 0
+  amount: string,
+  add: AddActions,
+  decimalCount = 0,
+  array: StringPart[]
 ) => {
-  const result: StringPart[] = [];
-
-  let unitPrefix: string | undefined;
-  let unitSuffix: string | undefined;
-
-  const testFormattedUnit = getFormattedUnit(TEST_AMOUNT, unit, 0);
-
-  if (/^[0-9]/.test(testFormattedUnit)) {
-    unitSuffix = testFormattedUnit.replace(TEST_AMOUNT.toString(), "");
-  } else {
-    unitPrefix = testFormattedUnit.replace(TEST_AMOUNT.toString(), "");
-  }
-
-  if (unitPrefix) {
-    result.push({ text: unitPrefix });
-  }
-
-  if (add !== undefined && !(amount === 0 && add === 0)) {
-    const [leftPart, rightPart] = getFormattedUnit(
-      amount,
-      unit,
-      amount > 0 && decimalCount < 2 ? 2 : 0
-    )
-      .split(/(\s+)/)
-      .filter((e) => e.trim().length > 0)[0]
-      .split(decimalSeparator);
+  if (amount !== "0" || add !== 0 || decimalCount > 0) {
+    const [leftPart, rightPart] = amount.split(decimalSeparator);
 
     let decimalSwitch = false;
 
@@ -52,22 +20,22 @@ export const formattedUnitChanges = (
 
     if (typeof add === "number") {
       if (!rightPart || (leftPart === "0" && rightPart[0] === "0")) {
-        result.push({ text: leftPart });
+        array.push({ text: leftPart });
         decimalSwitch = !rightPart;
       } else {
         if (leftPart === "0" && decimalCount === 0) {
-          result.push({ text: "0", remove: true });
+          array.push({ text: "0", remove: true });
         } else {
-          result.push({ text: leftPart });
+          array.push({ text: leftPart });
         }
         if (decimalCount === 0) {
-          result.push({ text: decimalSeparator, remove: true });
-          result.push({ text: rightPart[0] });
+          array.push({ text: decimalSeparator, remove: true });
+          array.push({ text: rightPart[0] });
           decimalSwitch = true;
         }
       }
 
-      result.push({
+      array.push({
         text: decimalSeparator,
         add: decimalSwitch && decimalCount === 0
       });
@@ -76,127 +44,143 @@ export const formattedUnitChanges = (
 
       if (!rightPart) {
         if (decimalCount === 2) {
-          result.push({ text: firstChar, add: true });
+          array.push({ text: firstChar, add: true });
         } else {
-          result.push({ text: "0", add: true });
+          array.push({ text: "0", add: true });
         }
       } else {
-        if (rightPart[0] === "0" && leftPart === "0") {
-          result.push({ text: "0", remove: true });
+        if (rightPart[0] === "0" && leftPart === "0" && decimalCount !== 1) {
+          array.push({ text: "0", remove: true });
           if (decimalCount === 2) {
-            result.push({ text: firstChar, add: true });
-            result.push({ text: "0" });
+            array.push({ text: firstChar, add: true });
+            array.push({ text: "0" });
           }
         }
         if (decimalCount === 0) {
-          result.push({ text: rightPart.slice(-1) });
+          array.push({ text: rightPart.slice(-1) });
         } else if (decimalCount === 1) {
-          result.push({ text: rightPart[0] });
+          array.push({ text: rightPart[0] });
           if (firstChar === "0") {
-            result.push({ text: "0" });
+            array.push({ text: "0", add: true });
           } else {
             if (decimalCount !== 1) {
-              result.push({ text: "0", remove: true });
+              array.push({ text: "0", remove: true });
             }
-            result.push({ text: firstChar, add: true });
+            array.push({ text: firstChar, add: true });
           }
         }
       }
       if (decimalCount === 0) {
-        result.push({ text: firstChar, add: true });
+        array.push({ text: firstChar, add: true });
       }
     } else if (add === "delete") {
       if (leftPart === "0") {
-        result.push({ text: leftPart });
+        array.push({ text: leftPart });
       } else {
         if (leftPart.length === 1) {
-          result.push({ text: "0", add: true });
+          array.push({ text: "0", add: true });
         }
         if (leftPart.length >= 1) {
-          result.push({ text: leftPart.slice(0, -1) });
-          result.push({ text: decimalSeparator, add: true });
+          array.push({ text: leftPart.slice(0, -1) });
+          array.push({ text: decimalSeparator, add: true });
           decimalSwitch = true;
         }
       }
 
       if (decimalCount === 2 && !rightPart) {
-        result.push({ text: decimalSeparator, remove: true });
+        array.push({ text: decimalSeparator, remove: true });
       }
 
       if (leftPart !== "0") {
-        result.push({ text: leftPart[leftPart.length - 1] });
-        result.push({ text: decimalSeparator, remove: decimalSwitch });
+        array.push({ text: leftPart[leftPart.length - 1] });
+        array.push({ text: decimalSeparator, remove: decimalSwitch });
       } else {
-        result.push({ text: decimalSeparator, add: decimalSwitch });
-        result.push({ text: "0", add: true });
+        array.push({ text: decimalSeparator, add: decimalSwitch });
+        array.push({ text: "0", add: true });
       }
 
-      result.push({ text: rightPart[0] });
-      result.push({ text: rightPart[1], remove: true });
+      array.push({ text: rightPart[0] });
+      if (decimalCount !== 1) {
+        array.push({ text: rightPart[1], remove: true });
+      }
     } else if (add === "clear") {
+      const isRightPartDefined = rightPart !== undefined;
       const isLastLeftPartCharZero = leftPart[leftPart.length - 1] === "0";
 
       if (leftPart !== "0") {
-        result.push({
-          text: leftPart.slice(0, isLastLeftPartCharZero ? -1 : undefined),
+        if (!isRightPartDefined) {
+          array.push({ text: "0" });
+        }
+        array.push({
+          text: leftPart.slice(
+            isRightPartDefined ? 0 : 1,
+            isLastLeftPartCharZero ? -1 : undefined
+          ),
           remove: true
         });
       }
       if (isLastLeftPartCharZero) {
-        result.push({ text: "0" });
+        array.push({ text: "0" });
       }
 
       const isLastRightPartCharZero =
-        !isLastLeftPartCharZero && rightPart[rightPart.length - 1] === "0";
+        isRightPartDefined &&
+        !isLastLeftPartCharZero &&
+        rightPart[rightPart.length - 1] === "0";
 
-      if (!isLastRightPartCharZero && !isLastLeftPartCharZero) {
-        result.push({ text: "0", add: leftPart !== "0" });
+      if (
+        !isLastRightPartCharZero &&
+        !isLastLeftPartCharZero &&
+        isRightPartDefined
+      ) {
+        array.push({ text: "0", add: leftPart !== "0" });
       }
 
       if (decimalCount === 2 && !rightPart) {
-        result.push({ text: decimalSeparator, remove: true });
+        array.push({ text: decimalSeparator, remove: true });
       }
 
       if (rightPart) {
-        result.push({
+        array.push({
           text: `${decimalSeparator}${rightPart.slice(0, isLastRightPartCharZero ? -1 : undefined)}`,
           remove: true
         });
       }
       if (isLastRightPartCharZero) {
-        result.push({ text: "0" });
+        array.push({ text: "0" });
       }
     } else if (add === "decimal") {
       if (!rightPart) {
-        result.push({ text: leftPart });
-        result.push({ text: decimalSeparator, add: true });
+        array.push({ text: leftPart });
+        array.push({ text: decimalSeparator, add: true });
       } else {
         if (decimalCount === 0) {
-          result.push({ text: leftPart, remove: leftPart === "0" });
-          result.push({ text: decimalSeparator, remove: true });
+          array.push({ text: leftPart, remove: leftPart === "0" });
+          array.push({ text: decimalSeparator, remove: true });
+          if (rightPart === "00") {
+            array.push({ text: "00" });
+          }
+
           const fullRight = rightPart.replace(/^0+/, "");
           if (fullRight.length === 1) {
-            result.push({ text: "0", remove: true });
+            array.push({ text: "0", remove: leftPart === "0" });
           }
-          result.push({ text: fullRight });
+          array.push({ text: fullRight });
         }
-        result.push({ text: decimalSeparator, add: true });
+        array.push({ text: decimalSeparator, add: true });
       }
     }
   } else {
-    result.push({ text: amount.toString() });
-  }
-  if (unitSuffix) {
-    result.push({ text: unitSuffix });
+    array.push({ text: amount });
   }
 
-  return degroup(result).map((r) => ({ ...r, id: uuidv4() }));
+  return degroup(array).map((r) => ({ ...r, id: uuidv4() }));
 };
 
-const degroup = (result: StringPart[]) => {
+const degroup = (array: StringPart[]) => {
   const degroupArr: StringPart[] = [];
-  for (let i = 0; i < result.length; i++) {
-    const elem = result[i];
+  for (let i = 0; i < array.length; i++) {
+    const elem = array[i];
 
     if (elem.add || elem.remove) {
       degroupArr.push(

@@ -41,12 +41,15 @@ import {
   useSafeAreaInsets,
   useAccountConfig,
   usePostInvoice,
-  useModalInput
+  useModalInput,
+  useAnimateAmount,
+  useSymbolApi
 } from "@hooks";
 import { SBPContext, apiRootUrl, currencies, platform } from "@config";
 import { keyStoreDeviceName, keyStoreIsGuest } from "@config/settingsKeys";
 import { useToast } from "react-native-toast-notifications";
 import { useTheme } from "styled-components";
+import { v4 as uuidv4 } from "uuid";
 import {
   TextInput,
   Touchable,
@@ -55,12 +58,16 @@ import {
 } from "react-native";
 import * as S from "./styled";
 import { animated, easings, useSpring, useSprings } from "@react-spring/native";
-import { StringPart } from "@utils/formattedUnitChanges";
+import { diffStrings } from "@utils/diffStrings";
+import { StringPart, AddActions, AnimationMode } from "@hooks/useAnimateAmount";
+
+const { isAndroid } = platform;
 
 const DECIMAL_REF_INDEX = 10;
-const C_REF_INDEX = 11;
-const DEL_REF_INDEX = 12;
-const OK_REF_INDEX = 13;
+const PLUS_REF_INDEX = 11;
+const C_REF_INDEX = 12;
+const DEL_REF_INDEX = 13;
+const OK_REF_INDEX = 14;
 
 const {
   isWeb,
@@ -69,17 +76,13 @@ const {
   deviceType
 } = platform;
 
-const ANIMATION_CONFIG = { duration: 250, easing: easings.easeOutQuad };
-
-const VISIBLE_STYLE = {
-  scale: 1,
-  opacity: 1
+const PLUS_ANIMATION_CONFIG = {
+  duration: 350,
+  easing: easings.easeInOutQuad
 };
 
-const HIDDEN_STYLE = {
-  scale: 0.85,
-  opacity: 0
-};
+const PLUS_ANIMATION_OPACITY_DURATION = PLUS_ANIMATION_CONFIG.duration / 6;
+const PLUS_ANIMATION_DELAY = PLUS_ANIMATION_OPACITY_DURATION * 5;
 
 export const Pos = () => {
   const { colors } = useTheme();
@@ -111,31 +114,31 @@ export const Pos = () => {
 
   const [isGuestMode, setIsGuestMode] = useState(false);
 
-  const getFormattedFiatAmount = useCallback(
-    (_decimalFiat: number, trailingDecimal?: boolean) =>
-      getFormattedUnit(
-        _decimalFiat,
-        unit || "",
-        _decimalFiat === 0 || !haveDecimals ? 0 : 2,
-        trailingDecimal !== undefined
-          ? trailingDecimal
-          : !!decimalCount && _decimalFiat === 0
-      ),
-    [unit, haveDecimals, decimalCount]
-  );
-
   const [fiatAmount, setFiatAmount] = useState(0);
 
-  const initialValue = useMemo(() => formattedUnitChanges(0, unit), [unit]);
+  const initialValue = useMemo(
+    () => [{ id: uuidv4(), text: getFormattedUnit(0, unit, 0) }],
+    [unit]
+  );
 
-  const [parts, setParts] = useState<StringPart[]>(initialValue);
+  const [movingPlusAmount, setMovingPlusAmount] = useState<string>();
+  const [plusFiatAmount, setPlusFiatAmount] = useState<number>(0);
 
   const [maxFiatAmount, setMaxFiatAmount] = useState<number>();
   const [deviceName, setDeviceName] = useState<string>();
   const [description, setDescription] = useState<string>();
 
-  const decimalFiat = useMemo(() => fiatAmount / 100, [fiatAmount]);
-  const isActionButtonsDisabled = useMemo(() => fiatAmount === 0, [fiatAmount]);
+  const totalAmount = useMemo(
+    () => fiatAmount + plusFiatAmount,
+    [fiatAmount, plusFiatAmount]
+  );
+
+  const decimalFiat = useMemo(() => totalAmount / 100, [totalAmount]);
+
+  const isActionButtonsDisabled = useMemo(
+    () => totalAmount === 0,
+    [totalAmount]
+  );
   const haveDecimals = useMemo(
     () => !!currencies.find((c) => c.value === unit && !c.noDecimals),
     [unit]
@@ -205,11 +208,25 @@ export const Pos = () => {
 
   const descriptionInputRef = useRef<TextInput>(null);
 
-  const [springs, api] = useSprings(10, () => ({
-    from: VISIBLE_STYLE
-  }));
-
   const [decimalCount, setDecimalCount] = useState(0);
+
+  const [parts, springs, animateAmount] = useAnimateAmount({
+    unit,
+    initialParts: initialValue,
+    decimalCount
+  });
+
+  const [plusParts, plusSprings, animatePlusAmount, setPlusParts] =
+    useAnimateAmount({
+      unit,
+      mode: AnimationMode.Plus,
+      animationDelay: PLUS_ANIMATION_DELAY
+    });
+
+  const [totalParts, totalSprings, animateTotalAmount] = useAnimateAmount({
+    unit,
+    mode: AnimationMode.Plus
+  });
 
   const numberRef = useRef<View[]>([]);
 
@@ -220,12 +237,8 @@ export const Pos = () => {
     []
   );
 
-  const animateInput = useCallback(
-    async (
-      newFiatAmount: number,
-      add?: number | "delete" | "clear",
-      trailingDecimal?: boolean
-    ) => {
+  const isBelowMaxFiatAmount = useCallback(
+    (newFiatAmount: number) => {
       if (maxFiatAmount && newFiatAmount / 100 > maxFiatAmount) {
         toast.show(
           t("cannotGoHigher", {
@@ -237,86 +250,32 @@ export const Pos = () => {
         );
         return false;
       }
-
-      const previousText = getFormattedFiatAmount(fiatAmount / 100);
-
-      const rawParts = formattedUnitChanges(
-        fiatAmount / 100,
-        unit,
-        add,
-        decimalCount
-      );
-
-      const elemsWithWidths = (
-        await Promise.all(
-          rawParts.map((e) =>
-            measureText(e.text, { fontSize: 32, fontFamily: "Poppins-Bold" })
-          )
-        )
-      ).map(({ width }, i) => {
-        const part = rawParts[i];
-        const consecutiveElementsNb = part.add
-          ? countConsecutiveStringParts(rawParts, "add", i)
-          : part.remove
-            ? countConsecutiveStringParts(rawParts, "remove", i)
-            : 0;
-
-        const initialConfig = part.add
-          ? { ...HIDDEN_STYLE, width: 0 }
-          : { ...VISIBLE_STYLE, width };
-
-        return { ...part, width, consecutiveElementsNb, initialConfig };
-      });
-
-      await api.start((springIndex) => {
-        const { initialConfig } = elemsWithWidths[springIndex] || {};
-
-        return {
-          from: initialConfig,
-          to: initialConfig,
-          immediate: true
-        };
-      });
-
-      setParts(elemsWithWidths);
-
-      await api.start((springIndex) => {
-        const { add, remove, width, consecutiveElementsNb } =
-          elemsWithWidths[springIndex] || {};
-
-        return {
-          ...(add
-            ? {
-                from: { ...HIDDEN_STYLE, width: 0 },
-                to: { ...VISIBLE_STYLE, width }
-              }
-            : remove
-              ? {
-                  from: { ...VISIBLE_STYLE, width },
-                  to: { ...HIDDEN_STYLE, width: 0 }
-                }
-              : {
-                  from: { ...VISIBLE_STYLE, width },
-                  to: { ...VISIBLE_STYLE, width }
-                }),
-          delay: consecutiveElementsNb * 70,
-          config: ANIMATION_CONFIG
-        };
-      });
-
-      setFiatAmount(newFiatAmount);
-
       return true;
     },
-    [
-      api,
-      fiatAmount,
-      maxFiatAmount,
-      toast,
-      unit,
-      decimalCount,
-      getFormattedFiatAmount
-    ]
+    [toast, maxFiatAmount, unit]
+  );
+
+  const updateTotalAmount = useCallback(
+    async (newTotalFiatAmount: number) => {
+      await animateTotalAmount(newTotalFiatAmount);
+    },
+    [animateTotalAmount]
+  );
+
+  const updateAmount = useCallback(
+    async (newFiatAmount: number, add: AddActions) => {
+      await animateAmount(newFiatAmount, add);
+      setFiatAmount(newFiatAmount);
+    },
+    [animateAmount, updateTotalAmount]
+  );
+
+  const updatePlusAmount = useCallback(
+    async (newPlusFiatAmount: number) => {
+      await animatePlusAmount(newPlusFiatAmount);
+      setPlusFiatAmount(newPlusFiatAmount);
+    },
+    [animatePlusAmount, fiatAmount]
   );
 
   const onPressNumber = useCallback(
@@ -330,24 +289,64 @@ export const Pos = () => {
         setDecimalCount(decimalCount - 1);
       }
 
-      void animateInput(newFiatAmount, newNumber);
+      if (isBelowMaxFiatAmount(newFiatAmount + plusFiatAmount)) {
+        void updateAmount(newFiatAmount, newNumber);
+        if (plusFiatAmount > 0) {
+          void updateTotalAmount(newFiatAmount + plusFiatAmount);
+        }
+      }
     },
-    [animateInput, haveDecimals, decimalCount]
+    [
+      updateAmount,
+      haveDecimals,
+      fiatAmount,
+      decimalCount,
+      plusFiatAmount,
+      isBelowMaxFiatAmount
+    ]
   );
 
   const clearAmount = useCallback(() => {
     setDecimalCount(0);
-    void animateInput(0, "clear");
-  }, [animateInput]);
+    void updateAmount(0, "clear");
+
+    if (plusFiatAmount > 0) {
+      void updatePlusAmount(0);
+      void updateTotalAmount(0);
+      void symbolsApi(false);
+    }
+  }, [
+    updateAmount,
+    updatePlusAmount,
+    updateTotalAmount,
+    symbolsApi,
+    plusFiatAmount
+  ]);
 
   const delAmount = useCallback(() => {
+    if (decimalCount > 0) {
+      setDecimalCount(0);
+    }
     if (fiatAmount <= 9) {
-      void animateInput(0, "clear");
+      void updateAmount(0, "clear");
+      if (plusFiatAmount > 0) {
+        void updateTotalAmount(plusFiatAmount);
+      }
       setDecimalCount(0);
     } else {
-      void animateInput(parseInt(fiatAmount.toString().slice(0, -1)), "delete");
+      const newAmount = parseInt(fiatAmount.toString().slice(0, -1));
+      void updateAmount(newAmount, "delete");
+      if (plusFiatAmount > 0) {
+        void updateTotalAmount(plusFiatAmount + newAmount);
+      }
     }
-  }, [fiatAmount, animateInput]);
+  }, [
+    fiatAmount,
+    updateAmount,
+    updateTotalAmount,
+    decimalCount,
+    plusFiatAmount
+  ]);
 
   useEffect(() => {
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
@@ -362,12 +361,79 @@ export const Pos = () => {
   const onDecimalSeparator = useCallback(async () => {
     if (
       fiatAmount.toString().length > 0 &&
-      !(await animateInput(fiatAmount * 100, "decimal"))
+      !isBelowMaxFiatAmount(plusFiatAmount + fiatAmount * 100)
     ) {
       return;
     }
+    void updateAmount(fiatAmount * 100, "decimal");
     setDecimalCount(haveDecimals ? 2 : 0);
-  }, [fiatAmount, haveDecimals]);
+  }, [
+    fiatAmount,
+    haveDecimals,
+    plusFiatAmount,
+    updateAmount,
+    isBelowMaxFiatAmount
+  ]);
+
+  const [movingPlusProps, movingPlusApi] = useSpring(() => ({
+    from: { top: 0, scale: 1, color: colors.white, opacity: 1 }
+  }));
+
+  const [symbolsProps, symbolsApi] = useSymbolApi();
+
+  const onPlus = useCallback(async () => {
+    const newPlusParts = parts.filter((p) => !p.remove);
+    const currentParts = newPlusParts.map((e) => e.text).join("");
+    setMovingPlusAmount(currentParts);
+
+    await movingPlusApi.start(() => ({
+      from: { top: 0, scale: 1, color: colors.white, opacity: 1 },
+      to: {
+        top: -(S.PLUS_TEXTS_TRANSLATE_Y + (isWeb ? 0 : 1.5)),
+        scale: S.PLUS_TEXTS_SCALE,
+        color: colors.greyLight
+      },
+      delay: isAndroid ? 70 : 0,
+      config: PLUS_ANIMATION_CONFIG
+    }));
+
+    if (plusFiatAmount > 0) {
+      await movingPlusApi.start(() => ({
+        from: { opacity: 1 },
+        to: { opacity: 0 },
+        delay: (isAndroid ? 70 : 0) + PLUS_ANIMATION_DELAY,
+        config: {
+          ...PLUS_ANIMATION_CONFIG,
+          duration: PLUS_ANIMATION_OPACITY_DURATION
+        }
+      }));
+    }
+
+    void updateAmount(0, "clear");
+    setDecimalCount(0);
+
+    const newPlusFiatAmount = plusFiatAmount + fiatAmount;
+    setPlusFiatAmount(newPlusFiatAmount);
+
+    if (plusFiatAmount === 0) {
+      void symbolsApi(true);
+      void updateTotalAmount(newPlusFiatAmount);
+      await sleep(PLUS_ANIMATION_OPACITY_DURATION * 6);
+      setPlusParts(newPlusParts);
+      setMovingPlusAmount(undefined);
+    } else {
+      void updatePlusAmount(newPlusFiatAmount);
+    }
+  }, [
+    movingPlusApi,
+    plusFiatAmount,
+    symbolsApi,
+    fiatAmount,
+    updateAmount,
+    animatePlusAmount,
+    parts,
+    setPlusParts
+  ]);
 
   const handleKeyPress = useCallback<EventListener>(
     // @ts-ignore
@@ -379,6 +445,8 @@ export const Pos = () => {
         refs.current[pressedKey]?.click?.();
       } else if (Object.keys(decimalSeparatorNameMapping).includes(pressCode)) {
         refs.current[DECIMAL_REF_INDEX]?.click?.();
+      } else if (pressCode === "Plus") {
+        refs.current[PLUS_REF_INDEX]?.click?.();
       } else if (pressCode === "Delete") {
         refs.current[C_REF_INDEX]?.click?.();
       } else if (pressCode === "Backspace") {
@@ -413,8 +481,8 @@ export const Pos = () => {
       isFirstRender.current = false;
       return;
     }
-    animateInput(fiatAmount);
-  }, [unit]);
+    clearAmount();
+  }, [initialValue]);
 
   return accountConfig ? (
     <PageContainer
@@ -459,8 +527,12 @@ export const Pos = () => {
           />
         )}
         {isBackgroundLoading && <S.BackgroundLoader size={20} />}
-        <S.FiatAmountComponentStack direction="horizontal" gapSize={10}>
-          <>
+        <S.FiatAmountComponentStack
+          direction="horizontal"
+          gapSize={10}
+          style={{ overflow: "visible" }}
+        >
+          <S.AmountsContainer>
             {parts.map((part, index) => (
               <animated.View
                 key={part.id}
@@ -473,19 +545,69 @@ export const Pos = () => {
                   ]
                 }}
               >
-                <Text
-                  h2
-                  weight={700}
-                  color={colors.white}
-                  style={{
-                    width: part.width
-                  }}
-                >
+                <S.AnimatedText style={{ width: part.width }}>
                   {part.text}
-                </Text>
+                </S.AnimatedText>
               </animated.View>
             ))}
-          </>
+            <S.PlusTextsContainer isTop>
+              {plusParts.map((part, index) => (
+                <animated.View
+                  key={part.id}
+                  style={{
+                    ...(plusSprings[index] || {}),
+                    transform: [
+                      {
+                        scale: plusSprings[index].scale
+                      }
+                    ]
+                  }}
+                >
+                  <S.PlusText style={{ width: part.width }}>
+                    {part.text}
+                  </S.PlusText>
+                </animated.View>
+              ))}
+            </S.PlusTextsContainer>
+            <S.PlusTextsContainer
+              style={{
+                opacity: movingPlusProps.opacity,
+                transform: [
+                  { translateY: movingPlusProps.top },
+                  { scale: movingPlusProps.scale }
+                ]
+              }}
+            >
+              <S.PlusText style={{ color: movingPlusProps.color }}>
+                {movingPlusAmount}
+              </S.PlusText>
+            </S.PlusTextsContainer>
+            <S.SymbolText style={symbolsProps}>+</S.SymbolText>
+            <S.SymbolText isBottom style={symbolsProps}>
+              =
+            </S.SymbolText>
+            <S.PlusTextsContainer isBottom>
+              {totalParts.map((part, index) => (
+                <animated.View
+                  key={part.id}
+                  style={{
+                    ...(totalSprings[index] || {}),
+                    transform: [
+                      {
+                        scale: totalSprings[index].scale
+                      }
+                    ]
+                  }}
+                >
+                  <S.PlusText
+                    style={{ width: part.width, color: colors.bitcoin }}
+                  >
+                    {part.text}
+                  </S.PlusText>
+                </animated.View>
+              ))}
+            </S.PlusTextsContainer>
+          </S.AmountsContainer>
           <S.FiatAmountDropdownIcon icon={faAngleDown} color={colors.grey} />
           <S.FiatUnitPicker
             value={unit}
@@ -493,7 +615,6 @@ export const Pos = () => {
             placeholder={{}}
             onValueChange={(value: string | null) => {
               if (value) {
-                clearAmount();
                 setPreferredCurrency(value);
               }
             }}
@@ -524,7 +645,7 @@ export const Pos = () => {
           [1, 2, 3],
           [4, 5, 6],
           [7, 8, 9],
-          [decimalSeparator, 0, undefined]
+          [decimalSeparator, 0, "+"]
         ].map((rowValue, rowIndex) => (
           <S.PadLine key={rowIndex}>
             {rowValue.map((columnValue, columnIndex) => (
@@ -538,11 +659,17 @@ export const Pos = () => {
                             ref: registerRef(columnValue),
                             onPress: () => onPressNumber(columnValue)
                           }
-                        : {
-                            ref: registerRef(DECIMAL_REF_INDEX),
-                            onPress: onDecimalSeparator,
-                            disabled: decimalCount !== 0
-                          })
+                        : columnValue === decimalSeparator
+                          ? {
+                              ref: registerRef(DECIMAL_REF_INDEX),
+                              onPress: onDecimalSeparator,
+                              disabled: decimalCount !== 0
+                            }
+                          : {
+                              ref: registerRef(PLUS_REF_INDEX),
+                              onPress: onPlus,
+                              disabled: fiatAmount === 0
+                            })
                     }
                   : {})}
               />
@@ -554,7 +681,11 @@ export const Pos = () => {
             value="C"
             ref={registerRef(C_REF_INDEX)}
             customColor={colors.error}
-            disabled={isActionButtonsDisabled && decimalCount === 0}
+            disabled={
+              isActionButtonsDisabled &&
+              decimalCount === 0 &&
+              plusFiatAmount === 0
+            }
             onPress={clearAmount}
             noBorderRadius
             rounded="left"
@@ -564,7 +695,10 @@ export const Pos = () => {
             value="DEL"
             ref={registerRef(DEL_REF_INDEX)}
             customColor={colors.bitcoin}
-            disabled={isActionButtonsDisabled && decimalCount === 0}
+            disabled={
+              (isActionButtonsDisabled && decimalCount === 0) ||
+              fiatAmount === 0
+            }
             onPress={delAmount}
             noBorderRadius
             paddingBottom={insets.bottom}
