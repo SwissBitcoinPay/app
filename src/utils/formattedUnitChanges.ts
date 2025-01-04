@@ -1,6 +1,5 @@
-import { decimalSeparator } from "@utils";
 import { v4 as uuidv4 } from "uuid";
-import { getFormattedUnit } from "./getFormattedUnit";
+import { getFormattedUnit, decimalSeparator } from "./getFormattedUnit";
 import { AddActions, StringPart } from "@hooks/useAnimateAmount";
 
 export const formattedUnitChanges = (

@@ -1,6 +1,5 @@
-import { decimalSeparator } from "@utils";
 import { v4 as uuidv4 } from "uuid";
-import { getUnitPrefixAndSuffix } from "./getFormattedUnit";
+import { getUnitPrefixAndSuffix, decimalSeparator } from "./getFormattedUnit";
 import { StringPart } from "@hooks/useAnimateAmount";
 
 export const diffStrings = (

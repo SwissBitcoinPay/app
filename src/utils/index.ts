@@ -1,4 +1,10 @@
 export {
+  getFormattedUnit,
+  getUnitPrefixAndSuffix,
+  decimalSeparator,
+  decimalSeparatorNameMapping
+} from "./getFormattedUnit";
+export {
   formattedUnitChanges,
   countConsecutiveStringParts
 } from "./formattedUnitChanges";
@@ -11,12 +17,6 @@ export { getLocale } from "./getLocale";
 export { Deeplink } from "./Deeplink";
 export { Biometrics } from "./Biometrics";
 export { getShadow } from "./getShadow";
-export {
-  getFormattedUnit,
-  getUnitPrefixAndSuffix,
-  decimalSeparator,
-  decimalSeparatorNameMapping
-} from "./getFormattedUnit";
 export { getSha256 } from "./getSha256";
 export { bcrypt } from "./bcrypt";
 export { isApiError } from "./isApiError";
