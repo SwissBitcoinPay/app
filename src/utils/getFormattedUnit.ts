@@ -1,4 +1,4 @@
-import { numberWithSpaces, decimalSeparator } from "@utils";
+import { numberWithSpaces } from "@utils";
 
 export const getFormattedUnit = (
   amount: number,
