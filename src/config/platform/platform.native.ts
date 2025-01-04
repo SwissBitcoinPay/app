@@ -20,6 +20,10 @@ const { height: initialWindowHeight, width: initialWindowWidth } =
 
 const isTablet = DeviceInfo.isTablet();
 
+const device = getDeviceSync();
+
+const isBitcoinize = ["BTC21PRO", "Bitcoinize Machine"].includes(device);
+
 export const platform = {
   isWeb: false,
   isNative: true,
@@ -37,8 +41,7 @@ export const platform = {
   bottomSafeAreaHeight: 0,
   deviceName: DeviceInfo.getDeviceNameSync(),
   deviceLocale: getLocale(),
-  isBitcoinize:
-    getDeviceSync() === "BTC21PRO" || getDeviceSync() === "Bitcoinize Machine",
+  isBitcoinize,
   isShareAvailable: true,
   springAnimationDelay: isAndroid ? 50 : 0
 };
