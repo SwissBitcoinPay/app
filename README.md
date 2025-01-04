@@ -28,6 +28,7 @@ Swiss Bitcoin Pay is an easy-to-use solution to accept bitcoin payments in your 
 - 🇮🇹 Italiano
 - 🇪🇸 Español
 - 🇵🇹 Português
+- 🇫🇮 Suomi
 
 ## ⚙️ Tech stack
 - [React](https://react.dev)
@@ -67,7 +68,11 @@ npm run android
 ```
 
 ## 🤝 Contributing
+- Help translate to your language:
+  - [App](https://crowdin.com/project/swiss-bitcoin-pay) [![Crowdin](https://badges.crowdin.net/swiss-bitcoin-pay/localized.svg)](https://crowdin.com/project/swiss-bitcoin-pay)
+  - [Backend](https://crowdin.com/project/swiss-bitcoin-pay-server) [![Crowdin](https://badges.crowdin.net/swiss-bitcoin-pay/localized.svg)](https://crowdin.com/project/swiss-bitcoin-pay-server)
+  - [Dashboard](https://crowdin.com/project/swiss-bitcoin-pay-dashboard) [![Crowdin](https://badges.crowdin.net/swiss-bitcoin-pay/localized.svg)](https://crowdin.com/project/swiss-bitcoin-pay-dashboard)
+  - [Website](https://crowdin.com/project/swiss-bitcoin-pay-website) [![Crowdin](https://badges.crowdin.net/swiss-bitcoin-pay/localized.svg)](https://crowdin.com/project/swiss-bitcoin-pay-website)
 - PRs are welcomed! Some ideas:
-  - Add your language
   - Imagine a new cool feature to further simplify merchant's experience with bitcoin payments
   - Improve testing & security
