@@ -1,4 +1,4 @@
-import { decimalSeparator } from "./decimalSeparator";
+import { decimalSeparator } from "@utils";
 import { v4 as uuidv4 } from "uuid";
 import { getUnitPrefixAndSuffix } from "./getFormattedUnit";
 import { StringPart } from "@hooks/useAnimateAmount";
