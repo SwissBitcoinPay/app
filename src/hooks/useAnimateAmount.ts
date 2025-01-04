@@ -1,14 +1,22 @@
-import { easings, useSprings } from "@react-spring/native";
+import {
+  AsyncResult,
+  Controller,
+  ControllerUpdate,
+  easings,
+  OneOrMore,
+  useSprings
+} from "@react-spring/native";
 import { getFormattedUnit, measureText, sleep } from "@utils";
 import { v4 as uuidv4 } from "uuid";
 import { getUnitPrefixAndSuffix } from "@utils";
 import { countConsecutiveStringParts, diffStrings } from "@utils/diffStrings";
-import { StringPart, formattedUnitChanges } from "@utils/formattedUnitChanges";
+import { formattedUnitChanges } from "@utils/formattedUnitChanges";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import usePrevious from "use-previous";
 import { platform } from "@config";
+import { useAnimatedValue } from "react-native";
 
-const { isAndroid } = platform;
+const { springAnimationDelay } = platform;
 
 export type StringPart = {
   id: string;
@@ -19,12 +27,14 @@ export type StringPart = {
 
 const VISIBLE_STYLE = {
   scale: 1,
-  opacity: 1
+  opacity: 1,
+  width: undefined
 };
 
 const HIDDEN_STYLE = {
   scale: 0.85,
-  opacity: 0
+  opacity: 0,
+  width: 0
 };
 
 const ANIMATION_CONFIG = {
@@ -175,7 +185,7 @@ export const useAnimateAmount = ({
               : 0;
 
           const initialConfig = part.add
-            ? { ...HIDDEN_STYLE, width: 0 }
+            ? HIDDEN_STYLE
             : { ...VISIBLE_STYLE, width };
 
           return { ...part, width, consecutiveElementsNb, initialConfig };
@@ -185,42 +195,49 @@ export const useAnimateAmount = ({
       await api.start((springIndex) => {
         const { initialConfig } = elemsWithWidths[springIndex] || {};
 
-        return {
-          from: initialConfig,
-          to: initialConfig,
-          immediate: true
-        };
+        if (initialConfig) {
+          return {
+            from: initialConfig,
+            to: initialConfig,
+            immediate: true
+          };
+        }
       });
 
       setParts(elemsWithWidths);
+
       if (mode === AnimationMode.Plus && newText) {
         await sleep(animationDelay);
       }
 
       await api.start((springIndex) => {
-        const { add, remove, width, consecutiveElementsNb } =
-          elemsWithWidths[springIndex] || {};
+        const part = elemsWithWidths[springIndex];
 
-        return {
-          ...(add
-            ? {
-                from: { ...HIDDEN_STYLE, width: 0 },
-                to: { ...VISIBLE_STYLE, width }
-              }
-            : remove
+        if (part?.add || part?.remove) {
+          const { add, remove, width, consecutiveElementsNb } = part;
+
+          return {
+            ...(add
               ? {
-                  from: { ...VISIBLE_STYLE, width },
-                  to: { ...HIDDEN_STYLE, width: 0 }
-                }
-              : {
-                  from: { ...VISIBLE_STYLE, width },
+                  from: HIDDEN_STYLE,
                   to: { ...VISIBLE_STYLE, width }
-                }),
-          delay:
-            (isAndroid ? 70 : 0) +
-            consecutiveElementsNb * (mode === AnimationMode.Normal ? 70 : 30),
-          config: ANIMATION_CONFIG
-        };
+                }
+              : remove
+                ? {
+                    from: { ...VISIBLE_STYLE, width },
+                    to: HIDDEN_STYLE
+                  }
+                : {
+                    from: { ...VISIBLE_STYLE, width },
+                    to: { ...VISIBLE_STYLE, width }
+                  }),
+            immediate: false,
+            delay:
+              springAnimationDelay +
+              consecutiveElementsNb * (mode === AnimationMode.Normal ? 60 : 30),
+            config: ANIMATION_CONFIG
+          };
+        }
       });
 
       return true;

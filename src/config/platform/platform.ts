@@ -34,5 +34,6 @@ export const platform = {
   deviceName: `${osName} | ${browserName}`,
   deviceLocale: getLocale(),
   isBitcoinize: false,
-  isShareAvailable: navigator.share !== undefined
+  isShareAvailable: navigator.share !== undefined,
+  springAnimationDelay: 0
 };

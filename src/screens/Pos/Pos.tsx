@@ -54,14 +54,17 @@ import {
   TextInput,
   Touchable,
   TouchableOpacity,
-  Text as RNText
+  Text as RNText,
+  ColorValue,
+  useAnimatedValue,
+  Animated
 } from "react-native";
 import * as S from "./styled";
 import { animated, easings, useSpring, useSprings } from "@react-spring/native";
 import { diffStrings } from "@utils/diffStrings";
 import { StringPart, AddActions, AnimationMode } from "@hooks/useAnimateAmount";
 
-const { isAndroid } = platform;
+const { springAnimationDelay } = platform;
 
 const DECIMAL_REF_INDEX = 10;
 const PLUS_REF_INDEX = 11;
@@ -393,7 +396,7 @@ export const Pos = () => {
         scale: S.PLUS_TEXTS_SCALE,
         color: colors.greyLight
       },
-      delay: isAndroid ? 70 : 0,
+      delay: springAnimationDelay,
       config: PLUS_ANIMATION_CONFIG
     }));
 
@@ -401,7 +404,7 @@ export const Pos = () => {
       await movingPlusApi.start(() => ({
         from: { opacity: 1 },
         to: { opacity: 0 },
-        delay: (isAndroid ? 70 : 0) + PLUS_ANIMATION_DELAY,
+        delay: springAnimationDelay + PLUS_ANIMATION_DELAY,
         config: {
           ...PLUS_ANIMATION_CONFIG,
           duration: PLUS_ANIMATION_OPACITY_DURATION
@@ -484,6 +487,87 @@ export const Pos = () => {
     clearAmount();
   }, [initialValue]);
 
+  const renderParts = useMemo(
+    () =>
+      parts.map((part, index) => {
+        const spring = springs[index];
+        return (
+          <animated.View
+            key={part.id}
+            style={{
+              willChange: "transform, opacity, width",
+              opacity: spring.opacity,
+              width: spring.width,
+              transform: [
+                {
+                  scale: spring.scale
+                }
+              ]
+            }}
+          >
+            <S.AnimatedText style={{ width: part.width }}>
+              {part.text}
+            </S.AnimatedText>
+          </animated.View>
+        );
+      }),
+    [parts, springs]
+  );
+
+  const renderPlusParts = useMemo(
+    () =>
+      plusParts.map((part, index) => {
+        const spring = plusSprings[index];
+
+        return (
+          <animated.View
+            key={part.id}
+            style={{
+              willChange: "transform, opacity, width",
+              opacity: spring.opacity,
+              width: spring.width,
+              transform: [
+                {
+                  scale: spring.scale
+                }
+              ]
+            }}
+          >
+            <S.PlusText style={{ width: part.width }}>{part.text}</S.PlusText>
+          </animated.View>
+        );
+      }),
+    [plusParts, plusSprings]
+  );
+
+  const totalPartsComponents = useMemo(
+    () =>
+      totalParts.map((part, index) => {
+        const spring = totalSprings[index];
+
+        return (
+          <animated.View
+            key={part.id}
+            style={{
+              willChange: "transform, opacity, width",
+              opacity: spring.opacity,
+              width: spring.width,
+              transform: [
+                {
+                  scale: spring.scale
+                }
+              ]
+            }}
+          >
+            <S.PlusText style={{ width: part.width, color: colors.bitcoin }}>
+              {part.text}
+            </S.PlusText>
+          </animated.View>
+        );
+      }),
+    [totalParts, totalSprings, colors.bitcoin]
+  );
+
   return accountConfig ? (
     <PageContainer
       header={{
@@ -533,44 +617,11 @@ export const Pos = () => {
           style={{ overflow: "visible" }}
         >
           <S.AmountsContainer>
-            {parts.map((part, index) => (
-              <animated.View
-                key={part.id}
-                style={{
-                  ...(springs[index] || {}),
-                  transform: [
-                    {
-                      scale: springs[index].scale
-                    }
-                  ]
-                }}
-              >
-                <S.AnimatedText style={{ width: part.width }}>
-                  {part.text}
-                </S.AnimatedText>
-              </animated.View>
-            ))}
-            <S.PlusTextsContainer isTop>
-              {plusParts.map((part, index) => (
-                <animated.View
-                  key={part.id}
-                  style={{
-                    ...(plusSprings[index] || {}),
-                    transform: [
-                      {
-                        scale: plusSprings[index].scale
-                      }
-                    ]
-                  }}
-                >
-                  <S.PlusText style={{ width: part.width }}>
-                    {part.text}
-                  </S.PlusText>
-                </animated.View>
-              ))}
-            </S.PlusTextsContainer>
+            {renderParts}
+            <S.PlusTextsContainer isTop>{renderPlusParts}</S.PlusTextsContainer>
             <S.PlusTextsContainer
               style={{
+                willChange: "opacity, transform",
                 opacity: movingPlusProps.opacity,
                 transform: [
                   { translateY: movingPlusProps.top },
@@ -578,7 +629,9 @@ export const Pos = () => {
                 ]
               }}
             >
-              <S.PlusText style={{ color: movingPlusProps.color }}>
+              <S.PlusText
+                style={{ willChange: "color", color: movingPlusProps.color }}
+              >
                 {movingPlusAmount}
               </S.PlusText>
             </S.PlusTextsContainer>
@@ -587,25 +640,7 @@ export const Pos = () => {
               =
             </S.SymbolText>
             <S.PlusTextsContainer isBottom>
-              {totalParts.map((part, index) => (
-                <animated.View
-                  key={part.id}
-                  style={{
-                    ...(totalSprings[index] || {}),
-                    transform: [
-                      {
-                        scale: totalSprings[index].scale
-                      }
-                    ]
-                  }}
-                >
-                  <S.PlusText
-                    style={{ width: part.width, color: colors.bitcoin }}
-                  >
-                    {part.text}
-                  </S.PlusText>
-                </animated.View>
-              ))}
+              {totalPartsComponents}
             </S.PlusTextsContainer>
           </S.AmountsContainer>
           <S.FiatAmountDropdownIcon icon={faAngleDown} color={colors.grey} />
