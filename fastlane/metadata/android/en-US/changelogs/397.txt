@@ -1,0 +1,4 @@
+- New paid animation in Invoice screen
+- Point-of-Sale screen have new animations when entering an amount
+- New decmial (,) and plus (+) buttons in Point-of-Sale screen for easier amount input
+- Minor improvements
