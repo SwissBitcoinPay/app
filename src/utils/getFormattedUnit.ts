@@ -50,9 +50,7 @@ export const getUnitPrefixAndSuffix = (unit: string) => {
   return { unitPrefix, unitSuffix };
 };
 
-export const decimalSeparator = Intl.NumberFormat(undefined)
-  .formatToParts(1.1)
-  .find((part) => part.type === "decimal").value;
+export const decimalSeparator = ",";
 
 // Used for keyboard input on web
 export const decimalSeparatorNameMapping = {
