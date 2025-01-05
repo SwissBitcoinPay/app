@@ -265,7 +265,16 @@
       "zipInvalid": "Ungültige Postleitzahl",
       "submit": "Absenden",
       "bitboxConnectSuccess": "Ihre BitBox02 wurde erfolgreich angeschlossen. Sie können sie ausstecken.",
-      "patchSettingNeedsEmailValidation": "Bestätigen Sie die neuen Einstellungen mit der E-Mail, die Sie erhalten haben."
+      "patchSettingNeedsEmailValidation": "Bestätigen Sie die neuen Einstellungen mit der E-Mail, die Sie erhalten haben.",
+      "error": {
+        "iban": {
+          "ibanAlreadyUsed": "IBAN already used",
+          "wiseBankNotSupported": "Wise bank not supported"
+        },
+        "depositAddress": {
+          "depositAddressAlreadyUsed": "Deposit address already used"
+        }
+      }
     },
     "wallet": {
       "title": "Onchain-Wallet",
