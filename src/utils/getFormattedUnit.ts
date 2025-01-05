@@ -1,5 +1,10 @@
 import { numberWithSpaces } from "./numberWithSpaces";
 
+export const decimalSeparator =
+  Intl.NumberFormat(undefined)
+    ?.formatToParts?.(1.1)
+    ?.find?.((part) => part.type === "decimal")?.value || ".";
+
 export const getFormattedUnit = (
   amount: number,
   unit: string,
@@ -27,7 +32,7 @@ export const getFormattedUnit = (
   }).format(amount);
 
   if (trailingDecimal) {
-    result = result.replace("0", `0${getDecimalSeparator()}`);
+    result = result.replace("0", `0${decimalSeparator}`);
   }
 
   return `${prefix}${result}`;
@@ -50,10 +55,7 @@ export const getUnitPrefixAndSuffix = (unit: string) => {
   return { unitPrefix, unitSuffix };
 };
 
-export const decimalSeparator =
-  Intl.NumberFormat(undefined)
-    ?.formatToParts?.(1.1)
-    ?.find?.((part) => part.type === "decimal")?.value || ".";
+
 
 // Used for keyboard input on web
 export const decimalSeparatorNameMapping = {
