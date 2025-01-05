@@ -18,7 +18,7 @@ import {
   countConsecutiveStringParts,
   measureText,
   sleep
-} from "../../utils";
+} from "@utils";
 import {
   Keyboard,
   Text,
