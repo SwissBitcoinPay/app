@@ -265,7 +265,16 @@
       "zipInvalid": "CAP non valido",
       "submit": "Invia",
       "bitboxConnectSuccess": "Il BitBox02 è stato collegato con successo. È possibile scollegarlo.",
-      "patchSettingNeedsEmailValidation": "Conferma le nuove impostazioni tramite l'e-mail ricevuta"
+      "patchSettingNeedsEmailValidation": "Conferma le nuove impostazioni tramite l'e-mail ricevuta",
+      "error": {
+        "iban": {
+          "ibanAlreadyUsed": "IBAN already used",
+          "wiseBankNotSupported": "Wise bank not supported"
+        },
+        "depositAddress": {
+          "depositAddressAlreadyUsed": "Deposit address already used"
+        }
+      }
     },
     "wallet": {
       "title": "Wallet Onchain",
