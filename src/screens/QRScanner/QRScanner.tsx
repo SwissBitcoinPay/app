@@ -13,6 +13,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CamerasConfig } from "@components/QRCamera/types";
 import { useAccountConfig, useIsScreenSizeMin, useQrLoginScan } from "@hooks";
 import * as S from "./styled";
+import { decimalSeparator } from "@utils";
 
 const imagePadding = 8;
 
