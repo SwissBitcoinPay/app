@@ -52,8 +52,8 @@ export const getUnitPrefixAndSuffix = (unit: string) => {
 
 export const getDecimalSeparator = () =>
   Intl.NumberFormat(undefined)
-    ?.formatToParts(1.1)
-    ?.find((part) => part.type === "decimal")?.value || ".";
+    ?.formatToParts?.(1.1)
+    ?.find?.((part) => part.type === "decimal")?.value || ".";
 
 // Used for keyboard input on web
 export const decimalSeparatorNameMapping = {
