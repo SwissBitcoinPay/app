@@ -120,7 +120,7 @@ export const Pos = () => {
   const [fiatAmount, setFiatAmount] = useState(0);
 
   const initialValue = useMemo(
-    () => [{ id: uuidv4(), text: getFormattedUnit(0, unit, 0) }],
+    () => (unit ? [{ id: uuidv4(), text: getFormattedUnit(0, unit, 0) }] : []),
     [unit]
   );
 
