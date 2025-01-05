@@ -265,7 +265,16 @@
       "zipInvalid": "Código postal no válido",
       "submit": "Enviar",
       "bitboxConnectSuccess": "Tu BitBox02 se ha conectado correctamente. Puede desconectarla.",
-      "patchSettingNeedsEmailValidation": "Confirme la nueva configuración a través del correo electrónico que ha recibido"
+      "patchSettingNeedsEmailValidation": "Confirme la nueva configuración a través del correo electrónico que ha recibido",
+      "error": {
+        "iban": {
+          "ibanAlreadyUsed": "IBAN already used",
+          "wiseBankNotSupported": "Wise bank not supported"
+        },
+        "depositAddress": {
+          "depositAddressAlreadyUsed": "Deposit address already used"
+        }
+      }
     },
     "wallet": {
       "title": "Monedero Onchain",
