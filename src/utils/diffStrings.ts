@@ -1,8 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import {
-  getUnitPrefixAndSuffix,
-  getDecimalSeparator
-} from "./getFormattedUnit";
+import { getUnitPrefixAndSuffix, decimalSeparator } from "./getFormattedUnit";
 import { StringPart } from "@hooks/useAnimateAmount";
 
 export const diffStrings = (
@@ -11,8 +8,6 @@ export const diffStrings = (
   array: StringPart[]
 ) => {
   if (newStr) {
-    const decimalSeparator = getDecimalSeparator();
-
     const oldAmount = oldStr;
     const newAmount = newStr;
 
