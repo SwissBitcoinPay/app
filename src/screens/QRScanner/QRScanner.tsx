@@ -102,7 +102,11 @@ export const QRScanner = () => {
         {!isCameraLoading && !isLoading ? (
           <>
             <S.VerticialPart>
-              {title && <S.TitleText weight={700}>{title}</S.TitleText>}
+              {title && (
+                <S.TitleText weight={700}>
+                  decimalSeparator: {decimalSeparator}
+                </S.TitleText>
+              )}
             </S.VerticialPart>
             <S.VerticialPart isItemsBottom>
               <S.BottomButtons>

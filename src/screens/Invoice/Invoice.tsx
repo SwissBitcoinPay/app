@@ -325,6 +325,7 @@ export const Invoice = () => {
 
       setIsQrModalOpen(false);
       setIsTimerPaused(true);
+      successLottieRef.current?.reset();
       const maxSize = frameWidth > frameHeight ? frameWidth : frameHeight;
       const circleSize = Math.round(maxSize * 1.55);
       if (isBitcoinize) {
