@@ -6,6 +6,7 @@ import { useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, View } from "@components";
 import * as S from "./styled";
+
 type PageContainerProps = Omit<
   StyledComponentComponentProps<typeof S.StyledPageContainer>,
   "isLarge" | "headerHeight" | "bottomHeight" | "windowWidth"

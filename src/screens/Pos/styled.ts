@@ -4,10 +4,18 @@ import {
   Icon,
   Loader,
   TextInput,
+  Text,
   Button,
   ComponentStack,
   Picker
 } from "@components";
+import { animated } from "@react-spring/native";
+
+export const PLUS_TEXTS_SCALE = 0.43745;
+export const PLUS_TEXTS_TRANSLATE_Y = 51;
+
+const _AnimatedText = animated(Text);
+const AnimatedView = animated(View);
 
 export const InfosContainer = styled(View)`
   flex: 1;
@@ -62,7 +70,7 @@ export const PadLine = styled(View)`
 `;
 
 export const DescriptionContainer = styled(View)`
-  margin-top: 32px;
+  margin-top: 58px;
   border-bottom-color: ${({ theme }) => theme.colors.primaryLight};
   border-bottom-width: 2px;
   width: 70%;
@@ -97,4 +105,40 @@ export const BackgroundLoader = styled(Loader)`
   opacity: 0.5;
   top: 8px;
   right: 8px;
+`;
+
+export const AmountsContainer = styled(View)`
+  flex-direction: row;
+  justify-content: center;
+`;
+
+export const PlusTextsContainer = styled(AnimatedView)<{
+  isTop?: boolean;
+  isBottom?: boolean;
+}>`
+  position: absolute;
+  flex-direction: row;
+
+  ${({ isTop, isBottom }) =>
+    isTop || isBottom
+      ? `transform: scale(${PLUS_TEXTS_SCALE})
+          translateY(${PLUS_TEXTS_TRANSLATE_Y * (isTop ? -1 : 1)}px);`
+      : ""}
+`;
+
+export const AnimatedText = styled(_AnimatedText).attrs(({ theme }) => ({
+  h2: true,
+  weight: 700
+}))`
+  color: ${({ theme }) => theme.colors.white};
+`;
+
+export const PlusText = styled(AnimatedText)`
+  color: ${({ theme }) => theme.colors.greyLight};
+`;
+
+export const SymbolText = styled(PlusText)<{ isBottom?: boolean }>`
+  position: absolute;
+  transform: scale(${PLUS_TEXTS_SCALE})
+    translateY(${({ isBottom }) => 28 * (isBottom ? 1 : -1)}px);
 `;

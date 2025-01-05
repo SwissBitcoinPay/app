@@ -193,7 +193,7 @@ export const History = () => {
       const satsTotal =
         transactions.reduce((result, transaction) => {
           if (
-            transaction.time < startOfToday ||
+            (transaction.time || 0) < startOfToday ||
             transaction.amount <= 0 ||
             transaction.status !== "settled"
           ) {
@@ -257,8 +257,8 @@ export const History = () => {
                 const color = isPaid
                   ? colors.success
                   : isExpired
-                  ? colors.primaryLight
-                  : colors.warning;
+                    ? colors.primaryLight
+                    : colors.warning;
                 const valueBase = getFormattedUnit(
                   transaction.input?.amount || 0,
                   transaction.input?.unit
@@ -284,10 +284,10 @@ export const History = () => {
                                   deviceType === "mobile"
                                     ? faMobileAlt
                                     : deviceType === "tablet"
-                                    ? faTabletAlt
-                                    : deviceType === "desktop"
-                                    ? faDesktopAlt
-                                    : faCircleQuestion
+                                      ? faTabletAlt
+                                      : deviceType === "desktop"
+                                        ? faDesktopAlt
+                                        : faCircleQuestion
                                 }
                                 color={colors.white}
                                 size={13}
@@ -326,7 +326,7 @@ export const History = () => {
                 ];
 
                 return {
-                  title: `${timeFormatter.format(transaction.time * 1000)}`,
+                  title: `${timeFormatter.format((transaction.time || 0) * 1000)}`,
                   disabled:
                     (isPaid && transaction.tag === "withdraw") ||
                     isExpired ||
@@ -356,30 +356,30 @@ export const History = () => {
                         iconColor: color
                       }
                     : isExpired
-                    ? {
-                        titleColor: colors.grey,
-                        tags: [
-                          { value: valueBase, color },
-                          {
-                            value: tRoot("common.expired"),
-                            color
-                          },
-                          ...lastTags
-                        ],
-                        icon: faTimesCircle,
-                        iconColor: color
-                      }
-                    : {
-                        tags: [
-                          { value: valueBase, color },
-                          {
-                            value: tRoot("common.inProgress"),
-                            color
-                          },
-                          ...lastTags
-                        ],
-                        component: <Loader size={26} color={color} />
-                      })
+                      ? {
+                          titleColor: colors.grey,
+                          tags: [
+                            { value: valueBase, color },
+                            {
+                              value: tRoot("common.expired"),
+                              color
+                            },
+                            ...lastTags
+                          ],
+                          icon: faTimesCircle,
+                          iconColor: color
+                        }
+                      : {
+                          tags: [
+                            { value: valueBase, color },
+                            {
+                              value: tRoot("common.inProgress"),
+                              color
+                            },
+                            ...lastTags
+                          ],
+                          component: <Loader size={26} color={color} />
+                        })
                 };
               })}
           />

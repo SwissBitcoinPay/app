@@ -14,10 +14,10 @@ export const ModalContent = styled(View)<{ isScreenExtraLarge?: boolean }>`
   max-height: 85%;
 
   ${({ theme, isScreenExtraLarge }) => `
-  background-color: ${theme.colors.primary};
-  border-radius: ${theme.borderRadius}px;
-  width: ${isScreenExtraLarge ? "30%" : "90%"};
-  border: 4px solid ${theme.colors.primaryLight};
+    background-color: ${theme.colors.primary};
+    border-radius: ${theme.borderRadius}px;
+    width: ${isScreenExtraLarge ? "30%" : "90%"};
+    border: 4px solid ${theme.colors.primaryLight};
   `}
 `;
 export const ModalHeader = styled(View)`
