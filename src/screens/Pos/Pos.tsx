@@ -12,7 +12,7 @@ import {
 import {
   getFormattedUnit,
   AsyncStorage,
-  decimalSeparator,
+  getDecimalSeparator,
   decimalSeparatorNameMapping,
   formattedUnitChanges,
   countConsecutiveStringParts,
@@ -567,6 +567,8 @@ export const Pos = () => {
       }),
     [totalParts, totalSprings, colors.bitcoin]
   );
+
+  const decimalSeparator = useMemo(() => getDecimalSeparator(), []);
 
   return accountConfig ? (
     <PageContainer

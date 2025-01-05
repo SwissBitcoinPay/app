@@ -27,7 +27,7 @@ export const getFormattedUnit = (
   }).format(amount);
 
   if (trailingDecimal) {
-    result = result.replace("0", `0${decimalSeparator}`);
+    result = result.replace("0", `0${getDecimalSeparator()}`);
   }
 
   return `${prefix}${result}`;
@@ -50,10 +50,10 @@ export const getUnitPrefixAndSuffix = (unit: string) => {
   return { unitPrefix, unitSuffix };
 };
 
-export const decimalSeparator =
+export const getDecimalSeparator = () =>
   Intl.NumberFormat(undefined)
     ?.formatToParts(1.1)
-    ?.find((part) => part.type === "decimal")?.value || ",";
+    ?.find((part) => part.type === "decimal")?.value || ".";
 
 // Used for keyboard input on web
 export const decimalSeparatorNameMapping = {

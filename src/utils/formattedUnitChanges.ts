@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { getFormattedUnit, decimalSeparator } from "./getFormattedUnit";
+import { getFormattedUnit, getDecimalSeparator } from "./getFormattedUnit";
 import { AddActions, StringPart } from "@hooks/useAnimateAmount";
 
 export const formattedUnitChanges = (
@@ -9,6 +9,7 @@ export const formattedUnitChanges = (
   array: StringPart[]
 ) => {
   if (amount !== "0" || add !== 0 || decimalCount > 0) {
+    const decimalSeparator = getDecimalSeparator();
     const [leftPart, rightPart] = amount.split(decimalSeparator);
 
     let decimalSwitch = false;

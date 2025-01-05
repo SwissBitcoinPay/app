@@ -13,7 +13,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CamerasConfig } from "@components/QRCamera/types";
 import { useAccountConfig, useIsScreenSizeMin, useQrLoginScan } from "@hooks";
 import * as S from "./styled";
-import { decimalSeparator } from "@utils";
 
 const imagePadding = 8;
 
@@ -103,11 +102,7 @@ export const QRScanner = () => {
         {!isCameraLoading && !isLoading ? (
           <>
             <S.VerticialPart>
-              {title && (
-                <S.TitleText weight={700}>
-                  decimalSeparator: {decimalSeparator}
-                </S.TitleText>
-              )}
+              {title && <S.TitleText weight={700}>{title}</S.TitleText>}
             </S.VerticialPart>
             <S.VerticialPart isItemsBottom>
               <S.BottomButtons>
