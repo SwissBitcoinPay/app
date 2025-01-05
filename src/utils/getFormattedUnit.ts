@@ -1,9 +1,7 @@
 import { numberWithSpaces } from "./numberWithSpaces";
 
 export const decimalSeparator =
-  Intl.NumberFormat(undefined)
-    ?.formatToParts?.(1.1)
-    ?.find?.((part) => part.type === "decimal")?.value || ".";
+  (1.1).toLocaleString(undefined).match(/1(.)1/)?.[1] || ".";
 
 export const getFormattedUnit = (
   amount: number,
