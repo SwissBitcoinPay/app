@@ -268,11 +268,11 @@
       "patchSettingNeedsEmailValidation": "Confirmez les nouveaux paramètres via le mail que vous avez reçu",
       "error": {
         "iban": {
-          "ibanAlreadyUsed": "IBAN already used",
-          "wiseBankNotSupported": "Wise bank not supported"
+          "ibanAlreadyUsed": "Cet IBAN est déjà utilisé",
+          "wiseBankNotSupported": "La banque Wise n'est pas supportée"
         },
         "depositAddress": {
-          "depositAddressAlreadyUsed": "Deposit address already used"
+          "depositAddressAlreadyUsed": "Cette adresse de dépôt est déjà utilisée"
         }
       }
     },
