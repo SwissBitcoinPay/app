@@ -1,0 +1,3 @@
+- Utilise la décimale locale pour les montants en bitcoin
+- Corrigé le mauvais type de paiement pour l'impression des tickets (Bitcoinize)
+- Mis à jour les traductions en finnois
