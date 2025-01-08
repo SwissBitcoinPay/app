@@ -1,0 +1,18 @@
+Yksinkertaisin Bitcoin-maksuratkaisu ravintoloille, baareille ja muille yrityksille.
+
+Todella yksinkertainen käyttää:
+1. Syötä veloitettava summa paikallisessa valuutassa.
+2. Asiakas maksaa joko Bitcoin-lähimaksukortilla tai QR-koodin lukemalla.
+3. Veloitus on valmis.
+
+Paras yhteensopivuus:
+Kaikki maksutavat veloitetaan samasta näkymästä:
+
+Bitcoin On-chain
+Bitcoin Lightning
+Bitcoin-lähimaksukortit
+
+Varat pysyvät omasäilössä:
+Kun asiakkaan maksusuoritus on saapunut, tilitetään varat omasäilyksessä olevaan Bitcoin-lompakkoonne tai pankkiinne.
+
+Veloitat 100€, saat 100€.

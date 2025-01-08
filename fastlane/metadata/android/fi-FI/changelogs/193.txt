@@ -1,0 +1,1 @@
+- Fixed a bug on currencies that does not support decimals (XOF)

@@ -1,0 +1,2 @@
+- ATM function is now available
+- Slight performance improvements

@@ -1,0 +1,3 @@
+- Improved Bolt Card handling in case of error
+- Changed "XOF" to be displayed as "F"
+- Improved some translations
