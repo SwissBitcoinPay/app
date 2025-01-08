@@ -481,6 +481,14 @@ export const Invoice = () => {
           );
         }
 
+        setDescription(getInvoiceData.description);
+        setAmount(getInvoiceData.amount * 1000);
+        setPaidAt(getInvoiceData.paidAt);
+        setInvoiceCurrency(getInvoiceData.input.unit || "CHF");
+        setInvoiceFiatAmount(getInvoiceData.input.amount);
+        setPaymentDetails(getInvoiceData.paymentDetails);
+        setDevice(getInvoiceData.device);
+
         if (
           getInvoiceData.status === "settled" &&
           status !== "settled" &&
@@ -491,21 +499,14 @@ export const Invoice = () => {
         }
 
         setTitle(getInvoiceData.title);
-        setDescription(getInvoiceData.description);
         setCreatedAt(getInvoiceData.time);
         setDelay(getInvoiceData.expiry - getInvoiceData.time);
-        setPaymentDetails(getInvoiceData.paymentDetails);
         setPr(_pr);
         setReadingNfcData(_pr);
         setOnChainAddr(unpaidOnchain?.address);
-        setAmount(getInvoiceData.amount * 1000);
-        setInvoiceCurrency(getInvoiceData.input.unit || "CHF");
-        setInvoiceFiatAmount(getInvoiceData.input.amount);
-        setDevice(getInvoiceData.device);
         setStatus(getInvoiceData.status);
         setPaymentMethod(_paymentMethod);
         setOnchainTxs(onchainPayments.filter((p) => !!p.paidAt));
-        setPaidAt(getInvoiceData.paidAt);
 
         setIsInit(true);
 

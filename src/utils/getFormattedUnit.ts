@@ -3,6 +3,18 @@ import { numberWithSpaces } from "./numberWithSpaces";
 export const decimalSeparator =
   (1.1).toLocaleString(undefined).match(/1(.)1/)?.[1] || ".";
 
+Number.prototype.toLocaleFixed = (fractionDigits: number) =>
+  this.toLocaleString(undefined, {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits
+  });
+
+declare global {
+  interface Number {
+    toLocaleFixed: (fractionDigits: number) => string;
+  }
+}
+
 export const getFormattedUnit = (
   amount: number,
   unit: string,
@@ -52,8 +64,6 @@ export const getUnitPrefixAndSuffix = (unit: string) => {
 
   return { unitPrefix, unitSuffix };
 };
-
-
 
 // Used for keyboard input on web
 export const decimalSeparatorNameMapping = {
