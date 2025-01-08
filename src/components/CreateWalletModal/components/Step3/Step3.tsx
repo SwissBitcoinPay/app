@@ -2,7 +2,9 @@ import { useEffect } from "react";
 import { useTheme } from "styled-components";
 import { useTranslation } from "react-i18next";
 import { ComponentStack, FieldDescription, Text } from "@components";
-import ScreenGuardModule from "react-native-screenguard";
+import ScreenGuardModule, {
+  ScreenGuardConstants
+} from "react-native-screenguard";
 import { StepProps } from "../../CreateWalletModal";
 import { generateBtcAddress, getRandomNumber } from "@utils";
 import { Word } from "../Word";
@@ -10,7 +12,7 @@ import { ActivityIndicator, Platform } from "react-native";
 import * as S from "./styled";
 import { platform } from "@config";
 
-const { isWeb } = platform;
+const { isWeb, isAndroid } = platform;
 
 export const Step3 = ({ setIsValid, setValue, watch }: StepProps) => {
   const { t } = useTranslation(undefined, {
@@ -56,9 +58,19 @@ export const Step3 = ({ setIsValid, setValue, watch }: StepProps) => {
 
   useEffect(() => {
     if (!isWeb) {
-      ScreenGuardModule.register("#000000");
+      if (isAndroid) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        ScreenGuardModule.registerWithoutEffect();
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        ScreenGuardModule.register({
+          backgroundColor: ScreenGuardConstants.BLACK_COLOR,
+          timeAfterResume: ScreenGuardConstants.TIME_DELAYED
+        });
+      }
 
       return () => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         ScreenGuardModule.unregister();
       };
     } else {

@@ -1,0 +1,5 @@
+- Nouvelle animation de paiement sur l'écran de Facture
+- Nouvelles animations sur l'écran Point-de-Vente lorsque l'on entre le montant
+- Nouveaux boutons décimales (,) et plus (+) sur l'écran Point-de-Vente pour une entrée facilitée
+- Corrigé les crashs occasionnels sur l'écran Historique
+- Améliorations mineures

@@ -6,7 +6,7 @@
     "paid": "Maksettu",
     "pending": "Odottaa",
     "expired": "Vanhentunut",
-    "inProgress": "Käynissä",
+    "inProgress": "Käynnissä",
     "edit": "Muokkaa",
     "submit": "Lähetä",
     "confirm": "Vahvista",
@@ -31,14 +31,14 @@
       "introTitle": "Hyväksy {{bitcoin}} maksut",
       "easily": "Helposti",
       "worldwide": "Maailmanlaajuisesti",
-      "nonCustodial": "Non-custodial",
+      "nonCustodial": "Itse-hallittu",
       "noKyc": "Ilman tunnistautumista",
       "in1minute": "Minuutissa",
       "licensedBy": "Luvan myöntäjä",
       "finma": "Swiss Financial Market Supervisory Authority",
       "createAccount": "Luo tili",
       "orConnectBy": "tai yhdistä käyttäen",
-      "scanActivationQRcode": "Lue QR-aktivointikoodi",
+      "scanActivationQRcode": "Lue QR-maksupäätekoodi",
       "email": "Sähköposti",
       "signature": "Allekirjoitus"
     },
@@ -57,8 +57,8 @@
       "titleWords": "Allekirjoitus 12 sanalla",
       "word": "Sana numero {{number}}",
       "enter12wordsDescription1": "Antamasi 12 sanaa pidetään laitteessasi ja niillä allekirjoitetaan tunnistamiseesi käytettävä viesti.",
-      "enter12wordsDescription2": "Varmista että syötät sanasi vain turvallisesta lähteestä ladattuun ja varmistettuun avoimen lähdekoodin sovelukseen.",
-      "enter12wordsDescription3": "Kaikesta huolimatta, tämä yhteystapa ei välttämättä ole 100% turvallinen, sillä laitteesi on kytkettynä internettiin, sekä siten se on haavoittuvainen. Emme vastaa mistään haitoista jota tämän kirjaantumismenetelmän käyttö saattaa aiheuttaa.",
+      "enter12wordsDescription2": "Varmista että syötät sanasi vain turvallisesta lähteestä ladattuun ja varmistettuun avoimen lähdekoodin sovellukseen.",
+      "enter12wordsDescription3": "Kaikesta huolimatta, tämä yhteystapa ei välttämättä ole 100% turvallinen, sillä laitteesi on kytkettynä internettiin, sekä siten se on haavoittuvainen. Emme vastaa mistään haitoista, jota tämän kirjaantumismenetelmän käyttö saattaa aiheuttaa.",
       "error": {
         "invalidSignature": "Kelpaamaton allekirjoitus",
         "invalidWord": "Virheellinen sana"
@@ -93,7 +93,7 @@
       "error": {
         "address": {
           "alreadyExists": "Osoite on käytössä jo toisessa tilissä",
-          "invalid": "Tamä osoite on virheellinen"
+          "invalid": "Tämä osoite on virheellinen"
         },
         "iban": {
           "blacklisted": "Tämän IBAN-tilinumeron pankki on mustalla listalla."
@@ -109,11 +109,11 @@
     "pos": {
       "deviceName": "Laitteen nimi",
       "enterDeviceName": "Anna laitteelle nimi",
-      "deviceNameDescription": "Voi maarittää millä nimellä laite näkyy ohjauspanelissa",
+      "deviceNameDescription": "Anna ohjauspaneelissa näytettävä laitteen nimi",
       "downloadApp": "Lataa sovellus",
-      "note": "Muistiinpano",
+      "note": "Maksun aihe",
       "atmAccount": "Nostomaatti-tili",
-      "guestMode": "Vierailija tila",
+      "guestMode": "Vierailijatila",
       "allowWithdraw": "Salli nostot",
       "cannotGoHigher": "Enimmäismäärä on {{maxAmount}}",
       "addToHomeScreen": "Lisää koti ruudulle"
@@ -122,8 +122,8 @@
       "creatingInvoice": "Luodaan laskua",
       "fetchingInvoice": "Haetaan laskua",
       "invoiceQrTitle": "Laskun QR-koodi",
-      "invoiceQr": "Access this invoice on another device by scanning this QR code",
-      "save": "Talleta",
+      "invoiceQr": "Voit nähdä laskun tiedot toisessa laitteessa lukemalla QR-koodin",
+      "save": "Tallenna",
       "status": "Tila",
       "timeLeft": "Aikaa jäljellä",
       "amount": "Määrä",
@@ -132,15 +132,15 @@
       "paidOn": "Maksettu",
       "awaitingPayment": "Maksua odotetaan",
       "returningToTerminal": "Palaa päätteeseen",
-      "withdrawSuccess": "Nosto onnisstus",
-      "confirmations": "Varmennuksia",
+      "withdrawSuccess": "Nosto onnistui",
+      "confirmations": "Varmistuksia",
       "redirectingYou": "Sinut ohjataan",
-      "invalidInvoiceId": "Virhellinen laskun tunnus",
+      "invalidInvoiceId": "Virhellinen laskutunnus",
       "paidWith": "Maksettu",
-      "transactionId": "Tapatumatunus",
+      "transactionId": "Tapahtumatunnus",
       "openWallet": "Avaa lompakko",
       "copy": "Kopioi",
-      "pendingConfirmations": "Pending confirmations",
+      "pendingConfirmations": "Odottavat varmistukset",
       "invoiceExpired": "Lasku vanheni",
       "invoicePaid": "Lasku maksettu",
       "tapAnywhereToSkip": "Napauta jossain ohittaaksesi vaiheen",
@@ -154,8 +154,8 @@
       "printReceipt": "Tulosta kuitti"
     },
     "history": {
-      "title": "Tapahtuma historia",
-      "cashedToday": "Tilitetty tänään",
+      "title": "Tapahtumahistoria",
+      "cashedToday": "Tilitystä odottaa",
       "previous": "Edellinen",
       "noData": "Ei tietoja",
       "total": "Yhteensä",
@@ -165,27 +165,27 @@
     "settings": {
       "title": "Asetukset",
       "loading": "Tiliä ladataan",
-      "activationCode": "Aktivointikoodi",
-      "scanOtherColleagues": "Työntekijät voivat scannaamalla veloittaa",
+      "activationCode": "Maksupäätekoodi",
+      "scanOtherColleagues": "Lue ja avaa työntekijäpääte yritykselle",
       "editableSettings": "Muokattavissa olevat asetukset",
-      "connectedAs": "Yhdeyden laji",
+      "connectedAs": "Käyttäjän rooli",
       "userType": "Käyttäjätyyppi",
       "patchSettingSuccessful": "Asetukset on päivitetty",
-      "patchSettingError": "Asetusten päivytys epäonnistui",
+      "patchSettingError": "Asetusten päivitys epäonnistui",
       "tickets": "Automaattiset kuitit",
       "ticketsPrinting": "Automaattinen kuitin tulostus",
       "testPrint": "Testitulostus",
       "ticketsPrintingDescription": "Maksukuitit voidaan tulostaa automaattisesti jokaisen laskun maksamisen jälkeen.",
       "merchantName": "Kauppiaan nimi",
-      "merchantNameDescription": "Kaikissa sinun ja työntekijöiden veloittamissa laskuissa näkyy kauppiaan nimi",
+      "merchantNameDescription": "Kaikissa sinun ja työntekijöittesi veloittamissa laskuissa näkyy kauppiaan nimi",
       "currency": "Valuutta",
-      "currencyDescription": "Tilisi oletusvaluutta",
-      "currencyChangeWarning": "{{fiatPercent}}%:ia tilityksissä saat {{currency}}:ssa. Jos vaihdat tilisi valuutan, seuraavat tilitykset muunnetaan uuteen valuutaan.",
+      "currencyDescription": "Käytettävä valuutta",
+      "currencyChangeWarning": "{{fiatPercent}}%:ia tilityksissä saat {{currency}}:ssa. Jos vaihdat tilisi valuutan, seuraavat tilitykset muunnetaan tapahtuvat uudessa valuutassa.",
       "onchainAvailable": "Onchain käytettävissä",
-      "onchainAvailableDescription": "Laskut sisältävät myös Onchain-maksujen osoitteen, mikäli tämä valinta on aktiivinen (suositeltavaa)",
+      "onchainAvailableDescription": "Myös Bitcoin Onchain -maksut toimivat, jos tämä on valittuna (suositus)",
       "email": "Sähköposti",
       "emailDescription": "Sähköpostiosoite, johon haluat vastaanottaa tiedotteet ja tärkeät ilmoitukset",
-      "payout": "Tilitukset",
+      "payout": "Tilitykset",
       "allInBtc": "100% bitcoinissa",
       "allInFiat": "100% {{currency}}:ssa",
       "percentInBtcAndFiat": "{{btcPercent}}% bitcoineina | {{fiatPercent}}% {{currency}}:issa",
@@ -194,7 +194,7 @@
       "contactSupport": "Tukipalvelut",
       "logout": "Uloskirjaus",
       "confirmLogout": "Vahvista uloskirjautuminen",
-      "confirmLogoutDescription": "Uloskirjauksen jälkeen tarvitset aktivointi koodin tai käyttäjätunnuksen",
+      "confirmLogoutDescription": "Uloskirjauksen jälkeen tarvitset maksupäätekoodin tai käyttäjätunnuksen",
       "logoutSuccessful": "Uloskirjautuminen onnistui",
       "shareMyLink": "Jaa aktivointilinkkini",
       "copyMyLink": "Kopioi aktivointilinkki",
@@ -204,27 +204,27 @@
     "payoutConfig": {
       "title": "Tilitys määrittelyt",
       "iWantToReceive": "Haluan vastaanottaa varani...",
-      "in": "ssa",
-      "fees": "Alkaen {{percent}}% kulut",
+      "in": "",
+      "fees": "Kulut alkaen {{percent}}%",
       "feesDetails1": "Kulut",
       "feesFirstYear": "Ensimmäinen vuosi rekisteröitymisestä",
       "feesAfterwards": "Ensimmäisen vuoden jälkeen",
       "cryptoSignature": "Allekirjoitus vaaditaan",
       "instantTransfer": "Välitön siirto",
-      "dailyTransfer": "Päivittäinen siirto",
+      "dailyTransfer": "Tilitys päivittäin",
       "bitcoinSettings": "Bitcoin-asetukset",
       "yourWallet": "Lompakkosi",
       "createWallet": "Luo lompakko",
       "bitcoinPayoutWallet": "Bitcoin tilitys lompakko",
       "localWallet": "Paikallinen lompakko",
-      "alreadyVerifiedAddresses": "Jo varmistetut osoiteet",
+      "alreadyVerifiedAddresses": "Jo varmistetut osoitteet",
       "lightningAddress": "LN-osoite",
       "nextAddresses": "Seuraavat osoitteet",
       "recommended": "Suositeltu",
       "messageToSign": "Allekirjoitettava viesti",
-      "messageToSignDetails": "Sign this message with the Bitcoin wallet you entered",
+      "messageToSignDetails": "Allekirjoita tämä viesti syöttämälläsi Bitcoin-lompakolla",
       "yourSignature": "Allekirjoituksesi",
-      "yourSignatureDetails": "Signature you obtained from your wallet",
+      "yourSignatureDetails": "Lompakkosi antama allekirjoitus",
       "invalidSignature": "Virheellinen allekirjoitus",
       "payInvoiceToCertify": "Vahvista Lightning Address -osoitteen omistajuus maksamalla tämä 1 satoshin lasku.",
       "openWallet": "Avaa lompakko",
@@ -232,14 +232,14 @@
       "signWithAddress": "Allekirjoita osoitteella",
       "signWithAddressDetails": "Allekirjoita viesti tällä Bitcoin-osoitteella",
       "receiveInBtcDescription1": "{{percent}}%:ia veloittamistasi bitcoineista lähetetään antamaasi bitcoin-lompakkoon.",
-      "receiveInBtcDescription2": "Tilityksien miner- ja vaihtokuluja Lightning verkosta onchain-osoitteisiin ei veloiteta sinulta ikinä.",
+      "receiveInBtcDescription2": "Tilityksien louhinta- ja vaihtokuluja Lightning verkosta onchain-osoitteisiin ei veloiteta sinulta ikinä.",
       "receiveInBtcDescription3": "Maksut lompakkoosi tulevat oletuksen jokaisen kuukauden ensimmäinen päivä, edellyttäen että tilitettävää on vähintään 1000 sat.",
-      "receiveInBtcDescription3Lightning": "Bitcoinit tilitetään Lightning Address osoitteeseesi välittömasti jokaisen laskutuksen jälkeen. Käytäthän ammattimaista Lightning Address -palvelua!",
-      "receiveInBtcDescription4": "Bitcoin-lompakkosi omistajuuden vahvistamiseksi sinun tulee kryptograafisesti allekirjoittaa viesti bitcoin-yksityisavaimellasi.",
-      "receiveInBankDescription1": "Kumppanimme myy automaattisesti {{percent}}%:ia laskuttamistasi bitcoineista {{currency}}-valuutaksi ja lähettää ne pankkitilillesi",
+      "receiveInBtcDescription3Lightning": "Bitcoinit tilitetään Lightning Address -osoitteeseesi välittömästi jokaisen laskutuksen jälkeen. Käytäthän ammattimaista Lightning Address -palvelua!",
+      "receiveInBtcDescription4": "Bitcoin-lompakkosi omistajuuden vahvistamiseksi sinun pitää allekirjoittaa vahvistusviesti bitcoin-yksityisavaimellasi.",
+      "receiveInBankDescription1": "Laskuttamistasi bitcoineista myydään automaattisesti {{percent}}%:ia {{currency}}-valuutaksi ja ne lähettää pankkiisi kumppanimme",
       "bankSettings": "Pankkiasetukset",
-      "receiveInBankDescription2Instant": "Varojen tilitys tehdään automaattisesti pankkitilillesi heti kun saldo ylitää {{formattedAmount}}.",
-      "receiveInBankDescription2Batched": "Varojen tilitys tehdään automaattisesti pankkitilillesi päivittän 0:00 UTC-aikaan, saldon ollessa vähintään {{formattedAmount}}.",
+      "receiveInBankDescription2Instant": "Varojen tilitys tehdään automaattisesti pankkiisi heti kun saldo ylitää {{formattedAmount}}.",
+      "receiveInBankDescription2Batched": "Varojen tilitys tehdään automaattisesti pankkiisi päivittän 0:00 UTC-aikaan, saldon ollessa vähintään {{formattedAmount}}.",
       "receiveInBankDescription2Swift": "Swift-siirrot {{currency}}-valuutassa edellyttävät Swift-kulujen maksamista. Niitä ei voi ennalta arvioida, mutta ovat vähintään {{formattedAmountLow}} ja enintään {{formattedAmountHigh}}.",
       "receiveInBankDescription3Swift": "Varojen tilitys tehdään automaattisesti pankkitilillesi joka kukauden ensimmäinen päivä, kun saldo on vähintään {{formattedAmount}}.",
       "receiveInBankDescription3": "Saldon ollessa tämän alle, on mahdollista liipaista tilitys manuaalisesti, jolloin siitä veloitetaan {{formattedAmount}}.",
@@ -263,9 +263,9 @@
       "yourIban": "IBAN-tilinumerosi",
       "ibanInvalid": "Virheellinen IBAN-numero",
       "zipInvalid": "Virheellinen postinumero",
-      "submit": "Lähetä",
+      "submit": "Hyväksy",
       "bitboxConnectSuccess": "BitBox02 on nyt määritelty onnistuneesti. Voit irroittaa sen.",
-      "patchSettingNeedsEmailValidation": "Sähköpostiisi on lähetty on viesti uusien asetusten aktivoimiseksi",
+      "patchSettingNeedsEmailValidation": "Sähköpostiisi on lähetty viesti uusien asetusten aktivoimiseksi",
       "error": {
         "iban": {
           "ibanAlreadyUsed": "IBAN already used",
@@ -287,10 +287,10 @@
       "receiveBitcoins": "Vastaanota bitcoinia",
       "sent": "Lähetetty",
       "received": "Saatu",
-      "receiveInfo": "Tällä aiemmin käyttämättämällä osoitteella voit vastaanottaa bitcoinia suoraan paikalliseen lompakkoosi.\nOsoitteeseen saapuvia maksuja ei seurata mitenkään ja niinpä niistä ei veloiteta kuluja, eivätkä ne näy raporteilla.",
+      "receiveInfo": "Tällä aiemmin käyttämättömällä osoitteella voit vastaanottaa bitcoinia suoraan paikalliseen lompakkoosi.\nOsoitteeseen saapuvia maksuja ei seurata mitenkään ja niinpä niistä ei veloiteta kuluja, eivätkä ne näy raporteilla.",
       "btcAmount": "Määrä",
       "fees": "Kulut",
-      "errorFetchingWallet": "Lompakon tietjen hakemisessa tapahtui virhe",
+      "errorFetchingWallet": "Lompakon tietojen hakemisessa tapahtui virhe",
       "sendModal": {
         "send": "Lähetä bitcoinit",
         "fastestFee": "Nopeasti",
@@ -319,25 +319,25 @@
     "returnToForm": "Palaa lomakkeelle",
     "autoSignatureError": "Virhe automaattisessa allekirjoituksessa",
     "step1": {
-      "instructions_title": "Vastuunvapautus lause",
-      "instructions1": "Bitcoin-lompakon omistaminen tarkoittaa, että sinä vastaa kaikesta siihen liittyvästä.",
-      "instructions2": "Varaa pieni hetki aikaa, ja opiskele seuraava johdanto, että mitä se todellakin tarkoittaa. Varojen kadottamisen ja varastamisen riski pienenee kun ymmärrät paremmin.",
-      "instructions3": "Jos varasi varastetaan tai kadotat ne, niin sinun tulee ymmärtää että kukaan ei voi auttaa sinua - ei edes tähän sovelluksen tekijät.",
-      "instructions4": "Sovellus tai sen tekijät eivät talleta kopiota lompakkosi salaisista sanoista, eikä varoilla ole missään takausta tai panttia. Tekijät eivät pääse varoihin kiinni eivätkä voi niitä pelastaa. Lompakkosi turvallisuudesta vastuussa olet ainoastaan sinä itse."
+      "instructions_title": "Vastuuvapautuslause",
+      "instructions1": "Bitcoin-lompakon omistaminen tarkoittaa, että sinä vastaat kaikesta siihen liittyvästä.",
+      "instructions2": "Varaa pieni hetki aikaa, ja opiskele seuraava johdanto, että mitä se todellakin tarkoittaa. Varojen kadottamisen ja varastamisen riski pienenee, kun ymmärrät paremmin.",
+      "instructions3": "Jos varasi varastetaan tai kadotat ne, niin sinun tulee ymmärtää, että kukaan ei voi auttaa sinua - ei edes tämän sovelluksen tekijät.",
+      "instructions4": "Sovellus tai sen tekijät eivät talleta kopiota lompakkosi salaisista sanoista, eikä varoilla ole mitään takausta tai panttia. Tekijät eivät pääse varoihin kiinni eivätkä voi niitä pelastaa. Lompakkosi turvallisuudesta vastuussa olet ainoastaan sinä itse."
     },
     "step2": {
       "seedPhrase": "Siemenlause",
-      "instructions1": "Seuraavaksi näytämme sinulle 12 sanaa (eli siemenlauseen). Siemanlause on ainut tapa päästä käyttämään bitcoinejasi.",
-      "instructions2": "Siemenlause luodaan turvallisesti ja paikallisesti laitteessasi, eikä sitä lähettetä sovelluksen käyttämille palvelimille, eikäpä myös muuallekaan.",
-      "instructions3": "Kirjoita se siis talteen kestävälle materiaalille ja talleta se turvalliseen paikkaan.",
-      "instructions4": "Mikäli kadotat lauseen, ovat lompakkosi varat menetetty ikuisiksi ajoiksi. On siis ensiarvoisen kriittistä säilyttää turvallisesti ja suojata lause ulkopuolisilta.",
-      "agree1": "Ymmärrän että olen ainut joka on vastuussa siemanlauseen säilyttämisestä.",
+      "instructions1": "Seuraavaksi näytämme sinulle 12 sanaa (eli siemenlauseen). Siemenlause on ainut tapa päästä käyttämään bitcoinejasi.",
+      "instructions2": "Siemenlause luodaan turvallisesti ja paikallisesti laitteessasi, eikä sitä lähetetä sovelluksen käyttämille palvelimille, eikä myös muuallekaan.",
+      "instructions3": "Kirjoita lause talteen kestävälle materiaalille ja talleta turvalliseen paikkaan.",
+      "instructions4": "Mikäli kadotat lauseen, ovat lompakkosi varat menetetty ikuisiksi ajoiksi. On ensiarvoisen kriittistä säilyttää lause turvallisesti ja suojata se ulkopuolisilta.",
+      "agree1": "Ymmärrän että olen ainut, joka on vastuussa siemenlauseen säilyttämisestä.",
       "agree2": "Ymmärrän että siemenlauseen hävittäminen tai sen joutuminen vääriin käsiin johtaa kaikkien lompakon varojen häviämiseen.",
-      "agree3": "Ymmärrän että kukaan ei voi auttaa palauttamaan varojani jos lause katoaa, ei edes tämän sovelluksen tekijät."
+      "agree3": "Ymmärrän että kukaan ei voi auttaa palauttamaan varojani, jos lause katoaa, eivät edes tämän sovelluksen tekijät."
     },
     "step3": {
       "instructions1": "Kirjoita 12 sanasi siemenlause talteen selkeästi ja varmista että teksti on hyvin luettavissa.",
-      "instructions2": "Pidä myös huoli että sanojen järjestys on selkeä!",
+      "instructions2": "Huolehdi että sanojen järjestys on oikea!",
       "instructions3": "Tämä siemenlause luotiin 100% avoimen lähdekoodin avulla, eikä sitä lähetetä laitteestasi ulos milloinkaan.",
       "generatingYourWallet": "Lompakkoasi luodaan",
       "confidential": "Luottamuksellinen"
@@ -354,9 +354,9 @@
     }
   },
   "secureWallet": {
-    "instructions1": "Bitcoinien käyttämiseksi et ole riippuvainen tästä sovelluksesta. Voit käyttää sinun {{backup}} lähes missä tahansa bitcoin-lompakossa.",
-    "instructions2": "Älä ikinä tee siemenlauseesta kopiota pilvipalveluun, puhelimellesi, tietokoneellesi äläkä myöskään ota siitä valokuvia. Mikä tahansa internettiin kytketty laite on riski!",
-    "instructions3": "Älä ikinä jaa sinun {{backup}} nkenellekkään. Mikäli joku pääsee käsiksi sinun {{backup}}, on hänen mahdollista varastaa varasi."
+    "instructions1": "Bitcoinien käyttämiseksi et ole riippuvainen tästä sovelluksesta. Voit käyttää {{backup}}:tta lähes missä tahansa Bitcoin-lompakossa.",
+    "instructions2": "Älä ikinä tee siemenlauseesta kopiota pilvipalveluun, puhelimellesi, tietokoneellesi äläkä myöskään ota siitä valokuvia. Mikä tahansa Internettiin kytketty laite on riski!",
+    "instructions3": "Älä ikinä jaa {{backup}}:tta kenellekään. Mikäli joku pääsee käsiksi sinun {{backup}}:een, on hänen mahdollista varastaa varasi."
   },
   "connectWalletModal": {
     "title": "Yhdistä BitBox02",
@@ -364,7 +364,7 @@
     "afterUpgrade": {
       "title": "Avaa BitBox02",
       "instruction": "Kosketa yhtä 2:sta puolesta tekstillä \"Tap this side\"",
-      "rebooting": "BitBox02 käynnistetään uudellen"
+      "rebooting": "BitBox02 käynnistetään uudelleen"
     },
     "afterSetup": {
       "sdcard": "SD-kortti",
@@ -373,9 +373,9 @@
       "title": "Salaa varmuuskopio",
       "removeSdCard": "Jatkaaksesi, sinun pitää poistaa SD-kortti BitBox02-laitteesta.",
       "instructions1": "Pidä sinun {{backup}} turvallisessa paikassa, jonne vain sinulla on pääsy.",
-      "understand1": "Ainoastaan sivä olet vastuussa {{backup}} turvallisesta säilyttämisestä.",
+      "understand1": "Ainoastaan sinä olet vastuussa {{backup}} turvallisesta säilyttämisestä.",
       "understand2": "Kadottaessasi {{backup}} tai varkaan päästessä siihen käsiksi, menetät kaikki lompakkosi varat.",
-      "understand3": "Kukaan ei voi auttaa sinua palauttamaan varojasi jos hukkaat {{backup}}, ei edes sovelluksen valmistaja."
+      "understand3": "Kukaan ei voi auttaa sinua palauttamaan varojasi, jos hukkaat {{backup}}, ei edes sovelluksen valmistaja."
     },
     "bootloader": {
       "title": "Laiteohjelmistoa asennetaan",
@@ -394,7 +394,7 @@
     },
     "pairing": {
       "title": "Varmista yhdistämiskoodi",
-      "instruction": "Varmista että seuraava yhdistämiskoodi on sama mikä näkyy BitBox02:",
+      "instruction": "Varmista että seuraava yhdistämiskoodi on sama, mikä näkyy BitBox02:",
       "confirm1": "Jos koodit ovat samat, tee vahvistaminen painamalla",
       "confirm2": "BitBox02:n kyljessä",
       "pairingFailed": "Yhdistäminen epäonnistui"
@@ -419,7 +419,7 @@
       "creatingWallet": "Lompakkoa luodaan",
       "confirmName1": "Vahvista laitteen nimi painamalla",
       "confirmName2": "BitBox02:n kyljessä",
-      "uninitBitboxNoWeb": "Alustamaton BitBox02 ei ole tuettu web-käytössä. Ota lompakkosi käyttöö virallisella BitBoxApp:illa"
+      "uninitBitboxNoWeb": "Alustamaton BitBox02 ei ole tuettu web-käytössä. Ota lompakkosi käyttöön virallisella BitBox App:illa"
     },
     "signature": {
       "title": "Allekirjoitus",
@@ -441,19 +441,19 @@
   },
   "errors": {
     "serverInMaintenance": "Palvelussa on huoltokatko. Yritä myöhemmin uudelleen.",
-    "noKycLimit": "Suurin ilman tunnistatumista sallittu määrä on tullut täyteen",
-    "accountNotVerified": "Varmista talletusosoitteesi ohjauspanelista"
+    "noKycLimit": "Ilman tunnistautumista sallittu siirtojen enimmäismäärä on ylitetty",
+    "accountNotVerified": "Varmista talletusosoitteesi ohjauspaneelista"
   },
   "printTicket": {
     "paidInBitcoin": "Maksettu Bitcoinilla",
-    "amount": "Määrä",
-    "fiatAmount": "Fiatin määrä",
-    "rate": "Arvioi",
-    "paidVia": "Maksettu",
+    "amount": "Summa",
+    "fiatAmount": "Summa valuutassa",
+    "rate": "Kurssi",
+    "paidVia": "Maksutapa",
     "paidAt": "Maksettu klo",
-    "note": "Huomautus",
-    "invoiceId": "Laskun ID",
-    "thanks": "Kiitos ostamisesta ₿itcoin kanssa",
-    "poweredBy": "Powered by"
+    "note": "Maksun aihe",
+    "invoiceId": "Laskun tunniste",
+    "thanks": "Kiitos kun maksoit ₿itcoinilla",
+    "poweredBy": "Toteutus"
   }
 }
