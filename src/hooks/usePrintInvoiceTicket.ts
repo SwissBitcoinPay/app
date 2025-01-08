@@ -131,7 +131,10 @@ export const usePrintInvoiceTicket = () => {
 
       await Printer.printLabelValue(
         t("amount"),
-        `${(amount / 100000000 / 1000).toFixed(8)} BTC`
+        `${(amount / 100000000 / 1000).toLocaleString(undefined, {
+          minimumFractionDigits: 8,
+          maximumFractionDigits: 8
+        })} BTC`
       );
 
       if (!["BTC", "sat", undefined].includes(input.unit)) {
