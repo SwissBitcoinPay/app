@@ -446,10 +446,7 @@ export const Invoice = () => {
     };
   }, [isNfcAvailable, readingNfcLoop, invoiceId]);
 
-  const btcAmount = useMemo(
-    () => ((amount || 0) / 1000 / 100000000).toFixed(8),
-    [amount]
-  );
+  const btcAmount = useMemo(() => (amount || 0) / 1000 / 100000000, [amount]);
 
   const updateInvoice = useCallback(
     (getInvoiceData: InvoiceType, isInitialData?: boolean) => {
@@ -552,7 +549,7 @@ export const Invoice = () => {
     () =>
       onChainAddr
         ? `bitcoin:${onChainAddr}?amount=${
-            btcAmount || ""
+            btcAmount.toFixed(8) || ""
           }&label=${encodeURIComponent(title || "")}${
             pr ? `&lightning=${pr}` : ""
           }`
@@ -1059,7 +1056,7 @@ export const Invoice = () => {
                 {btcAmount && (
                   <FooterLine
                     label={t("amount")}
-                    value={btcAmount.toString()}
+                    value={btcAmount.toLocaleFixed(8)}
                     valueSuffix=" BTC"
                     copyable
                   />
