@@ -265,7 +265,16 @@
       "zipInvalid": "Code postal invalide",
       "submit": "Soumettre",
       "bitboxConnectSuccess": "Votre BitBox02 a été connecté avec succès. Vous pouvez le débrancher.",
-      "patchSettingNeedsEmailValidation": "Confirmez les nouveaux paramètres via le mail que vous avez reçu"
+      "patchSettingNeedsEmailValidation": "Confirmez les nouveaux paramètres via le mail que vous avez reçu",
+      "error": {
+        "iban": {
+          "ibanAlreadyUsed": "Cet IBAN est déjà utilisé",
+          "wiseBankNotSupported": "La banque Wise n'est pas supportée"
+        },
+        "depositAddress": {
+          "depositAddressAlreadyUsed": "Cette adresse de dépôt est déjà utilisée"
+        }
+      }
     },
     "wallet": {
       "title": "Portefeuille Onchain",

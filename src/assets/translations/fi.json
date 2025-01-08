@@ -265,7 +265,16 @@
       "zipInvalid": "Virheellinen postinumero",
       "submit": "Hyväksy",
       "bitboxConnectSuccess": "BitBox02 on nyt määritelty onnistuneesti. Voit irroittaa sen.",
-      "patchSettingNeedsEmailValidation": "Sähköpostiisi on lähetty viesti uusien asetusten aktivoimiseksi"
+      "patchSettingNeedsEmailValidation": "Sähköpostiisi on lähetty viesti uusien asetusten aktivoimiseksi",
+      "error": {
+        "iban": {
+          "ibanAlreadyUsed": "IBAN already used",
+          "wiseBankNotSupported": "Wise bank not supported"
+        },
+        "depositAddress": {
+          "depositAddressAlreadyUsed": "Deposit address already used"
+        }
+      }
     },
     "wallet": {
       "title": "Onchain-lompakko",
