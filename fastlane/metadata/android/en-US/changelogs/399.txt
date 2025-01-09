@@ -1,0 +1,2 @@
+- Fixed wrong locale decimal separator for bitcoin amounts
+- Updated Finnish translations
