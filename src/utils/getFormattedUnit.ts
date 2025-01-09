@@ -3,11 +3,13 @@ import { numberWithSpaces } from "./numberWithSpaces";
 export const decimalSeparator =
   (1.1).toLocaleString(undefined).match(/1(.)1/)?.[1] || ".";
 
-Number.prototype.toLocaleFixed = (fractionDigits: number) =>
-  this.toLocaleString(undefined, {
+// Lambda syntax doesn't work for prototype functions
+Number.prototype.toLocaleFixed = function (fractionDigits: number) {
+  return this.toLocaleString(undefined, {
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits
   });
+};
 
 declare global {
   interface Number {
