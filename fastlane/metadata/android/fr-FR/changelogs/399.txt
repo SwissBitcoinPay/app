@@ -1,0 +1,2 @@
+- Corrige le mauvais formattage de la décimale locale pour les montants en bitcoin
+- Mis à jour les traductions en finnois
