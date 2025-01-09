@@ -1,0 +1,2 @@
+- Added Bitcoin price rate on the ticket receipt (Bitcoinize printing ticket)
+- Improved some error messages

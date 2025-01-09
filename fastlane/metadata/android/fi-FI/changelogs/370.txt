@@ -1,0 +1,3 @@
+- Fix bitcoin address signature not showing by @SwissBitcoinPay in #78
+- add fastlane images by @SwissBitcoinPay in #79
+- fix permissions by @SwissBitcoinPay in #80

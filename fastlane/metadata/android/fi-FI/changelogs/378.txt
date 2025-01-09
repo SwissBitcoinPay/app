@@ -1,0 +1,2 @@
+- Better support for our new infrastructure
+- Fixed a few bugs
