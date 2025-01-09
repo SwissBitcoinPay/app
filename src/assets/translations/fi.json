@@ -31,7 +31,7 @@
       "introTitle": "Hyväksy {{bitcoin}} maksut",
       "easily": "Helposti",
       "worldwide": "Maailmanlaajuisesti",
-      "nonCustodial": "Non-custodial",
+      "nonCustodial": "Varat omasäilössä",
       "noKyc": "Ilman tunnistautumista",
       "in1minute": "Minuutissa",
       "licensedBy": "Luvan myöntäjä",
@@ -122,7 +122,7 @@
       "creatingInvoice": "Luodaan laskua",
       "fetchingInvoice": "Haetaan laskua",
       "invoiceQrTitle": "Laskun QR-koodi",
-      "invoiceQr": "Access this invoice on another device by scanning this QR code",
+      "invoiceQr": "Nähdäksesi laskun toisessa laitteessa, lue QR-koodi",
       "save": "Talleta",
       "status": "Tila",
       "timeLeft": "Aikaa jäljellä",
@@ -140,7 +140,7 @@
       "transactionId": "Tapatumatunus",
       "openWallet": "Avaa lompakko",
       "copy": "Kopioi",
-      "pendingConfirmations": "Pending confirmations",
+      "pendingConfirmations": "Odottaa varmistuksia",
       "invoiceExpired": "Lasku vanheni",
       "invoicePaid": "Lasku maksettu",
       "tapAnywhereToSkip": "Napauta jossain ohittaaksesi vaiheen",
@@ -222,9 +222,9 @@
       "nextAddresses": "Seuraavat osoitteet",
       "recommended": "Suositeltu",
       "messageToSign": "Allekirjoitettava viesti",
-      "messageToSignDetails": "Sign this message with the Bitcoin wallet you entered",
+      "messageToSignDetails": "Allekirjoita tämä viesti, se vaatii omasäilötyn Bitcoin-lompakon",
       "yourSignature": "Allekirjoituksesi",
-      "yourSignatureDetails": "Signature you obtained from your wallet",
+      "yourSignatureDetails": "Lompakkosi antama allekirjoitus",
       "invalidSignature": "Virheellinen allekirjoitus",
       "payInvoiceToCertify": "Vahvista Lightning Address -osoitteen omistajuus maksamalla tämä 1 satoshin lasku.",
       "openWallet": "Avaa lompakko",
@@ -246,7 +246,7 @@
       "receiveInBankDescriptionInstantSepa": "Varat näkyvät tililläsi välittömästi, mikäli pankkisi tulee Instant SEPA -maksujen vastaanottoa",
       "receiveInBankDescriptionFasterPayments": "Varat saapuvat GBP-valuuttatilillesi välittömästi Faster Payments -maksuna.",
       "createYourBitcoinWallet": "Luo itsellesi Bitcoin-lompakko",
-      "iban": "IBAN",
+      "iban": "täytä IBAN-tilinumero",
       "bankReference": "Pankkiviite tai -viesti",
       "optional": "Valinnainen",
       "yourName": "Organisaation tai henkilön nimi",
@@ -268,11 +268,11 @@
       "patchSettingNeedsEmailValidation": "Sähköpostiisi on lähetty on viesti uusien asetusten aktivoimiseksi",
       "error": {
         "iban": {
-          "ibanAlreadyUsed": "IBAN already used",
-          "wiseBankNotSupported": "Wise bank not supported"
+          "ibanAlreadyUsed": "Tämä IBAN-tilinumero on jo käytössä.",
+          "wiseBankNotSupported": "Wise-neopankin palveluita ei tueta."
         },
         "depositAddress": {
-          "depositAddressAlreadyUsed": "Deposit address already used"
+          "depositAddressAlreadyUsed": "Tilitysosoite on jo käytetty"
         }
       }
     },
@@ -454,6 +454,6 @@
     "note": "Huomautus",
     "invoiceId": "Laskun ID",
     "thanks": "Kiitos ostamisesta ₿itcoin kanssa",
-    "poweredBy": "Powered by"
+    "poweredBy": "toteuttaja"
   }
 }
