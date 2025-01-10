@@ -139,6 +139,7 @@
       "paidWith": "Maksettu",
       "transactionId": "Tapatumatunus",
       "openWallet": "Avaa lompakko",
+      "noAvailableWallet": "No wallet available",
       "copy": "Kopioi",
       "pendingConfirmations": "Odottaa varmistuksia",
       "invoiceExpired": "Lasku vanheni",

@@ -139,6 +139,7 @@
       "paidWith": "Bezahlt mit",
       "transactionId": "Transaktions-ID",
       "openWallet": "Wallet öffnen",
+      "noAvailableWallet": "No wallet available",
       "copy": "Kopieren",
       "pendingConfirmations": "Ausstehende Bestätigungen",
       "invoiceExpired": "Abgelaufene Rechnung",

@@ -139,6 +139,7 @@
       "paidWith": "Pago com",
       "transactionId": "ID da transação",
       "openWallet": "Abrir a carteira",
+      "noAvailableWallet": "No wallet available",
       "copy": "Copiar",
       "pendingConfirmations": "Confirmações pendentes",
       "invoiceExpired": "A fatura expirou",
