@@ -1,0 +1,3 @@
+- Amélioration du suivi des erreurs
+- Corrigé un crash lors du clic sur "Ouvrir portefeuille" si aucun portefeuille n'est installé sur l'appareil
+- Corrigé de rares crashs pour d'anciennes transactions sur l'écran Historique
