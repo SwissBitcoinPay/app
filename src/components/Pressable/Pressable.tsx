@@ -67,7 +67,9 @@ export const Pressable = forwardRef<TouchableOpacity, PressableProps>(
       if (typeof _onPress === "string") {
         if (isNative) {
           return async () => {
-            await Linking.openURL(_onPress);
+            if (await Linking.canOpenURL(_onPress)) {
+              await Linking.openURL(_onPress);
+            }
           };
         } else {
           return _onPress;

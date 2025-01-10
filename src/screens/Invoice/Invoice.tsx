@@ -545,19 +545,39 @@ export const Invoice = () => {
     }
   }, [isNfcAvailable, pr, readingNfcLoop]);
 
-  const qrData = useMemo<`bitcoin:${string}` | `lightning:${string}`>(
-    () =>
-      onChainAddr
-        ? `bitcoin:${onChainAddr}?amount=${
-            btcAmount.toFixed(8) || ""
-          }&label=${encodeURIComponent(title || "")}${
-            pr ? `&lightning=${pr}` : ""
-          }`
-        : pr
-          ? `lightning:${pr || ""}`
-          : "",
-    [pr, onChainAddr, btcAmount, title]
-  );
+  const { bitcoinBase, fullUrl } = useMemo(() => {
+    const bitcoinBase = onChainAddr
+      ? `bitcoin:${onChainAddr}?amount=${
+          btcAmount.toFixed(8) || ""
+        }&label=${encodeURIComponent(title || "")}${description ? `&message=${encodeURIComponent(description)}` : ""}`
+      : undefined;
+
+    const fullUrl: `bitcoin:${string}` | `lightning:${string}` = bitcoinBase
+      ? `${bitcoinBase}${pr ? `&lightning=${pr}` : ""}`
+      : pr
+        ? `lightning:${pr || ""}`
+        : "";
+
+    return { bitcoinBase, fullUrl };
+  }, [onChainAddr, btcAmount, title, pr]);
+
+  const qrData = useMemo(() => fullUrl, [fullUrl]);
+
+  const [openWalletUrl, setOpenWalletUrl] = useState<string | null>();
+
+  useEffect(() => {
+    if (fullUrl) {
+      (async () => {
+        if (await Linking.canOpenURL(fullUrl)) {
+          setOpenWalletUrl(fullUrl);
+        } else if (bitcoinBase && (await Linking.canOpenURL(bitcoinBase))) {
+          setOpenWalletUrl(bitcoinBase);
+        } else {
+          setOpenWalletUrl(null);
+        }
+      })();
+    }
+  }, [fullUrl, bitcoinBase]);
 
   const qrCodeSize = useMemo(() => {
     const size = isLarge ? MAX_QR_SIZE : frameWidth - gridSize * 3.5;
@@ -823,7 +843,7 @@ export const Invoice = () => {
                 {status !== "expired" &&
                   (isAlive ? (
                     <QR
-                      value={qrData}
+                      value={fullUrl}
                       size={qrCodeSize}
                       image={{
                         source: require("@assets/images/bitcoin-white-border.png")
@@ -989,8 +1009,13 @@ export const Invoice = () => {
                 <ComponentStack gapSize={14}>
                   <S.ActionButton
                     icon={faWallet}
-                    title={t("openWallet")}
-                    onPress={qrData}
+                    title={t(
+                      openWalletUrl !== null
+                        ? "openWallet"
+                        : "noAvailableWallet"
+                    )}
+                    onPress={openWalletUrl}
+                    disabled={openWalletUrl === null}
                     type="bitcoin"
                   />
                   <ComponentStack
