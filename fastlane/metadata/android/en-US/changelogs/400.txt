@@ -1,0 +1,3 @@
+- Improved error tracking
+- Fixed a crash when clicking on "Open wallet" if no wallet is installed on the device
+- Fixed rare crashs on old transactions on the History tab

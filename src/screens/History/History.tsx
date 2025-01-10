@@ -336,8 +336,8 @@ export const History = () => {
                     {
                       state: {
                         isLocalInvoice: !isPaid && !isExpired,
-                        unit: transaction.input.unit,
-                        decimalFiat: transaction.input.amount,
+                        unit: transaction.input?.unit,
+                        decimalFiat: transaction.input?.amount,
                         description: transaction.description
                       }
                     }
