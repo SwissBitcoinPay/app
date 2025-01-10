@@ -19,7 +19,7 @@ type FooterLineProps = {
   prefixIcon?: { icon: IconProp; color?: string };
   prefixComponent?: React.ReactElement;
   suffixComponent?: React.ReactElement;
-  copyable?: boolean;
+  copyable?: boolean | string;
 };
 
 const ICON_SIZE = 18;
@@ -39,13 +39,13 @@ export const FooterLine = ({
   const [isCopied, setIsCopied] = useState(false);
 
   const onPress = useCallback(() => {
-    if (Clipboard.setString(value)) {
+    if (Clipboard.setString(typeof copyable === "string" ? copyable : value)) {
       setIsCopied(true);
       setTimeout(() => {
         setIsCopied(false);
       }, 2000);
     }
-  }, [value]);
+  }, [copyable, value]);
 
   return (
     <S.FooterLineContainer>

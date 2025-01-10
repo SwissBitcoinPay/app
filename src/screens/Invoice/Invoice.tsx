@@ -1083,7 +1083,7 @@ export const Invoice = () => {
                     label={t("amount")}
                     value={btcAmount.toLocaleFixed(8)}
                     valueSuffix=" BTC"
-                    copyable
+                    copyable={btcAmount.toFixed(8)}
                   />
                 )}
                 {isExternalInvoice && createdAt && delay && isAlive && (
