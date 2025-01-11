@@ -126,6 +126,7 @@
       "save": "Save",
       "status": "Status",
       "timeLeft": "Time left",
+      "rateUpdatedIn": "Rate updated in",
       "amount": "Amount",
       "alreadyPaid": "Already paid",
       "payTheRest": "Pay the rest ({{sats}} sats) via Lightning or Onchain",

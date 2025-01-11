@@ -46,6 +46,6 @@ export { BackHandler } from "./BackHandler";
 export { SplashScreen } from "./SplashScreen";
 export { BitcoinLoader } from "./BitcoinLoader";
 export { StatusBar } from "./StatusBar";
-export { CircleProgress } from "./CircleProgress";
+export { CountdownCircleTimer } from "./CountdownCircleTimer";
 export { BitcoinIcon } from "./BitcoinIcon";
 export { PayoutConfig } from "./PayoutConfig";
