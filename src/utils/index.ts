@@ -39,5 +39,6 @@ export { Printer } from "./Printer";
 export { getImageSize } from "./getImageSize";
 export { scaleDimensions } from "./scaleDimensions";
 export { base64ToHex } from "./base64ToHex";
+export { formatSecondsToMMSS } from "./formatSecondsToMMSS";
 export { FS } from "./FS";
 export { isNewAccount } from "./isNewAccount";

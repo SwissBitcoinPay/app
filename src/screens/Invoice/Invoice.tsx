@@ -13,6 +13,7 @@ import { bech32 } from "bech32";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, useLocation } from "@components/Router";
+import { Circle as CircleProgress, Pie } from "react-native-progress";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import {
   Loader,
@@ -23,10 +24,11 @@ import {
   ComponentStack,
   Icon,
   QR,
-  CircleProgress,
+  CountdownCircleTimer,
   Pressable,
   Modal,
-  ProgressBar
+  ProgressBar,
+  View
 } from "@components";
 import {
   faArrowLeft,
@@ -62,7 +64,8 @@ import {
   SBPThemeContext,
   apiRootDomain,
   appRootUrl,
-  currencies
+  currencies,
+  rateUpdateDelay
 } from "@config";
 import LottieView from "lottie-react-native";
 import * as S from "./styled";
@@ -72,7 +75,8 @@ import {
   Linking,
   getFormattedUnit,
   isApiError,
-  AsyncStorage
+  AsyncStorage,
+  formatSecondsToMMSS
 } from "@utils";
 import { keyStoreTicketsAutoPrint } from "@config/settingsKeys";
 import { useSpring, easings } from "@react-spring/native";
@@ -212,27 +216,31 @@ export const Invoice = () => {
   const [isInitialPaid, setIsInitialPaid] = useState(false);
   const [isTimerPaused, setIsTimerPaused] = useState(false);
 
-  const getProgress = useCallback(() => {
+  const [progress, setProgress] = useState<number>(1);
+  const [updateRateTime, setUpdateRateTime] = useState<number>(rateUpdateDelay);
+
+  const updateProgressAndUpdateRateTime = useCallback(() => {
     const now = Math.round(Date.now() / 1000);
     const timeElapsed = now - createdAt;
     const newProgress = timeElapsed / delay;
+    setProgress(1 - newProgress);
 
-    return 1 - newProgress;
+    const remainder = timeElapsed % rateUpdateDelay;
+    setUpdateRateTime(remainder === 0 ? 0 : rateUpdateDelay - remainder);
   }, [createdAt, delay]);
-
-  const [progress, setProgress] = useState<number>(1);
 
   useEffect(() => {
     if (isInit && !isTimerPaused) {
+      updateProgressAndUpdateRateTime();
       const intervalId = setInterval(() => {
-        setProgress(getProgress());
+        updateProgressAndUpdateRateTime();
       }, 1000);
 
       return () => {
         clearInterval(intervalId);
       };
     }
-  }, [isInit, isTimerPaused]);
+  }, [isInit, isTimerPaused, updateProgressAndUpdateRateTime]);
 
   // Paid data
   const [status, setStatus] = useState<Status>("draft");
@@ -292,13 +300,45 @@ export const Invoice = () => {
           )}
         </S.AmountText>
         {invoiceCurrency !== "sat" && (
-          <S.AmountText subAmount>
-            {amount ? numberWithSpaces(amount / 1000) : ""} sats
-          </S.AmountText>
+          <>
+            <S.AmountText subAmount>
+              {amount ? numberWithSpaces(amount / 1000) : ""} sats
+            </S.AmountText>
+            {isExternalInvoice && createdAt && delay && isAlive && (
+              <ComponentStack
+                direction="horizontal"
+                gapSize={4}
+                style={{ marginTop: 6 }}
+              >
+                <Text color={colors.grey} h6 weight={600}>
+                  {t("rateUpdatedIn")} {formatSecondsToMMSS(updateRateTime)}
+                </Text>
+                <Pie
+                  useNativeDriver
+                  progress={updateRateTime / rateUpdateDelay}
+                  color={colors.primaryLight}
+                  size={14}
+                  // borderWidth={0}
+                  unfilledColor={"transparent"}
+                  animationType="spring"
+                  style={{ position: "relative", top: -1 }}
+                />
+              </ComponentStack>
+            )}
+          </>
         )}
       </>
     ),
-    [invoiceFiatAmount, invoiceCurrency, amount]
+    [
+      invoiceFiatAmount,
+      isExternalInvoice,
+      createdAt,
+      delay,
+      isAlive,
+      invoiceCurrency,
+      amount,
+      updateRateTime
+    ]
   );
 
   const successLottieRef = useRef<LottieView>(null);
@@ -507,10 +547,8 @@ export const Invoice = () => {
 
         setIsInit(true);
 
-        if (isInitialData) {
-          if (status === "settled") {
-            setIsInitialPaid(true);
-          }
+        if (status === "settled" && isInitialData) {
+          setIsInitialPaid(true);
         }
 
         if (status === "expired") {
@@ -876,7 +914,7 @@ export const Invoice = () => {
                   <S.SuccessLottie
                     ref={successLottieRef}
                     autoPlay
-                    speed={10000}
+                    speed={isInitialPaid ? 10000 : 1}
                     loop={false}
                     source={require("@assets/animations/success.json")}
                     size={STATUS_ICON_SIZE}
@@ -924,7 +962,7 @@ export const Invoice = () => {
                   <Text h3 weight={600} color={colors.white}>
                     {t("redirectingYou")}
                   </Text>
-                  <CircleProgress
+                  <CountdownCircleTimer
                     isGrowing
                     isPlaying
                     duration={7}
@@ -1006,8 +1044,12 @@ export const Invoice = () => {
                 />
               )}
               {isAlive && isExternalInvoice && (
-                <ComponentStack gapSize={14}>
+                <ComponentStack
+                  gapSize={14}
+                  style={{ flex: 1, justifyContent: "flex-end" }}
+                >
                   <S.ActionButton
+                    style={{ flexGrow: 0 }}
                     icon={faWallet}
                     title={t(
                       openWalletUrl !== null
@@ -1165,9 +1207,11 @@ export const Invoice = () => {
                 source={require("@assets/images/logo-white.png")}
               />
             </Pressable>
-            <Text weight={500} h6 color={colors.grey}>
-              {versionTag}
-            </Text>
+            <Pressable onPress="https://github.com/SwissBitcoinPay/app">
+              <Text weight={500} h6 color={colors.grey}>
+                {versionTag}
+              </Text>
+            </Pressable>
           </S.PoweredContainer>
         )}
       </S.InvoicePageContainer>

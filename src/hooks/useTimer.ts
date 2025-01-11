@@ -73,7 +73,7 @@ export const useTimer = ({ createdAt, delay, stop = false }: UseTimerProps) => {
                   : "00"
               }`
             : ""
-        }`
+        }`.trim()
       );
     }
   }, [createdAt, delay, t]);
