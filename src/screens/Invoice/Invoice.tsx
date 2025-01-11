@@ -13,7 +13,7 @@ import { bech32 } from "bech32";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, useLocation } from "@components/Router";
-import { Circle as CircleProgress } from "react-native-progress";
+import { Circle as CircleProgress, Pie } from "react-native-progress";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import {
   Loader,
@@ -307,22 +307,21 @@ export const Invoice = () => {
             {isExternalInvoice && createdAt && delay && isAlive && (
               <ComponentStack
                 direction="horizontal"
-                gapSize={6}
+                gapSize={4}
                 style={{ marginTop: 6 }}
               >
-                <Text color={colors.grey} h5 weight={600}>
+                <Text color={colors.grey} h6 weight={600}>
                   {t("rateUpdatedIn")} {formatSecondsToMMSS(updateRateTime)}
                 </Text>
-                <CircleProgress
+                <Pie
                   useNativeDriver
                   progress={updateRateTime / rateUpdateDelay}
-                  color={colors.secondary}
-                  size={18}
-                  thickness={2.5}
-                  borderWidth={0}
-                  strokeCap="round"
-                  unfilledColor={colors.primaryLight}
+                  color={colors.primaryLight}
+                  size={14}
+                  // borderWidth={0}
+                  unfilledColor={"transparent"}
                   animationType="spring"
+                  style={{ position: "relative", top: -1 }}
                 />
               </ComponentStack>
             )}
