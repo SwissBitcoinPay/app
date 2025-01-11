@@ -126,6 +126,7 @@
       "save": "Guardar",
       "status": "Estado",
       "timeLeft": "Tiempo restante",
+      "rateUpdatedIn": "Rate updated in",
       "amount": "Importe",
       "alreadyPaid": "Ya pagado",
       "payTheRest": "Pagar el resto ({{sats}} sats) a través de Lightning o Onchain",
