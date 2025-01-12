@@ -304,27 +304,30 @@ export const Invoice = () => {
             <S.AmountText subAmount>
               {amount ? numberWithSpaces(amount / 1000) : ""} sats
             </S.AmountText>
-            {isExternalInvoice && createdAt && delay && isAlive && (
-              <ComponentStack
-                direction="horizontal"
-                gapSize={4}
-                style={{ marginTop: 6 }}
-              >
-                <Text color={colors.grey} h6 weight={600}>
-                  {t("rateUpdatedIn")} {formatSecondsToMMSS(updateRateTime)}
-                </Text>
-                <Pie
-                  useNativeDriver
-                  progress={updateRateTime / rateUpdateDelay}
-                  color={colors.primaryLight}
-                  size={14}
-                  // borderWidth={0}
-                  unfilledColor={"transparent"}
-                  animationType="spring"
-                  style={{ position: "relative", top: -1 }}
-                />
-              </ComponentStack>
-            )}
+            {isExternalInvoice &&
+              createdAt &&
+              delay &&
+              isAlive &&
+              delay > rateUpdateDelay && (
+                <ComponentStack
+                  direction="horizontal"
+                  gapSize={4}
+                  style={{ marginTop: 6 }}
+                >
+                  <Text color={colors.grey} h6 weight={600}>
+                    {t("rateUpdatedIn")} {formatSecondsToMMSS(updateRateTime)}
+                  </Text>
+                  <Pie
+                    useNativeDriver
+                    progress={updateRateTime / rateUpdateDelay}
+                    color={colors.primaryLight}
+                    size={14}
+                    unfilledColor="transparent"
+                    animationType="spring"
+                    style={{ position: "relative", top: -1 }}
+                  />
+                </ComponentStack>
+              )}
           </>
         )}
       </>
