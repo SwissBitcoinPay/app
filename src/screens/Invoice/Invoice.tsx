@@ -607,7 +607,7 @@ export const Invoice = () => {
   const [openWalletUrl, setOpenWalletUrl] = useState<string | null>();
 
   useEffect(() => {
-    if (fullUrl) {
+    if (fullUrl && isExternalInvoice) {
       (async () => {
         if (await Linking.canOpenURL(fullUrl)) {
           setOpenWalletUrl(fullUrl);
@@ -618,7 +618,7 @@ export const Invoice = () => {
         }
       })();
     }
-  }, [fullUrl, bitcoinBase]);
+  }, [fullUrl, bitcoinBase, isExternalInvoice]);
 
   const qrCodeSize = useMemo(() => {
     const size = isLarge ? MAX_QR_SIZE : frameWidth - gridSize * 3.5;
