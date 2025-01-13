@@ -8,7 +8,7 @@ export const formattedUnitChanges = (
   decimalCount = 0,
   array: StringPart[]
 ) => {
-  if (amount !== "0" || add !== 0 || decimalCount > 0) {
+  if (amount && (amount !== "0" || add !== 0 || decimalCount > 0)) {
     const [leftPart, rightPart] = amount.split(decimalSeparator);
 
     let decimalSwitch = false;
