@@ -1,0 +1,2 @@
+- Ajouté un timer de mise à jour du taux pour les factures externes
+- Mis à jour les traductions en finnois
