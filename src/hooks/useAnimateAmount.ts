@@ -6,14 +6,19 @@ import {
   OneOrMore,
   useSprings
 } from "@react-spring/native";
-import { getFormattedUnit, measureText, sleep } from "@utils";
+import {
+  getFormattedUnit,
+  getUnitDecimalPower,
+  measureText,
+  sleep
+} from "@utils";
 import { v4 as uuidv4 } from "uuid";
 import { getUnitPrefixAndSuffix } from "@utils";
 import { countConsecutiveStringParts, diffStrings } from "@utils/diffStrings";
 import { formattedUnitChanges } from "@utils/formattedUnitChanges";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import usePrevious from "use-previous";
-import { platform } from "@config";
+import { currencies, DEFAULT_DECIMALS, platform } from "@config";
 import { useAnimatedValue } from "react-native";
 
 const { springAnimationDelay } = platform;
@@ -131,8 +136,17 @@ export const useAnimateAmount = ({
 
       const isZeroUnitChanged = newFiatAmount === 0 && unitChanged;
 
+      const unitDecimals =
+        currencies.find((c) => c.value === unit)?.decimals ?? DEFAULT_DECIMALS;
+
       const newText = getAmountWithoutUnit(
-        newFiatAmount > 0 ? getFormattedUnit(newFiatAmount / 100, unit) : ""
+        newFiatAmount > 0
+          ? getFormattedUnit(
+              newFiatAmount / getUnitDecimalPower(unit),
+              unit,
+              unitDecimals
+            )
+          : ""
       );
 
       const addUnit =
@@ -157,7 +171,7 @@ export const useAnimateAmount = ({
         });
       }
 
-      if (mode === AnimationMode.Normal) {
+      if (mode === AnimationMode.Normal && unitDecimals === DEFAULT_DECIMALS) {
         elementsArray = formattedUnitChanges(
           previousText,
           add,
@@ -165,7 +179,11 @@ export const useAnimateAmount = ({
           elementsArray
         );
       } else {
-        elementsArray = diffStrings(previousText, newText, elementsArray);
+        elementsArray = diffStrings(
+          previousText,
+          newText || (mode === AnimationMode.Normal ? "0" : ""),
+          elementsArray
+        );
       }
 
       if (unitSuffix && addUnit) {

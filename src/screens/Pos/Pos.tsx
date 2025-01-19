@@ -17,7 +17,8 @@ import {
   formattedUnitChanges,
   countConsecutiveStringParts,
   measureText,
-  sleep
+  sleep,
+  getUnitDecimalPower
 } from "@utils";
 import {
   Keyboard,
@@ -45,7 +46,13 @@ import {
   useAnimateAmount,
   useSymbolApi
 } from "@hooks";
-import { SBPContext, apiRootUrl, currencies, platform } from "@config";
+import {
+  DEFAULT_DECIMALS,
+  SBPContext,
+  apiRootUrl,
+  currencies,
+  platform
+} from "@config";
 import { keyStoreDeviceName, keyStoreIsGuest } from "@config/settingsKeys";
 import { useToast } from "react-native-toast-notifications";
 import { useTheme } from "styled-components";
@@ -136,16 +143,24 @@ export const Pos = () => {
     [fiatAmount, plusFiatAmount]
   );
 
-  const decimalFiat = useMemo(() => totalAmount / 100, [totalAmount]);
+  const { unitDecimals, unitDecimalPower } = useMemo(() => {
+    const unitDecimals =
+      currencies.find((c) => c.value === unit)?.decimals ?? DEFAULT_DECIMALS;
+    const unitDecimalPower = getUnitDecimalPower(unit);
+    return { unitDecimals, unitDecimalPower };
+  }, [unit]);
+
+  const decimalFiat = useMemo(
+    () => totalAmount / unitDecimalPower,
+    [totalAmount, unitDecimalPower]
+  );
 
   const isActionButtonsDisabled = useMemo(
     () => totalAmount === 0,
     [totalAmount]
   );
-  const haveDecimals = useMemo(
-    () => !!currencies.find((c) => c.value === unit && !c.noDecimals),
-    [unit]
-  );
+
+  const haveDecimals = useMemo(() => unitDecimals !== 0, [unit]);
 
   const fiatUnitPickerItems = useMemo(
     () => [{ label: "sats", value: "sat" }, ...currencies],
@@ -242,7 +257,7 @@ export const Pos = () => {
 
   const isBelowMaxFiatAmount = useCallback(
     (newFiatAmount: number) => {
-      if (maxFiatAmount && newFiatAmount / 100 > maxFiatAmount) {
+      if (maxFiatAmount && newFiatAmount / unitDecimalPower > maxFiatAmount) {
         toast.show(
           t("cannotGoHigher", {
             maxAmount: getFormattedUnit(maxFiatAmount, unit || "")
@@ -255,7 +270,7 @@ export const Pos = () => {
       }
       return true;
     },
-    [toast, maxFiatAmount, unit]
+    [toast, maxFiatAmount, unit, unitDecimalPower]
   );
 
   const updateTotalAmount = useCallback(
@@ -285,7 +300,7 @@ export const Pos = () => {
     (newNumber: number) => {
       let newFiatAmount: number;
       if (decimalCount === 0) {
-        newFiatAmount = fiatAmount * 10 + newNumber * (haveDecimals ? 1 : 100);
+        newFiatAmount = fiatAmount * 10 + newNumber;
       } else {
         newFiatAmount =
           fiatAmount + newNumber * parseInt(`1${"0".repeat(decimalCount - 1)}`);
@@ -301,7 +316,6 @@ export const Pos = () => {
     },
     [
       updateAmount,
-      haveDecimals,
       fiatAmount,
       decimalCount,
       plusFiatAmount,
@@ -364,14 +378,15 @@ export const Pos = () => {
   const onDecimalSeparator = useCallback(async () => {
     if (
       fiatAmount.toString().length > 0 &&
-      !isBelowMaxFiatAmount(plusFiatAmount + fiatAmount * 100)
+      !isBelowMaxFiatAmount(plusFiatAmount + fiatAmount * unitDecimalPower)
     ) {
       return;
     }
-    void updateAmount(fiatAmount * 100, "decimal");
-    setDecimalCount(haveDecimals ? 2 : 0);
+    void updateAmount(fiatAmount * unitDecimalPower, "decimal");
+    setDecimalCount(unitDecimals);
   }, [
     fiatAmount,
+    unitDecimalPower,
     haveDecimals,
     plusFiatAmount,
     updateAmount,
@@ -680,33 +695,31 @@ export const Pos = () => {
           [1, 2, 3],
           [4, 5, 6],
           [7, 8, 9],
-          [decimalSeparator, 0, "+"]
+          [haveDecimals ? decimalSeparator : undefined, 0, "+"]
         ].map((rowValue, rowIndex) => (
           <S.PadLine key={rowIndex}>
             {rowValue.map((columnValue, columnIndex) => (
               <NumberInput
                 key={columnIndex}
-                {...(columnValue !== undefined
+                value={columnValue?.toString()}
+                {...(typeof columnValue === "number"
                   ? {
-                      value: columnValue.toString(),
-                      ...(typeof columnValue === "number"
-                        ? {
-                            ref: registerRef(columnValue),
-                            onPress: () => onPressNumber(columnValue)
-                          }
-                        : columnValue === decimalSeparator
-                          ? {
-                              ref: registerRef(DECIMAL_REF_INDEX),
-                              onPress: onDecimalSeparator,
-                              disabled: decimalCount !== 0
-                            }
-                          : {
-                              ref: registerRef(PLUS_REF_INDEX),
-                              onPress: onPlus,
-                              disabled: fiatAmount === 0
-                            })
+                      ref: registerRef(columnValue),
+                      onPress: () => onPressNumber(columnValue)
                     }
-                  : {})}
+                  : columnValue === decimalSeparator
+                    ? {
+                        ref: registerRef(DECIMAL_REF_INDEX),
+                        onPress: onDecimalSeparator,
+                        disabled: decimalCount !== 0
+                      }
+                    : columnValue === "+"
+                      ? {
+                          ref: registerRef(PLUS_REF_INDEX),
+                          onPress: onPlus,
+                          disabled: fiatAmount === 0
+                        }
+                      : { disabled: true })}
               />
             ))}
           </S.PadLine>
