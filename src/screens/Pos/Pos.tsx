@@ -515,7 +515,7 @@ export const Pos = () => {
               ]
             }}
           >
-            <S.AnimatedText style={{ width: part.width }}>
+            <S.AnimatedText style={{ width: part.width + 0.01 }}>
               {part.text}
             </S.AnimatedText>
           </animated.View>
