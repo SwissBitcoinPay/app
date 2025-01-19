@@ -142,7 +142,7 @@ export const Settings = () => {
     useModalInput({
       element: (
         <SelectField
-          items={currencies}
+          items={currencies.filter((c) => !["sat", "BTC"].includes(c.value))}
           right={{ icon: faDollarSign }}
           onValueChange={() => {}}
           placeholder={{}}

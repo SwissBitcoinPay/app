@@ -162,11 +162,6 @@ export const Pos = () => {
 
   const haveDecimals = useMemo(() => unitDecimals !== 0, [unit]);
 
-  const fiatUnitPickerItems = useMemo(
-    () => [{ label: "sats", value: "sat" }, ...currencies],
-    []
-  );
-
   useEffect(() => {
     (async () => {
       setIsGuestMode((await AsyncStorage.getItem(keyStoreIsGuest)) === "true");
@@ -661,7 +656,7 @@ export const Pos = () => {
           <S.FiatAmountDropdownIcon icon={faAngleDown} color={colors.grey} />
           <S.FiatUnitPicker
             value={unit}
-            items={fiatUnitPickerItems}
+            items={currencies}
             placeholder={{}}
             onValueChange={(value: string | null) => {
               if (value) {
