@@ -1,3 +1,4 @@
+import { currencies, DEFAULT_DECIMALS } from "@config";
 import { numberWithSpaces } from "./numberWithSpaces";
 
 export const decimalSeparator =
@@ -20,7 +21,7 @@ declare global {
 export const getFormattedUnit = (
   amount: number,
   unit: string,
-  floating = 2,
+  floating = DEFAULT_DECIMALS,
   trailingDecimal = false
 ) => {
   let prefix = "";
@@ -72,3 +73,9 @@ export const decimalSeparatorNameMapping = {
   Comma: ",",
   Period: "."
 };
+
+export const getUnitDecimalPower = (unit: string) =>
+  Math.pow(
+    10,
+    currencies.find((c) => c.value === unit)?.decimals ?? DEFAULT_DECIMALS
+  );

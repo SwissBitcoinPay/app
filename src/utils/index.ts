@@ -2,7 +2,8 @@ export {
   getFormattedUnit,
   getUnitPrefixAndSuffix,
   decimalSeparator,
-  decimalSeparatorNameMapping
+  decimalSeparatorNameMapping,
+  getUnitDecimalPower
 } from "./getFormattedUnit";
 export {
   formattedUnitChanges,

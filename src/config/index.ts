@@ -20,5 +20,6 @@ export {
   SBPBitboxContextProvider
 } from "./SBPBitboxContext";
 export { SBPModalContext, SBPModalContextProvider } from "./SBPModalContext";
+export { DEFAULT_DECIMALS } from "./defaultDecimals";
 
 export { i18n };
