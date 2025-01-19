@@ -5,6 +5,10 @@ workflows:
       events:
         - push
       cancel_previous_builds: true
+    when:
+      changeset:
+        includes:
+          - '.env'
     max_build_duration: 120
     instance_type: mac_mini_m1
     environment:
@@ -60,6 +64,10 @@ workflows:
       events:
         - push
       cancel_previous_builds: true
+    when:
+      changeset:
+        includes:
+          - '.env'
     max_build_duration: 120
     instance_type: mac_mini_m1
     environment:
