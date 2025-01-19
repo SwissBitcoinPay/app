@@ -41,8 +41,6 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
           }
         );
 
-        setPreferredCurrency(data.currency);
-
         const fullConfig = { ...data, apiKey: testApiKey || data.apiKey };
 
         await AsyncStorage.setItem(
