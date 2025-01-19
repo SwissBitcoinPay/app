@@ -358,7 +358,7 @@ export const Signup = () => {
           value={value}
           key={value} // key is important to avoid a re-render bug on Android : https://github.com/lawnstarter/react-native-picker-select/issues/112#issuecomment-640180303
           label={t("currency")}
-          items={currencies}
+          items={currencies.filter((c) => !["sat", "BTC"].includes(c.value))}
           onValueChange={onChange}
           error={error?.message}
           placeholder={{}}

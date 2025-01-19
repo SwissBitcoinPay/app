@@ -25,7 +25,7 @@ export const getFormattedUnit = (
   trailingDecimal = false
 ) => {
   let prefix = "";
-  if (amount > 0 && amount < 0.01) {
+  if (amount > 0 && amount < 0.01 && unit !== "BTC") {
     amount = 0.01;
     prefix = `< `;
   }

@@ -1,5 +1,15 @@
 export const currencies = [
   {
+    label: "sats",
+    value: "sat",
+    decimals: 0
+  },
+  {
+    label: "BTC",
+    value: "BTC",
+    decimals: 8
+  },
+  {
     label: "EUR • Euro 🇪🇺",
     value: "EUR" as const
   },

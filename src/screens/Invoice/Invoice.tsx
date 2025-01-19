@@ -61,6 +61,7 @@ import {
 import { useTheme } from "styled-components";
 import { FooterLine } from "./components/FooterLine";
 import {
+  DEFAULT_DECIMALS,
   SBPThemeContext,
   apiRootDomain,
   appRootUrl,
@@ -289,6 +290,13 @@ export const Invoice = () => {
     }
   }, [readyState]);
 
+  const unitDecimals = useMemo(() => {
+    return (
+      currencies.find((c) => c.value === invoiceCurrency)?.decimals ??
+      DEFAULT_DECIMALS
+    );
+  }, [invoiceCurrency]);
+
   const fiatSatAmountComponent = useMemo(
     () => (
       <>
@@ -296,7 +304,7 @@ export const Invoice = () => {
           {getFormattedUnit(
             invoiceFiatAmount,
             invoiceCurrency || "",
-            !invoiceFiatAmount || invoiceFiatAmount % 1 === 0 ? 0 : 2
+            unitDecimals
           )}
         </S.AmountText>
         {invoiceCurrency !== "sat" && (
