@@ -64,7 +64,8 @@ import {
   Text as RNText,
   ColorValue,
   useAnimatedValue,
-  Animated
+  Animated,
+  useWindowDimensions
 } from "react-native";
 import * as S from "./styled";
 import { animated, easings, useSpring, useSprings } from "@react-spring/native";
@@ -98,6 +99,8 @@ export const Pos = () => {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const toast = useToast();
+  const { height: windowHeight } = useWindowDimensions();
+  const isSmallHeight = useMemo(() => windowHeight <= 660, [windowHeight]);
   const { t } = useTranslation(undefined, { keyPrefix: "screens.pos" });
 
   const postInvoice = usePostInvoice();
@@ -601,7 +604,7 @@ export const Pos = () => {
       noBottomMargin
     >
       {deviceNameModal}
-      <S.InfosContainer>
+      <S.InfosContainer isSmallHeight={isSmallHeight}>
         {isAtm && (
           <S.ATMButton
             secondaryColor={colors.primary}
@@ -665,7 +668,7 @@ export const Pos = () => {
             }}
           />
         </S.FiatAmountComponentStack>
-        <S.DescriptionContainer>
+        <S.DescriptionContainer isSmallHeight={isSmallHeight}>
           <S.DescriptionInput
             blurOnSubmit
             textAlign="center"
