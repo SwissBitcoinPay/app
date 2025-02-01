@@ -17,14 +17,16 @@ export const PLUS_TEXTS_TRANSLATE_Y = 51;
 const _AnimatedText = animated(Text);
 const AnimatedView = animated(View);
 
-export const InfosContainer = styled(View)`
+export const InfosContainer = styled(View)<{
+  isSmallHeight?: boolean;
+}>`
   flex: 1;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 32px;
+  padding-top: ${({ isSmallHeight }) => (!isSmallHeight ? 32 : 0)}px;
 `;
 
 export const ATMButton = styled(Button)`
@@ -69,8 +71,12 @@ export const PadLine = styled(View)`
   justify-content: center;
 `;
 
-export const DescriptionContainer = styled(View)`
-  margin-top: 58px;
+export const DescriptionContainer = styled(View)<{
+  isSmallHeight?: boolean;
+}>`
+  margin-top: ${({ isSmallHeight }) => {
+    return !isSmallHeight ? 48 : 10;
+  }}px;
   border-bottom-color: ${({ theme }) => theme.colors.primaryLight};
   border-bottom-width: 2px;
   width: 70%;

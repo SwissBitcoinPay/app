@@ -1,5 +1,9 @@
 import { forwardRef, useCallback, useState } from "react";
-import { PressableProps, TouchableOpacity } from "react-native";
+import {
+  PressableProps,
+  TouchableOpacity,
+  useWindowDimensions
+} from "react-native";
 import { BackgroundEffect } from "./components/BackgroundEffect";
 import { useIsScreenSizeMin } from "@hooks";
 import { platform } from "@config";
@@ -31,6 +35,7 @@ export const NumberInput = forwardRef<TouchableOpacity, NumberInputProps>(
     ref
   ) => {
     const isLarge = useIsScreenSizeMin("large");
+    const { height: windowHeight } = useWindowDimensions();
 
     const [effects, setEffects] = useState<{ x: number; y: number }[]>([]);
 
@@ -71,6 +76,7 @@ export const NumberInput = forwardRef<TouchableOpacity, NumberInputProps>(
         bottomPadding={paddingBottom}
         disabled={props.disabled}
         isLargeScreen={isLarge}
+        isSmallHeight={windowHeight <= 660}
       >
         <S.NumberInputContainer
           {...props}
