@@ -79,7 +79,10 @@ import {
   AsyncStorage,
   formatSecondsToMMSS
 } from "@utils";
-import { keyStoreTicketsAutoPrint } from "@config/settingsKeys";
+import {
+  keyStoreTicketsAutoPrint,
+  keyStoreTransactionsHistory
+} from "@config/settingsKeys";
 import { useSpring, easings } from "@react-spring/native";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 
@@ -543,6 +546,26 @@ export const Invoice = () => {
           !isExternalInvoice
         ) {
           onFullScreenPaid(getInvoiceData);
+          AsyncStorage.getItem(keyStoreTransactionsHistory).then(
+            (transactionsHistory = "[]") => {
+              let localTransactionsHistory: InvoiceType[] =
+                JSON.parse(transactionsHistory);
+
+              const invoiceIndex = localTransactionsHistory.findIndex(
+                (i) => i.id === getInvoiceData.id
+              );
+
+              if (~invoiceIndex) {
+                localTransactionsHistory[invoiceIndex] = getInvoiceData;
+              }
+
+              AsyncStorage.setItem(
+                keyStoreTransactionsHistory,
+                JSON.stringify(localTransactionsHistory)
+              );
+            }
+          );
+
           return;
         }
 

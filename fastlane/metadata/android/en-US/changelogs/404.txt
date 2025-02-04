@@ -1,0 +1,1 @@
+- Fixed expired invoices issue on History tab (only for new invoices)
