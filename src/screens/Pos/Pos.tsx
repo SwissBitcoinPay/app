@@ -571,6 +571,7 @@ export const Pos = () => {
 
   return accountConfig ? (
     <PageContainer
+      bounces={false}
       header={{
         title: name || "",
         subTitle: {
