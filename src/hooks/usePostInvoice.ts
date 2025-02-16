@@ -203,8 +203,8 @@ export const usePostInvoice = () => {
             });
           }
         } else {
-          toast.show(e?.toString() || "unknown error", { type: "error" });
-          toast.show(e, { type: "error" });
+          toast.show(e?.toString?.() || "unknown error", { type: "error" });
+          // toast.show(e, { type: "error" });
         }
       }
     },
