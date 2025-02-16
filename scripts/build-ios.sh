@@ -20,9 +20,7 @@ npm run bundle:ios -- --dev "$DEV"
 
 cd ios
 
-bundle exec pod install
-
-# pod install --repo-update
+pod install --repo-update
 
 # Sourcemaps uploading
 
