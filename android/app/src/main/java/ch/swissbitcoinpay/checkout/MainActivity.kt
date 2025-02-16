@@ -38,11 +38,11 @@ class MainActivity : ReactActivity() {
   override fun createReactActivityDelegate(): ReactActivityDelegate =
       DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
 
-  override fun onNewIntent(intent: Intent?) {
+  override fun onNewIntent(intent: Intent) {
     // This is only called reliably when intents are received (e.g. USB is attached or when
     // handling 'aopp:' URIs through the android.intent.action.VIEW intent) with
     // android:launchMode="singleTop"
-    super.onNewIntent(intent)
-    setIntent(intent) // make sure onResume will have access to this intent
+      super.onNewIntent(intent)
+      setIntent(intent) // make sure onResume will have access to this intent
   }
 }

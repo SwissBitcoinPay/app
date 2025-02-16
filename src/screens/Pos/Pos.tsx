@@ -504,6 +504,7 @@ export const Pos = () => {
     () =>
       parts.map((part, index) => {
         const spring = springs[index];
+        const width = part.width ? part.width + 0.01 : undefined;
         return (
           <animated.View
             key={part.id}
@@ -511,16 +512,10 @@ export const Pos = () => {
               willChange: "transform, opacity, width",
               opacity: spring.opacity,
               width: spring.width,
-              transform: [
-                {
-                  scale: spring.scale
-                }
-              ]
+              transform: [{ scale: spring.scale }]
             }}
           >
-            <S.AnimatedText style={{ width: part.width + 0.01 }}>
-              {part.text}
-            </S.AnimatedText>
+            <S.AnimatedText style={{ width }}>{part.text}</S.AnimatedText>
           </animated.View>
         );
       }),
@@ -531,6 +526,7 @@ export const Pos = () => {
     () =>
       plusParts.map((part, index) => {
         const spring = plusSprings[index];
+        const width = part.width ? part.width + 0.01 : undefined;
 
         return (
           <animated.View
@@ -539,14 +535,10 @@ export const Pos = () => {
               willChange: "transform, opacity, width",
               opacity: spring.opacity,
               width: spring.width,
-              transform: [
-                {
-                  scale: spring.scale
-                }
-              ]
+              transform: [{ scale: spring.scale }]
             }}
           >
-            <S.PlusText style={{ width: part.width }}>{part.text}</S.PlusText>
+            <S.PlusText style={{ width }}>{part.text}</S.PlusText>
           </animated.View>
         );
       }),
@@ -557,6 +549,7 @@ export const Pos = () => {
     () =>
       totalParts.map((part, index) => {
         const spring = totalSprings[index];
+        const width = part.width ? part.width + 0.01 : undefined;
 
         return (
           <animated.View
@@ -565,14 +558,10 @@ export const Pos = () => {
               willChange: "transform, opacity, width",
               opacity: spring.opacity,
               width: spring.width,
-              transform: [
-                {
-                  scale: spring.scale
-                }
-              ]
+              transform: [{ scale: spring.scale }]
             }}
           >
-            <S.PlusText style={{ width: part.width, color: colors.bitcoin }}>
+            <S.PlusText style={{ width, color: colors.bitcoin }}>
               {part.text}
             </S.PlusText>
           </animated.View>
@@ -591,14 +580,8 @@ export const Pos = () => {
           isSecondary: true,
           onPress: onPressDeviceName
         },
-        left: {
-          icon: faListCheck,
-          onPress: "/history"
-        },
-        right: {
-          icon: faCog,
-          onPress: "/settings"
-        }
+        left: { icon: faListCheck, onPress: "/history" },
+        right: { icon: faCog, onPress: "/settings" }
       }}
       noPadding
       noBottomMargin
