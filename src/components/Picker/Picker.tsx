@@ -50,21 +50,16 @@ export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
         itemKey={tmpValue?.value || value}
         items={itemsWithColor}
         style={{
-          inputAndroid: fullStyle,
-          inputIOS: fullStyle,
+          inputAndroid: {
+            opacity: 0
+          },
+          inputIOS: {
+            opacity: 0
+          },
           viewContainer: style,
-          inputWeb: fullStyle
+          inputWeb: style
         }}
       />
     );
   }
 );
-
-const fullStyle = {
-  opacity: 0,
-  position: "absolute",
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0
-};
