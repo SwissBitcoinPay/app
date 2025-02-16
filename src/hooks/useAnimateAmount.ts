@@ -231,7 +231,7 @@ export const useAnimateAmount = ({
       await api.start((springIndex) => {
         const part = elemsWithWidths[springIndex];
 
-        if (part.add || part.remove) {
+        if (part?.add || part?.remove) {
           const { add, remove, width, consecutiveElementsNb } = part;
 
           return {
