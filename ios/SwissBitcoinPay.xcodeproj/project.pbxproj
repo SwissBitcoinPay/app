@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* SwissBitcoinPayTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* SwissBitcoinPayTests.m */; };
 		0417A60A45E44AE9A0FA9875 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D3249B2CDF3846F281E8E730 /* Poppins-Thin.ttf */; };
 		08E1EE460294473D9B9F8018 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E5EDC5440B8E4772A08D51ED /* Poppins-Bold.ttf */; };
 		0C80B921A6F3F58F76C31292 /* libPods-SwissBitcoinPay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-SwissBitcoinPay.a */; };
@@ -25,7 +24,7 @@
 		57F91ED329215126004189DA /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57F91ED229215126004189DA /* BootSplash.storyboard */; };
 		7260666463D8456AA63A2C02 /* Poppins-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AAEEAC31FF334054B5DF2805 /* Poppins-ExtraBoldItalic.ttf */; };
 		762D769A12AB40C9BCA070E8 /* Poppins-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A68C47BC9447461EADE2B291 /* Poppins-LightItalic.ttf */; };
-		7699B88040F8A987B510C191 /* libPods-SwissBitcoinPay-SwissBitcoinPayTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-SwissBitcoinPay-SwissBitcoinPayTests.a */; };
+		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		96E8E83FBC374E63B424EE6D /* Poppins-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BA8BF3B87549429E843022A5 /* Poppins-Black.ttf */; };
 		BA15DDABF7A64B1E8A8D07A5 /* Poppins-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E38A88D76F3F49608FE60991 /* Poppins-ExtraLightItalic.ttf */; };
@@ -47,9 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* SwissBitcoinPayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwissBitcoinPayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* SwissBitcoinPayTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SwissBitcoinPayTests.m; sourceTree = "<group>"; };
 		112FDAA795A44E5F9227AF2C /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraBold.ttf"; path = "../src/assets/fonts/Poppins/Poppins-ExtraBold.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* SwissBitcoinPay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwissBitcoinPay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = SwissBitcoinPay/AppDelegate.h; sourceTree = "<group>"; };
@@ -57,19 +54,17 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = SwissBitcoinPay/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = SwissBitcoinPay/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = SwissBitcoinPay/main.m; sourceTree = "<group>"; };
-		19F6CBCC0A4E27FBF8BF4A61 /* libPods-SwissBitcoinPay-SwissBitcoinPayTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwissBitcoinPay-SwissBitcoinPayTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2448DF6B77D34D39866078C7 /* Poppins-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BlackItalic.ttf"; path = "../src/assets/fonts/Poppins/Poppins-BlackItalic.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-SwissBitcoinPay.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwissBitcoinPay.debug.xcconfig"; path = "Target Support Files/Pods-SwissBitcoinPay/Pods-SwissBitcoinPay.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-SwissBitcoinPay.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwissBitcoinPay.release.xcconfig"; path = "Target Support Files/Pods-SwissBitcoinPay/Pods-SwissBitcoinPay.release.xcconfig"; sourceTree = "<group>"; };
 		57AEBEF529213BD200CC9943 /* SwissBitcoinPay.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SwissBitcoinPay.entitlements; path = SwissBitcoinPay/SwissBitcoinPay.entitlements; sourceTree = "<group>"; };
 		57F91ED229215126004189DA /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = SwissBitcoinPay/BootSplash.storyboard; sourceTree = "<group>"; };
-		5B7EB9410499542E8C5724F5 /* Pods-SwissBitcoinPay-SwissBitcoinPayTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwissBitcoinPay-SwissBitcoinPayTests.debug.xcconfig"; path = "Target Support Files/Pods-SwissBitcoinPay-SwissBitcoinPayTests/Pods-SwissBitcoinPay-SwissBitcoinPayTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-SwissBitcoinPay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwissBitcoinPay.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		62AD9F5E5B8C4C4188D7093D /* Poppins-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBoldItalic.ttf"; path = "../src/assets/fonts/Poppins/Poppins-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		6CCB3C1D68504C72965221A5 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../src/assets/fonts/Poppins/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
+		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = SwissBitcoinPay/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = SwissBitcoinPay/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		830124A1FABF42AEAD11946C /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../src/assets/fonts/Poppins/Poppins-Medium.ttf"; sourceTree = "<group>"; };
-		89C6BE57DB24E9ADA2F236DE /* Pods-SwissBitcoinPay-SwissBitcoinPayTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwissBitcoinPay-SwissBitcoinPayTests.release.xcconfig"; path = "Target Support Files/Pods-SwissBitcoinPay-SwissBitcoinPayTests/Pods-SwissBitcoinPay-SwissBitcoinPayTests.release.xcconfig"; sourceTree = "<group>"; };
 		9A4C7D994C374BC6AB03BB98 /* Poppins-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Italic.ttf"; path = "../src/assets/fonts/Poppins/Poppins-Italic.ttf"; sourceTree = "<group>"; };
 		9C25A2FE2C964CDD8521B925 /* Poppins-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Light.ttf"; path = "../src/assets/fonts/Poppins/Poppins-Light.ttf"; sourceTree = "<group>"; };
 		A68C47BC9447461EADE2B291 /* Poppins-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-LightItalic.ttf"; path = "../src/assets/fonts/Poppins/Poppins-LightItalic.ttf"; sourceTree = "<group>"; };
@@ -88,14 +83,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		00E356EB1AD99517003FC87E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7699B88040F8A987B510C191 /* libPods-SwissBitcoinPay-SwissBitcoinPayTests.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		13B07F8C1A680F5B00A75B9A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -107,15 +94,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* SwissBitcoinPayTests */ = {
-			isa = PBXGroup;
-			children = (
-				00E356F21AD99517003FC87E /* SwissBitcoinPayTests.m */,
-				00E356F01AD99517003FC87E /* Supporting Files */,
-			);
-			path = SwissBitcoinPayTests;
-			sourceTree = "<group>";
-		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -128,13 +106,11 @@
 			isa = PBXGroup;
 			children = (
 				57AEBEF529213BD200CC9943 /* SwissBitcoinPay.entitlements */,
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				57F91ED229215126004189DA /* BootSplash.storyboard */,
-				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				761780EC2CA45674006654EE /* AppDelegate.swift */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
-				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = SwissBitcoinPay;
 			sourceTree = "<group>";
@@ -144,7 +120,6 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				5DCACB8F33CDC322A6C60F78 /* libPods-SwissBitcoinPay.a */,
-				19F6CBCC0A4E27FBF8BF4A61 /* libPods-SwissBitcoinPay-SwissBitcoinPayTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -187,7 +162,6 @@
 			children = (
 				13B07FAE1A68108700A75B9A /* SwissBitcoinPay */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* SwissBitcoinPayTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -202,7 +176,6 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* SwissBitcoinPay.app */,
-				00E356EE1AD99517003FC87E /* SwissBitcoinPayTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -212,8 +185,6 @@
 			children = (
 				3B4392A12AC88292D35C810B /* Pods-SwissBitcoinPay.debug.xcconfig */,
 				5709B34CF0A7D63546082F79 /* Pods-SwissBitcoinPay.release.xcconfig */,
-				5B7EB9410499542E8C5724F5 /* Pods-SwissBitcoinPay-SwissBitcoinPayTests.debug.xcconfig */,
-				89C6BE57DB24E9ADA2F236DE /* Pods-SwissBitcoinPay-SwissBitcoinPayTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -221,27 +192,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* SwissBitcoinPayTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "SwissBitcoinPayTests" */;
-			buildPhases = (
-				A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */,
-				00E356EA1AD99517003FC87E /* Sources */,
-				00E356EB1AD99517003FC87E /* Frameworks */,
-				00E356EC1AD99517003FC87E /* Resources */,
-				C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */,
-				F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				00E356F51AD99517003FC87E /* PBXTargetDependency */,
-			);
-			name = SwissBitcoinPayTests;
-			productName = SwissBitcoinPayTests;
-			productReference = 00E356EE1AD99517003FC87E /* SwissBitcoinPayTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		13B07F861A680F5B00A75B9A /* SwissBitcoinPay */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "SwissBitcoinPay" */;
@@ -273,10 +223,6 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1210;
 				TargetAttributes = {
-					00E356ED1AD99517003FC87E = {
-						CreatedOnToolsVersion = 6.2;
-						TestTargetID = 13B07F861A680F5B00A75B9A;
-					};
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1120;
 					};
@@ -296,7 +242,6 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* SwissBitcoinPay */,
-				00E356ED1AD99517003FC87E /* SwissBitcoinPayTests */,
 			);
 		};
 /* End PBXProject section */
@@ -374,28 +319,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwissBitcoinPay/Pods-SwissBitcoinPay-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SwissBitcoinPay-SwissBitcoinPayTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -418,23 +341,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SwissBitcoinPay-SwissBitcoinPayTests/Pods-SwissBitcoinPay-SwissBitcoinPayTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SwissBitcoinPay-SwissBitcoinPayTests/Pods-SwissBitcoinPay-SwissBitcoinPayTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwissBitcoinPay-SwissBitcoinPayTests/Pods-SwissBitcoinPay-SwissBitcoinPayTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -450,23 +356,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwissBitcoinPay/Pods-SwissBitcoinPay-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SwissBitcoinPay-SwissBitcoinPayTests/Pods-SwissBitcoinPay-SwissBitcoinPayTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SwissBitcoinPay-SwissBitcoinPayTests/Pods-SwissBitcoinPay-SwissBitcoinPayTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwissBitcoinPay-SwissBitcoinPayTests/Pods-SwissBitcoinPay-SwissBitcoinPayTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8C0C901E871A433B97564943 /* Upload Debug Symbols to Sentry */ = {
@@ -486,20 +375,11 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		00E356EA1AD99517003FC87E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				00E356F31AD99517003FC87E /* SwissBitcoinPayTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		13B07F871A680F5B00A75B9A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
-				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				761780ED2CA45674006654EE /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -514,57 +394,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		00E356F61AD99517003FC87E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-SwissBitcoinPay-SwissBitcoinPayTests.debug.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = SwissBitcoinPayTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = ch.swissbitcoinpay.checkout;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwissBitcoinPay.app/SwissBitcoinPay";
-			};
-			name = Debug;
-		};
-		00E356F71AD99517003FC87E /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-SwissBitcoinPay-SwissBitcoinPayTests.release.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = SwissBitcoinPayTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = ch.swissbitcoinpay.checkout;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwissBitcoinPay.app/SwissBitcoinPay";
-			};
-			name = Release;
-		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-SwissBitcoinPay.debug.xcconfig */;
@@ -804,15 +633,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "SwissBitcoinPayTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				00E356F61AD99517003FC87E /* Debug */,
-				00E356F71AD99517003FC87E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "SwissBitcoinPay" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

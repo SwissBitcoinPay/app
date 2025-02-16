@@ -82,7 +82,6 @@ export const Button = styled(Pressable)<{
 
 export const ButtonContent = styled(View)<{ size: Size }>`
   height: 100%;
-  width: 100%;
   box-sizing: border-box;
   padding: 0px ${({ size }) => getPadding(size)}px;
   display: flex;
