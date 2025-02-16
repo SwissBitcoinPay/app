@@ -198,7 +198,7 @@ export const useAnimateAmount = ({
         ({ width, ...part }, i) => {
           const consecutiveElementsNb = part?.add
             ? countConsecutiveStringParts(elementsArray, "add", i)
-            : part.remove
+            : part?.remove
               ? countConsecutiveStringParts(elementsArray, "remove", i)
               : 0;
 

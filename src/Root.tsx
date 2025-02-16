@@ -17,7 +17,7 @@ export const Root = () => (
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
         <KeyboardAvoidingView>
           <Router
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+          // future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
           >
             <SBPThemeContextProvider>
               <SBPModalContextProvider>
