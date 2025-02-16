@@ -185,6 +185,7 @@ export const usePostInvoice = () => {
           ])
         );
       } catch (e) {
+        toast.show(JSON.stringify(e), { type: "error" });
         if (axios.isAxiosError<{ reason: string }>(e)) {
           navigate("/");
           if (e.response?.data) {
