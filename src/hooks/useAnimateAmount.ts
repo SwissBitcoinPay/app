@@ -196,13 +196,13 @@ export const useAnimateAmount = ({
 
       const elemsWithWidths = (await getElementsWidth(elementsArray)).map(
         ({ width, ...part }, i) => {
-          const consecutiveElementsNb = part?.add
+          const consecutiveElementsNb = part.add
             ? countConsecutiveStringParts(elementsArray, "add", i)
-            : part?.remove
+            : part.remove
               ? countConsecutiveStringParts(elementsArray, "remove", i)
               : 0;
 
-          const initialConfig = part?.add
+          const initialConfig = part.add
             ? HIDDEN_STYLE
             : { ...VISIBLE_STYLE, width };
 
@@ -231,7 +231,7 @@ export const useAnimateAmount = ({
       await api.start((springIndex) => {
         const part = elemsWithWidths[springIndex];
 
-        if (part?.add || part?.remove) {
+        if (part.add || part.remove) {
           const { add, remove, width, consecutiveElementsNb } = part;
 
           return {

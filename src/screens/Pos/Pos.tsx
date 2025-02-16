@@ -171,8 +171,6 @@ export const Pos = () => {
   }, []);
 
   const requestInvoice = useCallback(async () => {
-    toast.show("Request invoice", { type: "success" });
-
     await postInvoice({
       amount: decimalFiat,
       unit,
@@ -180,7 +178,7 @@ export const Pos = () => {
       deviceName,
       deviceType
     });
-  }, [postInvoice, decimalFiat, unit, description, deviceName, toast]);
+  }, [postInvoice, decimalFiat, unit, description, deviceName]);
 
   const saveMaxFiatAmount = useCallback(async () => {
     if (unit && !hasKyc) {
