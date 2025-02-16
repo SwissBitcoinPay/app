@@ -55,6 +55,7 @@ export const FiatUnitPicker = styled(Picker)`
   bottom: 0px;
   left: 0px;
   right: 0px;
+  opacity: 1;
   z-index: 100;
 `;
 
