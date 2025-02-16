@@ -1,0 +1,5 @@
+- Corrected the layout of the ‘Share my invitation link’ button
+- Corrected the invoices displayed as expired if they no longer exist on the server
+- Removed the lightning bolt in the background of the welcome screen
+- Removed blur
+- Removed code warnings
