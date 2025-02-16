@@ -59,13 +59,13 @@ const degroup = (result: StringPart[]) => {
   for (let i = 0; i < result.length; i++) {
     const elem = result[i];
 
-    if (elem.add || elem.remove) {
+    if (elem?.add || elem?.remove) {
       degroup.push(
         ...elem.text.split("").map((c) => ({
           id: uuidv4(),
           text: c,
-          add: elem.add,
-          remove: elem.remove
+          add: elem?.add || false,
+          remove: elem?.remove || false
         }))
       );
     } else {
@@ -74,7 +74,7 @@ const degroup = (result: StringPart[]) => {
       while (i < result.length) {
         const element = result[i];
 
-        if (!element.add && !element.remove) {
+        if (!element?.add && !element?.remove) {
           groupStr += element.text;
           i++;
         } else {
@@ -100,7 +100,7 @@ export const countConsecutiveStringParts = (
 
   if (attribute === "add") {
     for (let i = startIndex - 1; i >= 0; i--) {
-      if (array[i].add) {
+      if (array[i]?.add) {
         count++;
       } else {
         break;
