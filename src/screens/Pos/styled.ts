@@ -54,10 +54,8 @@ export const FiatAmountDropdownIcon = styled(Icon).attrs(() => ({
 
 export const FiatUnitPicker = styled(Picker)`
   position: absolute;
-  top: 0px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
+  width: 100%;
+  height: 100%;
   z-index: 100;
   ${isIos ? "opacity: 0.5;" : ""}
 `;
