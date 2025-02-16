@@ -51,10 +51,12 @@ export const FiatAmountDropdownIcon = styled(Icon).attrs(() => ({
 
 export const FiatUnitPicker = styled(Picker)`
   position: absolute;
-  height: 100%;
-  width: 100%;
-  opacity: 0;
-  z-index: 100;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  opacity: 0.5;
+  z-index: 10000;
 `;
 
 export const PadContainer = styled(View)`
