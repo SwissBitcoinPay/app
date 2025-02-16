@@ -192,6 +192,8 @@ export const usePostInvoice = () => {
               type: "error"
             });
           }
+        } else {
+          toast.show(JSON.stringify(e), { type: "error" });
         }
       }
     },
