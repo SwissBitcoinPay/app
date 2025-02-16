@@ -15,7 +15,6 @@ import {
   decimalSeparator,
   decimalSeparatorNameMapping,
   formattedUnitChanges,
-  countConsecutiveStringParts,
   measureText,
   sleep,
   getUnitDecimalPower
@@ -172,6 +171,8 @@ export const Pos = () => {
   }, []);
 
   const requestInvoice = useCallback(async () => {
+    toast.show("Request invoice", { type: "success" });
+
     await postInvoice({
       amount: decimalFiat,
       unit,
@@ -179,7 +180,7 @@ export const Pos = () => {
       deviceName,
       deviceType
     });
-  }, [postInvoice, decimalFiat, unit, description, deviceName]);
+  }, [postInvoice, decimalFiat, unit, description, deviceName, toast]);
 
   const saveMaxFiatAmount = useCallback(async () => {
     if (unit && !hasKyc) {
