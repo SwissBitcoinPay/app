@@ -152,18 +152,23 @@ export const History = () => {
       if (localTransactionsHistory.length === 0) {
         setIsLocal(false);
       }
-      const { data: payments } = await axios.get<InvoiceType[]>(
-        `${apiRootUrl}/payments`,
-        {
-          withCredentials: true,
-          headers: {
-            "api-key": accountConfig?.apiKey
+      let allAccountPayments: InvoiceType[] = [];
+
+      try {
+        const { data: accountPayments } = await axios.get<InvoiceType[]>(
+          `${apiRootUrl}/payments`,
+          {
+            withCredentials: true,
+            headers: {
+              "api-key": accountConfig?.apiKey
+            }
           }
-        }
-      );
+        );
+        allAccountPayments = accountPayments;
+      } catch (e) {}
 
       transactionsDetails = [
-        ...payments
+        ...allAccountPayments
           .filter(
             ({ tag, amount }) =>
               tag === "invoice-tpos" || (accountConfig?.isAtm && amount < 0)
@@ -174,8 +179,11 @@ export const History = () => {
 
             return localTx || transaction;
           }),
-        ...localTransactionsHistory
-          .filter((transaction) => transaction.status === "expired")
+        ...transactionsDetails
+          .filter(
+            (transaction) =>
+              !allAccountPayments.find((p) => p.id === transaction.id)
+          )
           .reverse()
       ].reverse();
     }

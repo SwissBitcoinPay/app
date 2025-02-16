@@ -15,7 +15,6 @@ import {
   decimalSeparator,
   decimalSeparatorNameMapping,
   formattedUnitChanges,
-  countConsecutiveStringParts,
   measureText,
   sleep,
   getUnitDecimalPower
@@ -572,6 +571,7 @@ export const Pos = () => {
 
   return accountConfig ? (
     <PageContainer
+      bounces={false}
       header={{
         title: name || "",
         subTitle: {

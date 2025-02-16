@@ -1,0 +1,6 @@
+- Corrigé la disposition du bouton "Partager mon lien d'invitation"
+- Corrigé les QR code s'affichant partiellement
+- Corrigé les factures affichées expirées si elles n'existent plus sur le serveur
+- Supprimé l'éclair en fond sur l'écran d'acceuil
+- Supprimé le flou
+- Supprimé des avertissements de code

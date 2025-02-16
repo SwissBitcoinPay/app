@@ -10,6 +10,9 @@ import {
   Picker
 } from "@components";
 import { animated } from "@react-spring/native";
+import { platform } from "@config";
+
+const { isIos } = platform;
 
 export const PLUS_TEXTS_SCALE = 0.43745;
 export const PLUS_TEXTS_TRANSLATE_Y = 51;
@@ -51,10 +54,10 @@ export const FiatAmountDropdownIcon = styled(Icon).attrs(() => ({
 
 export const FiatUnitPicker = styled(Picker)`
   position: absolute;
-  height: 100%;
   width: 100%;
-  opacity: 0;
+  height: 100%;
   z-index: 100;
+  opacity: ${isIos ? 0.5 : 0};
 `;
 
 export const PadContainer = styled(View)`
