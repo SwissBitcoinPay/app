@@ -57,7 +57,7 @@ export const FiatUnitPicker = styled(Picker)`
   width: 100%;
   height: 100%;
   z-index: 100;
-  ${isIos ? "opacity: 0.5;" : ""}
+  opacity: ${isIos ? 0.5 : 0};
 `;
 
 export const PadContainer = styled(View)`
