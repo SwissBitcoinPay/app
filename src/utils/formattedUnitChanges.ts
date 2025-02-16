@@ -206,7 +206,7 @@ export const countConsecutiveStringParts = (
 
   if (attribute === "add") {
     for (let i = startIndex - 1; i >= 0; i--) {
-      if (array[i].add) {
+      if (array[i]?.add) {
         count++;
       } else {
         break;
@@ -214,7 +214,7 @@ export const countConsecutiveStringParts = (
     }
   } else if (attribute === "remove") {
     for (let i = startIndex + 1; i < array.length; i++) {
-      if (array[i].remove) {
+      if (array[i]?.remove) {
         count++;
       } else {
         break;

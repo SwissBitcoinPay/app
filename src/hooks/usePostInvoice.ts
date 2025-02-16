@@ -36,9 +36,12 @@ export const usePostInvoice = () => {
       deviceType
     }: PostInvoiceParams) => {
       try {
+        toast.show("step 1", { type: "success" });
+
         const isGuestMode =
           (await AsyncStorage.getItem(keyStoreIsGuest)) === "true";
 
+        toast.show("step 2", { type: "success" });
         const isLocalInvoice = isAtm || !isGuestMode;
 
         let decimalFiat = amount;
@@ -46,12 +49,16 @@ export const usePostInvoice = () => {
         let id = "";
         let additionnalHistoryProps = {};
 
+        toast.show("step 3", { type: "success" });
+
         if (!isAtm) {
           navigate("/invoice", {
             state: {
               isLocalInvoice
             }
           });
+          toast.show("step 4", { type: "success" });
+
           const { data: checkoutResponseData } = await axios.post<{
             checkoutUrl: string;
             expiry: number;
@@ -78,6 +85,8 @@ export const usePostInvoice = () => {
             }
           );
 
+          toast.show("step 5", { type: "success" });
+
           additionnalHistoryProps = {
             device: {
               name: deviceName,
@@ -86,6 +95,7 @@ export const usePostInvoice = () => {
             description,
             expiry: checkoutResponseData.expiry
           };
+
           const url = checkoutResponseData.checkoutUrl;
           id = url.split("/").pop() || "";
           finalUrl = `/invoice/${id}`;
@@ -193,7 +203,8 @@ export const usePostInvoice = () => {
             });
           }
         } else {
-          toast.show(JSON.stringify(e), { type: "error" });
+          toast.show(e?.toString() || "unknown error", { type: "error" });
+          toast.show(e, { type: "error" });
         }
       }
     },
