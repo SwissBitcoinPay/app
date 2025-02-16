@@ -10,6 +10,9 @@ import {
   Picker
 } from "@components";
 import { animated } from "@react-spring/native";
+import { platform } from "@config";
+
+const { isIos } = platform;
 
 export const PLUS_TEXTS_SCALE = 0.43745;
 export const PLUS_TEXTS_TRANSLATE_Y = 51;
@@ -55,8 +58,8 @@ export const FiatUnitPicker = styled(Picker)`
   bottom: 0px;
   left: 0px;
   right: 0px;
-  opacity: 1;
   z-index: 100;
+  ${isIos ? "opacity: 0.5;" : ""}
 `;
 
 export const PadContainer = styled(View)`
