@@ -5,8 +5,11 @@ import { Blur, Icon } from "@components";
 import { hexToRgb } from "@utils";
 import { useTheme } from "styled-components";
 import * as S from "./styled";
+import { platform } from "@config";
 
 const HEADER_ICON_SIZE = 30;
+
+const { isWeb } = platform;
 
 type IconType = {
   onPress?: StyledComponentComponentProps<
@@ -37,7 +40,7 @@ export const Header = ({
   subTitle,
   left,
   right,
-  backgroundOpacity = 0.25,
+  backgroundOpacity = isWeb ? 0.25 : 0.5,
   blurRadius = 6,
   ...props
 }: HeaderProps) => {

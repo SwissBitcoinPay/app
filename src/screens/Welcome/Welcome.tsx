@@ -81,7 +81,7 @@ export const Welcome = () => {
   return (
     <>
       <AnimatedLinearGradient customColors={colors} speed={6000} />
-      {!isIos && (
+      {/* {!isIos && (
         <S.BlurContainer>
           <S.LightningAnimation
             loop
@@ -92,7 +92,7 @@ export const Welcome = () => {
           />
           <Blur blurRadius={24} />
         </S.BlurContainer>
-      )}
+      )} */}
 
       <PageContainer noVerticalPadding>
         <Pressable onPress="https://swiss-bitcoin-pay.ch">
@@ -112,7 +112,7 @@ export const Welcome = () => {
             </Text>
             {introTextParts[1]}.
           </S.TagLine>
-          <S.SubTagLine>😎 {t("easily")}.</S.SubTagLine>
+          <S.SubTagLine>👍 {t("easily")}.</S.SubTagLine>
           <S.SubTagLine>🌎 {t("worldwide")}.</S.SubTagLine>
           <S.SubTagLine>🔒 {t("nonCustodial")}.</S.SubTagLine>
           <S.SubTagLine>🛡️ {t("noKyc")}.</S.SubTagLine>
