@@ -1,6 +1,5 @@
 import { platform } from "@config";
 import { forwardRef, useMemo, useState } from "react";
-import { StyleSheet } from "react-native";
 import RNPickerSelect, {
   PickerSelectProps,
   PickerStyle
@@ -43,11 +42,6 @@ export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
       [colors.primary, items]
     );
 
-    const fullStyle = useMemo(
-      () => StyleSheet.flatten([style, { opacity: 0 }]),
-      [style]
-    );
-
     return (
       <RNPickerSelect
         ref={ref}
@@ -56,12 +50,21 @@ export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
         itemKey={tmpValue?.value || value}
         items={itemsWithColor}
         style={{
-          viewContainer: style,
           inputAndroid: fullStyle,
           inputIOS: fullStyle,
+          viewContainer: style,
           inputWeb: fullStyle
         }}
       />
     );
   }
 );
+
+const fullStyle = {
+  opacity: 0,
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0
+};
