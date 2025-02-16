@@ -174,6 +174,7 @@ export const usePostInvoice = () => {
                 unit: currency,
                 amount: decimalFiat
               },
+              tag: "invoice-tpos",
               ...(deviceName
                 ? {
                     device: {
