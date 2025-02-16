@@ -86,10 +86,15 @@ export const History = () => {
                     return response.data;
                   } else {
                     // Legacy
-                    return { ...transaction, status: "expired" };
+                    return transaction;
                   }
                 })
-                .catch(() => ({ ...transaction, status: "expired" }))
+                .catch((response) => {
+                  return {
+                    ...transaction,
+                    ...(response.status === 404 ? { status: "expired" } : {})
+                  };
+                })
             : transaction;
         })
       );
