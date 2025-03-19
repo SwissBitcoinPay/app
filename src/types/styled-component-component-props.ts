@@ -1,12 +1,7 @@
 import { ComponentPropsWithRef } from "react";
-import { Merge } from "ts-essentials";
-import {
-  AnyStyledComponent,
-  StyledComponentInnerComponent,
-  StyledComponentInnerOtherProps
-} from "styled-components";
+import { AnyStyledComponent } from "styled-components";
 
-export type StyledComponentComponentProps<T extends AnyStyledComponent> = Merge<
-  ComponentPropsWithRef<StyledComponentInnerComponent<T>>,
-  StyledComponentInnerOtherProps<T>
->;
+export type StyledComponentComponentProps<T extends AnyStyledComponent> =
+  ComponentPropsWithRef<T> & T extends AnyStyledComponent
+    ? React.ComponentProps<T>
+    : never;

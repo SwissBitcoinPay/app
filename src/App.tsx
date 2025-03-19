@@ -12,7 +12,8 @@ import {
   PayoutConfigScreen,
   EmailLogin,
   SignatureLogin,
-  Invoice
+  Invoice,
+  Aml
 } from "@screens";
 import {
   useAccountConfig,
@@ -83,6 +84,7 @@ const App = () => {
           <Route path="history" element={<History />} />
           <Route path="connect/:id" element={<Connect />} />
           <Route path="invoice/:id?" element={<Invoice />} />
+          <Route path="aml/:id?" element={<Aml />} />
         </Routes>
       </ErrorBoundary>
       <TopLeftLogo />

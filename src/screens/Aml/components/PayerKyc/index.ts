@@ -1,0 +1,1 @@
+export { PayerKyc } from "./PayerKyc";

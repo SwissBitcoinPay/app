@@ -24,6 +24,7 @@ type FieldProps = {
 export type BaseFieldProps<T extends FieldProps = FieldProps> = {
   component: React.ReactElement<FieldProps>;
   label?: string;
+  isLabelAsPlaceholder?: boolean;
   labelLeftPadding?: number;
   style?: StyleProp<ViewStyle>;
   color?: ColorValue;
@@ -32,16 +33,20 @@ export type BaseFieldProps<T extends FieldProps = FieldProps> = {
   disabled?: boolean;
   error?: string;
   value?: boolean | string;
+  valueColor?: ColorValue;
   isDefaultFocused?: boolean;
   onFocus?: T["onFocus"];
   onBlur?: T["onBlur"];
   testID?: string;
   asListAction?: boolean;
+  borderRadiusConfig?: S.BorderRadiusConfig;
 } & Omit<StyledComponentComponentProps<typeof S.BaseFieldContainer>, "error">;
 
 export const BaseField = <T extends FieldProps>({
   label,
+  isLabelAsPlaceholder = false,
   value,
+  valueColor,
   component,
   left,
   right,
@@ -92,15 +97,14 @@ export const BaseField = <T extends FieldProps>({
     <S.BaseFieldContainer {...props} disabled={disabled} error={isError}>
       {label && (
         <Label
+          isLabelAsPlaceholder={isLabelAsPlaceholder}
+          hasValue={!!value}
           label={error || label}
           isTop={isPlaceholderTop}
           color={
             isError ? colors.error : disabled ? colors.primaryLight : undefined
           }
         />
-      )}
-      {typeof value === "string" && (
-        <S.ValueText numberOfLines={2}>{value}</S.ValueText>
       )}
       {left && (
         <S.BadgeContainer>
@@ -116,6 +120,15 @@ export const BaseField = <T extends FieldProps>({
         hasRightBadge: !!right,
         isFocused
       })}
+      {typeof value === "string" && (
+        <S.ValueText
+          color={valueColor}
+          isLabelAsPlaceholder={isLabelAsPlaceholder}
+          numberOfLines={2}
+        >
+          {value}
+        </S.ValueText>
+      )}
       {right && (
         <S.BadgeContainer>
           {tupulize(right).map((b, i) => (

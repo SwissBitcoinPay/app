@@ -14,19 +14,10 @@ import {
   AsyncStorage,
   decimalSeparator,
   decimalSeparatorNameMapping,
-  formattedUnitChanges,
-  measureText,
   sleep,
   getUnitDecimalPower
 } from "@utils";
-import {
-  Keyboard,
-  Text,
-  Loader,
-  TextField,
-  PageContainer,
-  View
-} from "@components";
+import { Keyboard, Loader, TextField, PageContainer } from "@components";
 import { NumberInput } from "./components";
 import { useTranslation } from "react-i18next";
 import {
@@ -60,16 +51,11 @@ import {
   TextInput,
   Touchable,
   TouchableOpacity,
-  Text as RNText,
-  ColorValue,
-  useAnimatedValue,
-  Animated,
   useWindowDimensions
 } from "react-native";
 import * as S from "./styled";
-import { animated, easings, useSpring, useSprings } from "@react-spring/native";
-import { diffStrings } from "@utils/diffStrings";
-import { StringPart, AddActions, AnimationMode } from "@hooks/useAnimateAmount";
+import { animated, easings, useSpring } from "@react-spring/native";
+import { AddActions, AnimationMode } from "@hooks/useAnimateAmount";
 
 const { springAnimationDelay } = platform;
 
@@ -146,10 +132,11 @@ export const Pos = () => {
   );
 
   const { unitDecimals, unitDecimalPower } = useMemo(() => {
-    const unitDecimals =
+    const _unitDecimals =
       currencies.find((c) => c.value === unit)?.decimals ?? DEFAULT_DECIMALS;
-    const unitDecimalPower = getUnitDecimalPower(unit);
-    return { unitDecimals, unitDecimalPower };
+    const _unitDecimalPower = getUnitDecimalPower(unit);
+    console.log({ _unitDecimalPower });
+    return { unitDecimals: _unitDecimals, unitDecimalPower: _unitDecimalPower };
   }, [unit]);
 
   const decimalFiat = useMemo(
@@ -162,7 +149,7 @@ export const Pos = () => {
     [totalAmount]
   );
 
-  const haveDecimals = useMemo(() => unitDecimals !== 0, [unit]);
+  const haveDecimals = useMemo(() => unitDecimals !== 0, [unitDecimals]);
 
   useEffect(() => {
     (async () => {
@@ -243,15 +230,6 @@ export const Pos = () => {
     mode: AnimationMode.Plus
   });
 
-  const numberRef = useRef<View[]>([]);
-
-  const registerNumberRef = useCallback(
-    (index: string) => (ref: View) =>
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      (numberRef.current[index] = ref),
-    []
-  );
-
   const isBelowMaxFiatAmount = useCallback(
     (newFiatAmount: number) => {
       if (maxFiatAmount && newFiatAmount / unitDecimalPower > maxFiatAmount) {
@@ -267,7 +245,7 @@ export const Pos = () => {
       }
       return true;
     },
-    [toast, maxFiatAmount, unit, unitDecimalPower]
+    [maxFiatAmount, unitDecimalPower, toast, t, unit]
   );
 
   const updateTotalAmount = useCallback(
@@ -282,7 +260,7 @@ export const Pos = () => {
       await animateAmount(newFiatAmount, add);
       setFiatAmount(newFiatAmount);
     },
-    [animateAmount, updateTotalAmount]
+    [animateAmount]
   );
 
   const updatePlusAmount = useCallback(
@@ -290,7 +268,7 @@ export const Pos = () => {
       await animatePlusAmount(newPlusFiatAmount);
       setPlusFiatAmount(newPlusFiatAmount);
     },
-    [animatePlusAmount, fiatAmount]
+    [animatePlusAmount]
   );
 
   const onPressNumber = useCallback(
@@ -312,11 +290,12 @@ export const Pos = () => {
       }
     },
     [
-      updateAmount,
-      fiatAmount,
       decimalCount,
+      isBelowMaxFiatAmount,
       plusFiatAmount,
-      isBelowMaxFiatAmount
+      fiatAmount,
+      updateAmount,
+      updateTotalAmount
     ]
   );
 
@@ -383,11 +362,11 @@ export const Pos = () => {
     setDecimalCount(unitDecimals);
   }, [
     fiatAmount,
-    unitDecimalPower,
-    haveDecimals,
+    isBelowMaxFiatAmount,
     plusFiatAmount,
+    unitDecimalPower,
     updateAmount,
-    isBelowMaxFiatAmount
+    unitDecimals
   ]);
 
   const [movingPlusProps, movingPlusApi] = useSpring(() => ({
@@ -440,14 +419,17 @@ export const Pos = () => {
       void updatePlusAmount(newPlusFiatAmount);
     }
   }, [
+    parts,
     movingPlusApi,
     plusFiatAmount,
-    symbolsApi,
-    fiatAmount,
     updateAmount,
-    animatePlusAmount,
-    parts,
-    setPlusParts
+    fiatAmount,
+    colors.white,
+    colors.greyLight,
+    symbolsApi,
+    updateTotalAmount,
+    setPlusParts,
+    updatePlusAmount
   ]);
 
   const handleKeyPress = useCallback<EventListener>(

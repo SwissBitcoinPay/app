@@ -5,6 +5,7 @@ export const decimalSeparator =
   (1.1).toLocaleString(undefined).match(/1(.)1/)?.[1] || ".";
 
 // Lambda syntax doesn't work for prototype functions
+// eslint-disable-next-line no-extend-native
 Number.prototype.toLocaleFixed = function (fractionDigits: number) {
   return this.toLocaleString(undefined, {
     minimumFractionDigits: fractionDigits,
@@ -21,8 +22,8 @@ declare global {
 export const getFormattedUnit = (
   amount: number,
   unit: string,
-  floating = DEFAULT_DECIMALS,
-  trailingDecimal = false
+  floating?: number,
+  trailingDecimal?: boolean = false
 ) => {
   let prefix = "";
   if (amount > 0 && amount < 0.01 && unit !== "BTC") {
@@ -34,6 +35,16 @@ export const getFormattedUnit = (
     return `${prefix}${numberWithSpaces(amount)} sats`;
   } else if (!unit) {
     return `${prefix}${amount}`;
+  }
+
+  if (floating === undefined) {
+    const unitCount = getUnitDecimalPower(unit);
+    if (Number(amount) % unitCount === 0) {
+      floating = 0;
+    } else {
+      floating =
+        currencies.find((c) => c.value === unit)?.decimals ?? DEFAULT_DECIMALS;
+    }
   }
 
   let result = Intl.NumberFormat(undefined, {

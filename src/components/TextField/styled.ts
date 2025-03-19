@@ -7,16 +7,19 @@ export const TextFieldContainer = styled(View)`
   z-index: 1;
 `;
 
-export const TextInput = styled(RootTextInput)<{ hasRightBadge?: boolean }>`
+export const TextInput = styled(RootTextInput)<{
+  hasRightBadge?: boolean;
+  isLabelAsPlaceholder?: boolean;
+}>`
   flex: 1;
   padding: 0px 12px;
-  ${({ theme, hasRightBadge, multiline }) =>
+  ${({ theme, hasRightBadge, multiline, isLabelAsPlaceholder }) =>
     `
       color: ${theme.colors.primary};
       ${hasRightBadge ? "padding-right: 0px;" : ""}
-      padding-top: ${multiline ? 14 : 8}px;
+      padding-top: ${!isLabelAsPlaceholder ? (multiline ? 14 : 8) : multiline ? 6 : 0}px;
       ${multiline ? `padding-bottom: 4px;` : ``}
-      `}
+    `}
   width: 100%;
   align-items: flex-start;
   justify-content: flex-start;
@@ -26,21 +29,24 @@ export const TextInput = styled(RootTextInput)<{ hasRightBadge?: boolean }>`
   z-index: 1;
 `;
 
-export const SuggestionsComponentStack = styled(ComponentStack)`
+export const SuggestionsComponentStack = styled(ComponentStack)<{
+  isHidden: boolean;
+}>`
   ${({ theme }) => `
     background-color: ${theme.colors.white};
     border-radius: ${theme.borderRadius}px;
-    border: 3px solid ${theme.colors.primaryLight};
+    border: 5px solid ${theme.colors.primaryLight};
     border-top-color: ${theme.colors.primaryLight};
     `}
   border-top-width: 2px;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
 
-  width: 100%;
+  ${({ isHidden }) => (isHidden ? "display: none;" : "")}
 
   position: absolute;
   top: 100%;
+  width: 100%;
   right: 0px;
   margin-top: -10px;
   overflow: hidden;

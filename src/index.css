@@ -99,7 +99,7 @@ body {
   display: flex;
 }
 
-input, select, div {
+input, textarea, select, div {
   &:focus,
   &:active {
     outline: none;

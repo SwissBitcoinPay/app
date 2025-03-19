@@ -10,3 +10,4 @@ export { EmailLogin } from "./EmailLogin";
 export { SignatureLogin } from "./SignatureLogin";
 export { History } from "./History";
 export { Signup } from "./Signup";
+export { Aml } from "./Aml";
