@@ -53,7 +53,6 @@ import * as S from "./styled";
 import { faUsb } from "@fortawesome/free-brands-svg-icons";
 import { useToast } from "react-native-toast-notifications";
 import { IS_BITBOX_SUPPORTED } from "@config";
-import { addYears, isBefore } from "date-fns";
 
 export type SignatureData = {
   zPub: string;
@@ -137,8 +136,8 @@ export const BitcoinSettings = ({
             [btcAddressTypes.onchain
               ? "onchain"
               : btcAddressTypes.xpub
-              ? "xpub"
-              : "lightning"]: true
+                ? "xpub"
+                : "lightning"]: true
           },
           { shouldValidate: false }
         );
@@ -414,7 +413,11 @@ export const BitcoinSettings = ({
 
   const walletTypeInfoComponent = useMemo(
     () => (
-      <ComponentStack direction="horizontal" gapSize={10}>
+      <ComponentStack
+        style={{ marginTop: 8 }}
+        direction="horizontal"
+        gapSize={10}
+      >
         {[
           {
             value: btcAddressTypes.onchain,
@@ -435,10 +438,10 @@ export const BitcoinSettings = ({
             addressTypeValue === false
               ? theme.colors.primary
               : addressTypeValue === "error"
-              ? theme.colors.error
-              : isLoading
-              ? theme.colors.warning
-              : theme.colors.success;
+                ? theme.colors.error
+                : isLoading
+                  ? theme.colors.warning
+                  : theme.colors.success;
 
           return (
             <S.PassCheckContainer key={label}>
@@ -451,8 +454,8 @@ export const BitcoinSettings = ({
                     addressTypeValue === false
                       ? faCircle
                       : addressTypeValue === "error"
-                      ? faTimesCircle
-                      : faCheckCircle
+                        ? faTimesCircle
+                        : faCheckCircle
                   }
                   size={20}
                 />
@@ -487,29 +490,19 @@ export const BitcoinSettings = ({
   >(
     ({ field: { onChange, value }, fieldState: { error } }) => {
       return (
-        <ComponentStack>
-          <FieldContainer
-            icon={faWallet}
-            title={t("yourWallet")}
-            buttonProps={{
-              title: t("createWallet"),
-              icon: faAdd,
-              onPress: () => {
-                setIsCreateWalletModalOpen(true);
-              }
-            }}
-          >
+        <ComponentStack gapSize={8}>
+          <FieldContainer icon={faWallet} title={t("yourWallet")}>
             <TextField
               label={t("bitcoinPayoutWallet")}
               value={
                 walletType === "local"
                   ? t("localWallet")
                   : walletType === "bitbox02"
-                  ? "BitBox02"
-                  : value
+                    ? "BitBox02"
+                    : value
               }
               onChangeText={(newValue) => {
-                if (newValue !== undefined) {
+                if (newValue !== undefined && newValue !== null) {
                   onChange(
                     newValue.replace("bitcoin:", "").replace("lightning:", "")
                   );
@@ -549,6 +542,14 @@ export const BitcoinSettings = ({
               </ComponentStack>
             )}
           </FieldContainer>
+          <Button
+            title={t("createWallet")}
+            type="bitcoin"
+            icon={faAdd}
+            onPress={() => {
+              setIsCreateWalletModalOpen(true);
+            }}
+          />
           {IS_BITBOX_SUPPORTED && (
             <Button
               title={tRoot("connectWalletModal.title")}
@@ -774,7 +775,11 @@ export const BitcoinSettings = ({
                 />
               </FieldContainer>
             )}
-            <FieldContainer icon={faKey} title={t("messageToSignDetails")}>
+            <FieldContainer
+              icon={faKey}
+              title={t("messageToSignDetails")}
+              multiline
+            >
               <TextField
                 label={t("messageToSign")}
                 value={messageToSign}

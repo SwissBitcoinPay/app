@@ -42,6 +42,7 @@ export const FiatSettings = ({
   isGBPFasterPayments
 }: FiatSettingsProps) => {
   const { colors } = useTheme();
+  const { t: tRoot } = useTranslation();
   const { t } = useTranslation(undefined, {
     keyPrefix: "screens.payoutConfig"
   });
@@ -187,7 +188,7 @@ export const FiatSettings = ({
           isOptionnal
         >
           <TextField
-            label={t("optional")}
+            label={tRoot("common.optional")}
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
@@ -198,7 +199,7 @@ export const FiatSettings = ({
         </FieldContainer>
       );
     },
-    [t]
+    [t, tRoot]
   );
 
   const OwnerZipField = useCallback<
@@ -254,7 +255,7 @@ export const FiatSettings = ({
           isOptionnal
         >
           <TextField
-            label={t("optional")}
+            label={tRoot("common.optional")}
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
@@ -265,11 +266,11 @@ export const FiatSettings = ({
         </FieldContainer>
       );
     },
-    [t]
+    [t, tRoot]
   );
 
   return (
-    <ComponentStack>
+    <ComponentStack gapSize={32}>
       <ComponentStack gapSize={14}>
         <FieldDescription>💶 {t("feesDetails1")}</FieldDescription>
         <ComponentStack gapSize={2}>

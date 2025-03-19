@@ -6,3 +6,6 @@ export type { AccountConfigType } from "./AccountConfigType";
 
 export type { Bip84Account, Bip84PrivateAccount } from "./bitcoin";
 export type * from "./mempool";
+
+export * from "./FieldsType";
+export * from "./aml";

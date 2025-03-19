@@ -8,12 +8,13 @@ import {
 } from "react";
 import {
   NativeSyntheticEvent,
+  StyleSheet,
   TextInput,
   TextInputContentSizeChangeEventData,
   TextInputKeyPressEventData,
   TextInputSubmitEditingEventData
 } from "react-native";
-import { BaseField, QrScanWindow, QrModal, Text } from "@components";
+import { BaseField, QrScanWindow, QrModal, Text, View } from "@components";
 import { BaseFieldProps } from "@components/BaseField";
 import { StyledComponentComponentProps } from "@types";
 import { Clipboard, tupulize } from "@utils";
@@ -28,6 +29,9 @@ import {
 import { SBPContext } from "@config";
 import { useTheme } from "styled-components";
 import * as S from "./styled";
+import { platform } from "@config";
+
+const { isWeb } = platform;
 
 type TextInputProps = Omit<
   StyledComponentComponentProps<typeof S.TextInput>,
@@ -43,7 +47,10 @@ type TextFieldProps = TextInputProps & {
   deletable?: boolean | (() => void);
   suggestions?: string[];
   charMask?: RegExp;
-} & Pick<BaseFieldProps, "label" | "left" | "right" | "error" | "disabled">;
+} & Pick<
+    BaseFieldProps,
+    "label" | "left" | "right" | "error" | "disabled" | "isLabelAsPlaceholder"
+  >;
 
 export const TextField = forwardRef<TextInput, TextFieldProps>(
   (
@@ -51,6 +58,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
       style,
       label: labelProps,
       value,
+      onChange,
       onChangeText,
       left,
       right: rightProps,
@@ -68,14 +76,13 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
       multiline,
       onSubmitEditing: onSubmitEditingProps,
       charMask,
+      isLabelAsPlaceholder,
       ...props
     },
     ref
   ) => {
     const { colors } = useTheme();
     const { isCameraAvailable } = useContext(SBPContext);
-
-    const [isFocused, setIsFocused] = useState(props.autoFocus);
 
     const [isCopied, setIsCopied] = useState(false);
     const [isPasted, setIsPasted] = useState(false);
@@ -94,7 +101,6 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
 
     const onFocusHandler = useCallback<NonNullable<BaseFieldProps["onFocus"]>>(
       (e) => {
-        setIsFocused(true);
         onFocus?.(e);
       },
       [onFocus]
@@ -102,7 +108,6 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
 
     const onBlurHandler = useCallback<NonNullable<BaseFieldProps["onBlur"]>>(
       (e) => {
-        setIsFocused(false);
         onBlur?.(e);
       },
       [onBlur]
@@ -112,8 +117,9 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
       (v: string) => {
         if (charMask && v.length > 0 && !v.match(charMask)) return;
         onChangeText?.(v);
+        onChange?.({ nativeEvent: { value: v } });
       },
-      [charMask, onChangeText]
+      [charMask, onChange, onChangeText]
     );
 
     const onCopy = useCallback(() => {
@@ -302,6 +308,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
           onFocus={onFocusHandler}
           onBlur={onBlurHandler}
           isDefaultFocused={props.autoFocus}
+          isLabelAsPlaceholder={isLabelAsPlaceholder}
           component={
             <S.TextInput
               ref={ref}
@@ -309,19 +316,33 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
               editable={!disabled}
               onChangeText={_onChangeText}
               multiline={multiline}
-              style={{ height: contentHeight }}
+              style={StyleSheet.flatten([
+                { height: contentHeight },
+                isWeb && disabled && { cursor: "unset" }
+              ])}
               onContentSizeChange={onContentSizeChange}
               onKeyPress={onKeyPress}
               onSubmitEditing={onSubmitEditing}
+              isLabelAsPlaceholder={isLabelAsPlaceholder}
               {...props}
             />
           }
         />
-        {suggestions && suggestions.length > 0 && isFocused && (
-          <S.SuggestionsComponentStack gapSize={1} gapColor={colors.grey}>
-            {suggestions.map((suggestionValue, index) => (
+        {suggestions && (
+          <S.SuggestionsComponentStack
+            gapSize={2}
+            gapColor={colors.grey}
+            isHidden={
+              suggestions.length === 0 ||
+              (suggestions.length === 1 && suggestions[0] === value)
+            }
+          >
+            {suggestions?.map((suggestionValue, index) => (
               <S.SuggestionItem
                 key={index}
+                onMouseEnter={() => {
+                  setSuggestedIndex(index);
+                }}
                 isHighlighted={index === suggestedIndex}
                 onPress={() => {
                   _onChangeText(suggestionValue);

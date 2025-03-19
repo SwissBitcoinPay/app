@@ -46,7 +46,7 @@ import { PayoutConfigForm } from "@components/PayoutConfig/PayoutConfig";
 import { useToast } from "react-native-toast-notifications";
 import { useTheme } from "styled-components";
 import { AccountConfigType, UserType } from "@types";
-import { useAccountConfig } from "@hooks";
+import { useAccountConfig, useIsScreenSizeMin } from "@hooks";
 import * as S from "./styled";
 
 const { deviceLocale, isDesktop } = platform;
@@ -71,6 +71,7 @@ export const Signup = () => {
     keyPrefix: "screens.signup"
   });
   const toast = useToast();
+  const isLarge = useIsScreenSizeMin("large");
   const { onAuthLogin } = useAccountConfig({ refresh: false });
   const { setUserType } = useContext(SBPContext);
   const { colors } = useTheme();
@@ -374,9 +375,9 @@ export const Signup = () => {
     ({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
       return (
         <TextField
-          label={t("optional")}
+          label={tRoot("common.optional")}
           value={value}
-          onChangeText={onChange}
+          onChangeText={(v) => onChange(v.toUpperCase())}
           onBlur={onBlur}
           autoCapitalize="characters"
           error={error?.message}
@@ -389,7 +390,7 @@ export const Signup = () => {
         />
       );
     },
-    [isRefCodePrefilled, t]
+    [isRefCodePrefilled, tRoot]
   );
 
   const passwordChecksComponent = useMemo(
@@ -411,8 +412,8 @@ export const Signup = () => {
         const color = value
           ? colors.success
           : formState.errors.password
-          ? colors.error
-          : colors.grey;
+            ? colors.error
+            : colors.grey;
 
         return (
           <ComponentStack key={passIndex} direction="horizontal" gapSize={6}>
@@ -452,7 +453,7 @@ export const Signup = () => {
         onPress: handleSubmit(onSubmit)
       }}
     >
-      <ComponentStack gapSize={20}>
+      <ComponentStack gapSize={32}>
         <FieldContainer icon={faShop} title={t("yourAccountName")}>
           <Controller
             name="name"
@@ -464,32 +465,46 @@ export const Signup = () => {
             render={NameField}
           />
         </FieldContainer>
-        <FieldContainer icon={faAt} title={t("yourEmail")}>
-          <Controller
-            name="email"
-            control={control}
-            rules={{
-              required: true,
-              validate: validateEmail
+        <>
+          <FieldContainer icon={faAt} title={t("yourEmail")}>
+            <Controller
+              name="email"
+              control={control}
+              rules={{
+                required: true,
+                validate: validateEmail
+              }}
+              render={EmailField}
+            />
+          </FieldContainer>
+          <FieldDescription style={{ marginTop: 8 }}>
+            🔒 {t("emailDescription")}
+          </FieldDescription>
+        </>
+        <>
+          <FieldContainer icon={faLock} title={t("yourPassword")}>
+            <Controller
+              name="password"
+              control={control}
+              rules={{
+                required: true,
+                validate: validatePassword
+              }}
+              render={PasswordField}
+            />
+          </FieldContainer>
+          <ComponentStack
+            direction="horizontal"
+            gapSize={12}
+            style={{
+              marginTop: 8,
+              marginRight: 6,
+              alignSelf: isLarge ? "flex-end" : "flex-start"
             }}
-            render={EmailField}
-          />
-          <FieldDescription>🔒 {t("emailDescription")}</FieldDescription>
-        </FieldContainer>
-        <FieldContainer icon={faLock} title={t("yourPassword")}>
-          <Controller
-            name="password"
-            control={control}
-            rules={{
-              required: true,
-              validate: validatePassword
-            }}
-            render={PasswordField}
-          />
-          <ComponentStack direction="horizontal" gapSize={12}>
+          >
             {passwordChecksComponent}
           </ComponentStack>
-        </FieldContainer>
+        </>
         <FieldContainer icon={faDollar} title={t("yourCurrency")}>
           <Controller
             name="currency"

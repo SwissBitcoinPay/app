@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Image, View } from "@components";
+import { Icon, Image, View } from "@components";
 
 export const QRContainer = styled(View)`
   background: ${({ theme }) => theme.colors.white};
@@ -17,4 +17,13 @@ export const QRImage = styled(Image)`
   position: absolute;
   width: 70px;
   height: 70px;
+`;
+
+export const QRIconContinaer = styled(View)`
+  position: absolute;
+  background-color: ${({ theme }) => theme.colors.white};
+  padding: 8px;
+  border-radius: 100px;
+  align-items: center;
+  justify-content: center;
 `;

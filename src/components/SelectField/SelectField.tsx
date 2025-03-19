@@ -14,7 +14,13 @@ type SelectFieldProps = PickerProps & {
   onChange?: (event: { nativeEvent: { text: Item["label"] } }) => void;
 } & Pick<
     BaseFieldProps,
-    "value" | "label" | "left" | "right" | "error" | "disabled"
+    | "value"
+    | "label"
+    | "left"
+    | "right"
+    | "error"
+    | "disabled"
+    | "isLabelAsPlaceholder"
   >;
 
 export const SelectField = forwardRef<RNPickerSelect, SelectFieldProps>(
@@ -28,6 +34,7 @@ export const SelectField = forwardRef<RNPickerSelect, SelectFieldProps>(
       error,
       onChange,
       onValueChange: propsOnValueChange,
+      isLabelAsPlaceholder,
       ...props
     },
     ref
@@ -59,10 +66,13 @@ export const SelectField = forwardRef<RNPickerSelect, SelectFieldProps>(
         left={left}
         right={right}
         error={error}
+        isFlexHeight
+        isLabelAsPlaceholder={isLabelAsPlaceholder}
         component={
           <S.Picker
             ref={ref}
             value={valueProps}
+            isLabelAsPlaceholder={isLabelAsPlaceholder}
             {...props}
             onValueChange={onValueChange}
           />

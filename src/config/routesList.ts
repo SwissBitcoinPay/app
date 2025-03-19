@@ -9,5 +9,6 @@ export const routesList = [
   "payout-config",
   "history",
   "connect",
-  "invoice"
+  "invoice",
+  "kyc"
 ] as const;

@@ -49,3 +49,5 @@ export { StatusBar } from "./StatusBar";
 export { CountdownCircleTimer } from "./CountdownCircleTimer";
 export { BitcoinIcon } from "./BitcoinIcon";
 export { PayoutConfig } from "./PayoutConfig";
+export { DateField } from "./DateField";
+export { FileField } from "./FileField";
