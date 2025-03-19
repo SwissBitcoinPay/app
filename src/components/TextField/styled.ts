@@ -1,6 +1,7 @@
 import { TextInput as RootTextInput } from "react-native";
 import styled from "styled-components";
 import { ComponentStack, Pressable, View } from "@components";
+import { FIELD_BORDER_WIDTH } from "@components/BaseField/styled";
 
 export const TextFieldContainer = styled(View)`
   position: relative;
@@ -35,7 +36,7 @@ export const SuggestionsComponentStack = styled(ComponentStack)<{
   ${({ theme }) => `
     background-color: ${theme.colors.white};
     border-radius: ${theme.borderRadius}px;
-    border: 5px solid ${theme.colors.primaryLight};
+    border: ${FIELD_BORDER_WIDTH}px solid ${theme.colors.primaryLight};
     border-top-color: ${theme.colors.primaryLight};
     `}
   border-top-width: 2px;
