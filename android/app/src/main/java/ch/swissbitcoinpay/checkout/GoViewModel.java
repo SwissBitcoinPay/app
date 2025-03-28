@@ -106,6 +106,9 @@ public class GoViewModel extends AndroidViewModel {
         public void notifyUser(String message) {
         }
 
+        public void bluetoothConnect(String identifier) {
+        }
+
         private GoDeviceInfoInterface device;
 
         public void setDevice(GoDeviceInfo device) {
