@@ -1,0 +1,2 @@
+- Ajouté le support des appareils Ledger
+- Corrections et améliorations mineures

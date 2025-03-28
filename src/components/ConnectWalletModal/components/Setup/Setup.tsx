@@ -19,10 +19,12 @@ import {
   setPassword
 } from "@utils/Bitbox/api/bitbox02";
 import { useToast } from "react-native-toast-notifications";
-import { SBPBitboxContext } from "@config";
 import { Platform } from "react-native";
-
-export type BackupMode = "sdcard" | "12-words" | "24-words";
+import {
+  BackupMode,
+  SBPHardwareWalletContext
+} from "@config/SBPHardwareWallet";
+import { SBPBitboxContextType } from "@config/SBPHardwareWallet/hardware/bitbox02";
 
 export const Setup = ({ deviceId, onClose }: ConnectWalletComponentProps) => {
   const { t: tRoot } = useTranslation();
@@ -31,14 +33,14 @@ export const Setup = ({ deviceId, onClose }: ConnectWalletComponentProps) => {
   });
 
   const toast = useToast();
-  const [backupMode, setBackupMode] = useState<BackupMode>();
+  const [tmpBackupMode, setTmpBackupMode] = useState<BackupMode>();
   const [hasSdCard, setHasSdCard] = useState(false);
   const [withAdvancedOptions, setWithAdvancedOptions] = useState(false);
   const defaultBitboxName = useMemo(() => t("myBitbox"), [t]);
   const [bitboxName, setBitboxName] = useState(defaultBitboxName);
 
-  const { setAttentionToBitbox, setAfterSetupMode } =
-    useContext(SBPBitboxContext);
+  const { setAttentionToHardware, setBackupMode } =
+    useContext<SBPBitboxContextType>(SBPHardwareWalletContext);
 
   useEffect(() => {
     if (Platform.OS === "web") {
@@ -59,16 +61,16 @@ export const Setup = ({ deviceId, onClose }: ConnectWalletComponentProps) => {
     try {
       const initalHasSdCard = await checkSDCard(deviceId);
       setHasSdCard(initalHasSdCard);
-      setBackupMode("sdcard");
+      setTmpBackupMode("sdcard");
       if (initalHasSdCard) {
         return;
       }
 
-      setAttentionToBitbox(true);
+      setAttentionToHardware?.(true);
       const result = await insertSDCard(deviceId);
 
       if (result.success) {
-        setAttentionToBitbox(false);
+        setAttentionToHardware?.(false);
         setHasSdCard(true);
       } else {
         toast.show(result.message || t("sdcardDetectionError"), {
@@ -78,17 +80,17 @@ export const Setup = ({ deviceId, onClose }: ConnectWalletComponentProps) => {
     } catch (e) {
       toast.show(t("sdcardDetectionError"), { type: "error" });
     }
-  }, [deviceId, setAttentionToBitbox, t, toast]);
+  }, [deviceId, setAttentionToHardware, t, toast]);
 
   const makeBackup = useCallback(async () => {
-    if (backupMode) {
+    if (tmpBackupMode) {
       setStatus("create-backup");
       try {
-        setAfterSetupMode(backupMode);
-        setAttentionToBitbox(true);
+        setBackupMode(tmpBackupMode);
+        setAttentionToHardware?.(true);
         const result = await createBackup(
           deviceId,
-          backupMode.includes("words") ? "recovery-words" : "sdcard"
+          tmpBackupMode.includes("words") ? "recovery-words" : "sdcard"
         );
 
         if (!result.success) {
@@ -98,20 +100,20 @@ export const Setup = ({ deviceId, onClose }: ConnectWalletComponentProps) => {
               : result.message || t("createBackupFailed")
           );
         } else {
-          setAttentionToBitbox(false);
+          setAttentionToHardware?.(false);
         }
       } catch (error) {
         console.error(error);
       }
     }
-  }, [backupMode, deviceId, setAfterSetupMode, setAttentionToBitbox, t]);
+  }, [tmpBackupMode, deviceId, setBackupMode, setAttentionToHardware, t]);
 
   const ensurePassword = useCallback(async () => {
     setStatus("set-password");
-    setAttentionToBitbox(true);
+    setAttentionToHardware?.(true);
     const result = await setPassword(
       deviceId,
-      backupMode === "12-words" ? 16 : 32
+      tmpBackupMode === "12-words" ? 16 : 32
     );
     if (!result.success) {
       throw new Error(
@@ -120,9 +122,9 @@ export const Setup = ({ deviceId, onClose }: ConnectWalletComponentProps) => {
           : result.message || t("setPasswordFailed")
       );
     } else {
-      setAttentionToBitbox(false);
+      setAttentionToHardware?.(false);
     }
-  }, [backupMode, deviceId, setAttentionToBitbox, t]);
+  }, [tmpBackupMode, deviceId, setAttentionToHardware, t]);
 
   const ensureDeviceName = useCallback(async () => {
     const deviceInfo = await getDeviceInfo(deviceId);
@@ -134,9 +136,9 @@ export const Setup = ({ deviceId, onClose }: ConnectWalletComponentProps) => {
       setStatus("set-device-name");
 
       while (!setNameSuccess) {
-        setAttentionToBitbox(true);
+        setAttentionToHardware?.(true);
         const setName = await setDeviceName(deviceId, bitboxName);
-        setAttentionToBitbox(false);
+        setAttentionToHardware?.(false);
         if (setName.success) {
           setNameSuccess = true;
         } else {
@@ -144,35 +146,35 @@ export const Setup = ({ deviceId, onClose }: ConnectWalletComponentProps) => {
         }
       }
     }
-  }, [bitboxName, deviceId, setAttentionToBitbox, tRoot]);
+  }, [bitboxName, deviceId, setAttentionToHardware, tRoot]);
 
   useEffect(() => {
     (async () => {
       try {
         if (
-          (backupMode === "sdcard" && hasSdCard) ||
-          (backupMode && backupMode !== "sdcard")
+          (tmpBackupMode === "sdcard" && hasSdCard) ||
+          (tmpBackupMode && tmpBackupMode !== "sdcard")
         ) {
           await ensureDeviceName();
           await ensurePassword();
           await makeBackup();
         }
       } catch (e: Error) {
-        setAttentionToBitbox(false);
+        setAttentionToHardware?.(false);
         setStatus("choose-backup-mode");
-        setBackupMode(undefined);
+        setTmpBackupMode(undefined);
         toast.show((e as Error).message || t("createBackupFailed"), {
           type: "error"
         });
       }
     })();
-  }, [backupMode, hasSdCard]);
+  }, [tmpBackupMode, hasSdCard]);
 
   return (
     <ConnectStyled.ComponentStack gapSize={10}>
       <ConnectStyled.Title>{t("title")}</ConnectStyled.Title>
       {status === "choose-backup-mode" ? (
-        !backupMode ? (
+        !tmpBackupMode ? (
           <ComponentStack>
             <FieldDescription style={{ textAlign: "center" }}>
               {t("instruction1")}
@@ -201,19 +203,19 @@ export const Setup = ({ deviceId, onClose }: ConnectWalletComponentProps) => {
                 <Button
                   title={t("24words")}
                   onPress={() => {
-                    setBackupMode("24-words");
+                    setTmpBackupMode("24-words");
                   }}
                 />
                 <Button
                   title={t("12words")}
                   onPress={() => {
-                    setBackupMode("12-words");
+                    setTmpBackupMode("12-words");
                   }}
                 />
               </ComponentStack>
             )}
           </ComponentStack>
-        ) : backupMode === "sdcard" ? (
+        ) : tmpBackupMode === "sdcard" ? (
           hasSdCard ? null : (
             <FieldDescription>{t("insertSdCard")}</FieldDescription>
           )

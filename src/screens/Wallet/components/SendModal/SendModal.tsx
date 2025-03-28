@@ -11,13 +11,17 @@ import {
 } from "@components";
 import {
   getFormattedUnit,
+  hardwareNames,
   prepareTransaction,
   sleep,
   useErrorBoundary,
   validateBitcoinAddress
 } from "@utils";
 import { AsyncStorage } from "@utils";
-import { keyStoreWalletType } from "@config/settingsKeys";
+import {
+  keyStoreLedgerBluetoothId,
+  keyStoreWalletType
+} from "@config/settingsKeys";
 import { CreateTransactionReturn } from "@utils/wallet/types";
 import axios from "axios";
 import { useTheme } from "styled-components";
@@ -27,11 +31,11 @@ import { useAccountConfig, useIsScreenSizeMin, useRates } from "@hooks";
 import { AddressDetail, WalletTransaction } from "@screens/Wallet/Wallet";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useToast } from "react-native-toast-notifications";
-import { BitboxReadyFunctionParams } from "@components/ConnectWalletModal/ConnectWalletModal";
+import { HardwareReadyFunctionParams } from "@components/ConnectWalletModal/ConnectWalletModal";
 import { PrepareTransactionParams } from "@utils/wallet/prepare-transaction";
 import { Platform } from "react-native";
-import { faUsb } from "@fortawesome/free-brands-svg-icons";
-import { IS_BITBOX_SUPPORTED } from "@config";
+import { faBluetooth, faUsb } from "@fortawesome/free-brands-svg-icons";
+import { WalletType } from "@components/PayoutConfig/PayoutConfig";
 
 type SendForm = {
   address: string;
@@ -86,7 +90,10 @@ export const SendModal = ({
   const [isLoading, setIsLoading] = useState(false);
   const setError = useErrorBoundary();
 
-  const [walletType, setWalletType] = useState<string>();
+  const [wallet, setWallet] = useState<{
+    type: WalletType;
+    transport?: string;
+  }>();
   const [feesOptions, setFeesOptions] = useState<FeeOptionType[]>([]);
 
   const { control, formState, setValue, reset, handleSubmit, watch, trigger } =
@@ -103,7 +110,7 @@ export const SendModal = ({
 
   const [customWalletFunction, setCustomWalletFunction] =
     useState<
-      (walletReadyProps: BitboxReadyFunctionParams) => Promise<string>
+      (walletReadyProps: HardwareReadyFunctionParams) => Promise<string>
     >();
 
   const onCloseBitboxModal = useCallback(() => {
@@ -113,15 +120,19 @@ export const SendModal = ({
 
   useEffect(() => {
     (async () => {
-      setWalletType(
-        (await AsyncStorage.getItem(keyStoreWalletType)) || "local"
-      );
+      setWallet({
+        type: (await AsyncStorage.getItem(keyStoreWalletType)) || "local",
+        transport: (await AsyncStorage.getItem(keyStoreLedgerBluetoothId))
+          ? "bluetooth"
+          : undefined
+      });
     })();
   }, []);
 
   const awaitWalletTransaction = useCallback(
     async (params: PrepareTransactionParams) => {
       return new Promise<CreateTransactionReturn>((resolver, reject) => {
+        const walletType = wallet?.type;
         if (walletType === "local") {
           prepareTransaction({
             walletType,
@@ -129,9 +140,9 @@ export const SendModal = ({
           })
             .then(resolver)
             .catch(reject);
-        } else if (walletType === "bitbox02") {
+        } else if (walletType === "bitbox02" || walletType === "ledger") {
           setCustomWalletFunction(
-            () => async (walletReadyProps: BitboxReadyFunctionParams) => {
+            () => async (walletReadyProps: HardwareReadyFunctionParams) => {
               try {
                 const result = await prepareTransaction({
                   walletType,
@@ -147,12 +158,13 @@ export const SendModal = ({
         }
       });
     },
-    [walletType]
+    [wallet?.type]
   );
 
   const onSend = useCallback<SubmitHandler<SendForm>>(
     async (data) => {
       setIsLoading(true);
+      await sleep(500);
       try {
         const utxos = txs.filter((tx) => tx.value > 0 && !tx.isSpent);
 
@@ -271,12 +283,18 @@ export const SendModal = ({
 
   return (
     <>
+      <ConnectWalletModal
+        isOpen={!!customWalletFunction}
+        customFunction={customWalletFunction}
+        onClose={onCloseBitboxModal}
+        walletType={wallet?.type}
+      />
       <Modal
         {...props}
         onClose={() => {
           onClose(false);
         }}
-        isOpen={isOpen}
+        isOpen={isOpen && !isLoading}
         title={t("send")}
         noScrollView={Platform.OS === "web"}
         submitButton={{
@@ -284,10 +302,12 @@ export const SendModal = ({
           disabled: !isValid || currentBalance === 0,
           isLoading,
           onPress: handleSubmit(onSend),
-          ...(walletType === "bitbox02"
+          ...(wallet && wallet.type !== "local"
             ? {
-                title: t("signWithBitbox"),
-                icon: faUsb
+                title: t("signWithHardware", {
+                  hardwareWallet: hardwareNames[wallet.type]
+                }),
+                icon: wallet.transport === "bluetooth" ? faBluetooth : faUsb
               }
             : {})
         }}
@@ -504,18 +524,11 @@ export const SendModal = ({
               />
             </ComponentStack>
           </ComponentStack>
-          <Text h4 weight={600} color={colors.white}>
+          <Text h4 weight={600} color={colors.grey}>
             🔒 {t("sendLastInfo")}
           </Text>
         </ComponentStack>
       </Modal>
-      {IS_BITBOX_SUPPORTED && (
-        <ConnectWalletModal
-          isOpen={!!customWalletFunction}
-          customFunction={customWalletFunction}
-          onClose={onCloseBitboxModal}
-        />
-      )}
     </>
   );
 };

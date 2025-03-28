@@ -27,7 +27,7 @@ import * as S from "./styled";
 
 const { isIos } = platform;
 
-export type WalletType = "local" | "bitbox02";
+export type WalletType = "local" | "bitbox02" | "ledger";
 
 type BitcoinSettingsForm = {
   depositAddress?: string;

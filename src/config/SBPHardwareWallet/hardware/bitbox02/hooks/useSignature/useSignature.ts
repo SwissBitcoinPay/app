@@ -9,8 +9,14 @@ import {
   getReceiveAddressList
 } from "@utils/Bitbox/api/account";
 import { useTranslation } from "react-i18next";
+import { PairedBitBox } from "bitbox-api";
 
-export const useSignature = (error: (msg: string) => void) => {
+export type UseSignatureParams = {
+  wallet: PairedBitBox;
+  error: (msg: string) => void;
+};
+
+export const useSignature = ({ error }: UseSignatureParams) => {
   const { t } = useTranslation(undefined, {
     keyPrefix: "connectWalletModal.signature"
   });
@@ -28,8 +34,8 @@ export const useSignature = (error: (msg: string) => void) => {
 
           const allAccountsWithZpub = accountsInfo
             .map((a, i) => {
-              const signingConfiguration = a.signingConfigurations.find(
-                (e) => e.bitcoinSimple?.keyInfo.keypath.startsWith("m/84'/0'")
+              const signingConfiguration = a.signingConfigurations.find((e) =>
+                e.bitcoinSimple?.keyInfo.keypath.startsWith("m/84'/0'")
               );
               return {
                 label: accounts[i].name,

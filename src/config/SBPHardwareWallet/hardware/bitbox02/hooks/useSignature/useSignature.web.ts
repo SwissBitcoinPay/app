@@ -1,12 +1,12 @@
-import { SBPBitboxContext } from "@config";
 import jseu from "js-encoding-utils";
-import { useCallback, useContext } from "react";
+import { useCallback } from "react";
 import { ScriptType } from "@utils/Bitbox/api/account";
 import { useTranslation } from "react-i18next";
 // @ts-ignore
 import BIP84 from "bip84";
 import axios from "axios";
 import { Bip84Account, MempoolTX } from "@types";
+import { UseSignatureParams } from "./useSignature";
 
 const uint8ArrayToBase64 = (uint8Array: Uint8Array) => {
   return Buffer.from(uint8Array).toString("base64");
@@ -14,8 +14,7 @@ const uint8ArrayToBase64 = (uint8Array: Uint8Array) => {
 
 const ROOT_PATH = `m/84'/0'`;
 
-export const useSignature = (error: (msg: string) => void) => {
-  const { pairedBitbox } = useContext(SBPBitboxContext);
+export const useSignature = ({ wallet, error }: UseSignatureParams) => {
   const { t } = useTranslation(undefined, {
     keyPrefix: "connectWalletModal.signature"
   });
@@ -27,12 +26,7 @@ export const useSignature = (error: (msg: string) => void) => {
     while (true) {
       const path = `${ROOT_PATH}/${index}'`;
 
-      const accountXpub = await pairedBitbox.btcXpub(
-        "btc",
-        path,
-        "zpub",
-        false
-      );
+      const accountXpub = await wallet.btcXpub("btc", path, "zpub", false);
 
       accounts.push({
         label: `Bitcoin ${index + 1}`,
@@ -56,13 +50,13 @@ export const useSignature = (error: (msg: string) => void) => {
 
       index += 1;
     }
-  }, [pairedBitbox]);
+  }, [wallet]);
 
   const getAccountFirstAddress = useCallback(
     async (format: ScriptType, account: string) => {
       try {
         if (pairedBitbox) {
-          const firstAddress = await pairedBitbox.btcAddress(
+          const firstAddress = await wallet.btcAddress(
             "btc",
             `${account}/0/0`,
             { simpleType: format },
@@ -73,13 +67,13 @@ export const useSignature = (error: (msg: string) => void) => {
       } catch (e) {}
       error(t("cannotGetAccount"));
     },
-    [error, pairedBitbox, t]
+    [error, wallet, t]
   );
 
   const signMessage = useCallback(
     async (format: ScriptType, message: string, account: string) => {
       try {
-        const signatureData = await pairedBitbox.btcSignMessage(
+        const signatureData = await wallet.btcSignMessage(
           "btc",
           {
             scriptConfig: { simpleType: format },
@@ -96,7 +90,7 @@ export const useSignature = (error: (msg: string) => void) => {
         return { success: false };
       }
     },
-    [pairedBitbox]
+    [wallet]
   );
 
   return {

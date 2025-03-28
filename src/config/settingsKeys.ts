@@ -23,3 +23,6 @@ export const keyStoreZpub = "settings.wallet.zPub";
 export const keyStoreMnemonicWords = "settings.wallet.mnemonicWords";
 export const keyStoreWalletType = "settings.wallet.type";
 export const keyStoreWalletPath = "settings.wallet.path";
+
+// Hardware wallet data
+export const keyStoreLedgerBluetoothId = "settings.hw.ledgerBluetoothId";

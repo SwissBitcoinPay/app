@@ -135,7 +135,6 @@ export const Pos = () => {
     const _unitDecimals =
       currencies.find((c) => c.value === unit)?.decimals ?? DEFAULT_DECIMALS;
     const _unitDecimalPower = getUnitDecimalPower(unit);
-    console.log({ _unitDecimalPower });
     return { unitDecimals: _unitDecimals, unitDecimalPower: _unitDecimalPower };
   }, [unit]);
 
