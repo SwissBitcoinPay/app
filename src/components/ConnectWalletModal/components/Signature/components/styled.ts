@@ -10,20 +10,41 @@ export const AccountBalance = styled(Text).attrs(({ theme }) => ({
   color: theme.colors.greyLight,
   weight: 500,
   h5: true
-}))``;
+}))`
+  width: 95%;
+`;
+
+const NEW_CONTAINER_HEIGHT = 20;
 
 export const AccountNewIcon = styled(Icon).attrs(({ theme }) => ({
   color: theme.colors.white,
-  size: 14
+  size: NEW_CONTAINER_HEIGHT
 }))`
   position: absolute;
   left: 0px;
   top: 0px;
-  height: 100%;
-  padding-left: 6px;
-  padding-right: 6px;
-
   background-color: ${({ theme }) => theme.colors.success};
+`;
+
+export const AccountNewContainerWrapper = styled(View)`
+  position: relative;
+  flex-direction: row;
+  width: 95%;
+`;
+
+export const AccountNewContainer = styled(View)`
+  position: relative;
+  height: ${NEW_CONTAINER_HEIGHT}px;
+  padding-left: 4px;
+  padding-right: 4px;
+
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: ${({ theme }) => theme.colors.successLight};
+  border-radius: 4px;
+  max-width: 100%;
 `;
 
 export const AccountNew = styled(Text).attrs(({ theme }) => ({
@@ -31,10 +52,6 @@ export const AccountNew = styled(Text).attrs(({ theme }) => ({
   weight: 500,
   h6: true
 }))`
-  overflow: hidden;
-  position: relative;
-  padding: 3px 6px;
-  padding-left: 32px;
-  background-color: ${({ theme }) => theme.colors.successLight};
-  border-radius: 4px;
+  padding-left: ${NEW_CONTAINER_HEIGHT}px;
+  width: 100%;
 `;

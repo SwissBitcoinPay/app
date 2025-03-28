@@ -40,13 +40,15 @@ export const AccountBalance = ({ xpub }: AccountBalanceProps) => {
   return balance === undefined ? (
     <Loader size={16} />
   ) : balance !== undefined && txs > 0 ? (
-    <S.AccountBalance>
+    <S.AccountBalance numberOfLines={1}>
       {balance} BTC • {t("transactions", { txs })}
     </S.AccountBalance>
   ) : (
-    <S.AccountNew>
-      <S.AccountNewIcon icon={faPlus} />
-      {t("newAccount")}
-    </S.AccountNew>
+    <S.AccountNewContainerWrapper>
+      <S.AccountNewContainer>
+        <S.AccountNewIcon icon={faPlus} />
+        <S.AccountNew numberOfLines={1}>{t("newAccount")}</S.AccountNew>
+      </S.AccountNewContainer>
+    </S.AccountNewContainerWrapper>
   );
 };
