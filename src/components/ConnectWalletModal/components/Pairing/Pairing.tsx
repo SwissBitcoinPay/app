@@ -1,27 +1,27 @@
 import { useTranslation } from "react-i18next";
 import { ComponentStack, FieldDescription, Loader } from "@components";
-import { ConnectWalletComponentProps } from "../../ConnectWalletModal";
 import * as S from "./styled";
 import * as ConnectStyled from "../../styled";
 import { useTheme } from "styled-components";
-import { usePairing } from "./hook";
+import { useContext } from "react";
+import { SBPBitboxContext } from "@config";
 
-export const Pairing = ({ deviceId }: ConnectWalletComponentProps) => {
+export const Pairing = () => {
   const { t } = useTranslation(undefined, {
     keyPrefix: "connectWalletModal.pairing"
   });
   const { colors } = useTheme();
 
-  const { hash } = usePairing(deviceId);
+  const { pairingHash } = useContext(SBPBitboxContext);
 
   return (
     <ComponentStack gapSize={10} style={{ alignItems: "center" }}>
       <ConnectStyled.Title>{t("title")}</ConnectStyled.Title>
       <FieldDescription>{t("instruction")}</FieldDescription>
-      {hash ? (
+      {pairingHash ? (
         <>
           <S.HashContainer style={{ alignItems: "center" }}>
-            {hash.split("\n").map((hashSplit) => (
+            {pairingHash.split("\n").map((hashSplit) => (
               <FieldDescription
                 key={hashSplit}
                 color={colors.white}

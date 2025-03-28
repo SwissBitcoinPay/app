@@ -268,7 +268,7 @@
       "ibanInvalid": "IBAN non valide",
       "zipInvalid": "Code postal invalide",
       "submit": "Soumettre",
-      "bitboxConnectSuccess": "Votre BitBox02 a été connecté avec succès. Vous pouvez le débrancher.",
+      "hardwareConnectSuccess": "Votre {{hardwareWallet}} a été connecté avec succès. Vous pouvez le débrancher.",
       "patchSettingNeedsEmailValidation": "Confirmez les nouveaux paramètres via le mail que vous avez reçu",
       "error": {
         "iban": {
@@ -363,7 +363,7 @@
     "instructions3": "Ne partagez jamais votre {{backup}} à qui que ce soit. Toute personne qui accède à votre {{backup}} pourra voler tous vos fonds."
   },
   "connectWalletModal": {
-    "title": "Connecter BitBox02",
+    "title": "Portefeuille matériel",
     "iUnderstand": "Je comprends",
     "afterUpgrade": {
       "title": "Ouvrez votre BitBox02",

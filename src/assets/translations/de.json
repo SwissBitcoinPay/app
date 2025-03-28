@@ -266,7 +266,7 @@
       "ibanInvalid": "Ungültige IBAN",
       "zipInvalid": "Ungültige Postleitzahl",
       "submit": "Absenden",
-      "bitboxConnectSuccess": "Ihre BitBox02 wurde erfolgreich angeschlossen. Sie können sie ausstecken.",
+      "hardwareConnectSuccess": "Ihre {{hardwareWallet}} wurde erfolgreich angeschlossen. Sie können sie ausstecken.",
       "patchSettingNeedsEmailValidation": "Bestätigen Sie die neuen Einstellungen mit der E-Mail, die Sie erhalten haben.",
       "error": {
         "iban": {

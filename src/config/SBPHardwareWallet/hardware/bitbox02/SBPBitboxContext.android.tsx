@@ -21,12 +21,28 @@ import { apiGet } from "@utils/Bitbox/api/request";
 import { useToast } from "react-native-toast-notifications";
 import { Icon, Webview } from "@components";
 import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
-import { SBPModalContext } from "./SBPModalContext";
 import { animated, easings, useSpring } from "@react-spring/native";
-import { platform } from "@config";
-import { BackupMode } from "@components/ConnectWalletModal/components/Setup/Setup";
+import { platform, SBPModalContext } from "@config";
 import { useTheme } from "styled-components";
 import { SBPBitboxContextType } from "./SBPBitboxContext";
+import {
+  BackupMode,
+  HardwareState
+} from "@config/SBPHardwareWallet/SBPHardwareWalletContext";
+import { useTranslation } from "react-i18next";
+import { useSync } from "@hooks/bitbox/api";
+import {
+  getChannelHash,
+  getStatus,
+  verifyChannelHash
+} from "@utils/Bitbox/api/bitbox02";
+import {
+  screenRotate,
+  getStatus as bootloaderGetStatus
+} from "@utils/Bitbox/api/bitbox02bootloader";
+import { useDefault } from "@hooks/bitbox/default";
+import { getDeviceList, TDevices } from "@utils/Bitbox/api/devices";
+import { useSignature } from "./hooks";
 
 export const IS_BITBOX_SUPPORTED = true;
 
@@ -41,13 +57,26 @@ const ATTENTION_ARROW_TRANSLATE_Y = isBitcoinize ? [0, 35] : [0, 35];
 export const SBPBitboxContext = React.createContext<SBPBitboxContextType>({});
 
 export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
+  // const [state, setState] = useState<HardwareState>();
   const [isBitboxServerRunning, setIsBitboxServerRunning] = useState(false);
-  const [isAfterUpgradeScreen, setIsAfterUpgradeScreen] = useState(false);
-  const [afterSetupMode, setAfterSetupMode] = useState<BackupMode>();
+  const [isHardwareUpgraded, setIsHardwareUpgraded] = useState(false);
+  const [backupMode, setBackupMode] = useState<BackupMode>();
+  const [pairingHash, setPairingHash] = useState<string>();
   const { setModalOverlayComponent } = useContext(SBPModalContext);
   const currentListeners = useRef<TMsgCallback[]>([]);
   const subscriptions = useRef<Subscriptions>({});
   const legacySubscriptions = useRef<Subscriptions>({});
+  const { t } = useTranslation();
+  const toast = useToast();
+
+  const error = useCallback(
+    (msg: string) => {
+      toast.show(msg, { type: "error" });
+    },
+    [toast]
+  );
+
+  const signatureFunctions = useSignature({ error });
 
   const { colors } = useTheme();
 
@@ -90,7 +119,7 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
     [animatedYSpring.translateY, colors.white]
   );
 
-  const setAttentionToBitbox = useCallback(
+  const setAttentionToHardware = useCallback(
     (value: boolean) => {
       setModalOverlayComponent(value ? ArrowComponent : undefined);
     },
@@ -177,21 +206,22 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
   const messages = useRef<{ [k in number]: (value: unknown) => void }>({});
   const bitboxQueryId = useRef<number>(1);
 
-  const toast = useToast();
+  const init = useCallback(async () => {
+    setIsBitboxServerRunning(true);
+    await sleep(1);
+    await Bitbox.startBitBoxBridge();
+    await sleep(1);
+    // setState(HardwareState.Connect);
+  }, []);
 
-  const _setIsBitboxServerRunning = useCallback(
-    async (value: boolean) => {
-      setIsBitboxServerRunning(value);
-      if (value) {
-        await sleep(1);
-        await Bitbox.startBitBoxBridge();
-      } else if (!value && isBitboxServerRunning) {
-        await Bitbox.stopBitBoxBridge();
-      }
-      await sleep(1);
-    },
-    [isBitboxServerRunning]
-  );
+  const close = useCallback(async () => {
+    setIsBitboxServerRunning(false);
+    if (isBitboxServerRunning) {
+      await Bitbox.stopBitBoxBridge();
+    }
+    await sleep(1);
+    // setState(HardwareState.Connect);
+  }, [isBitboxServerRunning]);
 
   const onMessage = useCallback(
     (event: WebViewMessageEvent) => {
@@ -238,7 +268,7 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
     global.bitboxAndroidSend = bitboxAndroidSend;
   }, [bitboxAndroidSend]);
 
-  const _subscribeEndpoint = useCallback(
+  const subscribeEndpoint = useCallback(
     (endpoint: string, cb: TSubscriptionCallback<T>) => {
       return apiSubscribe(endpoint, (event: TEvent) => {
         switch (event.action) {
@@ -256,20 +286,170 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
     [apiSubscribe]
   );
 
+  const syncDeviceList = useCallback<
+    (cb: (accounts: TDevices) => void) => TDevices
+  >((cb) => subscribeEndpoint("devices/registered", cb), [subscribeEndpoint]);
+
+  const devices = useDefault(useSync(getDeviceList, syncDeviceList), {});
+
+  const [[deviceId, deviceMode] = []]: [string, TProductName][] = useMemo(
+    () =>
+      Object.keys(devices).map((key) => [key, devices[key]]) || [
+        ["androidDevice", "bitbox02-bootloader"]
+      ],
+    [devices]
+  );
+
+  const syncStatus = useCallback(
+    (cb: (accounts: TDevices) => void) => {
+      const unsubscribe = subscribeLegacy("statusChanged", (event) => {
+        if (event.type === "device" && event.deviceID === deviceId) {
+          getStatus(deviceId).then(cb);
+        }
+      });
+      return unsubscribe;
+    },
+    [deviceId, subscribeLegacy]
+  );
+
+  const status = useSync(
+    useCallback(() => getStatus(deviceId), [deviceId]),
+    syncStatus,
+    deviceMode !== "bitbox02"
+  );
+
+  const bootloaderSyncStatus = useCallback(
+    (cb: (accounts: TDevices) => void) =>
+      subscribeEndpoint(`devices/bitbox02-bootloader/${deviceId}/status`, cb),
+    [deviceId, subscribeEndpoint]
+  );
+
+  const bootloaderStatus = useSync(
+    useCallback(() => bootloaderGetStatus(deviceId), [deviceId]),
+    bootloaderSyncStatus,
+    deviceMode !== "bitbox02-bootloader"
+  );
+
+  const state = useMemo(() => {
+    if (deviceMode === "bitbox02-bootloader") {
+      return HardwareState.Bootloader;
+    } else if (deviceMode === "bitbox02") {
+      switch (status) {
+        case "connected":
+          return HardwareState.Connected;
+        case "unpaired":
+        case "pairingFailed":
+          return HardwareState.Pairing;
+        case "uninitialized":
+        case "seeded":
+          return HardwareState.Setup;
+        case "initialized":
+          return HardwareState.Signature;
+      }
+    }
+    return HardwareState.Connect;
+  }, [deviceMode, status]);
+
+  console.log({ status, state });
+
+  useEffect(() => {
+    if (isBitcoinize && deviceMode === "bitbox02-bootloader") {
+      (async () => {
+        await screenRotate(deviceId);
+      })();
+    }
+  }, [deviceMode]);
+
+  // Pairing
+  const onChannelHashChanged = useCallback(() => {
+    (async () => {
+      const channelHash = await getChannelHash(deviceId);
+
+      if (channelHash.hash) {
+        setPairingHash(channelHash.hash);
+        setAttentionToHardware?.(true);
+        // setState(HardwareState.Pairing);
+      } else if (channelHash.deviceVerified) {
+        await verifyChannelHash(deviceId, true);
+      }
+    })();
+  }, [deviceId, setAttentionToHardware]);
+
+  useEffect(() => {
+    return () => {
+      setAttentionToHardware?.(false);
+    };
+  }, []);
+
+  useEffect(onChannelHashChanged, [deviceId, onChannelHashChanged]);
+
+  const channelHashChanged = (
+    deviceID: string,
+    cb: (deviceID: string) => void
+  ): TUnsubscribe => {
+    const unsubscribe = subscribeLegacy("channelHashChanged", (event) => {
+      if (event.type === "device" && event.deviceID === deviceID) {
+        cb(deviceID);
+      }
+    });
+    return unsubscribe;
+  };
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return channelHashChanged(deviceId, onChannelHashChanged);
+  }, [onChannelHashChanged, deviceId]);
+
+  const screenComponentProps = useMemo(() => {
+    let obj = {};
+    if (backupMode !== "sdcard") {
+      obj = {
+        ...obj,
+        buttonProps: {
+          title: t("connectWalletModal.iUnderstand"),
+          onPress: () => {
+            setBackupMode(undefined);
+          }
+        }
+      };
+    }
+
+    if (deviceMode === "bitbox02") {
+      obj = {
+        ...obj,
+        deviceId,
+        status
+      };
+    } else if (deviceMode === "bitbox02-bootloader") {
+      obj = {
+        ...obj,
+        deviceId,
+
+        status: bootloaderStatus
+      };
+    }
+
+    return obj;
+  }, [backupMode, deviceId, bootloaderStatus, deviceMode, status, t]);
+
   return (
     <SBPBitboxContext.Provider
       value={{
-        setIsBitboxServerRunning: _setIsBitboxServerRunning,
-        pushNotificationListener,
-        subscribeEndpoint: _subscribeEndpoint,
-        subscribeLegacy,
-        onNotification,
-        apiSubscribe,
-        setAttentionToBitbox,
-        setIsAfterUpgradeScreen,
-        isAfterUpgradeScreen,
-        setAfterSetupMode,
-        afterSetupMode
+        state,
+        // setState,
+        init,
+        close,
+        // subscribeEndpoint: _subscribeEndpoint,
+        // subscribeLegacy,
+        setAttentionToHardware,
+        setIsHardwareUpgraded,
+        isHardwareUpgraded,
+        screenComponentProps,
+        setBackupMode,
+        pairingHash,
+        setPairingHash,
+        ...signatureFunctions
+        // backupMode
       }}
     >
       {children}

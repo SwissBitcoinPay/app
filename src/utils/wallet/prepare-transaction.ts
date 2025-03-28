@@ -4,6 +4,7 @@ import _ecc from "@bitcoinerlab/secp256k1";
 import BIP84 from "bip84";
 import * as local from "./local";
 import * as bitbox02 from "./bitbox02";
+import * as ledger from "./ledger";
 import { AddressDetail, WalletTransaction } from "@screens/Wallet/Wallet";
 import {
   AddressType,
@@ -11,7 +12,7 @@ import {
   validate
 } from "bitcoin-address-validation";
 import axios from "axios";
-import { BitboxReadyFunctionParams } from "@components/ConnectWalletModal/ConnectWalletModal";
+import { HardwareReadyFunctionParams } from "@components/ConnectWalletModal/ConnectWalletModal";
 import { Wallet } from "./types";
 import { Bip84Account } from "@types";
 import { DEFAULT_NETWORK } from "@config";
@@ -95,7 +96,7 @@ export type PrepareTransactionParams = {
   changeAddress?: AddressDetail;
   feeRate: number;
   walletType: string;
-} & Partial<BitboxReadyFunctionParams>;
+} & Partial<HardwareReadyFunctionParams>;
 
 export const prepareTransaction = async ({
   zPub,
@@ -104,16 +105,32 @@ export const prepareTransaction = async ({
   amount,
   changeAddress,
   feeRate,
-  bitbox,
+  wallet: hardwareWallet,
   account,
   walletType
 }: PrepareTransactionParams) => {
-  const wallet: Wallet = walletType === "local" ? local : bitbox02;
+  let wallet: Wallet;
+  switch (walletType) {
+    case "local":
+      wallet = local;
+      break;
+    case "bitbox02":
+      wallet = bitbox02;
+      break;
+    case "ledger":
+      wallet = ledger;
+      break;
+    default:
+      break;
+  }
 
   let inputs: InputsTypes = {};
   let outputs: OutputsTypes = {};
 
   const psbt = new Psbt({ network: DEFAULT_NETWORK });
+
+  const rootPath =
+    (await AsyncStorage.getItem(keyStoreWalletPath)) || "m/84'/0'/0'";
 
   psbt.setVersion(1);
   psbt.setLocktime(0);
@@ -122,8 +139,9 @@ export const prepareTransaction = async ({
   const bipPublicAccount: Bip84Account = new BIP84.fromZPub(zPub);
 
   const { bip84Account, masterFingerprint } = await wallet.prepareTransaction({
-    bitbox,
-    account
+    hardwareWallet,
+    account,
+    rootPath
   });
 
   const receiveAddressType = getAddressType(receiveAddress);
@@ -140,9 +158,6 @@ export const prepareTransaction = async ({
     };
   }
 
-  const rootPath =
-    (await AsyncStorage.getItem(keyStoreWalletPath)) || "m/84'/0'/0'";
-
   const usedUtxos: WalletTransaction[] = [];
   let inputAmount = 0;
   let finalFee = 0;
@@ -158,7 +173,7 @@ export const prepareTransaction = async ({
       `https://mempool.space/api/tx/${utxo.txid}/hex`
     );
 
-    const path = `${rootPath}/${utxo.change ? "1" : "0"}/${utxo.addressIndex}`;
+    const path = `m/${rootPath}/${utxo.change ? "1" : "0"}/${utxo.addressIndex}`;
 
     try {
       psbt.addInput({
@@ -219,7 +234,7 @@ export const prepareTransaction = async ({
             bipPublicAccount.getPublicKey(changeAddress.index, true),
             "hex"
           ),
-          path: `${rootPath}/1/${changeAddress.index}`
+          path: `m/${rootPath}/1/${changeAddress.index}`
         }
       ]
     });
@@ -229,9 +244,11 @@ export const prepareTransaction = async ({
     psbt,
     bip84Account,
     usedUtxos,
-    bitbox,
+    hardwareWallet,
     feeRate,
-    account
+    account,
+    rootPath,
+    masterFingerprint
   });
 };
 

@@ -1,12 +1,13 @@
 import { useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { ComponentStack, FieldDescription, Icon } from "@components";
-import { SBPBitboxContext } from "@config";
 import { faSdCard, faVault } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "styled-components";
 import * as ConnectStyled from "../../styled";
 import { checkSDCard } from "@utils/Bitbox/api/bitbox02";
 import { ConnectWalletComponentProps } from "@components/ConnectWalletModal/ConnectWalletModal";
+import { SBPHardwareWalletContext } from "@config/SBPHardwareWallet";
+import { SBPBitboxContextType } from "@config/SBPHardwareWallet/hardware/bitbox02";
 
 export const AfterSetup = ({ deviceId }: ConnectWalletComponentProps) => {
   const { t } = useTranslation(undefined, {
@@ -16,17 +17,17 @@ export const AfterSetup = ({ deviceId }: ConnectWalletComponentProps) => {
     keyPrefix: "secureWallet"
   });
   const { colors } = useTheme();
-  const { afterSetupMode, setAfterSetupMode, setAttentionToBitbox } =
-    useContext(SBPBitboxContext);
+  const { backupMode, setBackupMode, setAttentionToHardware } =
+    useContext<SBPBitboxContextType>(SBPHardwareWalletContext);
 
   useEffect(() => {
-    setAttentionToBitbox(false);
+    setAttentionToHardware?.(false);
 
-    if (afterSetupMode === "sdcard") {
+    if (backupMode === "sdcard") {
       const interval = setInterval(() => {
         (async () => {
           if (!(await checkSDCard(deviceId))) {
-            setAfterSetupMode(undefined);
+            setBackupMode(undefined);
           }
         })();
       }, 500);
@@ -47,30 +48,30 @@ export const AfterSetup = ({ deviceId }: ConnectWalletComponentProps) => {
           size={18}
           style={{ transform: [{ translateY: 5 }] }}
         />{" "}
-        {t("instructions1", { backup: t(afterSetupMode) })}
+        {t("instructions1", { backup: t(backupMode) })}
       </FieldDescription>
       <FieldDescription>
         ✅{" "}
         {tSecureWallet("instructions1", {
-          backup: t(afterSetupMode)
+          backup: t(backupMode)
         })}
       </FieldDescription>
       <FieldDescription color={colors.warning}>
         ⚠️ {tSecureWallet("instructions2")}
       </FieldDescription>
       <FieldDescription color={colors.warning}>
-        ⚠️ {tSecureWallet("instructions3", { backup: t(afterSetupMode) })}
+        ⚠️ {tSecureWallet("instructions3", { backup: t(backupMode) })}
       </FieldDescription>
       <FieldDescription color={colors.warning}>
-        ⚠️ {t("understand1", { backup: t(afterSetupMode) })}
+        ⚠️ {t("understand1", { backup: t(backupMode) })}
       </FieldDescription>
       <FieldDescription color={colors.warning}>
-        ⚠️ {t("understand2", { backup: t(afterSetupMode) })}
+        ⚠️ {t("understand2", { backup: t(backupMode) })}
       </FieldDescription>
       <FieldDescription color={colors.warning}>
-        ⚠️ {t("understand3", { backup: t(afterSetupMode) })}
+        ⚠️ {t("understand3", { backup: t(backupMode) })}
       </FieldDescription>
-      {afterSetupMode === "sdcard" && (
+      {backupMode === "sdcard" && (
         <FieldDescription>
           <Icon
             icon={faSdCard}

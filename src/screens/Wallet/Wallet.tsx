@@ -185,8 +185,8 @@ export const Wallet = () => {
             voutIndex !== -1
               ? tx.vout[voutIndex].scriptpubkey
               : vinIndex !== -1
-              ? tx.vin[vinIndex].prevout.scriptpubkey
-              : undefined;
+                ? tx.vin[vinIndex].prevout.scriptpubkey
+                : undefined;
 
           const isSpent = !!addressTxs.find((_tx) =>
             _tx.vin.find((vin) => vin.txid === tx.txid)
@@ -266,7 +266,7 @@ export const Wallet = () => {
     async (success: boolean) => {
       setIsSendModalOpen(false);
       if (success) {
-        await sleep(1500);
+        await sleep(4000);
         void updateWallet();
       }
     },
@@ -390,8 +390,8 @@ export const Wallet = () => {
                       color: isPending
                         ? colors.bitcoin
                         : isPositive
-                        ? colors.success
-                        : colors.primaryLight
+                          ? colors.success
+                          : colors.primaryLight
                     }
                   ],
                   title: isPositive ? t("received") : t("sent"),

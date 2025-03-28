@@ -2,7 +2,6 @@ import { Text } from "react-native";
 import { useTranslation } from "react-i18next";
 import {
   Image,
-  Blur,
   Button,
   PageContainer,
   Pressable,
@@ -17,7 +16,6 @@ import {
 // @ts-ignore
 import AnimatedLinearGradient from "react-native-animated-linear-gradient";
 import { colors } from "./gradient-config";
-import { useWindowDimensions } from "react-native";
 import { useTheme } from "styled-components";
 import { useMemo } from "react";
 import {
@@ -27,24 +25,15 @@ import {
   useVersionTag
 } from "@hooks";
 import FinmaSvg from "@assets/images/finma.svg";
-import { platform } from "@config";
 import * as S from "./styled";
-
-const { isIos } = platform;
 
 export const Welcome = () => {
   const { t } = useTranslation(undefined, { keyPrefix: "screens.welcome" });
   const versionTag = useVersionTag();
   const theme = useTheme();
-  const { height, width } = useWindowDimensions();
   const qrLoginScan = useQrLoginScan();
   const startQrScan = useScanQr({ onScan: qrLoginScan });
   const isLarge = useIsScreenSizeMin("large");
-
-  const higherWindowSize = useMemo(
-    () => (height > width ? height : width),
-    [height, width]
-  );
 
   const introTextParts = useMemo(
     () => t("introTitle").split("{{bitcoin}}"),

@@ -6,7 +6,9 @@ import {
   SBPThemeContextProvider,
   SBPBitboxContextProvider,
   SBPModalContextProvider,
-  platform
+  platform,
+  SBPHardwareWalletContextProvider,
+  SBPLedgerContextProvider
 } from "@config";
 import App from "./App";
 import { SafeAreaProvider, initialWindowMetrics } from "@components/SafeArea";
@@ -24,9 +26,13 @@ export const Root = () => (
           >
             <SBPThemeContextProvider>
               <SBPModalContextProvider>
-                <SBPBitboxContextProvider>
-                  <App />
-                </SBPBitboxContextProvider>
+                <SBPLedgerContextProvider>
+                  <SBPBitboxContextProvider>
+                    <SBPHardwareWalletContextProvider>
+                      <App />
+                    </SBPHardwareWalletContextProvider>
+                  </SBPBitboxContextProvider>
+                </SBPLedgerContextProvider>
               </SBPModalContextProvider>
             </SBPThemeContextProvider>
           </Router>

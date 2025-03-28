@@ -266,7 +266,7 @@
       "ibanInvalid": "IBAN-tilinumero on virheellinen ",
       "zipInvalid": "Postinumero on virheellinen ",
       "submit": "LÄHETÄ",
-      "bitboxConnectSuccess": "BitBox02 on nyt määritelty onnistuneesti. Voit irroittaa sen.",
+      "hardwareConnectSuccess": "{{hardwareWallet}} on nyt määritelty onnistuneesti. Voit irroittaa sen.",
       "patchSettingNeedsEmailValidation": "Sähköpostiisi on lähetty viesti uusien asetusten aktivoimiseksi",
       "error": {
         "iban": {

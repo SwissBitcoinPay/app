@@ -71,6 +71,7 @@ export default [
       "@typescript-eslint/ban-ts-comment": "off",
       "@typescript-eslint/no-floating-promises": "off",
       "@typescript-eslint/no-misused-promises": "off",
+      "@typescript-eslint/no-require-imports": "off",
       "react/display-name": "off",
       "react-native/no-inline-styles": "off",
       "react/react-in-jsx-scope": "off",

@@ -31,10 +31,9 @@ import * as S from "./styled";
 import { faUsb } from "@fortawesome/free-brands-svg-icons";
 import { SignatureData } from "@components/PayoutConfig/components/BitcoinSettings/BitcoinSettings";
 import {
-  BitboxReadyFunctionParams,
+  HardwareReadyFunctionParams,
   CustomFunctionType
 } from "@components/ConnectWalletModal/ConnectWalletModal";
-import { IS_BITBOX_SUPPORTED } from "@config";
 
 const wordsList = BIP39.wordlists.english;
 
@@ -206,9 +205,12 @@ export const SignatureLogin = () => {
     [refs]
   );
 
-  const onConnectBitboxModalClose = useCallback(
+  const [customWalletFunction, setCustomWalletFunction] =
+    useState<CustomFunctionType>();
+
+  const onConnectWalletModalClose = useCallback(
     async (data?: SignatureData) => {
-      setCustomBitboxFunction(undefined);
+      setCustomWalletFunction(undefined);
       if (data) {
         const signatureLoginData = {
           messageToSign: data.message,
@@ -218,19 +220,16 @@ export const SignatureLogin = () => {
         await onAuthLogin(signatureLoginData);
 
         setUserType(UserType.Wallet);
-        await AsyncStorage.setItem(keyStoreWalletType, "bitbox02");
+        await AsyncStorage.setItem(keyStoreWalletType, data.walletType);
       }
     },
     [onAuthLogin, setUserType]
   );
 
-  const [customBitboxFunction, setCustomBitboxFunction] =
-    useState<CustomFunctionType>();
-
-  const loginWithBitbox = useCallback(async () => {
+  const loginWithWallet = useCallback(async () => {
     return new Promise<void>((resolver) => {
-      setCustomBitboxFunction(
-        () => async (walletReadyProps: BitboxReadyFunctionParams) => {
+      setCustomWalletFunction(
+        () => async (walletReadyProps: HardwareReadyFunctionParams) => {
           try {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-call
             const bipPublicAccount: Bip84Account = new BIP84.fromZPub(
@@ -267,24 +266,20 @@ export const SignatureLogin = () => {
         title: tRoot("common.login")
       }}
     >
-      {IS_BITBOX_SUPPORTED && (
-        <ConnectWalletModal
-          isOpen={!!customBitboxFunction}
-          onClose={onConnectBitboxModalClose}
-          customFunction={customBitboxFunction}
-        />
-      )}
+      <ConnectWalletModal
+        isOpen={!!customWalletFunction}
+        onClose={onConnectWalletModalClose}
+        customFunction={customWalletFunction}
+      />
       <ComponentStack>
-        {IS_BITBOX_SUPPORTED && (
-          <LoginView title={t("titleWallet")}>
-            <Button
-              icon={faUsb}
-              title={tRoot("connectWalletModal.title")}
-              type="primary"
-              onPress={loginWithBitbox}
-            />
-          </LoginView>
-        )}
+        <LoginView title={t("titleWallet")}>
+          <Button
+            icon={faUsb}
+            title={tRoot("connectWalletModal.title")}
+            type="primary"
+            onPress={loginWithWallet}
+          />
+        </LoginView>
         <LoginView
           title={t("titleWords")}
           button={{

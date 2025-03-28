@@ -266,7 +266,7 @@
       "ibanInvalid": "IBAN no válido",
       "zipInvalid": "Código postal no válido",
       "submit": "Enviar",
-      "bitboxConnectSuccess": "Tu BitBox02 se ha conectado correctamente. Puede desconectarla.",
+      "hardwareConnectSuccess": "Tu {{hardwareWallet}} se ha conectado correctamente. Puede desconectarla.",
       "patchSettingNeedsEmailValidation": "Confirme la nueva configuración a través del correo electrónico que ha recibido",
       "error": {
         "iban": {

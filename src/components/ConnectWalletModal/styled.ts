@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Text, ComponentStack as RootComponentStack, Icon } from "@components";
+import { Text, Icon, ComponentStack as RootComponentStack } from "@components";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 export const Title = styled(Text).attrs(() => ({

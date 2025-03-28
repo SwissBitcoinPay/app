@@ -25,6 +25,8 @@
     "close": "Close",
     "optional": "Optional",
     "selectFile": "Select file",
+    "loading": "loading",
+    "notSupported": "Not supported",
     "errors": {
       "invalidBitcoinAddress": "Invalid bitcoin address",
       "unableGetRates": "Unable to get rates",
@@ -270,7 +272,7 @@
       "ibanInvalid": "Invalid IBAN",
       "zipInvalid": "Invalid ZIP code",
       "submit": "Submit",
-      "bitboxConnectSuccess": "Your BitBox02 has been connected sucessfully. You can unplug it.",
+      "hardwareConnectSuccess": "Your {{hardwareWallet}} has been connected sucessfully. You can disconnect it.",
       "patchSettingNeedsEmailValidation": "Confirm the new settings via the email you received",
       "error": {
         "iban": {
@@ -312,7 +314,7 @@
         "balance": "Balance",
         "fees": "Fees",
         "sendLastInfo": "Your transaction is generated and broadcast entirely from your local device. No private information passes through Swiss Bitcoin Pay servers",
-        "signWithBitbox": "Sign with BitBox02",
+        "signWithHardware": "Sign with {{hardwareWallet}}",
         "broadcast": "Send"
       }
     },
@@ -508,7 +510,7 @@
     "instructions3": "Never share your {{backup}} to anyone. Any person that access your {{backup}} will be able to steal all of your funds."
   },
   "connectWalletModal": {
-    "title": "Connect BitBox02",
+    "title": "Connect hardware wallet",
     "iUnderstand": "I understand",
     "afterUpgrade": {
       "title": "Open your BitBox02",
@@ -531,8 +533,21 @@
       "instruction1": "We are installing the official firmware in your BitBox02",
       "instruction2": "Do not remove the BitBox02 from your device"
     },
+    "empty": {
+      "title": "Select your hardware wallet"
+    },
+    "transport": {
+      "title": "Select the connection method"
+    },
+    "selectDevice": {
+      "title": "Select your device",
+      "selectDevice": "Select your {{hardwareWallet}} in the list",
+      "connecting": "Connecting to {{hardwareWallet}}",
+      "select": "Select"
+    },
     "connect": {
-      "title": "Connect your BitBox02",
+      "title": "Connect your hardware wallet",
+      "title_select": "Select your hardware wallet",
       "connecting": "Connecting your wallet",
       "disconnected": "Wallet disconnected",
       "updateBitbox": "Make sure your BitBox02 have a firmware installed"
@@ -546,6 +561,7 @@
       "instruction": "Verify that the following pairing code is the same as displayed on your BitBox02:",
       "confirm1": "If the codes are the same, confirm it by pressing",
       "confirm2": "on the side of your BitBox02",
+      "notInitialized": "BitBox02 not initialized",
       "pairingFailed": "Pairing failed"
     },
     "setup": {
@@ -576,11 +592,16 @@
       "selectAccount": "Select the account you want to use",
       "select": "Select",
       "prepareSignature": "Prepare signature",
-      "waitingForSignature": "Please sign the message on your BitBox02",
+      "waitingForSignature": "Please sign the message on your {{hardwareWallet}}",
       "verifySignature": "Verify signature",
       "cannotGetAccount": "Cannot get account",
       "cannotGetXpub": "Cannot get xpub",
-      "signatureError": "Error signing message. Please try again"
+      "bitcoinAppNotOpened": "Please open the Bitcoin app on your wallet and try again",
+      "signatureError": "Error signing message. Please try again",
+      "accountBalance": {
+        "transactions": "{{txs}} transactions",
+        "newAccount": "New account (recommended)"
+      }
     }
   },
   "accountConfigHook": {
