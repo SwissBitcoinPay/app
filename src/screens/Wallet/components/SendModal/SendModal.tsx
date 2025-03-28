@@ -287,7 +287,7 @@ export const SendModal = ({
         onClose={() => {
           onClose(false);
         }}
-        isOpen={isOpen}
+        isOpen={isOpen && !customWalletFunction}
         title={t("send")}
         noScrollView={Platform.OS === "web"}
         submitButton={{

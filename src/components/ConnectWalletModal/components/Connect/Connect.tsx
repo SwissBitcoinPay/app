@@ -21,11 +21,11 @@ export const Connect = () => {
   ) : (
     <ComponentStack gapSize={10} style={{ alignItems: "center" }}>
       <ConnectStyled.Title>
-        {t("title", { hardwareWallet: hardwareNames[hardwareWallet] })}
+        {t("title", { hardwareWallet: hardwareNames[hardwareType] })}
       </ConnectStyled.Title>
       <Loader
         reason={t("connecting", {
-          hardwareWallet: hardwareNames[hardwareWallet]
+          hardwareWallet: hardwareNames[hardwareType]
         })}
       />
     </ComponentStack>

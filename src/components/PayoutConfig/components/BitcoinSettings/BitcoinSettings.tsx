@@ -46,7 +46,7 @@ import axios from "axios";
 import { ScrollView } from "react-native";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import { SBPContext, apiRootUrl } from "@config";
+import { SBPContext, apiRootUrl, platform } from "@config";
 import { DescriptionLine } from "../DescriptionLine";
 import {
   BitcoinFiatFormSettings,
@@ -54,10 +54,11 @@ import {
   WalletType
 } from "@components/PayoutConfig/PayoutConfig";
 import * as S from "./styled";
-import { faUsb } from "@fortawesome/free-brands-svg-icons";
+import { faBluetooth, faUsb } from "@fortawesome/free-brands-svg-icons";
 import { useToast } from "react-native-toast-notifications";
-import { IS_BITBOX_SUPPORTED } from "@config";
 import { useIsScreenSizeMin } from "@hooks";
+
+const { isIos } = platform;
 
 export type SignatureData = {
   zPub: string;
@@ -569,7 +570,7 @@ export const BitcoinSettings = ({
             />
             <Button
               title={tRoot("connectWalletModal.title")}
-              icon={faUsb}
+              icon={isIos ? faBluetooth : faUsb}
               onPress={onPressConnectWallet}
             />
           </ComponentStack>
@@ -724,12 +725,10 @@ export const BitcoinSettings = ({
         isOpen={isCreateWalletModalOpen}
         onClose={onWalletModalsClose}
       />
-      {IS_BITBOX_SUPPORTED && (
-        <ConnectWalletModal
-          isOpen={isConnectWalletModalOpen}
-          onClose={onBitboxWalletModalClose}
-        />
-      )}
+      <ConnectWalletModal
+        isOpen={isConnectWalletModalOpen}
+        onClose={onBitboxWalletModalClose}
+      />
       <ComponentStack>
         <ComponentStack gapSize={14}>
           <FieldDescription>💶 {t("feesDetails1")}</FieldDescription>

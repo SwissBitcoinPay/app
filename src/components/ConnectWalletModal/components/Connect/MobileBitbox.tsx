@@ -4,6 +4,7 @@ import { ComponentStack, Image, View } from "@components";
 import { animated, easings, useSpring } from "@react-spring/native";
 import { platform } from "@config";
 import * as ConnectStyled from "../../styled";
+import { hardwareNames } from "@utils";
 
 const { isBitcoinize } = platform;
 
@@ -70,7 +71,9 @@ export const MobileBitbox = () => {
 
   return (
     <ComponentStack gapSize={10}>
-      <ConnectStyled.Title>{t("title")}</ConnectStyled.Title>
+      <ConnectStyled.Title>
+        {t("title", { hardwareWallet: hardwareNames["bitbox02"] })}
+      </ConnectStyled.Title>
       <View
         style={{
           alignItems: "center",

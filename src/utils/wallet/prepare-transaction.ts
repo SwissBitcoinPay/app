@@ -110,6 +110,7 @@ export const prepareTransaction = async ({
   walletType
 }: PrepareTransactionParams) => {
   let wallet: Wallet;
+  let pathPrefix = "";
   switch (walletType) {
     case "local":
       wallet = local;
@@ -119,6 +120,7 @@ export const prepareTransaction = async ({
       break;
     case "ledger":
       wallet = ledger;
+      pathPrefix = "m/";
       break;
     default:
       break;
@@ -173,7 +175,7 @@ export const prepareTransaction = async ({
       `https://mempool.space/api/tx/${utxo.txid}/hex`
     );
 
-    const path = `m/${rootPath}/${utxo.change ? "1" : "0"}/${utxo.addressIndex}`;
+    const path = `${pathPrefix}${rootPath}/${utxo.change ? "1" : "0"}/${utxo.addressIndex}`;
 
     try {
       psbt.addInput({
@@ -234,7 +236,7 @@ export const prepareTransaction = async ({
             bipPublicAccount.getPublicKey(changeAddress.index, true),
             "hex"
           ),
-          path: `m/${rootPath}/1/${changeAddress.index}`
+          path: `${pathPrefix}${rootPath}/1/${changeAddress.index}`
         }
       ]
     });

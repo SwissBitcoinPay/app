@@ -1,6 +1,6 @@
 import { useCallback, useContext, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { SBPContext, apiRootUrl } from "@config";
+import { SBPContext, apiRootUrl, platform } from "@config";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
   Button,
@@ -28,12 +28,14 @@ import {
 import { ACCESS_CONTROL } from "react-native-keychain";
 import * as BIP39 from "bip39";
 import * as S from "./styled";
-import { faUsb } from "@fortawesome/free-brands-svg-icons";
+import { faBluetooth, faUsb } from "@fortawesome/free-brands-svg-icons";
 import { SignatureData } from "@components/PayoutConfig/components/BitcoinSettings/BitcoinSettings";
 import {
   HardwareReadyFunctionParams,
   CustomFunctionType
 } from "@components/ConnectWalletModal/ConnectWalletModal";
+
+const { isIos } = platform;
 
 const wordsList = BIP39.wordlists.english;
 
@@ -274,7 +276,7 @@ export const SignatureLogin = () => {
       <ComponentStack>
         <LoginView title={t("titleWallet")}>
           <Button
-            icon={faUsb}
+            icon={isIos ? faBluetooth : faUsb}
             title={tRoot("connectWalletModal.title")}
             type="primary"
             onPress={loginWithWallet}

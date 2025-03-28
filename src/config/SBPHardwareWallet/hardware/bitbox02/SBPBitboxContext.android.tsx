@@ -211,7 +211,6 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
     await sleep(1);
     await Bitbox.startBitBoxBridge();
     await sleep(1);
-    // setState(HardwareState.Connect);
   }, []);
 
   const close = useCallback(async () => {
@@ -220,7 +219,6 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
       await Bitbox.stopBitBoxBridge();
     }
     await sleep(1);
-    // setState(HardwareState.Connect);
   }, [isBitboxServerRunning]);
 
   const onMessage = useCallback(
@@ -350,8 +348,6 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
     return HardwareState.Connect;
   }, [deviceMode, status]);
 
-  console.log({ status, state });
-
   useEffect(() => {
     if (isBitcoinize && deviceMode === "bitbox02-bootloader") {
       (async () => {
@@ -364,12 +360,11 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
   const onChannelHashChanged = useCallback(() => {
     (async () => {
       const channelHash = await getChannelHash(deviceId);
-
-      if (channelHash.hash) {
+      if (channelHash.hash && !channelHash.deviceVerified) {
         setPairingHash(channelHash.hash);
         setAttentionToHardware?.(true);
-        // setState(HardwareState.Pairing);
-      } else if (channelHash.deviceVerified) {
+      }
+      if (channelHash.deviceVerified) {
         await verifyChannelHash(deviceId, true);
       }
     })();

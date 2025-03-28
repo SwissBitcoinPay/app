@@ -25,7 +25,7 @@
     "close": "Close",
     "optional": "Optional",
     "selectFile": "Select file",
-    "loading": "loading",
+    "loading": "Loading",
     "notSupported": "Not supported",
     "errors": {
       "invalidBitcoinAddress": "Invalid bitcoin address",
