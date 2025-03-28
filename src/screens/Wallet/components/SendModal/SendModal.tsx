@@ -164,6 +164,7 @@ export const SendModal = ({
   const onSend = useCallback<SubmitHandler<SendForm>>(
     async (data) => {
       setIsLoading(true);
+      await sleep(500);
       try {
         const utxos = txs.filter((tx) => tx.value > 0 && !tx.isSpent);
 
@@ -282,12 +283,18 @@ export const SendModal = ({
 
   return (
     <>
+      <ConnectWalletModal
+        isOpen={!!customWalletFunction}
+        customFunction={customWalletFunction}
+        onClose={onCloseBitboxModal}
+        walletType={wallet?.type}
+      />
       <Modal
         {...props}
         onClose={() => {
           onClose(false);
         }}
-        isOpen={isOpen && !customWalletFunction}
+        isOpen={isOpen && !isLoading}
         title={t("send")}
         noScrollView={Platform.OS === "web"}
         submitButton={{
@@ -522,12 +529,6 @@ export const SendModal = ({
           </Text>
         </ComponentStack>
       </Modal>
-      <ConnectWalletModal
-        isOpen={!!customWalletFunction}
-        customFunction={customWalletFunction}
-        onClose={onCloseBitboxModal}
-        walletType={wallet?.type}
-      />
     </>
   );
 };
