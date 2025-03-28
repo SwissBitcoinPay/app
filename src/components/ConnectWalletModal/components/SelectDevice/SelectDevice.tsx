@@ -119,38 +119,40 @@ export const SelectDevice = ({ onClose }: ConnectWalletComponentProps) => {
 
   useEffect(() => {
     if (isBluetoothAvailable && hasPermissions) {
-      const currentLedgerBluetoothId = await AsyncStorage.getItem(
-        keyStoreLedgerBluetoothId
-      );
+      (async () => {
+        const currentLedgerBluetoothId = await AsyncStorage.getItem(
+          keyStoreLedgerBluetoothId
+        );
 
-      const subscription = TransportRNBLE.listen({
-        complete: () => {},
-        next: (e) => {
-          if (e.type === "add") {
-            const device: Device = {
-              id: e.descriptor.id,
-              name: e.descriptor.name
-            };
-            if (currentLedgerBluetoothId === device.id) {
-              onSelectDevice(currentLedgerBluetoothId);
-            }
-            setDevices((oldState) => {
-              if (oldState.find((d) => d.id === device.id)) {
-                return oldState;
-              } else {
-                return [...oldState, device];
+        const subscription = TransportRNBLE.listen({
+          complete: () => {},
+          next: (e) => {
+            if (e.type === "add") {
+              const device: Device = {
+                id: e.descriptor.id,
+                name: e.descriptor.name
+              };
+              if (currentLedgerBluetoothId === device.id) {
+                onSelectDevice(currentLedgerBluetoothId);
               }
-            });
+              setDevices((oldState) => {
+                if (oldState.find((d) => d.id === device.id)) {
+                  return oldState;
+                } else {
+                  return [...oldState, device];
+                }
+              });
+            }
+          },
+          error: (err) => {
+            error(err.message);
+            onClose();
           }
-        },
-        error: (err) => {
-          error(err.message);
-          onClose();
-        }
-      });
-      return () => {
-        subscription.unsubscribe();
-      };
+        });
+        return () => {
+          subscription.unsubscribe();
+        };
+      })();
     }
   }, [isBluetoothAvailable, hasPermissions]);
 
