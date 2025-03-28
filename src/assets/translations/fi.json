@@ -25,6 +25,8 @@
     "close": "",
     "optional": "",
     "selectFile": "",
+    "loading": "",
+    "notSupported": "",
     "errors": {
       "invalidBitcoinAddress": "Virheellinen Bitcoin-osoite",
       "unableGetRates": "Vaihtokursseja ei saada haettua",
@@ -270,7 +272,7 @@
       "ibanInvalid": "IBAN-tilinumero on virheellinen ",
       "zipInvalid": "Postinumero on virheellinen ",
       "submit": "LÄHETÄ",
-      "bitboxConnectSuccess": "BitBox02 on nyt määritelty onnistuneesti. Voit irroittaa sen.",
+      "hardwareConnectSuccess": "",
       "patchSettingNeedsEmailValidation": "Sähköpostiisi on lähetty viesti uusien asetusten aktivoimiseksi",
       "error": {
         "iban": {
@@ -312,7 +314,7 @@
         "balance": "Saldo",
         "fees": "Siirtonopeus ja kulut",
         "sendLastInfo": "Tapahtumasi luodaan ja lähetetään täysin paikallisesta laitteestasi. Yksityistä tietoa ei välitetä sovelluksen palvelinten kautta.",
-        "signWithBitbox": "Allekirjoita BitBox02-laitteistolompakolla",
+        "signWithHardware": "",
         "broadcast": "Lähetä"
       }
     },
@@ -508,7 +510,7 @@
     "instructions3": "Älä ikinä jaa sinun {{backup}} nkenellekkään. Mikäli joku pääsee käsiksi sinun {{backup}}, on hänen mahdollista varastaa varasi."
   },
   "connectWalletModal": {
-    "title": "Yhdistä BitBox02",
+    "title": "",
     "iUnderstand": "Ymmärrän",
     "afterUpgrade": {
       "title": "Avaa BitBox02",
@@ -531,9 +533,21 @@
       "instruction1": "Asennamme parhaillaan virallista laiteohjelmistoa sinun BitBox02:iin",
       "instruction2": "Älä irroita BitBox02:ia laitteestasi "
     },
+    "empty": {
+      "title": ""
+    },
+    "transport": {
+      "title": ""
+    },
+    "selectDevice": {
+      "title": "",
+      "selectDevice": "",
+      "connecting": "",
+      "select": ""
+    },
     "connect": {
-      "title": "Yhdistä BitBox02",
-      "connecting": "Yhdistetään lompakkoosi",
+      "title": "",
+      "connecting": "",
       "disconnected": "Yhteys lompakkoon katkaistu",
       "updateBitbox": "Varmista että BitBox02:ssa on laiteohjelmisto asennettuna"
     },
@@ -546,6 +560,7 @@
       "instruction": "Varmista että seuraava yhdistämiskoodi on sama mikä näkyy BitBox02:",
       "confirm1": "Jos koodit ovat samat, tee vahvistaminen painamalla",
       "confirm2": "BitBox02:n kyljessä",
+      "notInitialized": "",
       "pairingFailed": "Yhdistäminen epäonnistui"
     },
     "setup": {
@@ -576,11 +591,16 @@
       "selectAccount": "Valitse käytettävä tili",
       "select": "Valitse",
       "prepareSignature": "Valmistele allekirjoitus",
-      "waitingForSignature": "Allekirjoita viesti BitBox02:lla",
+      "waitingForSignature": "",
       "verifySignature": "Vahvista allekirjoitus",
       "cannotGetAccount": "Tiliä ei löydetty",
       "cannotGetXpub": "xpub ei löydetty",
-      "signatureError": "Viestin allekirjoitus epäonnistui. Yritä uudelleen."
+      "bitcoinAppNotOpened": "",
+      "signatureError": "Viestin allekirjoitus epäonnistui. Yritä uudelleen.",
+      "accountBalance": {
+        "transactions": "",
+        "newAccount": ""
+      }
     }
   },
   "accountConfigHook": {
