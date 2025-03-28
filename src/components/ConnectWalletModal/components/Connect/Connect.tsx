@@ -5,6 +5,7 @@ import { platform } from "@config";
 import * as ConnectStyled from "../../styled";
 import { SBPHardwareWalletContext } from "@config/SBPHardwareWallet";
 import { MobileBitbox } from "./MobileBitbox";
+import { hardwareNames } from "@utils";
 
 const { isNative } = platform;
 
@@ -19,8 +20,14 @@ export const Connect = () => {
     <MobileBitbox />
   ) : (
     <ComponentStack gapSize={10} style={{ alignItems: "center" }}>
-      <ConnectStyled.Title>{t("title")}</ConnectStyled.Title>
-      <Loader reason={t("connecting")} />
+      <ConnectStyled.Title>
+        {t("title", { hardwareWallet: hardwareNames[hardwareWallet] })}
+      </ConnectStyled.Title>
+      <Loader
+        reason={t("connecting", {
+          hardwareWallet: hardwareNames[hardwareWallet]
+        })}
+      />
     </ComponentStack>
   );
 };

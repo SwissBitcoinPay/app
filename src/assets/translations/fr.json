@@ -387,8 +387,8 @@
       "instruction2": "Ne retirez pas le BitBox02 de votre appareil"
     },
     "connect": {
-      "title": "Connectez votre BitBox02",
-      "connecting": "Connectez votre portefeuille",
+      "title": "Connectez votre {{hardwareWallet}}",
+      "connecting": "En attente de votre {{hardwareWallet}}",
       "disconnected": "Portefeuille déconnecté",
       "updateBitbox": "Assurez-vous que votre BitBox02 dispose d'un firmware installé"
     },
@@ -431,7 +431,7 @@
       "selectAccount": "Sélectionnez le compte que vous souhaitez utiliser",
       "select": "Sélectionner",
       "prepareSignature": "Préparation de la signature",
-      "waitingForSignature": "Veuillez signer le message sur votre BitBox02",
+      "waitingForSignature": "Veuillez signer le message sur votre {{hardwareWallet}}",
       "verifySignature": "Vérification de la signature",
       "cannotGetAccount": "Impossible d'obtenir un compte",
       "cannotGetXpub": "Impossible d'obtenir la xpub",

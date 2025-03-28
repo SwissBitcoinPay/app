@@ -546,9 +546,8 @@
       "select": "Select"
     },
     "connect": {
-      "title": "Connect your hardware wallet",
-      "title_select": "Select your hardware wallet",
-      "connecting": "Connecting your wallet",
+      "title": "Connect your {{hardwareWallet}}",
+      "connecting": "Awaiting your {{hardwareWallet}}",
       "disconnected": "Wallet disconnected",
       "updateBitbox": "Make sure your BitBox02 have a firmware installed"
     },
