@@ -25,6 +25,8 @@
     "close": "",
     "optional": "",
     "selectFile": "",
+    "loading": "",
+    "notSupported": "",
     "errors": {
       "invalidBitcoinAddress": "Dirección bitcoin no válida",
       "unableGetRates": "Imposible obtener tarifas",
@@ -270,7 +272,7 @@
       "ibanInvalid": "IBAN no válido",
       "zipInvalid": "Código postal no válido",
       "submit": "Enviar",
-      "bitboxConnectSuccess": "Tu BitBox02 se ha conectado correctamente. Puede desconectarla.",
+      "hardwareConnectSuccess": "",
       "patchSettingNeedsEmailValidation": "Confirme la nueva configuración a través del correo electrónico que ha recibido",
       "error": {
         "iban": {
@@ -312,7 +314,7 @@
         "balance": "Saldo",
         "fees": "Tarifas",
         "sendLastInfo": "Su transacción se genera y transmite íntegramente desde su dispositivo local. Ninguna información privada pasa por los servidores de Swiss Bitcoin Pay.",
-        "signWithBitbox": "Firmar con BitBox02",
+        "signWithHardware": "",
         "broadcast": "Enviar"
       }
     },
@@ -508,7 +510,7 @@
     "instructions3": "Nunca compartas tu {{backup}} con nadie. Cualquier persona que acceda a tu {{backup}} podrá robarte todos tus fondos."
   },
   "connectWalletModal": {
-    "title": "Conectar BitBox02",
+    "title": "",
     "iUnderstand": "Comprendo",
     "afterUpgrade": {
       "title": "Abre tu BitBox02",
@@ -531,9 +533,21 @@
       "instruction1": "Estamos instalando el firmware oficial en tu BitBox02",
       "instruction2": "No retire el BitBox02 de su dispositivo"
     },
+    "empty": {
+      "title": ""
+    },
+    "transport": {
+      "title": ""
+    },
+    "selectDevice": {
+      "title": "",
+      "selectDevice": "",
+      "connecting": "",
+      "select": ""
+    },
     "connect": {
-      "title": "Conecta tu BitBox02",
-      "connecting": "Conectar su monedero",
+      "title": "",
+      "connecting": "",
       "disconnected": "Cartera desconectada",
       "updateBitbox": "Asegúrate de que tu BitBox02 tiene un firmware instalado"
     },
@@ -546,6 +560,7 @@
       "instruction": "Comprueba que el siguiente código de emparejamiento es el mismo que aparece en tu BitBox02:",
       "confirm1": "Si los códigos coinciden, confírmelo pulsando",
       "confirm2": "en el lateral de su BitBox02",
+      "notInitialized": "",
       "pairingFailed": "Error de emparejamiento"
     },
     "setup": {
@@ -576,11 +591,16 @@
       "selectAccount": "Seleccione la cuenta que desea utilizar",
       "select": "Seleccione",
       "prepareSignature": "Preparar la firma",
-      "waitingForSignature": "Por favor, firme el mensaje en su BitBox02",
+      "waitingForSignature": "",
       "verifySignature": "Verificar la firma",
       "cannotGetAccount": "No se puede obtener la cuenta",
       "cannotGetXpub": "No se puede obtener xpub",
-      "signatureError": "Mensaje de error al firmar. Vuelva a intentarlo"
+      "bitcoinAppNotOpened": "",
+      "signatureError": "Mensaje de error al firmar. Vuelva a intentarlo",
+      "accountBalance": {
+        "transactions": "",
+        "newAccount": ""
+      }
     }
   },
   "accountConfigHook": {
