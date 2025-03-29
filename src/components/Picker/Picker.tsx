@@ -49,6 +49,7 @@ export const Picker = forwardRef<RNPickerSelect, PickerRootProps>(
         {...selectProps}
         itemKey={tmpValue?.value || value}
         items={itemsWithColor}
+        placeholder={{}}
         style={{
           inputAndroid: {
             opacity: 0

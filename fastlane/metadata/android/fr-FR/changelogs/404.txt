@@ -1,0 +1,1 @@
+- Corrigé les factures expirées sur l'écran Historique (nouvelles factures uniquement)

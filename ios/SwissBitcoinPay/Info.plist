@@ -37,6 +37,10 @@
 	<string>$(PRODUCT_NAME) needs access to your Camera to scan your activation QR code.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>$(PRODUCT_NAME) needs access to FaceID to secure withdrawing funds from your account.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location is never requested.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to your Bluetooth to get access hardware wallets nearby.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Poppins-Black.ttf</string>
@@ -83,5 +87,11 @@
 	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>bitcoin</string>
+		<string>lightning</string>
+		<string>mailto</string>
+	</array>
 </dict>
 </plist>

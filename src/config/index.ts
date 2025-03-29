@@ -14,11 +14,8 @@ export { screenSizes } from "./screenSizes";
 export { DEFAULT_NETWORK, DEFAULT_SCRIPT_TYPE } from "./bitcoin";
 export { SBPContext, SBPContextProvider } from "./SBPContext";
 export { SBPThemeContext, SBPThemeContextProvider } from "./SBPThemeContext";
-export {
-  IS_BITBOX_SUPPORTED,
-  SBPBitboxContext,
-  SBPBitboxContextProvider
-} from "./SBPBitboxContext";
+export * from "./SBPHardwareWallet";
 export { SBPModalContext, SBPModalContextProvider } from "./SBPModalContext";
+export { DEFAULT_DECIMALS } from "./defaultDecimals";
 
 export { i18n };

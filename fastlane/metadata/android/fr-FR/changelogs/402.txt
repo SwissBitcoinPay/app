@@ -1,0 +1,4 @@
+- Meilleure prise en charge des devises avec des décimales autres que 2
+- Bug de réinitialisation de la devise préférée entre chaque facture
+- Meilleure prise en charge de la facturation en sats et en BTC
+- Correction d'un bug dans la mise en page des sats

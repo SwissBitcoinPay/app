@@ -1,0 +1,2 @@
+- Add support for Ledger devices
+- Minor fixes and improvements

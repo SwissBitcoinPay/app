@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 
-export const call: (query: string) => Promise<unknown> =
-  window.bitboxAndroidSend;
+export const call: (query: string) => Promise<unknown> = window?.bitboxAndroidSend;
 
 export const apiGet = (endpoint: string) => {
   return call(

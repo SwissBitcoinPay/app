@@ -8,7 +8,7 @@ import {
   getVersionInfo,
   upgradeFirmware
 } from "@utils/Bitbox/api/bitbox02bootloader";
-import { SBPBitboxContext } from "@config";
+import { SBPHardwareWalletContext } from "@config/SBPHardwareWallet";
 
 export const Bootloader = ({
   deviceId,
@@ -18,7 +18,7 @@ export const Bootloader = ({
     keyPrefix: "connectWalletModal.bootloader"
   });
 
-  const { setIsAfterUpgradeScreen } = useContext(SBPBitboxContext);
+  const { setIsHardwareUpgraded } = useContext(SBPHardwareWalletContext);
 
   const updateProgress = useMemo(
     () => status?.progress || 0,
@@ -31,7 +31,7 @@ export const Bootloader = ({
       if (ret.erased || ret.canUpgrade) {
         try {
           await upgradeFirmware(deviceId);
-          setIsAfterUpgradeScreen(true);
+          setIsHardwareUpgraded(true);
         } catch (e) {}
       }
     })();

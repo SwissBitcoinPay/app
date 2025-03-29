@@ -4,14 +4,14 @@ import { Button, ComponentStack, FieldDescription, Loader } from "@components";
 import { ConnectWalletComponentProps } from "../../ConnectWalletModal";
 import { useToast } from "react-native-toast-notifications";
 import axios from "axios";
-import { SBPBitboxContext, apiRootUrl } from "@config";
-import { useSignature } from "./hook";
+import { apiRootUrl } from "@config";
 import * as ConnectStyled from "../../styled";
 import { DEFAULT_SCRIPT_TYPE } from "@config";
 import * as S from "./styled";
 import { AccountBalance } from "./components/AccountBalance";
 import { keyStoreWalletPath } from "@config/settingsKeys";
-import { AsyncStorage } from "@utils";
+import { AsyncStorage, hardwareNames } from "@utils";
+import { SBPHardwareWalletContext } from "@config/SBPHardwareWallet";
 
 export type Account = {
   label: string;
@@ -35,7 +35,13 @@ export const Signature = ({
     "getAccount" | "selectAccount" | "prepareSignature" | "waitingForSignature"
   >("getAccount");
 
-  const { setAttentionToBitbox, pairedBitbox } = useContext(SBPBitboxContext);
+  const {
+    setAttentionToHardware,
+    getAccounts,
+    signMessage,
+    wallet,
+    hardwareType
+  } = useContext(SBPHardwareWalletContext);
 
   const error = useCallback(
     (msg: string) => {
@@ -48,11 +54,14 @@ export const Signature = ({
 
   const [accounts, setAccounts] = useState<Account[]>();
 
-  const { getAccounts, signMessage } = useSignature(error);
-
   useEffect(() => {
     (async () => {
       const _accounts = await getAccounts();
+
+      if (!_accounts) {
+        onClose();
+        return;
+      }
 
       const walletPath = await AsyncStorage.getItem(keyStoreWalletPath);
 
@@ -93,10 +102,11 @@ export const Signature = ({
         messageToSign = verifyData.message;
       } else {
         setState("waitingForSignature");
-        setAttentionToBitbox(true);
+
+        setAttentionToHardware?.(true);
 
         const customSignatureData = await customFunction({
-          bitbox: pairedBitbox,
+          wallet,
           account,
           xPub: accountZpub
         });
@@ -108,7 +118,7 @@ export const Signature = ({
       try {
         if (messageToSign) {
           setState("waitingForSignature");
-          setAttentionToBitbox(true);
+          setAttentionToHardware?.(true);
           while (!signature) {
             const signatureData = await signMessage(
               DEFAULT_SCRIPT_TYPE,
@@ -122,7 +132,7 @@ export const Signature = ({
               error(t("signatureError"));
 
               if (signatureData.errorCode !== "userAbort") {
-                setAttentionToBitbox(false);
+                setAttentionToHardware?.(false);
                 return;
               }
             }
@@ -135,7 +145,7 @@ export const Signature = ({
         }
       } catch (e) {}
 
-      setAttentionToBitbox(false);
+      setAttentionToHardware?.(false);
       onClose(success);
     })();
   }, []);
@@ -175,7 +185,9 @@ export const Signature = ({
         <Loader reason={t(state)} />
       ) : (
         <FieldDescription style={{ textAlign: "center" }}>
-          {t("waitingForSignature")}
+          {t("waitingForSignature", {
+            hardwareWallet: hardwareNames[hardwareType]
+          })}
         </FieldDescription>
       )}
     </ComponentStack>

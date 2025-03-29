@@ -10,6 +10,9 @@ import {
   Picker
 } from "@components";
 import { animated } from "@react-spring/native";
+import { platform } from "@config";
+
+const { isIos } = platform;
 
 export const PLUS_TEXTS_SCALE = 0.43745;
 export const PLUS_TEXTS_TRANSLATE_Y = 51;
@@ -17,14 +20,16 @@ export const PLUS_TEXTS_TRANSLATE_Y = 51;
 const _AnimatedText = animated(Text);
 const AnimatedView = animated(View);
 
-export const InfosContainer = styled(View)`
+export const InfosContainer = styled(View)<{
+  isSmallHeight?: boolean;
+}>`
   flex: 1;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 32px;
+  padding-top: ${({ isSmallHeight }) => (!isSmallHeight ? 32 : 0)}px;
 `;
 
 export const ATMButton = styled(Button)`
@@ -49,10 +54,10 @@ export const FiatAmountDropdownIcon = styled(Icon).attrs(() => ({
 
 export const FiatUnitPicker = styled(Picker)`
   position: absolute;
-  height: 100%;
   width: 100%;
-  opacity: 0;
+  height: 100%;
   z-index: 100;
+  opacity: ${isIos ? 0.5 : 0};
 `;
 
 export const PadContainer = styled(View)`
@@ -69,8 +74,12 @@ export const PadLine = styled(View)`
   justify-content: center;
 `;
 
-export const DescriptionContainer = styled(View)`
-  margin-top: 58px;
+export const DescriptionContainer = styled(View)<{
+  isSmallHeight?: boolean;
+}>`
+  margin-top: ${({ isSmallHeight }) => {
+    return !isSmallHeight ? 48 : 10;
+  }}px;
   border-bottom-color: ${({ theme }) => theme.colors.primaryLight};
   border-bottom-width: 2px;
   width: 70%;

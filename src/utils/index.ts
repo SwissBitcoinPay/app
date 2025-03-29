@@ -2,7 +2,8 @@ export {
   getFormattedUnit,
   getUnitPrefixAndSuffix,
   decimalSeparator,
-  decimalSeparatorNameMapping
+  decimalSeparatorNameMapping,
+  getUnitDecimalPower
 } from "./getFormattedUnit";
 export {
   formattedUnitChanges,
@@ -10,6 +11,8 @@ export {
 } from "./formattedUnitChanges";
 export { measureText } from "./measureText";
 export { Clipboard } from "./Clipboard";
+export { scriptTypeToPath } from "./scriptTypeToPath";
+export { hardwareNames } from "./hardwareNames";
 export { NFC } from "./NFC";
 export { AsyncStorage } from "./AsyncStorage";
 export { Linking } from "./Linking";

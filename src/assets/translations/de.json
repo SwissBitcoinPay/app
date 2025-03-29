@@ -272,7 +272,7 @@
       "ibanInvalid": "Ungültige IBAN",
       "zipInvalid": "Ungültige Postleitzahl",
       "submit": "Absenden",
-      "hardwareConnectSuccess": "Your {{hardwareWallet}} has been connected sucessfully. You can disconnect it.",
+      "hardwareConnectSuccess": "Ihre {{hardwareWallet}} wurde erfolgreich angeschlossen. Sie können sie ausstecken.",
       "patchSettingNeedsEmailValidation": "Bestätigen Sie die neuen Einstellungen mit der E-Mail, die Sie erhalten haben.",
       "error": {
         "iban": {

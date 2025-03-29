@@ -3,17 +3,13 @@ import React, {
   useEffect,
   useMemo,
   useState,
-  useRef,
-  useContext,
-  ReactElement,
-  ReactNode,
-  cloneElement
+  useRef
 } from "react";
 import { bech32 } from "bech32";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, useLocation } from "@components/Router";
-import { Circle as CircleProgress, Pie } from "react-native-progress";
+import { Pie } from "react-native-progress";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import {
   Loader,
@@ -26,9 +22,7 @@ import {
   QR,
   CountdownCircleTimer,
   Pressable,
-  Modal,
-  ProgressBar,
-  View
+  Modal
 } from "@components";
 import {
   faArrowLeft,
@@ -36,7 +30,9 @@ import {
   faBolt,
   faCheck,
   faClock,
+  faGlobe,
   faHandPointer,
+  faIdCard,
   faPen,
   faPrint,
   faQrcode,
@@ -53,15 +49,11 @@ import {
   useVersionTag,
   usePrintInvoiceTicket
 } from "@hooks";
-import {
-  ActivityIndicator,
-  Vibration,
-  useWindowDimensions
-} from "react-native";
+import { ActivityIndicator, Vibration } from "react-native";
 import { useTheme } from "styled-components";
 import { FooterLine } from "./components/FooterLine";
 import {
-  SBPThemeContext,
+  DEFAULT_DECIMALS,
   apiRootDomain,
   appRootUrl,
   currencies,
@@ -78,9 +70,13 @@ import {
   AsyncStorage,
   formatSecondsToMMSS
 } from "@utils";
-import { keyStoreTicketsAutoPrint } from "@config/settingsKeys";
+import {
+  keyStoreTicketsAutoPrint,
+  keyStoreTransactionsHistory
+} from "@config/settingsKeys";
 import { useSpring, easings } from "@react-spring/native";
 import { useSafeAreaFrame } from "react-native-safe-area-context";
+import { AmlInfoStatus } from "@screens/Aml/components/AmlStatus/AmlStatus";
 
 const getTrue = () => true;
 
@@ -123,7 +119,7 @@ type PaymentDetail = XOR<
 type FiatUnits = (typeof currencies)[number]["value"];
 
 type Input = {
-  unit: FiatUnits | "sat" | "BTC";
+  unit: FiatUnits;
   amount: number;
 };
 
@@ -134,6 +130,7 @@ type Device = {
 
 export type InvoiceType = {
   id: string;
+  merchantName: string;
   tag: string;
   title: string;
   time: number;
@@ -149,6 +146,7 @@ export type InvoiceType = {
   device?: Device;
   // paymentMethod: "lightning" | "onchain";
   redirectUrl: `http://${string}`;
+  amlInfoStatus?: AmlInfoStatus;
 };
 
 const truncate = (str: string, length: number, separator = "...") => {
@@ -176,7 +174,6 @@ export const Invoice = () => {
   const { t: tRoot } = useTranslation();
   const { bottom: bottomInset } = useSafeAreaInsets();
   const { width: frameWidth, height: frameHeight } = useSafeAreaFrame();
-  const { setBackgroundColor } = useContext(SBPThemeContext);
   const params = useParams<{ id: string }>();
   const location = useLocation<{ isLocalInvoice?: boolean }>();
   const isLarge = useIsScreenSizeMin("large");
@@ -207,6 +204,7 @@ export const Invoice = () => {
   const [onChainAddr, setOnChainAddr] = useState<string>();
   const [invoiceCurrency, setInvoiceCurrency] = useState<string>();
   const [device, setDevice] = useState<Device>();
+  const [amlDecision, setAmlDescision] = useState(true);
   const [invoiceFiatAmount, setInvoiceFiatAmount] = useState(0);
   const [isInvalidInvoice, setIsInvalidInvoice] = useState(false);
   const [redirectUrl, setRedirectUrl] = useState<`http://${string}`>();
@@ -289,6 +287,13 @@ export const Invoice = () => {
     }
   }, [readyState]);
 
+  const unitDecimals = useMemo(() => {
+    return (
+      currencies.find((c) => c.value === invoiceCurrency)?.decimals ??
+      DEFAULT_DECIMALS
+    );
+  }, [invoiceCurrency]);
+
   const fiatSatAmountComponent = useMemo(
     () => (
       <>
@@ -296,14 +301,16 @@ export const Invoice = () => {
           {getFormattedUnit(
             invoiceFiatAmount,
             invoiceCurrency || "",
-            !invoiceFiatAmount || invoiceFiatAmount % 1 === 0 ? 0 : 2
+            unitDecimals
           )}
         </S.AmountText>
         {invoiceCurrency !== "sat" && (
           <>
-            <S.AmountText subAmount>
-              {amount ? numberWithSpaces(amount / 1000) : ""} sats
-            </S.AmountText>
+            {amount > 0 && (
+              <S.AmountText subAmount>
+                {amount ? numberWithSpaces(amount / 1000) : ""} sats
+              </S.AmountText>
+            )}
             {isExternalInvoice &&
               createdAt &&
               delay &&
@@ -334,12 +341,16 @@ export const Invoice = () => {
     ),
     [
       invoiceFiatAmount,
+      invoiceCurrency,
+      unitDecimals,
+      amount,
       isExternalInvoice,
       createdAt,
       delay,
       isAlive,
-      invoiceCurrency,
-      amount,
+      colors.grey,
+      colors.primaryLight,
+      t,
       updateRateTime
     ]
   );
@@ -403,13 +414,12 @@ export const Invoice = () => {
       }, 200);
     },
     [
-      greenCircleApi,
-      isExternalInvoice,
-      printInvoiceTicket,
-      redirect,
-      successLottieRef,
+      frameWidth,
       frameHeight,
-      frameWidth
+      greenCircleApi,
+      redirectProgressApi,
+      printInvoiceTicket,
+      redirect
     ]
   );
 
@@ -471,7 +481,7 @@ export const Invoice = () => {
                 setStatus("settled");
                 onPaid();
               }
-            } catch (e) {}
+            } catch (_e) {}
           }, 2 * 1000);
         } catch (e) {
           navigate("/");
@@ -494,6 +504,14 @@ export const Invoice = () => {
   const updateInvoice = useCallback(
     (getInvoiceData: InvoiceType, isInitialData?: boolean) => {
       try {
+        const _amlStatus = getInvoiceData.amlInfoStatus;
+        const _amlDecision = !_amlStatus || _amlStatus === "accepted";
+        setAmlDescision(_amlDecision);
+        if (isExternalInvoice && !_amlDecision) {
+          navigate(`/aml/${invoiceId}`);
+          return;
+        }
+
         const lightningPayments = getInvoiceData.paymentDetails.filter(
           (p) => p.network === "lightning"
         );
@@ -535,6 +553,26 @@ export const Invoice = () => {
           !isExternalInvoice
         ) {
           onFullScreenPaid(getInvoiceData);
+          AsyncStorage.getItem(keyStoreTransactionsHistory).then(
+            (transactionsHistory = "[]") => {
+              let localTransactionsHistory: InvoiceType[] =
+                JSON.parse(transactionsHistory);
+
+              const invoiceIndex = localTransactionsHistory.findIndex(
+                (i) => i.id === getInvoiceData.id
+              );
+
+              if (~invoiceIndex) {
+                localTransactionsHistory[invoiceIndex] = getInvoiceData;
+              }
+
+              AsyncStorage.setItem(
+                keyStoreTransactionsHistory,
+                JSON.stringify(localTransactionsHistory)
+              );
+            }
+          );
+
           return;
         }
 
@@ -562,7 +600,7 @@ export const Invoice = () => {
         return;
       }
     },
-    [onPaid, onFullScreenPaid, status, isExternalInvoice]
+    [status, isExternalInvoice, navigate, invoiceId, onFullScreenPaid]
   );
 
   const [isInitial, setIsInitial] = useState(true);
@@ -577,32 +615,36 @@ export const Invoice = () => {
   }, [lastJsonMessage, isWithdraw]);
 
   useEffect(() => {
-    setupNfc();
-  }, []);
+    if (amlDecision) {
+      setupNfc();
+    }
+  }, [amlDecision]);
 
   useEffect(() => {
-    if (isNfcAvailable && pr && !isNfcNeedsTap && !isWithdraw) {
+    if (isNfcAvailable && pr && !isNfcNeedsTap && !isWithdraw && amlDecision) {
       void readingNfcLoop(pr);
     }
   }, [isNfcAvailable, pr, readingNfcLoop]);
 
   const { bitcoinBase, fullUrl } = useMemo(() => {
-    const bitcoinBase = onChainAddr
-      ? `bitcoin:${onChainAddr}?amount=${
-          btcAmount.toFixed(8) || ""
-        }&label=${encodeURIComponent(title || "")}${description ? `&message=${encodeURIComponent(description)}` : ""}`
-      : undefined;
+    if (amlDecision) {
+      const _bitcoinBase = onChainAddr
+        ? `bitcoin:${onChainAddr}?amount=${
+            btcAmount.toFixed(8) || ""
+          }&label=${encodeURIComponent(title || "")}${description ? `&message=${encodeURIComponent(description)}` : ""}`
+        : undefined;
 
-    const fullUrl: `bitcoin:${string}` | `lightning:${string}` = bitcoinBase
-      ? `${bitcoinBase}${pr ? `&lightning=${pr}` : ""}`
-      : pr
-        ? `lightning:${pr || ""}`
-        : "";
+      const _fullUrl: `bitcoin:${string}` | `lightning:${string}` = _bitcoinBase
+        ? `${_bitcoinBase}${pr ? `&lightning=${pr}` : ""}`
+        : pr
+          ? `lightning:${pr || ""}`
+          : "";
 
-    return { bitcoinBase, fullUrl };
-  }, [onChainAddr, btcAmount, title, pr]);
-
-  const qrData = useMemo(() => fullUrl, [fullUrl]);
+      return { bitcoinBase: _bitcoinBase, fullUrl: _fullUrl };
+    } else {
+      return { bitcoinBase: "", fullUrl: `${appRootUrl}/aml/${invoiceId}` };
+    }
+  }, [amlDecision, onChainAddr, btcAmount, title, description, pr, invoiceId]);
 
   const [openWalletUrl, setOpenWalletUrl] = useState<string | null>();
 
@@ -644,11 +686,6 @@ export const Invoice = () => {
       };
     }
   }, [isExternalInvoice, navigate, redirectUrl, toTerminalTimeout]);
-
-  const isFullScreenSuccess = useMemo(
-    () => status === "settled" && !isExternalInvoice,
-    [status, isExternalInvoice]
-  );
 
   const alreadyPaidAmount = useMemo(
     () => onChainTxs?.reduce((result, o) => result + (o.amount || 0), 0) || 0,
@@ -738,6 +775,7 @@ export const Invoice = () => {
     [
       title,
       description,
+      colors.white,
       location.key,
       isInvoiceLoading,
       onOpenQrModal,
@@ -843,7 +881,20 @@ export const Invoice = () => {
               {isAlive && (
                 <>
                   <S.TypeText>
-                    {t(!isWithdraw ? "scanToPayIn" : "scanToWithdraw")}
+                    {!amlDecision && (
+                      <S.PayByIcon
+                        icon={faIdCard}
+                        color={colors.white}
+                        size={TEXT_ICON_SIZE}
+                      />
+                    )}
+                    {t(
+                      !isWithdraw
+                        ? amlDecision
+                          ? "scanToPayIn"
+                          : "scanToVerify"
+                        : "scanToWithdraw"
+                    )}
                   </S.TypeText>
                   <S.TypeText>
                     {pr && (
@@ -886,9 +937,15 @@ export const Invoice = () => {
                     <QR
                       value={fullUrl}
                       size={qrCodeSize}
-                      image={{
-                        source: require("@assets/images/bitcoin-white-border.png")
-                      }}
+                      {...(amlDecision
+                        ? {
+                            image: {
+                              source: require("@assets/images/bitcoin-white-border.png")
+                            }
+                          }
+                        : {
+                            icon: faGlobe
+                          })}
                       ecl="M"
                     />
                   ) : null)}
@@ -978,43 +1035,47 @@ export const Invoice = () => {
                 </ComponentStack>
               )}
               <>
-                {(isNfcAvailable || isNfcNeedsTap) && isAlive && (
-                  <S.NFCWrapper>
-                    <S.AskButton
-                      disabled={!isNfcNeedsTap}
-                      isLightOpacity={isNfcNeedsPermission}
-                      onPress={async () => {
-                        if (isWeb) {
-                          await setupNfc();
-                        } else if (isIos && readingNfcData) {
-                          await readingNfcLoop(readingNfcData);
-                        }
-                      }}
-                    >
-                      {isNfcLoading ? (
-                        <ActivityIndicator
-                          size="large"
-                          color={isNfcNeedsTap ? colors.primary : colors.white}
-                        />
-                      ) : (
-                        <S.NFCImage
-                          source={
-                            isNfcNeedsPermission
-                              ? require("@assets/images/bolt-card-white.png")
-                              : isNfcNeedsTap
-                                ? require("@assets/images/bolt-card-black.png")
-                                : require("@assets/images/bolt-card.png")
+                {(isNfcAvailable || isNfcNeedsTap) &&
+                  isAlive &&
+                  amlDecision && (
+                    <S.NFCWrapper>
+                      <S.AskButton
+                        disabled={!isNfcNeedsTap}
+                        isLightOpacity={isNfcNeedsPermission}
+                        onPress={async () => {
+                          if (isWeb) {
+                            await setupNfc();
+                          } else if (isIos && readingNfcData) {
+                            await readingNfcLoop(readingNfcData);
                           }
-                        />
-                      )}
-                      {isNfcNeedsPermission && (
-                        <S.NFCSwitchContainer>
-                          <S.NFCSwitchContainerCircle />
-                        </S.NFCSwitchContainer>
-                      )}
-                    </S.AskButton>
-                  </S.NFCWrapper>
-                )}
+                        }}
+                      >
+                        {isNfcLoading ? (
+                          <ActivityIndicator
+                            size="large"
+                            color={
+                              isNfcNeedsTap ? colors.primary : colors.white
+                            }
+                          />
+                        ) : (
+                          <S.NFCImage
+                            source={
+                              isNfcNeedsPermission
+                                ? require("@assets/images/bolt-card-white.png")
+                                : isNfcNeedsTap
+                                  ? require("@assets/images/bolt-card-black.png")
+                                  : require("@assets/images/bolt-card.png")
+                            }
+                          />
+                        )}
+                        {isNfcNeedsPermission && (
+                          <S.NFCSwitchContainer>
+                            <S.NFCSwitchContainerCircle />
+                          </S.NFCSwitchContainer>
+                        )}
+                      </S.AskButton>
+                    </S.NFCWrapper>
+                  )}
                 {fiatSatAmountComponent}
                 {alreadyPaidAmount > 0 && status === "underpaid" && (
                   <>

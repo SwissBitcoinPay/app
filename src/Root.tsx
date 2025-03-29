@@ -5,23 +5,34 @@ import {
   SBPContextProvider,
   SBPThemeContextProvider,
   SBPBitboxContextProvider,
-  SBPModalContextProvider
+  SBPModalContextProvider,
+  platform,
+  SBPHardwareWalletContextProvider,
+  SBPLedgerContextProvider
 } from "@config";
 import App from "./App";
 import { SafeAreaProvider, initialWindowMetrics } from "@components/SafeArea";
 import "./config/i18n";
+
+const { isIos } = platform;
 
 export const Root = () => (
   <Suspense fallback={<Loader />}>
     <SBPContextProvider>
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
         <KeyboardAvoidingView>
-          <Router>
+          <Router
+            future={{ v7_startTransition: !isIos, v7_relativeSplatPath: true }}
+          >
             <SBPThemeContextProvider>
               <SBPModalContextProvider>
-                <SBPBitboxContextProvider>
-                  <App />
-                </SBPBitboxContextProvider>
+                <SBPLedgerContextProvider>
+                  <SBPBitboxContextProvider>
+                    <SBPHardwareWalletContextProvider>
+                      <App />
+                    </SBPHardwareWalletContextProvider>
+                  </SBPBitboxContextProvider>
+                </SBPLedgerContextProvider>
               </SBPModalContextProvider>
             </SBPThemeContextProvider>
           </Router>

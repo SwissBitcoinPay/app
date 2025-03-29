@@ -272,7 +272,7 @@
       "ibanInvalid": "IBAN non valido",
       "zipInvalid": "CAP non valido",
       "submit": "Invia",
-      "hardwareConnectSuccess": "Your {{hardwareWallet}} has been connected sucessfully. You can disconnect it.",
+      "hardwareConnectSuccess": "Il {{hardwareWallet}} è stato collegato con successo. È possibile scollegarlo.",
       "patchSettingNeedsEmailValidation": "Conferma le nuove impostazioni tramite l'e-mail ricevuta",
       "error": {
         "iban": {

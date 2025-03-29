@@ -1,0 +1,4 @@
+- Better support for currencies with non-2 decimals
+- Fix Preferred currency to be reset between each invoice
+- Better support for sats & BTC invoicing
+- Fixed sats layout bug

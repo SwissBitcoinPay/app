@@ -1,5 +1,15 @@
 export const currencies = [
   {
+    label: "sats",
+    value: "sat",
+    decimals: 0
+  },
+  {
+    label: "BTC",
+    value: "BTC",
+    decimals: 8
+  },
+  {
     label: "EUR • Euro 🇪🇺",
     value: "EUR" as const
   },
@@ -17,7 +27,8 @@ export const currencies = [
   },
   {
     label: "JPY • Japanese yen 🇯🇵",
-    value: "JPY" as const
+    value: "JPY" as const,
+    decimals: 0
   },
   {
     label: "HKD • Hong Kong dollar 🇭🇰",
@@ -129,7 +140,8 @@ export const currencies = [
   },
   {
     label: "BIF • Burundian franc",
-    value: "BIF" as const
+    value: "BIF" as const,
+    decimals: 0
   },
   {
     label: "BMD • Bermudian dollar",
@@ -173,7 +185,8 @@ export const currencies = [
   },
   {
     label: "CLF • Unidad de Fomento",
-    value: "CLF" as const
+    value: "CLF" as const,
+    decimals: 4
   },
   {
     label: "CLP • Chilean peso",
@@ -209,7 +222,8 @@ export const currencies = [
   },
   {
     label: "DJF • Djiboutian franc",
-    value: "DJF" as const
+    value: "DJF" as const,
+    decimals: 0
   },
   {
     label: "DOP • Dominican peso",
@@ -261,7 +275,8 @@ export const currencies = [
   },
   {
     label: "GNF • Guinean franc",
-    value: "GNF" as const
+    value: "GNF" as const,
+    decimals: 0
   },
   {
     label: "GTQ • Guatemalan quetzal",
@@ -337,7 +352,8 @@ export const currencies = [
   },
   {
     label: "KMF • Comoro franc",
-    value: "KMF" as const
+    value: "KMF" as const,
+    decimals: 0
   },
   {
     label: "KPW • North Korean won",
@@ -345,7 +361,8 @@ export const currencies = [
   },
   {
     label: "KRW • South Korean won",
-    value: "KRW" as const
+    value: "KRW" as const,
+    decimals: 0
   },
   {
     label: "KWD • Kuwaiti dinar",
@@ -413,7 +430,8 @@ export const currencies = [
   },
   {
     label: "MRO",
-    value: "MRO" as const
+    value: "MRO" as const,
+    decimals: 1
   },
   {
     label: "MUR • Mauritian rupee",
@@ -477,7 +495,8 @@ export const currencies = [
   },
   {
     label: "PYG • Paraguayan guaraní",
-    value: "PYG" as const
+    value: "PYG" as const,
+    decimals: 0
   },
   {
     label: "QAR • Qatari riyal",
@@ -497,7 +516,8 @@ export const currencies = [
   },
   {
     label: "RWF • Rwandan franc",
-    value: "RWF" as const
+    value: "RWF" as const,
+    decimals: 0
   },
   {
     label: "SAR • Saudi riyal",
@@ -593,7 +613,8 @@ export const currencies = [
   },
   {
     label: "UGX • Ugandan shilling",
-    value: "UGX" as const
+    value: "UGX" as const,
+    decimals: 0
   },
   {
     label: "UYU • Uruguyan peso",
@@ -609,11 +630,13 @@ export const currencies = [
   },
   {
     label: "VND • Vietnamese đồng",
-    value: "VND" as const
+    value: "VND" as const,
+    decimals: 0
   },
   {
     label: "VUV • Vanuatu vatu",
-    value: "VUV" as const
+    value: "VUV" as const,
+    decimals: 0
   },
   {
     label: "WST • Samoan tala",
@@ -621,7 +644,8 @@ export const currencies = [
   },
   {
     label: "XAF",
-    value: "XAF" as const
+    value: "XAF" as const,
+    decimals: 0
   },
   {
     label: "XAG • Silver",
@@ -642,7 +666,7 @@ export const currencies = [
   {
     label: "XOF • CFA franc BCEAO",
     value: "XOF" as const,
-    noDecimals: true
+    decimals: 0
   },
   {
     label: "XPD",
@@ -650,7 +674,8 @@ export const currencies = [
   },
   {
     label: "XPF • Franc pacifique",
-    value: "XPF" as const
+    value: "XPF" as const,
+    decimals: 0
   },
   {
     label: "XPT",

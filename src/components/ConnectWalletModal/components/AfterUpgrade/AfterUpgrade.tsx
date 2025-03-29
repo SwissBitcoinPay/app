@@ -2,11 +2,14 @@ import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ComponentStack, FieldDescription, Icon, Loader } from "@components";
 import { ConnectWalletComponentProps } from "../../ConnectWalletModal";
-import { SBPBitboxContext } from "@config";
 import { faHandPointUp } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "styled-components";
 import { sleep } from "@utils";
 import * as ConnectStyled from "../../styled";
+import {
+  SBPBitboxContextType,
+  SBPHardwareWalletContext
+} from "@config/SBPHardwareWallet";
 
 const TIME_TO_WAKEUP_AFTER_UPGRADE = 2000;
 
@@ -16,26 +19,26 @@ export const AfterUpgrade = ({ status }: ConnectWalletComponentProps) => {
   });
   const { colors } = useTheme();
 
-  const { setIsAfterUpgradeScreen, setAttentionToBitbox } =
-    useContext(SBPBitboxContext);
+  const { setAttentionToHardware, setIsHardwareUpgraded } =
+    useContext<SBPBitboxContextType>(SBPHardwareWalletContext);
 
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     (async () => {
       await sleep(TIME_TO_WAKEUP_AFTER_UPGRADE);
-      setAttentionToBitbox(true);
+      setAttentionToHardware?.(true);
       setIsReady(true);
     })();
 
     return () => {
-      setAttentionToBitbox(false);
+      setAttentionToHardware?.(false);
     };
   }, []);
 
   useEffect(() => {
     if (["unpaired", "uninitialized"].includes(status)) {
-      setIsAfterUpgradeScreen(false);
+      setIsHardwareUpgraded(false);
     }
   }, [status]);
 

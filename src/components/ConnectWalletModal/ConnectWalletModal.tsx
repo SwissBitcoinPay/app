@@ -3,13 +3,12 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
-  useState
+  useMemo
 } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal } from "@components";
 import { UseFormSetValue, useForm } from "react-hook-form";
-import { AsyncStorage, sleep } from "@utils";
+import { AsyncStorage, hardwareNames, sleep } from "@utils";
 import {
   keyStoreUserType,
   keyStoreWalletPath,
@@ -17,10 +16,11 @@ import {
   keyStoreZpub
 } from "@config/settingsKeys";
 import { UserType } from "@types";
-import { SBPBitboxContext } from "@config";
-import { useBitboxBridge } from "@hooks/useBitboxBridge";
 import {
+  Empty as EmptyScreen,
   Connect as ConnectScreen,
+  Transport as TransportScreen,
+  SelectDevice as SelectDeviceScreen,
   Bootloader as BootloaderScreen,
   Connected as ConnectedScreen,
   Pairing as PairingScreen,
@@ -35,6 +35,12 @@ import { SignatureData } from "@components/PayoutConfig/components/BitcoinSettin
 import { XOR } from "ts-essentials";
 import { PairedBitBox } from "bitbox-api";
 import { ACCESS_CONTROL } from "react-native-keychain";
+import {
+  HardwareState,
+  SBPHardwareWalletContext
+} from "@config/SBPHardwareWallet";
+import { HardwareWallet } from "@utils/wallet/types";
+import { WalletType } from "@components/PayoutConfig/PayoutConfig";
 
 type ConnectWalletForm = {
   zPub: string;
@@ -44,7 +50,7 @@ type ConnectWalletForm = {
 };
 
 export type CustomFunctionType = (
-  params: BitboxReadyFunctionParams
+  params: HardwareReadyFunctionParams
 ) => Promise<{ messageToSign: string } | void>;
 
 type ConnectWalletModalProps = Omit<
@@ -53,12 +59,13 @@ type ConnectWalletModalProps = Omit<
 > & {
   onClose: (signatureData?: SignatureData) => void;
   customFunction?: CustomFunctionType;
+  walletType?: WalletType;
 };
 
-export type BitboxReadyFunctionParams = {
+export type HardwareReadyFunctionParams = {
   account: string;
   xPub: string;
-  bitbox?: PairedBitBox;
+  wallet?: HardwareWallet;
 };
 
 export type ConnectWalletComponentProps = {
@@ -66,7 +73,6 @@ export type ConnectWalletComponentProps = {
   status: XOR<BootloaderStatus, Status>;
   onClose: (isFinished: boolean) => void;
   setValue: UseFormSetValue<ConnectWalletForm>;
-  setState: (value: WalletConnectState) => void;
   customFunction?: CustomFunctionType;
 };
 
@@ -83,42 +89,19 @@ export const ConnectWalletModal = ({
   isOpen,
   onClose,
   customFunction,
+  walletType,
   ...props
 }: ConnectWalletModalProps) => {
   const { t } = useTranslation(undefined, { keyPrefix: "connectWalletModal" });
-  const { deviceId, deviceMode, status } = useBitboxBridge();
-  const [state, setState] = useState<WalletConnectState>();
   const {
-    setIsBitboxServerRunning,
-    setAfterSetupMode,
-    isAfterUpgradeScreen,
-    afterSetupMode
-  } = useContext(SBPBitboxContext);
-
-  useEffect(() => {
-    if (deviceMode === "bitbox02-bootloader") {
-      setState(WalletConnectState.Bootloader);
-    } else if (deviceMode === "bitbox02") {
-      switch (status) {
-        case "connected":
-          setState(WalletConnectState.Connected);
-          break;
-        case "unpaired":
-        case "pairingFailed":
-          setState(WalletConnectState.Pairing);
-          break;
-        case "uninitialized":
-        case "seeded":
-          setState(WalletConnectState.Setup);
-          break;
-        case "initialized":
-          setState(WalletConnectState.Signature);
-          break;
-      }
-    } else if (!status && !!state) {
-      setState(WalletConnectState.Connect);
-    }
-  }, [deviceMode, status]);
+    init,
+    close,
+    state,
+    setHardwareType,
+    hardwareType,
+    screenComponentProps = {},
+    isHardwareUpgraded
+  } = useContext(SBPHardwareWalletContext);
 
   const {
     Component,
@@ -128,57 +111,62 @@ export const ConnectWalletModal = ({
     Component: React.ElementType<ConnectWalletComponentProps>;
     buttonProps?: Omit<ComponentProps<typeof Modal>["submitButton"], "onPress">;
   }>(() => {
-    if (isAfterUpgradeScreen) {
+    if (!hardwareType) {
+      return { Component: EmptyScreen };
+    } else if (isHardwareUpgraded) {
       return { Component: AfterUpgradeScreen };
     } else {
       switch (state) {
-        case WalletConnectState.Connect:
+        case HardwareState.Connect:
           return { Component: ConnectScreen };
-        case WalletConnectState.Bootloader:
+        case HardwareState.Transport:
+          return { Component: TransportScreen };
+        case HardwareState.SelectDevice:
+          return { Component: SelectDeviceScreen };
+        case HardwareState.Bootloader:
           return { Component: BootloaderScreen };
-        case WalletConnectState.Connected:
+        case HardwareState.Connected:
           return { Component: ConnectedScreen };
-        case WalletConnectState.Pairing:
+        case HardwareState.Pairing:
           return { Component: PairingScreen };
-        case WalletConnectState.Setup:
+        case HardwareState.Setup:
           return { Component: SetupScreen };
-        case WalletConnectState.Signature:
-          if (afterSetupMode) {
-            return {
-              Component: AfterSetupScreen,
-              ...(afterSetupMode !== "sdcard"
-                ? {
-                    buttonProps: {
-                      title: t("iUnderstand"),
-                      onPress: () => {
-                        setAfterSetupMode(undefined);
-                      }
-                    }
-                  }
-                : {})
-            };
-          } else {
-            return {
-              Component: SignatureScreen,
-              componentProps: { customFunction }
-            };
-          }
+        case HardwareState.AfterSetup:
+          return { Component: AfterSetupScreen, ...screenComponentProps };
+        case HardwareState.Signature:
+          return {
+            Component: SignatureScreen,
+            componentProps: { customFunction }
+          };
         default:
           return {};
       }
     }
   }, [
-    afterSetupMode,
-    customFunction,
-    isAfterUpgradeScreen,
-    setAfterSetupMode,
+    hardwareType,
+    isHardwareUpgraded,
     state,
-    t
+    screenComponentProps,
+    customFunction
   ]);
 
   const { watch, setValue, reset } = useForm<ConnectWalletForm>({
     mode: "onTouched"
   });
+
+  useEffect(() => {
+    if (hardwareType) {
+      init?.();
+    } else {
+      close?.();
+    }
+  }, [!!hardwareType]);
+
+  useEffect(() => {
+    if (isOpen && Object.keys(hardwareNames).includes(walletType)) {
+      setHardwareType(walletType);
+    }
+  }, [isOpen]);
 
   const handleOnClose = useCallback(
     async (withData = false) => {
@@ -191,25 +179,24 @@ export const ConnectWalletModal = ({
         );
         await AsyncStorage.setItem(keyStoreWalletPath, data.path);
         await AsyncStorage.setItem(keyStoreUserType, UserType.Wallet);
-        await AsyncStorage.setItem(keyStoreWalletType, "bitbox02");
-        onClose({ ...data, walletType: "bitbox02" });
+        await AsyncStorage.setItem(keyStoreWalletType, hardwareType);
+        onClose({ ...data, walletType: hardwareType });
       } else {
         onClose();
       }
       await sleep(500);
-      setState(WalletConnectState.Connect);
+      setHardwareType(undefined);
       reset();
     },
-    [onClose, reset, watch]
+    [hardwareType, onClose, reset, setHardwareType, watch]
   );
 
   useEffect(() => {
-    (async () => {
-      await setIsBitboxServerRunning(isOpen);
-      if (isOpen) {
-        setState(WalletConnectState.Connect);
-      }
-    })();
+    if (isOpen) {
+      init?.();
+    } else {
+      close?.();
+    }
   }, [isOpen]);
 
   return (
@@ -222,11 +209,8 @@ export const ConnectWalletModal = ({
     >
       {Component && (
         <Component
-          deviceId={deviceId}
-          status={status}
           onClose={handleOnClose}
           setValue={setValue}
-          setState={setState}
           {...componentProps}
         />
       )}

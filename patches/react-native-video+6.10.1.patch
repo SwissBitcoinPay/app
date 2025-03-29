@@ -1,0 +1,24 @@
+diff --git a/node_modules/react-native-video/lib/Video.web.js b/node_modules/react-native-video/lib/Video.web.js
+index b31aef4..c55f02e 100644
+--- a/node_modules/react-native-video/lib/Video.web.js
++++ b/node_modules/react-native-video/lib/Video.web.js
+@@ -316,7 +316,6 @@ const Video = (0, react_1.forwardRef)(({ source, paused, muted, volume, rate, re
+         }, onEnded: onEnd, style: videoStyle }));
+ });
+ const videoStyle = {
+-    position: 'absolute',
+     inset: 0,
+     objectFit: 'contain',
+     width: '100%',
+diff --git a/node_modules/react-native-video/src/Video.web.tsx b/node_modules/react-native-video/src/Video.web.tsx
+index 1dcc684..8b8c5f7 100644
+--- a/node_modules/react-native-video/src/Video.web.tsx
++++ b/node_modules/react-native-video/src/Video.web.tsx
+@@ -417,7 +417,6 @@ const Video = forwardRef<VideoRef, ReactVideoProps>(
+ );
+ 
+ const videoStyle = {
+-  position: 'absolute',
+   inset: 0,
+   objectFit: 'contain',
+   width: '100%',

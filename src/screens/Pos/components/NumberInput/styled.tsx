@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { View, Text, Pressable } from "@components";
 
+
+
 export const NumberContainer = styled(View)<{
   noExpend?: boolean;
   customColor?: string;
@@ -9,6 +11,7 @@ export const NumberContainer = styled(View)<{
   rounded?: "left" | "right";
   bottomPadding?: number;
   isLargeScreen?: boolean;
+  isSmallHeight?: boolean;
 }>`
   margin: 4px;
   border-radius: 16px;
@@ -20,11 +23,13 @@ export const NumberContainer = styled(View)<{
     customColor,
     disabled,
     rounded,
-    isLargeScreen
+    isLargeScreen,
+    isSmallHeight
   }) => {
+    const buttonHeight = !isSmallHeight ? 24 : 18;
     return `
       ${noExpend ? "width: 33.333%;" : "flex: 1;"}
-      height: ${24 + (bottomPadding > 24 ? bottomPadding : 24) * 2}px;
+      height: ${buttonHeight + (bottomPadding > buttonHeight ? bottomPadding : buttonHeight) * 2}px;
       ${noBorderRadius ? "border-radius: 0px; margin: 0px;" : ""}
       ${customColor ? `background: ${customColor};` : ""}
       ${disabled ? `opacity: 0.75;` : ""}

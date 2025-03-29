@@ -37,12 +37,16 @@ import {
   useMemo,
   useState
 } from "react";
-import { validateBitcoinAddress, isNewAccount as _isNewAccount } from "@utils";
+import {
+  validateBitcoinAddress,
+  isNewAccount as _isNewAccount,
+  hardwareNames
+} from "@utils";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import { SBPContext, apiRootUrl } from "@config";
+import { SBPContext, apiRootUrl, platform } from "@config";
 import { DescriptionLine } from "../DescriptionLine";
 import {
   BitcoinFiatFormSettings,
@@ -50,10 +54,11 @@ import {
   WalletType
 } from "@components/PayoutConfig/PayoutConfig";
 import * as S from "./styled";
-import { faUsb } from "@fortawesome/free-brands-svg-icons";
+import { faBluetooth, faUsb } from "@fortawesome/free-brands-svg-icons";
 import { useToast } from "react-native-toast-notifications";
-import { IS_BITBOX_SUPPORTED } from "@config";
-import { addYears, isBefore } from "date-fns";
+import { useIsScreenSizeMin } from "@hooks";
+
+const { isIos } = platform;
 
 export type SignatureData = {
   zPub: string;
@@ -68,6 +73,7 @@ export const BitcoinSettings = ({
   watch,
   control
 }: BitcoinFiatFormSettings) => {
+  const isLarge = useIsScreenSizeMin("large");
   const { t } = useTranslation(undefined, {
     keyPrefix: "screens.payoutConfig"
   });
@@ -137,8 +143,8 @@ export const BitcoinSettings = ({
             [btcAddressTypes.onchain
               ? "onchain"
               : btcAddressTypes.xpub
-              ? "xpub"
-              : "lightning"]: true
+                ? "xpub"
+                : "lightning"]: true
           },
           { shouldValidate: false }
         );
@@ -382,9 +388,14 @@ export const BitcoinSettings = ({
         const verifySignatureData = await validateSignature(signatureData);
 
         if (verifySignatureData === true) {
-          toast.show(t("bitboxConnectSuccess"), {
-            type: "success"
-          });
+          toast.show(
+            t("hardwareConnectSuccess", {
+              hardwareWallet: hardwareNames[signatureData.walletType]
+            }),
+            {
+              type: "success"
+            }
+          );
         } else {
           toast.show(verifySignatureData, {
             type: "error"
@@ -414,7 +425,11 @@ export const BitcoinSettings = ({
 
   const walletTypeInfoComponent = useMemo(
     () => (
-      <ComponentStack direction="horizontal" gapSize={10}>
+      <ComponentStack
+        style={{ marginTop: 8 }}
+        direction="horizontal"
+        gapSize={10}
+      >
         {[
           {
             value: btcAddressTypes.onchain,
@@ -435,10 +450,10 @@ export const BitcoinSettings = ({
             addressTypeValue === false
               ? theme.colors.primary
               : addressTypeValue === "error"
-              ? theme.colors.error
-              : isLoading
-              ? theme.colors.warning
-              : theme.colors.success;
+                ? theme.colors.error
+                : isLoading
+                  ? theme.colors.warning
+                  : theme.colors.success;
 
           return (
             <S.PassCheckContainer key={label}>
@@ -451,8 +466,8 @@ export const BitcoinSettings = ({
                     addressTypeValue === false
                       ? faCircle
                       : addressTypeValue === "error"
-                      ? faTimesCircle
-                      : faCheckCircle
+                        ? faTimesCircle
+                        : faCheckCircle
                   }
                   size={20}
                 />
@@ -487,29 +502,21 @@ export const BitcoinSettings = ({
   >(
     ({ field: { onChange, value }, fieldState: { error } }) => {
       return (
-        <ComponentStack>
-          <FieldContainer
-            icon={faWallet}
-            title={t("yourWallet")}
-            buttonProps={{
-              title: t("createWallet"),
-              icon: faAdd,
-              onPress: () => {
-                setIsCreateWalletModalOpen(true);
-              }
-            }}
-          >
+        <ComponentStack gapSize={8}>
+          <FieldContainer icon={faWallet} title={t("yourWallet")}>
             <TextField
               label={t("bitcoinPayoutWallet")}
               value={
                 walletType === "local"
                   ? t("localWallet")
                   : walletType === "bitbox02"
-                  ? "BitBox02"
-                  : value
+                    ? "BitBox02"
+                    : walletType === "ledger"
+                      ? "Ledger"
+                      : value
               }
               onChangeText={(newValue) => {
-                if (newValue !== undefined) {
+                if (newValue !== undefined && newValue !== null) {
                   onChange(
                     newValue.replace("bitcoin:", "").replace("lightning:", "")
                   );
@@ -549,13 +556,24 @@ export const BitcoinSettings = ({
               </ComponentStack>
             )}
           </FieldContainer>
-          {IS_BITBOX_SUPPORTED && (
+          <ComponentStack
+            gapSize={8}
+            direction={isLarge ? "horizontal" : "vertical"}
+          >
+            <Button
+              title={t("createWallet")}
+              type="bitcoin"
+              icon={faAdd}
+              onPress={() => {
+                setIsCreateWalletModalOpen(true);
+              }}
+            />
             <Button
               title={tRoot("connectWalletModal.title")}
-              icon={faUsb}
+              icon={isIos ? faBluetooth : faUsb}
               onPress={onPressConnectWallet}
             />
-          )}
+          </ComponentStack>
           {!walletType && walletTypeInfoComponent}
           {!walletType && btcAddressTypes.xpub === true && (
             <ComponentStack>
@@ -614,6 +632,7 @@ export const BitcoinSettings = ({
     [
       alreadyVerifiedAddresses,
       btcAddressTypes.xpub,
+      isLarge,
       nextAddresses,
       onChangeDepositAddress,
       onPressConnectWallet,
@@ -706,12 +725,10 @@ export const BitcoinSettings = ({
         isOpen={isCreateWalletModalOpen}
         onClose={onWalletModalsClose}
       />
-      {IS_BITBOX_SUPPORTED && (
-        <ConnectWalletModal
-          isOpen={isConnectWalletModalOpen}
-          onClose={onBitboxWalletModalClose}
-        />
-      )}
+      <ConnectWalletModal
+        isOpen={isConnectWalletModalOpen}
+        onClose={onBitboxWalletModalClose}
+      />
       <ComponentStack>
         <ComponentStack gapSize={14}>
           <FieldDescription>💶 {t("feesDetails1")}</FieldDescription>
@@ -774,7 +791,11 @@ export const BitcoinSettings = ({
                 />
               </FieldContainer>
             )}
-            <FieldContainer icon={faKey} title={t("messageToSignDetails")}>
+            <FieldContainer
+              icon={faKey}
+              title={t("messageToSignDetails")}
+              multiline
+            >
               <TextField
                 label={t("messageToSign")}
                 value={messageToSign}

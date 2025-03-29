@@ -52,6 +52,7 @@ export const usePostInvoice = () => {
               isLocalInvoice
             }
           });
+
           const { data: checkoutResponseData } = await axios.post<{
             checkoutUrl: string;
             expiry: number;
@@ -86,6 +87,7 @@ export const usePostInvoice = () => {
             description,
             expiry: checkoutResponseData.expiry
           };
+
           const url = checkoutResponseData.checkoutUrl;
           id = url.split("/").pop() || "";
           finalUrl = `/invoice/${id}`;
@@ -172,6 +174,7 @@ export const usePostInvoice = () => {
                 unit: currency,
                 amount: decimalFiat
               },
+              tag: "invoice-tpos",
               ...(deviceName
                 ? {
                     device: {
@@ -192,6 +195,8 @@ export const usePostInvoice = () => {
               type: "error"
             });
           }
+        } else {
+          toast.show(e?.toString?.() || "unknown error", { type: "error" });
         }
       }
     },

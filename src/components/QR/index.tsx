@@ -3,15 +3,9 @@ import { useTheme } from "styled-components";
 import { useMemo } from "react";
 import { ImageURISource } from "react-native";
 import * as S from "./styled";
-
-type QRProps = Omit<QRCodeProps, "ref"> & {
-  style?: React.CSSProperties;
-  image?: {
-    source: ImageURISource;
-    scale?: number;
-    hidePieces?: boolean;
-  };
-};
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { XOR } from "ts-essentials";
+import { Icon } from "@components";
 
 const extractPaddingFromStyle = <T extends React.CSSProperties>(
   style: T
@@ -54,7 +48,20 @@ const extractPaddingFromStyle = <T extends React.CSSProperties>(
   return { padding, borderRadius, restStyle };
 };
 
-export const QR = ({ style, image, size = 0, ...props }: QRProps) => {
+type QRProps = Omit<QRCodeProps, "ref"> & {
+  style?: React.CSSProperties;
+} & XOR<
+    {
+      image?: {
+        source: ImageURISource;
+        scale?: number;
+        hidePieces?: boolean;
+      };
+    },
+    { icon?: IconProp }
+  >;
+
+export const QR = ({ style, image, icon, size = 0, ...props }: QRProps) => {
   const theme = useTheme();
   const { padding, borderRadius } = useMemo(
     () => extractPaddingFromStyle(style as React.CSSProperties),
@@ -66,12 +73,16 @@ export const QR = ({ style, image, size = 0, ...props }: QRProps) => {
       style={{ padding, borderRadius, width: (size || 0) + padding * 2 }}
     >
       <QRCode color={theme.colors.primary} size={size} ecl="Q" {...props} />
-      {image && (
+      {image ? (
         <S.QRImage
           source={image.source}
           style={{ transform: [{ scale: image.scale || 1 }] }}
         />
-      )}
+      ) : icon ? (
+        <S.QRIconContinaer>
+          <Icon icon={icon} size={50} color={theme.colors.primary} />
+        </S.QRIconContinaer>
+      ) : null}
     </S.QRContainer>
   );
 };

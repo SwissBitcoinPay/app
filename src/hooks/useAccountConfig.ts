@@ -23,7 +23,7 @@ type UseAccountConfigParams = {
 export const useAccountConfig = (props?: UseAccountConfigParams) => {
   const { refresh = true } = props || {};
   const navigate = useNavigate();
-  const { accountConfig, setUserType, setAccountConfig, setPreferredCurrency } =
+  const { accountConfig, setUserType, setAccountConfig } =
     useContext(SBPContext);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -40,8 +40,6 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
             headers: { "Api-Key": testApiKey }
           }
         );
-
-        setPreferredCurrency(data.currency);
 
         const fullConfig = { ...data, apiKey: testApiKey || data.apiKey };
 
@@ -65,7 +63,7 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
       setIsLoading(false);
       return true;
     },
-    [setAccountConfig, setPreferredCurrency]
+    [setAccountConfig]
   );
 
   const appState = useRef(AppState.currentState);
