@@ -510,7 +510,7 @@
     "instructions3": "Nunca compartas tu {{backup}} con nadie. Cualquier persona que acceda a tu {{backup}} podrá robarte todos tus fondos."
   },
   "connectWalletModal": {
-    "title": "Connect hardware wallet",
+    "title": "Conectar billetera de hardware",
     "iUnderstand": "Comprendo",
     "afterUpgrade": {
       "title": "Abre tu BitBox02",
@@ -546,8 +546,8 @@
       "select": "Select"
     },
     "connect": {
-      "title": "Connect your {{hardwareWallet}}",
-      "connecting": "Awaiting your {{hardwareWallet}}",
+      "title": "Conecta tu {{hardwareWallet}}",
+      "connecting": "Conectar su {{hardwareWallet}}",
       "disconnected": "Cartera desconectada",
       "updateBitbox": "Asegúrate de que tu BitBox02 tiene un firmware instalado"
     },
@@ -591,7 +591,7 @@
       "selectAccount": "Seleccione la cuenta que desea utilizar",
       "select": "Seleccione",
       "prepareSignature": "Preparar la firma",
-      "waitingForSignature": "Please sign the message on your {{hardwareWallet}}",
+      "waitingForSignature": "Por favor, firme el mensaje en su {{hardwareWallet}}",
       "verifySignature": "Verificar la firma",
       "cannotGetAccount": "No se puede obtener la cuenta",
       "cannotGetXpub": "No se puede obtener xpub",
