@@ -156,7 +156,7 @@ export const usePostInvoice = () => {
           replace: true,
           state: {
             isLocalInvoice,
-            unit: currency,
+            unit: unit || currency,
             decimalFiat,
             customNote: description
           }
@@ -171,7 +171,7 @@ export const usePostInvoice = () => {
               status: "open",
               time: Math.round(new Date().getTime() / 1000),
               input: {
-                unit: currency,
+                unit: unit || currency,
                 amount: decimalFiat
               },
               tag: "invoice-tpos",

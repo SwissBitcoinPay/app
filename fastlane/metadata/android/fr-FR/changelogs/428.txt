@@ -1,0 +1,1 @@
+- Parfois la devise personnalisée n'était pas correctement affichée
