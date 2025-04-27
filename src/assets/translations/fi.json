@@ -160,7 +160,9 @@
       "scanToVerify": "Skannaa henkilöllisyytesi varmentamiseksi",
       "or": "tai",
       "scanToWithdraw": "Scannaa vastaanottaaksesi bitcoinia",
-      "printReceipt": "Tulosta kuitti"
+      "printReceipt": "Tulosta kuitti",
+      "receipt": "Receipt",
+      "downloadReceipt": "Download receipt"
     },
     "history": {
       "title": "Tapahtuma historia",
