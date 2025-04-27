@@ -61,7 +61,15 @@ type QRProps = Omit<QRCodeProps, "ref"> & {
     { icon?: IconProp }
   >;
 
-export const QR = ({ style, image, icon, size = 0, ...props }: QRProps) => {
+export const QR = ({
+  style,
+  image,
+  icon,
+  size = 0,
+  logoBackgroundColor,
+  logoColor,
+  ...props
+}: QRProps) => {
   const theme = useTheme();
   const { padding, borderRadius } = useMemo(
     () => extractPaddingFromStyle(style as React.CSSProperties),
@@ -79,9 +87,13 @@ export const QR = ({ style, image, icon, size = 0, ...props }: QRProps) => {
           style={{ transform: [{ scale: image.scale || 1 }] }}
         />
       ) : icon ? (
-        <S.QRIconContinaer>
-          <Icon icon={icon} size={50} color={theme.colors.primary} />
-        </S.QRIconContinaer>
+        <S.QRIconContainer style={{ backgroundColor: logoBackgroundColor }}>
+          <Icon
+            icon={icon}
+            size={size / 5}
+            color={logoColor || theme.colors.primary}
+          />
+        </S.QRIconContainer>
       ) : null}
     </S.QRContainer>
   );

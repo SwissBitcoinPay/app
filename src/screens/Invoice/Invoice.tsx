@@ -22,14 +22,17 @@ import {
   QR,
   CountdownCircleTimer,
   Pressable,
-  Modal
+  Modal,
+  View
 } from "@components";
 import {
   faArrowLeft,
   faArrowUpRightFromSquare,
   faBolt,
   faCheck,
+  faCircleDown,
   faClock,
+  faFileDownload,
   faGlobe,
   faHandPointer,
   faIdCard,
@@ -55,6 +58,7 @@ import { FooterLine } from "./components/FooterLine";
 import {
   DEFAULT_DECIMALS,
   apiRootDomain,
+  apiRootUrl,
   appRootUrl,
   currencies,
   rateUpdateDelay
@@ -162,13 +166,15 @@ const STATUS_ICON_SIZE = 120;
 const MAX_QR_SIZE = 320;
 const FOOTER_VALUE_ITEMS_SIZE = 18;
 
+const REDIRECT_DELAY = 60 * 1000;
+
 export const Invoice = () => {
   const navigate = useNavigate();
   const { colors, gridSize } = useTheme();
   const toast = useToast();
   const versionTag = useVersionTag();
   const printInvoiceTicket = usePrintInvoiceTicket();
-  const { t } = useTranslation(undefined, {
+  const { t, i18n } = useTranslation(undefined, {
     keyPrefix: "screens.invoice"
   });
   const { t: tRoot } = useTranslation();
@@ -396,8 +402,6 @@ export const Invoice = () => {
         delay: springAnimationDelay
       });
 
-      const REDIRECT_DELAY = 7000;
-
       redirectProgressApi.start({
         to: { left: "0%" },
         config: { duration: REDIRECT_DELAY }
@@ -539,7 +543,10 @@ export const Invoice = () => {
           );
         }
 
-        setDescription(getInvoiceData.description);
+        if (getInvoiceData.description) {
+          // don't remove description if it already stored
+          setDescription(getInvoiceData.description);
+        }
         setAmount(getInvoiceData.amount * 1000);
         setPaidAt(getInvoiceData.paidAt);
         setInvoiceCurrency(getInvoiceData.input.unit || "CHF");
@@ -736,6 +743,12 @@ export const Invoice = () => {
     printInvoiceTicket
   ]);
 
+  const downloadPdfLink = useMemo(
+    () =>
+      `${apiRootUrl}/pdf/${invoiceId}?lng=${i18n.language}&tz=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+    [i18n.language, invoiceId]
+  );
+
   const getPageContainerProps = useCallback(
     (isSuccessScreen = false) => {
       return {
@@ -788,6 +801,13 @@ export const Invoice = () => {
     [qrCodeSize, gridSize]
   );
 
+  const redirectDuration = useMemo(() => {
+    if (!isExternalInvoice) {
+      return REDIRECT_DELAY / 1000;
+    }
+    return 7;
+  }, [isExternalInvoice]);
+
   return (
     <>
       <Modal
@@ -811,6 +831,23 @@ export const Invoice = () => {
         >
           <S.InvoicePageContainer {...getPageContainerProps(true)}>
             <S.SectionsContainer gapSize={2}>
+              {!isWithdraw && (
+                <S.InvoiceDownloadContainer isLarge={isLarge}>
+                  <QR
+                    value={downloadPdfLink}
+                    size={S.INVOICE_DOWNLOAD_QR}
+                    icon={faCircleDown}
+                    ecl="M"
+                    backgroundColor={colors.white}
+                    logoBackgroundColor={colors.white}
+                    color={colors.success}
+                    logoColor={colors.success}
+                  />
+                  <Text centered weight={600} color={colors.success} h4>
+                    {t("receipt")}
+                  </Text>
+                </S.InvoiceDownloadContainer>
+              )}
               <S.Section grow>
                 <>
                   <S.TypeText color="transparent">_</S.TypeText>
@@ -1025,7 +1062,7 @@ export const Invoice = () => {
                   <CountdownCircleTimer
                     isGrowing
                     isPlaying
-                    duration={7}
+                    duration={redirectDuration}
                     strokeWidth={5}
                     size={STATUS_ICON_SIZE / 4}
                     colors={colors.white}
@@ -1142,6 +1179,21 @@ export const Invoice = () => {
                     )}
                   </ComponentStack>
                 </ComponentStack>
+              )}
+              {status === "settled" && !isWithdraw && (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "flex-end",
+                    width: "100%"
+                  }}
+                >
+                  <Button
+                    icon={faFileDownload}
+                    title={t("downloadReceipt")}
+                    onPress={downloadPdfLink}
+                  />
+                </View>
               )}
               {createdAt && delay && isAlive && !isExternalInvoice && (
                 <S.ProgressBar
