@@ -72,7 +72,7 @@ workflows:
     instance_type: mac_mini_m2
     environment:
       xcode: 16.2
-      java: 17.0.14
+      java: 17.0.13
       groups:
         - testfairy
         - appstore_credentials
