@@ -16,6 +16,7 @@ import { platform } from "@config";
 import { Circle } from "react-native-progress";
 import { animated } from "@react-spring/native";
 import { ColorValue } from "react-native";
+import { getShadow } from "@utils";
 
 const { isNative, maxContentWidth } = platform;
 
@@ -61,6 +62,25 @@ export const LoaderText = styled(Text).attrs(({ theme }) => ({
 
 export const SectionsContainer = styled(ComponentStack)`
   flex-grow: 1;
+`;
+
+export const INVOICE_DOWNLOAD_QR = 115;
+const INVOICE_DOWNLOAD_PADDING = 12;
+
+export const InvoiceDownloadContainer = styled(ComponentStack).attrs(() => ({
+  direction: "vertical",
+  gapSize: 6
+}))`
+  position: absolute;
+  top: -22px;
+  right: 0px;
+  padding: ${INVOICE_DOWNLOAD_PADDING}px;
+  width: ${INVOICE_DOWNLOAD_QR + 2 * INVOICE_DOWNLOAD_PADDING}px;
+  border-radius: ${({ theme }) => theme.borderRadius}px;
+  align-items: center;
+  text-align: center;
+  background-color: ${({ theme }) => theme.colors.white};
+  ${getShadow({ level: 16 })}
 `;
 
 export const Section = styled(ComponentStack)<{ grow?: boolean }>`

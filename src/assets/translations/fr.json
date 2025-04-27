@@ -160,7 +160,9 @@
       "scanToVerify": "Scanner pour vérifier votre identité",
       "or": "ou",
       "scanToWithdraw": "Scanner pour recevoir des bitcoins via",
-      "printReceipt": "Imprimer reçu"
+      "printReceipt": "Imprimer reçu",
+      "receipt": "Reçu",
+      "downloadReceipt": "Télécharger le reçu"
     },
     "history": {
       "title": "Historique des transactions",

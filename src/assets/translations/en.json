@@ -160,7 +160,9 @@
       "scanToVerify": "Scan to verify your identity",
       "or": "or",
       "scanToWithdraw": "Scan to receive bitcoin via",
-      "printReceipt": "Print receipt"
+      "printReceipt": "Print receipt",
+      "receipt": "Receipt",
+      "downloadReceipt": "Download receipt"
     },
     "history": {
       "title": "Transaction history",
