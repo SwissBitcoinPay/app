@@ -174,7 +174,7 @@ export const Invoice = () => {
   const toast = useToast();
   const versionTag = useVersionTag();
   const printInvoiceTicket = usePrintInvoiceTicket();
-  const { t } = useTranslation(undefined, {
+  const { t, i18n } = useTranslation(undefined, {
     keyPrefix: "screens.invoice"
   });
   const { t: tRoot } = useTranslation();
@@ -744,8 +744,9 @@ export const Invoice = () => {
   ]);
 
   const downloadPdfLink = useMemo(
-    () => `${apiRootUrl}/export-to-pdf/${invoiceId}`,
-    [invoiceId]
+    () =>
+      `${apiRootUrl}/pdf/${invoiceId}?lng=${i18n.language}&tz=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+    [i18n.language, invoiceId]
   );
 
   const getPageContainerProps = useCallback(
@@ -830,21 +831,23 @@ export const Invoice = () => {
         >
           <S.InvoicePageContainer {...getPageContainerProps(true)}>
             <S.SectionsContainer gapSize={2}>
-              <S.InvoiceDownloadContainer>
-                <QR
-                  value={downloadPdfLink}
-                  size={S.INVOICE_DOWNLOAD_QR}
-                  icon={faCircleDown}
-                  ecl="M"
-                  backgroundColor={colors.white}
-                  logoBackgroundColor={colors.white}
-                  color={colors.success}
-                  logoColor={colors.success}
-                />
-                <Text centered weight={600} color={colors.success} h4>
-                  {t("receipt")}
-                </Text>
-              </S.InvoiceDownloadContainer>
+              {!isWithdraw && (
+                <S.InvoiceDownloadContainer isLarge={isLarge}>
+                  <QR
+                    value={downloadPdfLink}
+                    size={S.INVOICE_DOWNLOAD_QR}
+                    icon={faCircleDown}
+                    ecl="M"
+                    backgroundColor={colors.white}
+                    logoBackgroundColor={colors.white}
+                    color={colors.success}
+                    logoColor={colors.success}
+                  />
+                  <Text centered weight={600} color={colors.success} h4>
+                    {t("receipt")}
+                  </Text>
+                </S.InvoiceDownloadContainer>
+              )}
               <S.Section grow>
                 <>
                   <S.TypeText color="transparent">_</S.TypeText>
@@ -1177,7 +1180,7 @@ export const Invoice = () => {
                   </ComponentStack>
                 </ComponentStack>
               )}
-              {status === "settled" && (
+              {status === "settled" && !isWithdraw && (
                 <View
                   style={{
                     flex: 1,

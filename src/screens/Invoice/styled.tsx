@@ -70,7 +70,7 @@ const INVOICE_DOWNLOAD_PADDING = 12;
 export const InvoiceDownloadContainer = styled(ComponentStack).attrs(() => ({
   direction: "vertical",
   gapSize: 6
-}))`
+}))<{ isLarge: boolean }>`
   position: absolute;
   top: -22px;
   right: 0px;
@@ -81,6 +81,14 @@ export const InvoiceDownloadContainer = styled(ComponentStack).attrs(() => ({
   text-align: center;
   background-color: ${({ theme }) => theme.colors.white};
   ${getShadow({ level: 16 })}
+  ${({ theme, isLarge }) =>
+    !isLarge
+      ? `
+          right: -${theme.gridSize}px;
+          border-top-right-radius: 0px;
+          border-bottom-right-radius: 0px;
+        `
+      : ``}
 `;
 
 export const Section = styled(ComponentStack)<{ grow?: boolean }>`
