@@ -161,8 +161,8 @@
       "or": "ou",
       "scanToWithdraw": "Scanner pour recevoir des bitcoins via",
       "printReceipt": "Imprimer reçu",
-      "receipt": "Receipt",
-      "downloadReceipt": "Download receipt"
+      "receipt": "Reçu",
+      "downloadReceipt": "Télécharger le reçu"
     },
     "history": {
       "title": "Historique des transactions",
