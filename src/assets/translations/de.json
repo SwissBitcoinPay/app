@@ -162,7 +162,7 @@
       "scanToWithdraw": "Scannen, um Bitcoin zu empfangen über",
       "printReceipt": "Beleg drucken",
       "receipt": "Receipt",
-      "downloadReceipt": "Download receipt"
+      "downloadReceipt": "Beleg herunterladen"
     },
     "history": {
       "title": "Verlauf der Transaktionen",
@@ -418,7 +418,7 @@
         "compensationPayoutDetails": "Details of events leading to claim",
         "lifeInsuranceAmountReceived": "Amount received",
         "lifeInsurancePolicyProvider": "Policenanbieter",
-        "lifeInsuranceNumber": "Policy number/reference",
+        "lifeInsuranceNumber": "Versicherungsnummer",
         "lifeInsurancePayoutDate": "Date of payout"
       },
       "documentType": "Document type",
