@@ -745,8 +745,8 @@ export const Invoice = () => {
 
   const downloadPdfLink = useMemo(
     () =>
-      `${apiRootUrl}/pdf/${invoiceId}?lng=${i18n.language}&tz=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-    [i18n.language, invoiceId]
+      `${apiRootUrl}/pdf/${invoiceId}?&tz=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+    [invoiceId]
   );
 
   const getPageContainerProps = useCallback(
