@@ -10,7 +10,7 @@ import {
   faUserFriends
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
-import { AsyncStorage, Linking, bcrypt, isApiError } from "@utils";
+import { AsyncStorage, Linking, isApiError } from "@utils";
 import {
   SBPContext,
   apiRootUrl,
@@ -155,9 +155,6 @@ export const Signup = () => {
 
       setIsSubmiting(true);
 
-      const salt = await bcrypt.getSalt(16);
-      const hashedPassword = await bcrypt.hash(salt, password);
-
       const isReceiveBitcoin = btcPercent >= 1;
       const isReceiveFiat = btcPercent <= 99;
 
@@ -169,8 +166,7 @@ export const Signup = () => {
           name,
           email,
           currency,
-          salt,
-          hashedPassword,
+          password,
           isAtm,
           language: i18n.language,
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
