@@ -745,7 +745,7 @@ export const Invoice = () => {
 
   const downloadPdfLink = useMemo(
     () =>
-      `${apiRootUrl}/pdf/${invoiceId}?&tz=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+      `${apiRootUrl}/pdf/${invoiceId}?tz=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
     [invoiceId]
   );
 

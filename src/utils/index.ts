@@ -21,7 +21,6 @@ export { Deeplink } from "./Deeplink";
 export { Biometrics } from "./Biometrics";
 export { getShadow } from "./getShadow";
 export { getSha256 } from "./getSha256";
-export { bcrypt } from "./bcrypt";
 export { isApiError } from "./isApiError";
 export { isIcon } from "./isIcon";
 export { interpolateColors } from "./interpolateColors";
