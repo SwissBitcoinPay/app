@@ -1,8 +1,8 @@
 import React, { PropsWithChildren, useContext, useState } from "react";
-import { SBPLedgerContext } from "@config";
 import { AddressSignResponse, ScriptType } from "@utils/Bitbox/api/account";
 import { BitboxWallets, SBPBitboxContext } from "./hardware/bitbox02";
 import Btc from "@ledgerhq/hw-app-btc";
+import { SBPLedgerContext } from "./hardware";
 
 export enum HardwareState {
   Connect,

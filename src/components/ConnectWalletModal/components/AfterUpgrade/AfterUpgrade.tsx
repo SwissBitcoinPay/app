@@ -6,10 +6,7 @@ import { faHandPointUp } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "styled-components";
 import { sleep } from "@utils";
 import * as ConnectStyled from "../../styled";
-import {
-  SBPBitboxContextType,
-  SBPHardwareWalletContext
-} from "@config/SBPHardwareWallet";
+import { SBPBitboxContextType, SBPHardwareWalletContext } from "@wallets";
 
 const TIME_TO_WAKEUP_AFTER_UPGRADE = 2000;
 

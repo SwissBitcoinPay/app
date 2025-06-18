@@ -8,9 +8,9 @@ import * as ConnectStyled from "../../styled";
 import * as S from "./styled";
 import { keyStoreLedgerBluetoothId } from "@config/settingsKeys";
 import { AsyncStorage, hardwareNames } from "@utils";
-import { SBPHardwareWalletContext } from "@config/SBPHardwareWallet";
 import { PermissionsAndroid, Platform } from "react-native";
 import Btc from "@ledgerhq/hw-app-btc";
+import { SBPHardwareWalletContext } from "@wallets";
 
 export type Device = {
   id: string;

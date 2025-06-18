@@ -4,8 +4,7 @@ import Video from "react-native-video";
 import { ComponentStack, FieldDescription } from "@components";
 import * as ConnectStyled from "../../styled";
 import { BitBox } from "bitbox-api";
-import { SBPHardwareWalletContext } from "@config/SBPHardwareWallet";
-import { SBPBitboxContextType } from "@config/SBPHardwareWallet/hardware/bitbox02";
+import { SBPBitboxContextType, SBPHardwareWalletContext } from "@wallets";
 
 export const Connected = () => {
   const { t } = useTranslation(undefined, {

@@ -35,12 +35,9 @@ import { SignatureData } from "@components/PayoutConfig/components/BitcoinSettin
 import { XOR } from "ts-essentials";
 import { PairedBitBox } from "bitbox-api";
 import { ACCESS_CONTROL } from "react-native-keychain";
-import {
-  HardwareState,
-  SBPHardwareWalletContext
-} from "@config/SBPHardwareWallet";
 import { HardwareWallet } from "@utils/wallet/types";
 import { WalletType } from "@components/PayoutConfig/PayoutConfig";
+import { HardwareState, SBPHardwareWalletContext } from "@wallets";
 
 type ConnectWalletForm = {
   zPub: string;

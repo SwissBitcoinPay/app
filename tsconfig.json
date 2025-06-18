@@ -8,6 +8,8 @@
       "@screens/*": ["screens/*"],
       "@config": ["config"],
       "@config/*": ["config/*"],
+      "@wallets": ["wallets"],
+      "@wallets/*": ["wallets/*"],
       "@assets": ["assets"],
       "@assets/*": ["assets/*"],
       "@hooks": ["hooks"],
@@ -17,9 +19,7 @@
       "@types": ["types"],
       "@types/*": ["types/*"]
     },
-    "types": [
-      "react-native-web"
-    ],
+    "types": ["react-native-web"],
     "target": "ES2022",
     "module": "esnext",
     "lib": ["es2022", "dom"],

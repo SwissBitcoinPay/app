@@ -4,15 +4,17 @@ import { KeyboardAvoidingView, Loader } from "@components";
 import {
   SBPContextProvider,
   SBPThemeContextProvider,
-  SBPBitboxContextProvider,
   SBPModalContextProvider,
-  platform,
-  SBPHardwareWalletContextProvider,
-  SBPLedgerContextProvider
+  platform
 } from "@config";
 import App from "./App";
 import { SafeAreaProvider, initialWindowMetrics } from "@components/SafeArea";
 import "./config/i18n";
+import {
+  SBPBitboxContextProvider,
+  SBPHardwareWalletContextProvider,
+  SBPLedgerContextProvider
+} from "@wallets";
 
 const { isIos } = platform;
 

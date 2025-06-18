@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 import { ComponentStack, Loader } from "@components";
 import { platform } from "@config";
 import * as ConnectStyled from "../../styled";
-import { SBPHardwareWalletContext } from "@config/SBPHardwareWallet";
 import { MobileBitbox } from "./MobileBitbox";
 import { hardwareNames } from "@utils";
+import { SBPHardwareWalletContext } from "@wallets";
 
 const { isNative } = platform;
 

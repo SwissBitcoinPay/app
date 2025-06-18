@@ -6,8 +6,7 @@ import { useTheme } from "styled-components";
 import * as ConnectStyled from "../../styled";
 import { checkSDCard } from "@utils/Bitbox/api/bitbox02";
 import { ConnectWalletComponentProps } from "@components/ConnectWalletModal/ConnectWalletModal";
-import { SBPHardwareWalletContext } from "@config/SBPHardwareWallet";
-import { SBPBitboxContextType } from "@config/SBPHardwareWallet/hardware/bitbox02";
+import { SBPBitboxContextType, SBPHardwareWalletContext } from "@wallets";
 
 export const AfterSetup = ({ deviceId }: ConnectWalletComponentProps) => {
   const { t } = useTranslation(undefined, {

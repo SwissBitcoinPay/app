@@ -8,7 +8,7 @@ import {
   getVersionInfo,
   upgradeFirmware
 } from "@utils/Bitbox/api/bitbox02bootloader";
-import { SBPHardwareWalletContext } from "@config/SBPHardwareWallet";
+import { SBPHardwareWalletContext } from "@wallets";
 
 export const Bootloader = ({
   deviceId,

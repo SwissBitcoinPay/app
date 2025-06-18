@@ -3,12 +3,12 @@ import { useTranslation } from "react-i18next";
 import { ComponentStack } from "@components";
 import * as ConnectStyled from "../../styled";
 import * as S from "./styled";
+import { useIsScreenSizeMin } from "@hooks";
 import {
   IS_BITBOX_SUPPORTED,
   IS_LEDGER_SUPPORTED,
   SBPHardwareWalletContext
-} from "@config/SBPHardwareWallet";
-import { useIsScreenSizeMin } from "@hooks";
+} from "@wallets";
 
 export const Empty = () => {
   const isLarge = useIsScreenSizeMin("large");

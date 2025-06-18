@@ -25,10 +25,6 @@ import { animated, easings, useSpring } from "@react-spring/native";
 import { platform, SBPModalContext } from "@config";
 import { useTheme } from "styled-components";
 import { SBPBitboxContextType } from "./SBPBitboxContext";
-import {
-  BackupMode,
-  HardwareState
-} from "@config/SBPHardwareWallet/SBPHardwareWalletContext";
 import { useTranslation } from "react-i18next";
 import { useSync } from "@hooks/bitbox/api";
 import {
@@ -43,6 +39,10 @@ import {
 import { useDefault } from "@hooks/bitbox/default";
 import { getDeviceList, TDevices } from "@utils/Bitbox/api/devices";
 import { useSignature } from "./hooks";
+import {
+  BackupMode,
+  HardwareState
+} from "@wallets/SBPHardwareWallet/SBPHardwareWalletContext";
 
 export const IS_BITBOX_SUPPORTED = true;
 

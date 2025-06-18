@@ -4,7 +4,7 @@ import { TStatus } from "@utils/Bitbox/api/bitbox02";
 import {
   BackupMode,
   SBPHardwareWalletContextType
-} from "@config/SBPHardwareWallet";
+} from "@wallets/SBPHardwareWallet/SBPHardwareWalletContext";
 
 export const IS_BITBOX_SUPPORTED: boolean = false;
 

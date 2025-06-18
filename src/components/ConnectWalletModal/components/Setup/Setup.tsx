@@ -22,9 +22,9 @@ import { useToast } from "react-native-toast-notifications";
 import { Platform } from "react-native";
 import {
   BackupMode,
+  SBPBitboxContextType,
   SBPHardwareWalletContext
-} from "@config/SBPHardwareWallet";
-import { SBPBitboxContextType } from "@config/SBPHardwareWallet/hardware/bitbox02";
+} from "@wallets";
 
 export const Setup = ({ deviceId, onClose }: ConnectWalletComponentProps) => {
   const { t: tRoot } = useTranslation();

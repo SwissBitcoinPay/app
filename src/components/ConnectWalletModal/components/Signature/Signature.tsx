@@ -11,7 +11,7 @@ import * as S from "./styled";
 import { AccountBalance } from "./components/AccountBalance";
 import { keyStoreWalletPath } from "@config/settingsKeys";
 import { AsyncStorage, hardwareNames } from "@utils";
-import { SBPHardwareWalletContext } from "@config/SBPHardwareWallet";
+import { SBPHardwareWalletContext } from "@wallets";
 
 export type Account = {
   label: string;

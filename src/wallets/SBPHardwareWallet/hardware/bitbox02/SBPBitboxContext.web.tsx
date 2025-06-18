@@ -11,7 +11,7 @@ import { sleep } from "@utils";
 import { useTranslation } from "react-i18next";
 import { useSignature } from "./hooks";
 import { useToast } from "react-native-toast-notifications";
-import { HardwareState } from "@config/SBPHardwareWallet/SBPHardwareWalletContext";
+import { HardwareState } from "@wallets/SBPHardwareWallet/SBPHardwareWalletContext";
 
 let bitbox: typeof _bitbox;
 
