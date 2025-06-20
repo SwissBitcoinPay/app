@@ -1,6 +1,9 @@
 # Generates a release APK by running:
 #
-# docker build -t sbp-builder . -o sbp-output
+# docker build . -o sbp-output
+#
+# If command fails (because of containerized environment), export the app as Tar archive :
+# docker build . --output type=tar,dest=sbp-output.tar
 #
 
 ARG SBP_CHECKOUT_UPLOAD_STORE_FILE=sbp.keystore
