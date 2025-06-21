@@ -148,8 +148,7 @@ export type InvoiceType = {
   input: Input;
   paymentDetails: PaymentDetail[];
   device?: Device;
-  // paymentMethod: "lightning" | "onchain";
-  redirectUrl: `http://${string}`;
+  redirectAfterPaid?: `http://${string}`;
   amlInfoStatus?: AmlInfoStatus;
 };
 
@@ -213,7 +212,8 @@ export const Invoice = () => {
   const [amlDecision, setAmlDescision] = useState(true);
   const [invoiceFiatAmount, setInvoiceFiatAmount] = useState(0);
   const [isInvalidInvoice, setIsInvalidInvoice] = useState(false);
-  const [redirectUrl, setRedirectUrl] = useState<`http://${string}`>();
+  const [redirectAfterPaid, setRedirectAfterPaid] =
+    useState<`http://${string}`>();
   const [readingNfcData, setReadingNfcData] =
     useState<Parameters<typeof readingNfcLoop>[0]>();
 
@@ -535,11 +535,11 @@ export const Invoice = () => {
           (p) => p.paidAt
         )?.network;
 
-        if (getInvoiceData.redirectUrl) {
-          setRedirectUrl(
-            getInvoiceData.redirectUrl.includes("://")
-              ? getInvoiceData.redirectUrl
-              : `http://${getInvoiceData.redirectUrl}`
+        if (getInvoiceData.redirectAfterPaid) {
+          setRedirectAfterPaid(
+            getInvoiceData.redirectAfterPaid.includes("://")
+              ? getInvoiceData.redirectAfterPaid
+              : `http://${getInvoiceData.redirectAfterPaid}`
           );
         }
 
@@ -687,12 +687,12 @@ export const Invoice = () => {
         }
         navigate("/");
       };
-    } else if (redirectUrl) {
+    } else if (redirectAfterPaid) {
       return () => {
-        void Linking.openURL(redirectUrl);
+        void Linking.openURL(redirectAfterPaid);
       };
     }
-  }, [isExternalInvoice, navigate, redirectUrl, toTerminalTimeout]);
+  }, [isExternalInvoice, navigate, redirectAfterPaid, toTerminalTimeout]);
 
   const alreadyPaidAmount = useMemo(
     () => onChainTxs?.reduce((result, o) => result + (o.amount || 0), 0) || 0,
@@ -1137,11 +1137,11 @@ export const Invoice = () => {
                   </>
                 )}
               </>
-              {status === "settled" && redirectUrl && isInitialPaid && (
+              {status === "settled" && redirectAfterPaid && isInitialPaid && (
                 <Button
                   title={t("returnToWebsite")}
                   icon={faArrowUpRightFromSquare}
-                  onPress={redirectUrl}
+                  onPress={redirectAfterPaid}
                 />
               )}
               {isAlive && isExternalInvoice && (
