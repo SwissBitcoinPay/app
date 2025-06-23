@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  useRef
-} from "react";
+import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { bech32 } from "bech32";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
@@ -137,9 +131,10 @@ export type InvoiceType = {
   merchantName: string;
   tag: string;
   title: string;
-  time: number;
+  createdAt: number;
   description: string;
   expiry: number;
+  delay: number;
   amount: number;
   grossAmount?: number;
   status: Status;
@@ -158,6 +153,21 @@ const truncate = (str: string, length: number, separator = "...") => {
   const end = str.substr(str.length - pad);
 
   return [start, separator, end].join("");
+};
+
+const formatDecimalComponents = (input: number) => {
+  const divisor = 100000000;
+  const whole = Math.floor(input / divisor);
+  const decimal = (input % divisor).toString().padStart(8, "0");
+
+  const formattedDecimal =
+    decimal.slice(0, 2) + " " + decimal.slice(2, 5) + " " + decimal.slice(5);
+
+  const result = [...whole.toString(), ".", ...formattedDecimal].map((char) =>
+    char === " " ? " " : isNaN(char) ? char : Number(char)
+  );
+
+  return result;
 };
 
 const TEXT_ICON_SIZE = 16;
@@ -225,8 +235,8 @@ export const Invoice = () => {
 
   const updateProgressAndUpdateRateTime = useCallback(() => {
     const now = Math.round(Date.now() / 1000);
-    const timeElapsed = now - createdAt;
-    const newProgress = timeElapsed / delay;
+    const timeElapsed = now - (createdAt || 0);
+    const newProgress = timeElapsed / (delay || 1);
     setProgress(1 - newProgress);
 
     const remainder = timeElapsed % rateUpdateDelay;
@@ -300,66 +310,97 @@ export const Invoice = () => {
     );
   }, [invoiceCurrency]);
 
-  const fiatSatAmountComponent = useMemo(
-    () => (
+  const fiatSatAmountComponent = useMemo(() => {
+    const elements = formatDecimalComponents((amount || 0) / 1000).reduce(
+      (result, v) => {
+        const currentIsEnabled =
+          result[result.length - 1]?.isEnabled ||
+          (typeof v === "number" && v !== 0);
+        return [
+          ...result,
+          {
+            value: v,
+            isEnabled: currentIsEnabled
+          }
+        ];
+      },
+      [] as { value: string | number; isEnabled: boolean }[]
+    );
+
+    const isSatBtcInvoice =
+      invoiceCurrency && ["sat", "BTC"].includes(invoiceCurrency);
+
+    return (
       <>
         <S.AmountText>
-          {getFormattedUnit(
-            invoiceFiatAmount,
-            invoiceCurrency || "",
-            unitDecimals
-          )}
-        </S.AmountText>
-        {invoiceCurrency !== "sat" && (
-          <>
-            {amount > 0 && (
-              <S.AmountText subAmount>
-                {amount ? numberWithSpaces(amount / 1000) : ""} sats
-              </S.AmountText>
+          {!isSatBtcInvoice &&
+            getFormattedUnit(
+              invoiceFiatAmount,
+              invoiceCurrency || "",
+              unitDecimals
             )}
-            {isExternalInvoice &&
-              createdAt &&
-              delay &&
-              isAlive &&
-              delay > rateUpdateDelay && (
-                <ComponentStack
-                  direction="horizontal"
-                  gapSize={4}
-                  style={{ marginTop: 6 }}
+        </S.AmountText>
+        {isAlive && (
+          <S.BtcSatsContainer
+            style={{ transform: [{ scale: isSatBtcInvoice ? 1.5 : 1 }] }}
+            gapSize={8}
+            direction="horizontal"
+          >
+            <BitcoinIcon size={20} />
+            <>
+              {elements.map((element) => (
+                <Text
+                  weight={700}
+                  h4
+                  color={element.isEnabled ? colors.white : colors.grey}
                 >
-                  <Text color={colors.grey} h6 weight={600}>
-                    {t("rateUpdatedIn")} {formatSecondsToMMSS(updateRateTime)}
-                  </Text>
-                  <Pie
-                    useNativeDriver
-                    progress={updateRateTime / rateUpdateDelay}
-                    color={colors.primaryLight}
-                    size={14}
-                    unfilledColor="transparent"
-                    animationType="spring"
-                    style={{ position: "relative", top: -1 }}
-                  />
-                </ComponentStack>
-              )}
-          </>
+                  {element.value}
+                </Text>
+              ))}
+            </>
+            <S.AmountText subAmount>sats</S.AmountText>
+          </S.BtcSatsContainer>
         )}
+        {isExternalInvoice &&
+          createdAt &&
+          delay &&
+          isAlive &&
+          delay > rateUpdateDelay && (
+            <ComponentStack
+              direction="horizontal"
+              gapSize={4}
+              style={{ marginTop: 6 }}
+            >
+              <Text color={colors.grey} h6 weight={600}>
+                {t("rateUpdatedIn")} {formatSecondsToMMSS(updateRateTime)}
+              </Text>
+              <Pie
+                useNativeDriver
+                progress={updateRateTime / rateUpdateDelay}
+                color={colors.primaryLight}
+                size={14}
+                unfilledColor="transparent"
+                animationType="spring"
+                style={{ position: "relative", top: -1 }}
+              />
+            </ComponentStack>
+          )}
       </>
-    ),
-    [
-      invoiceFiatAmount,
-      invoiceCurrency,
-      unitDecimals,
-      amount,
-      isExternalInvoice,
-      createdAt,
-      delay,
-      isAlive,
-      colors.grey,
-      colors.primaryLight,
-      t,
-      updateRateTime
-    ]
-  );
+    );
+  }, [
+    invoiceFiatAmount,
+    invoiceCurrency,
+    unitDecimals,
+    amount,
+    isExternalInvoice,
+    createdAt,
+    delay,
+    isAlive,
+    colors.grey,
+    colors.primaryLight,
+    t,
+    updateRateTime
+  ]);
 
   const successLottieRef = useRef<LottieView>(null);
 
@@ -584,8 +625,8 @@ export const Invoice = () => {
         }
 
         setTitle(getInvoiceData.title);
-        setCreatedAt(getInvoiceData.time);
-        setDelay(getInvoiceData.expiry - getInvoiceData.time);
+        setCreatedAt(getInvoiceData.createdAt);
+        setDelay(getInvoiceData.delay);
         setPr(_pr);
         setReadingNfcData(_pr);
         setOnChainAddr(unpaidOnchain?.address);
