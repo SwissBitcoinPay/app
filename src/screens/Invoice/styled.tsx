@@ -245,6 +245,13 @@ export const AmountText = styled(Text).attrs<AmountTextProps>(
   })
 )<AmountTextProps>``;
 
+export const BtcSatsContainer = styled(ComponentStack)`
+  display: flex;
+  flex-direction: row;
+`;
+
+export const BtcSatsText = styled(Text)``;
+
 export const BitcoinSlotText = styled(AmountText)`
   display: flex;
   margin-top: 16px;
