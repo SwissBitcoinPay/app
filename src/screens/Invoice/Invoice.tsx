@@ -310,97 +310,106 @@ export const Invoice = () => {
     );
   }, [invoiceCurrency]);
 
-  const fiatSatAmountComponent = useMemo(() => {
-    const elements = formatDecimalComponents((amount || 0) / 1000).reduce(
-      (result, v) => {
-        const currentIsEnabled =
-          result[result.length - 1]?.isEnabled ||
-          (typeof v === "number" && v !== 0);
-        return [
-          ...result,
-          {
-            value: v,
-            isEnabled: currentIsEnabled
-          }
-        ];
-      },
-      [] as { value: string | number; isEnabled: boolean }[]
-    );
+  const getFiatSatAmountComponent = useCallback(
+    (isSuccessScreen = false) => {
+      const elements = formatDecimalComponents((amount || 0) / 1000).reduce(
+        (result, v) => {
+          const currentIsEnabled =
+            result[result.length - 1]?.isEnabled ||
+            (typeof v === "number" && v !== 0);
+          return [
+            ...result,
+            {
+              value: v,
+              isEnabled: currentIsEnabled
+            }
+          ];
+        },
+        [] as { value: string | number; isEnabled: boolean }[]
+      );
 
-    const isSatBtcInvoice =
-      invoiceCurrency && ["sat", "BTC"].includes(invoiceCurrency);
+      const isSatBtcInvoice =
+        invoiceCurrency && ["sat", "BTC"].includes(invoiceCurrency);
 
-    return (
-      <>
-        <S.AmountText>
-          {!isSatBtcInvoice &&
-            getFormattedUnit(
-              invoiceFiatAmount,
-              invoiceCurrency || "",
-              unitDecimals
-            )}
-        </S.AmountText>
-        {isAlive && (
-          <S.BtcSatsContainer
-            style={{ transform: [{ scale: isSatBtcInvoice ? 1.5 : 1 }] }}
-            gapSize={8}
-            direction="horizontal"
-          >
-            <BitcoinIcon size={20} />
-            <>
-              {elements.map((element) => (
-                <Text
-                  weight={700}
-                  h4
-                  color={element.isEnabled ? colors.white : colors.grey}
-                >
-                  {element.value}
-                </Text>
-              ))}
-            </>
-            <S.AmountText subAmount>sats</S.AmountText>
-          </S.BtcSatsContainer>
-        )}
-        {isExternalInvoice &&
-          createdAt &&
-          delay &&
-          isAlive &&
-          delay > rateUpdateDelay && (
-            <ComponentStack
+      return (
+        <>
+          <S.AmountText>
+            {!isSatBtcInvoice &&
+              getFormattedUnit(
+                invoiceFiatAmount,
+                invoiceCurrency || "",
+                unitDecimals
+              )}
+          </S.AmountText>
+          {isAlive && (
+            <S.BtcSatsContainer
+              style={{ transform: [{ scale: isSatBtcInvoice ? 1.5 : 1 }] }}
+              gapSize={8}
               direction="horizontal"
-              gapSize={4}
-              style={{ marginTop: 6 }}
             >
-              <Text color={colors.grey} h6 weight={600}>
-                {t("rateUpdatedIn")} {formatSecondsToMMSS(updateRateTime)}
-              </Text>
-              <Pie
-                useNativeDriver
-                progress={updateRateTime / rateUpdateDelay}
-                color={colors.primaryLight}
-                size={14}
-                unfilledColor="transparent"
-                animationType="spring"
-                style={{ position: "relative", top: -1 }}
-              />
-            </ComponentStack>
+              <BitcoinIcon size={20} />
+              <>
+                {elements.map((element) => (
+                  <Text
+                    weight={700}
+                    h4
+                    color={
+                      element.isEnabled
+                        ? colors.white
+                        : isSuccessScreen
+                          ? colors.successLight
+                          : colors.grey
+                    }
+                  >
+                    {element.value}
+                  </Text>
+                ))}
+              </>
+              <S.AmountText subAmount>sats</S.AmountText>
+            </S.BtcSatsContainer>
           )}
-      </>
-    );
-  }, [
-    invoiceFiatAmount,
-    invoiceCurrency,
-    unitDecimals,
-    amount,
-    isExternalInvoice,
-    createdAt,
-    delay,
-    isAlive,
-    colors.grey,
-    colors.primaryLight,
-    t,
-    updateRateTime
-  ]);
+          {isExternalInvoice &&
+            createdAt &&
+            delay &&
+            isAlive &&
+            delay > rateUpdateDelay && (
+              <ComponentStack
+                direction="horizontal"
+                gapSize={4}
+                style={{ marginTop: 6 }}
+              >
+                <Text color={colors.grey} h6 weight={600}>
+                  {t("rateUpdatedIn")} {formatSecondsToMMSS(updateRateTime)}
+                </Text>
+                <Pie
+                  useNativeDriver
+                  progress={updateRateTime / rateUpdateDelay}
+                  color={colors.primaryLight}
+                  size={14}
+                  unfilledColor="transparent"
+                  animationType="spring"
+                  style={{ position: "relative", top: -1 }}
+                />
+              </ComponentStack>
+            )}
+        </>
+      );
+    },
+    [
+      invoiceFiatAmount,
+      invoiceCurrency,
+      unitDecimals,
+      amount,
+      isExternalInvoice,
+      createdAt,
+      delay,
+      isAlive,
+      colors.grey,
+      colors.primaryLight,
+      t,
+      updateRateTime
+    ]
+  );
 
   const successLottieRef = useRef<LottieView>(null);
 
@@ -908,7 +917,7 @@ export const Invoice = () => {
                     {!isWithdraw ? t("invoicePaid") : t("withdrawSuccess")}
                   </Text>
                 </S.MainContentStack>
-                {fiatSatAmountComponent}
+                {getFiatSatAmountComponent(true)}
               </S.Section>
             </S.SectionsContainer>
           </S.InvoicePageContainer>
@@ -1154,7 +1163,7 @@ export const Invoice = () => {
                       </S.AskButton>
                     </S.NFCWrapper>
                   )}
-                {fiatSatAmountComponent}
+                {getFiatSatAmountComponent()}
                 {alreadyPaidAmount > 0 && status === "underpaid" && (
                   <>
                     <S.BitcoinSlotText subAmount color={colors.warning}>
