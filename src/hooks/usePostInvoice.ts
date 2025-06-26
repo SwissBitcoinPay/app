@@ -66,7 +66,8 @@ export const usePostInvoice = () => {
               tag: "invoice-tpos",
               device: {
                 name: deviceName,
-                type: deviceType
+                type: deviceType,
+                appVersion: process.env.APP_VERSION
               },
               extra: {
                 isGuestMode
