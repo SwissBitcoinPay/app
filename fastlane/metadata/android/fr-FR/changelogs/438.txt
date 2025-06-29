@@ -1,0 +1,2 @@
+- Corrigé l'accès aux liens https
+- Améliorations et optimisations mineures

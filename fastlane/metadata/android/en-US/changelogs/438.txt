@@ -1,0 +1,2 @@
+- Fix access to https links
+- Minor improvements and optimizations
