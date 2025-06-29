@@ -25,6 +25,10 @@
 
     <queries>
         <package android:name="net.nyx.printerservice"/>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https"/>
+        </intent>
     </queries>
     <application
       android:name=".MainApplication"

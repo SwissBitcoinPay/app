@@ -127,7 +127,7 @@
     "invoice": {
       "creatingInvoice": "Creating invoice",
       "fetchingInvoice": "Fetching invoice",
-      "invoiceQrTitle": "Invoice QR code",
+      "invoiceQrTitle": "Payment link QR code",
       "invoiceQr": "Access this invoice on another device by scanning this QR code",
       "save": "Save",
       "status": "Status",
