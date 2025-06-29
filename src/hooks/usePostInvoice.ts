@@ -83,7 +83,8 @@ export const usePostInvoice = () => {
           additionnalHistoryProps = {
             device: {
               name: deviceName,
-              type: deviceType
+              type: deviceType,
+              appVersion: process.env.APP_VERSION
             },
             description,
             expiry: checkoutResponseData.expiry

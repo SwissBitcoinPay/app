@@ -98,6 +98,7 @@ export const Signup = () => {
         deviceLocale
       ) as AccountConfigType["currency"],
       btcPercent: 100,
+      ownerCountry: deviceLocale?.split("-")?.[1],
       btcAddressTypes: {
         onchain: false,
         lightning: false,
