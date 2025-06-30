@@ -127,7 +127,7 @@
     "invoice": {
       "creatingInvoice": "Creazione della fattura",
       "fetchingInvoice": "Recupero della fattura",
-      "invoiceQrTitle": "QR code della fattura",
+      "invoiceQrTitle": "Payment link QR code",
       "invoiceQr": "Accedi a questa fattura su un altro dispositivo scansionando questo QR code",
       "save": "Salva",
       "status": "Stato",
