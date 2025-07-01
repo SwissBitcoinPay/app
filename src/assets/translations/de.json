@@ -127,7 +127,7 @@
     "invoice": {
       "creatingInvoice": "Rechnung erstellen",
       "fetchingInvoice": "Rechnung abrufen",
-      "invoiceQrTitle": "QR-Code der Rechnung",
+      "invoiceQrTitle": "Payment link QR code",
       "invoiceQr": "Rufen Sie diese Rechnung auf einem anderen Gerät auf, indem Sie diesen QR-Code scannen",
       "save": "Speichern",
       "status": "Status",

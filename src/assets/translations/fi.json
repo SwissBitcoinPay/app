@@ -127,7 +127,7 @@
     "invoice": {
       "creatingInvoice": "Laskua luodaan ",
       "fetchingInvoice": "Haetaan laskua",
-      "invoiceQrTitle": "Laskun QR-koodi",
+      "invoiceQrTitle": "Payment link QR code",
       "invoiceQr": "Nähdäksesi laskun toisessa laitteessa, lue QR-koodi",
       "save": "Tallenna",
       "status": "Tila",
