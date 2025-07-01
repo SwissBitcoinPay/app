@@ -18,10 +18,11 @@ const oldAppRootUrl = "https://checkout.swiss-bitcoin-pay.ch";
 
 type UseAccountConfigParams = {
   refresh?: boolean;
+  listenAppState?: boolean;
 };
 
 export const useAccountConfig = (props?: UseAccountConfigParams) => {
-  const { refresh = true } = props || {};
+  const { refresh = true, listenAppState = false } = props || {};
   const navigate = useNavigate();
   const { accountConfig, setUserType, setAccountConfig } =
     useContext(SBPContext);
@@ -69,7 +70,7 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
   const appState = useRef(AppState.currentState);
 
   useEffect(() => {
-    if (accountConfig?.apiKey && AppState.isAvailable) {
+    if (listenAppState && accountConfig?.apiKey && AppState.isAvailable) {
       const subscription = AppState.addEventListener(
         "change",
         (nextAppState) => {
@@ -86,7 +87,7 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
 
       return () => subscription.remove();
     }
-  }, [accountConfig?.apiKey]);
+  }, [listenAppState, accountConfig?.apiKey]);
 
   const onScan = useCallback(
     async (scannedValue: string) => {
