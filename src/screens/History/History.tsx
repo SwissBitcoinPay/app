@@ -137,7 +137,10 @@ export const History = () => {
           title: data.defaultDescription,
           status: data.status || "open",
           tag: "withdraw",
-          time: localTransactionsHistory[index].time || 0,
+          createdAt:
+            localTransactionsHistory[index].createdAt ||
+            localTransactionsHistory[index].time ||
+            0,
           amount:
             localTransactionsHistory[index]?.amount || data.minWithdrawable
         } as InvoiceWithLnurlUrl;
@@ -206,7 +209,7 @@ export const History = () => {
       const satsTotal =
         transactions.reduce((result, transaction) => {
           if (
-            (transaction.time || 0) < startOfToday ||
+            (transaction.createdAt || 0) < startOfToday ||
             transaction.amount <= 0 ||
             transaction.status !== "settled"
           ) {
@@ -339,7 +342,7 @@ export const History = () => {
                 ];
 
                 return {
-                  title: `${timeFormatter.format((transaction.time || 0) * 1000)}`,
+                  title: `${timeFormatter.format((transaction.createdAt || 0) * 1000)}`,
                   disabled:
                     (isPaid && transaction.tag === "withdraw") ||
                     isExpired ||
