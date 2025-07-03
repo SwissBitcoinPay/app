@@ -1,0 +1,4 @@
+- Correction de la valeur de date et heure invalides dans l'onglet Historique
+- Amélioration de l'affichage de l'état de lecture de BoltCards
+- Suppression des avertissements de production indésirables
+- Améliorations et optimisations mineures
