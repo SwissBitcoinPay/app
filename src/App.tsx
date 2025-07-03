@@ -46,7 +46,10 @@ const ErrorComponent = ({ resetError }: FallbackComponentProps) => {
 };
 
 const App = () => {
-  const { accountConfig } = useAccountConfig({ refresh: false });
+  const { accountConfig } = useAccountConfig({
+    refresh: false,
+    listenAppState: true
+  });
   const navigate = useNavigate();
 
   useDeepLink();
