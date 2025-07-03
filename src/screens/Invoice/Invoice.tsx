@@ -17,7 +17,9 @@ import {
   CountdownCircleTimer,
   Pressable,
   Modal,
-  View
+  View,
+  Blur,
+  Image
 } from "@components";
 import {
   faArrowLeft,
@@ -1021,20 +1023,83 @@ export const Invoice = () => {
               >
                 {status !== "expired" &&
                   (isAlive ? (
-                    <QR
-                      value={fullUrl}
-                      size={qrCodeSize}
-                      {...(amlDecision
-                        ? {
-                            image: {
-                              source: require("@assets/images/bitcoin-white-border.png")
+                    <>
+                      <QR
+                        value={fullUrl}
+                        size={qrCodeSize}
+                        {...(amlDecision
+                          ? {
+                              image: {
+                                source: require("@assets/images/bitcoin-white-border.png")
+                              }
                             }
-                          }
-                        : {
-                            icon: faGlobe
-                          })}
-                      ecl="M"
-                    />
+                          : {
+                              icon: faGlobe
+                            })}
+                        ecl="M"
+                      />
+                      {isNfcLoading && (
+                        <>
+                          <Blur
+                            realBlur
+                            blurRadius={6}
+                            backgroundColor="rgba(0, 0, 0, 0.25)"
+                          />
+                          <ComponentStack
+                            direction="vertical"
+                            gapSize={8}
+                            style={{
+                              position: "absolute",
+                              width: "100%",
+                              height: "100%",
+                              alignItems: "center",
+                              justifyContent: "center"
+                            }}
+                          >
+                            <Text
+                              h2
+                              style={{ fontSize: 26 }}
+                              color={colors.white}
+                              weight={700}
+                            >
+                              {t("readingBoltCard")}
+                            </Text>
+                            <View
+                              style={{
+                                height: 80,
+                                width: 80,
+                                alignItems: "center",
+                                justifyContent: "center"
+                              }}
+                            >
+                              <Loader
+                                thickness={6}
+                                color={colors.white}
+                                size={80}
+                              />
+                              <View
+                                style={{
+                                  position: "absolute",
+                                  height: 58,
+                                  width: 58,
+                                  backgroundColor: colors.bitcoin,
+                                  borderRadius: 100
+                                }}
+                              />
+                              <Image
+                                style={{
+                                  position: "absolute",
+                                  width: 52,
+                                  height: 52,
+                                  transform: [{ translateY: 2 }]
+                                }}
+                                source={require("@assets/images/bolt-card-white.png")}
+                              />
+                            </View>
+                          </ComponentStack>
+                        </>
+                      )}
+                    </>
                   ) : null)}
                 {status === "unconfirmed" &&
                 confirmations !== undefined &&
@@ -1137,29 +1202,33 @@ export const Invoice = () => {
                           }
                         }}
                       >
-                        {isNfcLoading ? (
-                          <ActivityIndicator
-                            size="large"
-                            color={
-                              isNfcNeedsTap ? colors.primary : colors.white
-                            }
-                          />
-                        ) : (
-                          <S.NFCImage
-                            source={
-                              isNfcNeedsPermission
-                                ? require("@assets/images/bolt-card-white.png")
-                                : isNfcNeedsTap
-                                  ? require("@assets/images/bolt-card-black.png")
-                                  : require("@assets/images/bolt-card.png")
-                            }
-                          />
-                        )}
+                        <S.NFCImage
+                          source={
+                            isNfcNeedsPermission
+                              ? require("@assets/images/bolt-card-white.png")
+                              : isNfcNeedsTap
+                                ? require("@assets/images/bolt-card-black.png")
+                                : require("@assets/images/bolt-card.png")
+                          }
+                        />
                         {isNfcNeedsPermission && (
                           <S.NFCSwitchContainer>
                             <S.NFCSwitchContainerCircle />
                           </S.NFCSwitchContainer>
                         )}
+                        <Text
+                          style={{
+                            position: "absolute",
+                            bottom: -10.5,
+                            lineHeight: 7,
+                            textAlign: "center"
+                          }}
+                          h9
+                          weight={600}
+                          color={colors.grey}
+                        >
+                          {t("boltcardSupported")}
+                        </Text>
                       </S.AskButton>
                     </S.NFCWrapper>
                   )}

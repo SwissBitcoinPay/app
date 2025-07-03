@@ -8,7 +8,16 @@ const { isNative } = platform;
 export type TextProps = RootTextProps &
   PropsWithChildren<
     {
-      [key in "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "h7" | "h8"]?: boolean;
+      [key in
+        | "h1"
+        | "h2"
+        | "h3"
+        | "h4"
+        | "h5"
+        | "h6"
+        | "h7"
+        | "h8"
+        | "h9"]?: boolean;
     } & {
       weight?: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
       italic?: boolean;
@@ -40,7 +49,8 @@ const StyledText = styled(RootText)<TextProps>`
     h5,
     h6,
     h7,
-    h8
+    h8,
+    h9
   }) => {
     const fontSize = (() => {
       switch (true) {
@@ -60,6 +70,8 @@ const StyledText = styled(RootText)<TextProps>`
           return 9;
         case !!h8:
           return 8;
+        case !!h9:
+          return 6.5;
         default:
           return 19;
       }

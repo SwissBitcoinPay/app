@@ -41,7 +41,7 @@ export const Header = ({
   left,
   right,
   backgroundOpacity = isWeb ? 0.25 : 0.5,
-  blurRadius = 6,
+  blurRadius = 8,
   ...props
 }: HeaderProps) => {
   const isLarge = useIsScreenSizeMin("large");

@@ -12,7 +12,7 @@ export const Blur = ({
     style={{
       backgroundColor,
       // @ts-ignore
-      backdropFilter: `blur(${blurRadius * 1.5}px)`,
+      backdropFilter: `blur(${blurRadius}px)`,
       zIndex
     }}
   />
