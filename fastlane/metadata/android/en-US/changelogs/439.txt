@@ -1,0 +1,4 @@
+- Fixed invalid date/time value in History tab
+- Improved BoltCard reading state layout
+- Removed unwanted production warnings
+- Minor improvements and optimizations
