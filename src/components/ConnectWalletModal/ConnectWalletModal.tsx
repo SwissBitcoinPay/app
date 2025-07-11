@@ -130,13 +130,17 @@ export const ConnectWalletModal = ({
         case HardwareState.Pairing:
           return { Component: PairingScreen };
         case HardwareState.Setup:
-          return { Component: SetupScreen };
+          return { Component: SetupScreen, ...screenComponentProps };
         case HardwareState.AfterSetup:
           return { Component: AfterSetupScreen, ...screenComponentProps };
         case HardwareState.Signature:
           return {
             Component: SignatureScreen,
-            componentProps: { customFunction }
+            ...screenComponentProps,
+            componentProps: {
+              ...(screenComponentProps.componentProps || {}),
+              customFunction
+            }
           };
         default:
           return {};
