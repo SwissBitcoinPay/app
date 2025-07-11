@@ -397,7 +397,7 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
 
   const screenComponentProps = useMemo(() => {
     let obj = {};
-    if (backupMode !== "sdcard") {
+    if (backupMode && backupMode !== "sdcard") {
       obj = {
         ...obj,
         buttonProps: {
@@ -412,15 +412,18 @@ export const SBPBitboxContextProvider = ({ children }: PropsWithChildren) => {
     if (deviceMode === "bitbox02") {
       obj = {
         ...obj,
-        deviceId,
-        status
+        componentProps: {
+          deviceId,
+          status
+        }
       };
     } else if (deviceMode === "bitbox02-bootloader") {
       obj = {
         ...obj,
-        deviceId,
-
-        status: bootloaderStatus
+        componentProps: {
+          deviceId,
+          status: bootloaderStatus
+        }
       };
     }
 
