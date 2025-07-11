@@ -93,5 +93,15 @@
 		<string>lightning</string>
 		<string>mailto</string>
 	</array>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>fr</string>
+		<string>de</string>
+		<string>es</string>
+		<string>it</string>
+		<string>pt</string>
+		<string>fi</string>
+	</array>
 </dict>
 </plist>

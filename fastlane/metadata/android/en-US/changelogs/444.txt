@@ -1,0 +1,4 @@
+- Support ticket printing on Bitcoinize v2.1
+- Fixed wrong ticket printing amount
+- Official support on Finland language
+- Fixed BitBox02 connection on Android

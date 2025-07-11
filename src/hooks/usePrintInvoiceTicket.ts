@@ -1,6 +1,9 @@
 import { InvoiceType } from "@screens/Invoice/Invoice";
 import { MarkOptional } from "ts-essentials";
-import { NyxAlign, NyxFontStyle } from "react-native-nyx-printer";
+import {
+  NyxAlign,
+  NyxFontStyle
+} from "react-native-nyx-printer/src/NyxTextFormat";
 import {
   AsyncStorage,
   getImageSize,
@@ -128,7 +131,7 @@ export const usePrintInvoiceTicket = () => {
 
       await Printer.printLabelValue(
         t("amount"),
-        `${(amount / 100000000 / 1000).toLocaleString(undefined, {
+        `${(amount / 100000000).toLocaleString(undefined, {
           minimumFractionDigits: 8,
           maximumFractionDigits: 8
         })} BTC`
