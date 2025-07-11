@@ -106,7 +106,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode generateVersionCode()
         versionName generateVersionName()
-        resConfigs "en", "fr", "de", "es", "it", "pt"
+        resConfigs "en", "fr", "de", "es", "it", "pt", "fi"
     }
 
     splits {
