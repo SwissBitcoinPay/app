@@ -162,7 +162,9 @@
       "scanToWithdraw": "Scansiona per ricevere bitcoin tramite",
       "printReceipt": "Stampa della ricevuta",
       "receipt": "Receipt",
-      "downloadReceipt": "Download receipt"
+      "downloadReceipt": "Download receipt",
+      "readingBoltCard": "Reading BoltCard",
+      "boltcardSupported": "BoltCard supported"
     },
     "history": {
       "title": "Storico delle transazioni",

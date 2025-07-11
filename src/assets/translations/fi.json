@@ -162,7 +162,9 @@
       "scanToWithdraw": "Scannaa vastaanottaaksesi bitcoinia",
       "printReceipt": "Tulosta kuitti",
       "receipt": "Receipt",
-      "downloadReceipt": "Download receipt"
+      "downloadReceipt": "Download receipt",
+      "readingBoltCard": "Reading BoltCard",
+      "boltcardSupported": "BoltCard supported"
     },
     "history": {
       "title": "Tapahtuma historia",
