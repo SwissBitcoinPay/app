@@ -22,7 +22,11 @@ const isTablet = DeviceInfo.isTablet();
 
 const device = getDeviceSync();
 
-const isBitcoinize = ["BTC21PRO", "Bitcoinize Machine"].includes(device);
+const model = DeviceInfo.getModel();
+
+const isBitcoinize =
+  ["BTC21PRO", "Bitcoinize Machine"].includes(device) ||
+  model === "Bitcoinize-BTC21PRO";
 
 export const platform = {
   isWeb: false,
@@ -31,7 +35,7 @@ export const platform = {
   isIos,
   isDesktop: false,
   isMobile,
-  model: DeviceInfo.getModel(),
+  model,
   maxContentWidth: 520,
   isTablet,
   isIphoneX,

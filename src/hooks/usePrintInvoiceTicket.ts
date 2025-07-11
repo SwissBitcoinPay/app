@@ -1,9 +1,6 @@
 import { InvoiceType } from "@screens/Invoice/Invoice";
 import { MarkOptional } from "ts-essentials";
-import {
-  NyxAlign,
-  NyxFontStyle
-} from "react-native-nyx-printer/src/NyxTextFormat";
+import { NyxAlign, NyxFontStyle } from "react-native-nyx-printer";
 import {
   AsyncStorage,
   getImageSize,
