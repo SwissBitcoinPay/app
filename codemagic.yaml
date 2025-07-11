@@ -8,11 +8,11 @@ workflows:
     when:
       changeset:
         includes:
-          - '.env'
+          - ".env"
     max_build_duration: 120
     instance_type: mac_mini_m2
     environment:
-      java: 17.0.14
+      java: 17.0.13
       android_signing:
         - Swiss Bitcoin Pay Checkout
       groups:
@@ -67,7 +67,7 @@ workflows:
     when:
       changeset:
         includes:
-          - '.env'
+          - ".env"
     max_build_duration: 120
     instance_type: mac_mini_m2
     environment:
