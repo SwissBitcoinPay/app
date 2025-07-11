@@ -1,0 +1,3 @@
+- Support de l'impression du ticket sur Bitcoinize v2.1
+- Corrigé le faux montant en BTC imprimé sur les tickets
+- Corrigé la connexion avec les BitBox02 sur Android
