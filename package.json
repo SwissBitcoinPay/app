@@ -41,7 +41,7 @@
     "@react-native/assets-registry": "0.77.1",
     "@react-spring/native": "9.7.5",
     "@react-spring/web": "9.7.5",
-    "@sentry/react-native": "6.15.1",
+    "@sentry/react-native": "6.17.0",
     "@sentry/webpack-plugin": "3.1.2",
     "@yudiel/react-qr-scanner": "2.1.0",
     "axios": "1.7.9",
