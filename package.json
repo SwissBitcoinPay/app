@@ -116,7 +116,7 @@
     "react-refresh": "0.16.0",
     "react-router-dom": "7.1.5",
     "react-router-native": "6.29.0",
-    "react-secure-storage": "1.3.2",
+    "react-secure-storage": "github:andrevitalb/react-secure-storage#d9b8ba9",
     "react-use-websocket": "4.13.0",
     "stream-browserify": "3.0.0",
     "styled-components": "6.1.15",
