@@ -3,7 +3,7 @@ import secureLocalStorage from "react-secure-storage";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 const getItem = async (key: string, _prompt?: AuthenticationPrompt) => {
-  return localStorage.getItem(key)?.toString();
+  return secureLocalStorage.getItem(key)?.toString();
 };
 
 const setItem = async (
@@ -12,17 +12,17 @@ const setItem = async (
   _accessControl?: ACCESS_CONTROL
   // eslint-disable-next-line @typescript-eslint/require-await
 ) => {
-  return localStorage.setItem(key, value);
+  return secureLocalStorage.setItem(key, value);
 };
 
 // eslint-disable-next-line @typescript-eslint/require-await
 const removeItem = async (key: string) => {
-  return localStorage.removeItem(key);
+  return secureLocalStorage.removeItem(key);
 };
 
 // eslint-disable-next-line @typescript-eslint/require-await
 const clear = async () => {
-  return localStorage.clear();
+  return secureLocalStorage.clear();
 };
 
 const AsyncStorage = { getItem, setItem, removeItem, clear };
