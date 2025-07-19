@@ -68,7 +68,8 @@
       "enter12wordsDescription3": "Dennoch gilt diese Verbindungsmethode nicht als 100% sicher, da Ihr Gerät mit dem Internet verbunden und somit angreifbar ist. Wir sind nicht verantwortlich für Verluste, die durch die Verwendung dieser Anmeldemethode verursacht werden.",
       "error": {
         "invalidSignature": "Ungültige Signatur",
-        "invalidWord": "Ungültiges Wort"
+        "invalidWord": "Ungültiges Wort",
+        "invalidPassword": "Invalid password"
       }
     },
     "signup": {
@@ -465,6 +466,14 @@
         "insuranceLetter": "Letter from insurance provider confirming payout"
       }
     }
+  },
+  "askPasswordModal": {
+    "enterPassword": "Enter your account password",
+    "login": "Login",
+    "accountName": "Account name",
+    "accountEmail": "Account email",
+    "password": "Password",
+    "errorGettingPassword": "Error while getting password"
   },
   "createWalletModal": {
     "continue": "Weiter",
