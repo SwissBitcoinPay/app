@@ -13,17 +13,17 @@ const platform = {
   deviceType: isMobile
     ? ("mobile" as const)
     : isTablet
-    ? ("tablet" as const)
-    : isDesktop
-    ? ("desktop" as const)
-    : ("unknown" as const),
+      ? ("tablet" as const)
+      : isDesktop
+        ? ("desktop" as const)
+        : ("unknown" as const),
   deviceIcon: isMobile
     ? faMobileAlt
     : isTablet
-    ? faTabletScreenButton
-    : isDesktop
-    ? faDesktop
-    : faCircleQuestion
+      ? faTabletScreenButton
+      : isDesktop
+        ? faDesktop
+        : faCircleQuestion
 };
 
 export { platform };

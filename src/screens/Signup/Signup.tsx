@@ -41,13 +41,22 @@ import {
   SubmitHandler,
   useForm
 } from "react-hook-form";
-import { keyStoreRefCode } from "@config/settingsKeys";
+import {
+  keyStoreMnemonicWords,
+  keyStoreRefCode,
+  keyStoreZpub
+} from "@config/settingsKeys";
 import { PayoutConfigForm } from "@components/PayoutConfig/PayoutConfig";
 import { useToast } from "react-native-toast-notifications";
 import { useTheme } from "styled-components";
 import { AccountConfigType, UserType } from "@types";
-import { useAccountConfig, useIsScreenSizeMin } from "@hooks";
+import {
+  useAccountConfig,
+  useIsBiometrySupported,
+  useIsScreenSizeMin
+} from "@hooks";
 import * as S from "./styled";
+import { ACCESS_CONTROL } from "react-native-keychain";
 
 const { deviceLocale, isDesktop } = platform;
 
@@ -129,6 +138,8 @@ export const Signup = () => {
 
   const walletType = watch("walletType");
 
+  const isBiometrySupported = useIsBiometrySupported();
+
   const onSubmit = useCallback<SubmitHandler<SignupForm>>(
     async (values) => {
       const {
@@ -148,7 +159,8 @@ export const Signup = () => {
         ownerComplement,
         ownerZip,
         ownerCity,
-        ownerCountry
+        ownerCountry,
+        words
       } = values;
 
       if (!name || !email || !password || !currency || btcPercent === undefined)
@@ -200,6 +212,27 @@ export const Signup = () => {
 
         await AsyncStorage.removeItem(keyStoreRefCode);
 
+        if (words) {
+          await AsyncStorage.setItem(
+            keyStoreMnemonicWords,
+            words,
+            isBiometrySupported
+              ? ACCESS_CONTROL.BIOMETRY_CURRENT_SET
+              : undefined,
+            !isBiometrySupported ? password : undefined
+          );
+        }
+
+        if (depositAddress?.startsWith("zpub")) {
+          await AsyncStorage.setItem(
+            keyStoreZpub,
+            depositAddress,
+            isBiometrySupported
+              ? ACCESS_CONTROL.BIOMETRY_CURRENT_SET
+              : undefined
+          );
+        }
+
         const emailLoginData = {
           UserId: email,
           Password: password
@@ -247,7 +280,8 @@ export const Signup = () => {
       setUserType,
       t,
       tRoot,
-      toast
+      toast,
+      isBiometrySupported
     ]
   );
 

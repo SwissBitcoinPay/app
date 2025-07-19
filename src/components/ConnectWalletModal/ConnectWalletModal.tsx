@@ -12,8 +12,7 @@ import { AsyncStorage, hardwareNames, sleep } from "@utils";
 import {
   keyStoreUserType,
   keyStoreWalletPath,
-  keyStoreWalletType,
-  keyStoreZpub
+  keyStoreWalletType
 } from "@config/settingsKeys";
 import { UserType } from "@types";
 import {
@@ -176,11 +175,6 @@ export const ConnectWalletModal = ({
     async (withData = false) => {
       if (withData === true) {
         const data = watch();
-        await AsyncStorage.setItem(
-          keyStoreZpub,
-          data.zPub,
-          ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE
-        );
         await AsyncStorage.setItem(keyStoreWalletPath, data.path);
         await AsyncStorage.setItem(keyStoreUserType, UserType.Wallet);
         await AsyncStorage.setItem(keyStoreWalletType, hardwareType);

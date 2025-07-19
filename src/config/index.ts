@@ -16,6 +16,10 @@ export { SBPContext, SBPContextProvider } from "./SBPContext";
 export { SBPThemeContext, SBPThemeContextProvider } from "./SBPThemeContext";
 export * from "./SBPHardwareWallet";
 export { SBPModalContext, SBPModalContextProvider } from "./SBPModalContext";
+export {
+  SBPAskPasswordModalContext,
+  SBPAskPasswordModalContextProvider
+} from "./SBPAskPasswordModalContext";
 export { DEFAULT_DECIMALS } from "./defaultDecimals";
 
 export { i18n };

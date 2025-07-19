@@ -8,7 +8,8 @@ import {
   SBPModalContextProvider,
   platform,
   SBPHardwareWalletContextProvider,
-  SBPLedgerContextProvider
+  SBPLedgerContextProvider,
+  SBPAskPasswordModalContextProvider
 } from "@config";
 import App from "./App";
 import { SafeAreaProvider, initialWindowMetrics } from "@components/SafeArea";
@@ -25,15 +26,17 @@ export const Root = () => (
             future={{ v7_startTransition: !isIos, v7_relativeSplatPath: true }}
           >
             <SBPThemeContextProvider>
-              <SBPModalContextProvider>
-                <SBPLedgerContextProvider>
-                  <SBPBitboxContextProvider>
-                    <SBPHardwareWalletContextProvider>
-                      <App />
-                    </SBPHardwareWalletContextProvider>
-                  </SBPBitboxContextProvider>
-                </SBPLedgerContextProvider>
-              </SBPModalContextProvider>
+              <SBPAskPasswordModalContextProvider>
+                <SBPModalContextProvider>
+                  <SBPLedgerContextProvider>
+                    <SBPBitboxContextProvider>
+                      <SBPHardwareWalletContextProvider>
+                        <App />
+                      </SBPHardwareWalletContextProvider>
+                    </SBPBitboxContextProvider>
+                  </SBPLedgerContextProvider>
+                </SBPModalContextProvider>
+              </SBPAskPasswordModalContextProvider>
             </SBPThemeContextProvider>
           </Router>
         </KeyboardAvoidingView>

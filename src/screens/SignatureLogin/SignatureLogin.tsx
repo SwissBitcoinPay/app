@@ -19,7 +19,7 @@ import { useToast } from "react-native-toast-notifications";
 import { Bip84Account, UserType } from "@types";
 import { TextInput } from "react-native";
 import { useTheme } from "styled-components";
-import { useAccountConfig } from "@hooks";
+import { useAccountConfig, useIsBiometrySupported } from "@hooks";
 import {
   keyStoreMnemonicWords,
   keyStoreWalletType,
@@ -34,6 +34,7 @@ import {
   HardwareReadyFunctionParams,
   CustomFunctionType
 } from "@components/ConnectWalletModal/ConnectWalletModal";
+import { useAskPassword } from "@hooks/useAskPassword";
 
 const { isIos } = platform;
 
@@ -61,9 +62,10 @@ export const SignatureLogin = () => {
   const { t } = useTranslation(undefined, {
     keyPrefix: "screens.signatureLogin"
   });
+  const askPassword = useAskPassword();
   const toast = useToast();
   const { colors } = useTheme();
-  const { setUserType } = useContext(SBPContext);
+  const { setUserType, clearContext } = useContext(SBPContext);
   const { onAuthLogin } = useAccountConfig({ refresh: false });
   const { control, handleSubmit, formState, setError, trigger } =
     useForm<SignatureLoginForm>({
@@ -71,7 +73,91 @@ export const SignatureLogin = () => {
       reValidateMode: "onChange"
     });
 
+  const isBiometrySupported = useIsBiometrySupported();
+
   const [isSubmitting, setIsSubmiting] = useState(false);
+
+  const loginWithSignature = useCallback(
+    async ({ message, signature, zPub, words, walletType }: SignatureData) => {
+      const signatureLoginData = {
+        messageToSign: message,
+        signature,
+        zPub,
+        words
+      };
+
+      const requireEncryptionPassword = !!words && !isBiometrySupported;
+
+      const _accountConfig = await onAuthLogin(
+        signatureLoginData,
+        false,
+        !requireEncryptionPassword
+      );
+
+      await AsyncStorage.setItem(
+        keyStoreZpub,
+        zPub,
+        isBiometrySupported ? ACCESS_CONTROL.BIOMETRY_CURRENT_SET : undefined
+      );
+
+      const storeWords = (encryptionKey?: string) => {
+        if (words) {
+          void AsyncStorage.setItem(
+            keyStoreMnemonicWords,
+            words,
+            isBiometrySupported
+              ? ACCESS_CONTROL.BIOMETRY_CURRENT_SET
+              : undefined,
+            !isBiometrySupported ? encryptionKey : undefined
+          );
+        }
+      };
+
+      // When requireEncryptionPassword, ask for account password to encrypt data
+      if (requireEncryptionPassword && _accountConfig && _accountConfig.mail) {
+        const password = await askPassword?.(_accountConfig);
+        if (password) {
+          const emailLoginData = {
+            UserId: _accountConfig.mail,
+            Password: password
+          };
+
+          try {
+            await onAuthLogin(emailLoginData);
+            storeWords(password);
+          } catch (e) {
+            let errorMessage = t("common.errors.unknown");
+            if (isApiError(e)) {
+              if (e.response.status === 401) {
+                errorMessage = t("error.invalidPassword");
+              }
+            }
+            toast.show(errorMessage, {
+              type: "error"
+            });
+            return;
+          }
+        } else {
+          // Force logout
+          try {
+            await axios.post(`${apiRootUrl}/auth`, null, {
+              withCredentials: true
+            });
+          } catch (e) {}
+
+          await AsyncStorage.clear();
+          clearContext();
+          return;
+        }
+      } else {
+        storeWords();
+      }
+
+      setUserType(UserType.Wallet);
+      await AsyncStorage.setItem(keyStoreWalletType, walletType);
+    },
+    [isBiometrySupported, clearContext]
+  );
 
   const onSubmit = useCallback<SubmitHandler<SignatureLoginForm>>(
     async (values) => {
@@ -130,26 +216,13 @@ export const SignatureLogin = () => {
           messageToSign
         ) as string;
 
-        await AsyncStorage.setItem(
-          keyStoreZpub,
+        await loginWithSignature({
+          message: messageToSign,
+          signature,
           zPub,
-          ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE
-        );
-        await AsyncStorage.setItem(
-          keyStoreMnemonicWords,
-          words.join(" "),
-          ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE
-        );
-
-        const signatureLoginData = {
-          messageToSign,
-          signature
-        };
-
-        await onAuthLogin(signatureLoginData);
-
-        setUserType(UserType.Wallet);
-        await AsyncStorage.setItem(keyStoreWalletType, "local");
+          words: words.join(" "),
+          walletType: "local"
+        });
       } catch (e) {
         if (isApiError(e)) {
           let errorMessage;
@@ -175,7 +248,16 @@ export const SignatureLogin = () => {
       }
       setIsSubmiting(false);
     },
-    [onAuthLogin, setError, setUserType, t, tRoot, toast, trigger]
+    [
+      onAuthLogin,
+      setError,
+      setUserType,
+      t,
+      tRoot,
+      toast,
+      trigger,
+      isBiometrySupported
+    ]
   );
 
   const validateWord = useCallback(
@@ -214,18 +296,16 @@ export const SignatureLogin = () => {
     async (data?: SignatureData) => {
       setCustomWalletFunction(undefined);
       if (data) {
-        const signatureLoginData = {
-          messageToSign: data.message,
-          signature: data.signature
-        };
-
-        await onAuthLogin(signatureLoginData);
-
-        setUserType(UserType.Wallet);
-        await AsyncStorage.setItem(keyStoreWalletType, data.walletType);
+        await loginWithSignature({
+          message: data.message,
+          signature: data.signature,
+          zPub: data.zPub,
+          words: data.words,
+          walletType: data.walletType
+        });
       }
     },
-    [onAuthLogin, setUserType]
+    [onAuthLogin, setUserType, isBiometrySupported]
   );
 
   const loginWithWallet = useCallback(async () => {
@@ -251,9 +331,13 @@ export const SignatureLogin = () => {
             return { messageToSign: signatureAuthData.messageToSign };
           } catch (e) {
             if (isApiError(e)) {
-              toast.show(JSON.stringify(e?.response || "{}"), {
-                type: "error"
-              });
+              toast.show(
+                e?.response?.data?.reason ||
+                  JSON.stringify(e?.response || "{}"),
+                {
+                  type: "error"
+                }
+              );
             }
           }
         }

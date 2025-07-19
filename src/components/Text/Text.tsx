@@ -1,7 +1,7 @@
 import { PropsWithChildren, forwardRef } from "react";
 import { Text as RootText, TextProps as RootTextProps } from "react-native";
 import styled from "styled-components";
-import { platform } from "@config";
+import { platform } from "@config/platform";
 
 const { isNative } = platform;
 

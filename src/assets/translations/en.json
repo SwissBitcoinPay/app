@@ -68,7 +68,8 @@
       "enter12wordsDescription3": "Still, this connection method is not considered 100% safe, as your device is connected to the internet, and therefore vulnerable. We are not responsible for any loss caused by the use of this login method.",
       "error": {
         "invalidSignature": "Invalid signature",
-        "invalidWord": "Invalid word"
+        "invalidWord": "Invalid word",
+        "invalidPassword": "Invalid password"
       }
     },
     "signup": {
@@ -465,6 +466,14 @@
         "insuranceLetter": "Letter from insurance provider confirming payout"
       }
     }
+  },
+  "askPasswordModal": {
+    "enterPassword": "Enter your account password",
+    "login": "Login",
+    "accountName": "Account name",
+    "accountEmail": "Account email",
+    "password": "Password",
+    "errorGettingPassword": "Error while getting password"
   },
   "createWalletModal": {
     "continue": "Continue",

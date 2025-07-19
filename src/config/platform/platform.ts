@@ -8,7 +8,7 @@ import {
   browserName,
   osName
 } from "react-device-detect";
-import { getLocale } from "@utils";
+import { getLocale } from "@utils/getLocale";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 const getIsNfcSupported = async () => "NDEFReader" in window;

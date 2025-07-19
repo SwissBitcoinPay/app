@@ -1,4 +1,4 @@
-import { platform } from "@config";
+import { platform } from "@config/platform";
 import { bech32 } from "bech32";
 import { useCallback, useEffect, useState } from "react";
 import { NFC } from "@utils";
