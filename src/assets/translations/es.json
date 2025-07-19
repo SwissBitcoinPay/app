@@ -68,7 +68,8 @@
       "enter12wordsDescription3": "Aún así, este método de acceso no se considera 100% seguro, ya que su dispositivo está conectado a Internet y, por lo tanto, es vulnerable. No nos hacemos responsables de ninguna pérdida causada por el uso de este método de acceso.",
       "error": {
         "invalidSignature": "Firma no válida",
-        "invalidWord": "Palabra no válida"
+        "invalidWord": "Palabra no válida",
+        "invalidPassword": "Invalid password"
       }
     },
     "signup": {
@@ -465,6 +466,14 @@
         "insuranceLetter": "Letter from insurance provider confirming payout"
       }
     }
+  },
+  "askPasswordModal": {
+    "enterPassword": "Enter your account password",
+    "login": "Login",
+    "accountName": "Account name",
+    "accountEmail": "Account email",
+    "password": "Password",
+    "errorGettingPassword": "Error while getting password"
   },
   "createWalletModal": {
     "continue": "Continuar",
