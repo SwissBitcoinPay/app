@@ -36,6 +36,7 @@ import { PrepareTransactionParams } from "@utils/wallet/prepare-transaction";
 import { Platform } from "react-native";
 import { faBluetooth, faUsb } from "@fortawesome/free-brands-svg-icons";
 import { WalletType } from "@components/PayoutConfig/PayoutConfig";
+import { useAskPassword } from "@hooks";
 
 type SendForm = {
   address: string;
@@ -129,36 +130,43 @@ export const SendModal = ({
     })();
   }, []);
 
+  const askPassword = useAskPassword();
+
   const awaitWalletTransaction = useCallback(
     async (params: PrepareTransactionParams) => {
       return new Promise<CreateTransactionReturn>((resolver, reject) => {
-        const walletType = wallet?.type;
-        if (walletType === "local") {
-          prepareTransaction({
-            walletType,
-            ...params
-          })
-            .then(resolver)
-            .catch(reject);
-        } else if (walletType === "bitbox02" || walletType === "ledger") {
-          setCustomWalletFunction(
-            () => async (walletReadyProps: HardwareReadyFunctionParams) => {
-              try {
-                const result = await prepareTransaction({
-                  walletType,
-                  ...walletReadyProps,
-                  ...params
-                });
-                resolver(result);
-              } catch (e) {
-                reject(e);
+        try {
+          const walletType = wallet?.type;
+          if (walletType === "local") {
+            prepareTransaction({
+              walletType,
+              askWordsPassword: askPassword,
+              ...params
+            })
+              .then(resolver)
+              .catch(reject);
+          } else if (["bitbox02", "ledger"].includes(walletType)) {
+            setCustomWalletFunction(
+              () => async (walletReadyProps: HardwareReadyFunctionParams) => {
+                try {
+                  const result = await prepareTransaction({
+                    walletType,
+                    ...walletReadyProps,
+                    ...params
+                  });
+                  resolver(result);
+                } catch (e) {
+                  reject(e);
+                }
               }
-            }
-          );
+            );
+          }
+        } catch (e) {
+          toast.show(e, { type: "error" });
         }
       });
     },
-    [wallet?.type]
+    [wallet?.type, askPassword]
   );
 
   const onSend = useCallback<SubmitHandler<SendForm>>(

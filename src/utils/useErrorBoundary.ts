@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
+import { useToast } from "react-native-toast-notifications";
 
 export const useErrorBoundary = () => {
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error>();
+  const toast = useToast();
 
   useEffect(() => {
     if (error) {
-      throw error;
+      toast.show(error.message, { type: "error" });
+      // throw error;
     }
   }, [error]);
 

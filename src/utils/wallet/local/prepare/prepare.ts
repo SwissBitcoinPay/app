@@ -5,6 +5,7 @@ import BIP84 from "bip84";
 import { XOR } from "ts-essentials";
 import { Bip84PrivateAccount } from "@types";
 import { PairedBitBox } from "bitbox-api";
+import { AskWordsPassword } from "@config/SBPAskPasswordModalContext/SBPAskPasswordModalContext";
 
 export type PrepareTransactionParams = XOR<
   {
@@ -13,7 +14,9 @@ export type PrepareTransactionParams = XOR<
   {
     accountCode: string;
   }
->;
+> & {
+  askWordsPassword?: AskWordsPassword;
+};
 
 export type PrepareTransactionReturn = {
   bip84Account: Bip84PrivateAccount;
@@ -21,9 +24,19 @@ export type PrepareTransactionReturn = {
 };
 
 export const prepareTransaction = async (
-  _params: PrepareTransactionParams
+  params: PrepareTransactionParams
 ): Promise<PrepareTransactionReturn> => {
-  const mnemonic = await AsyncStorage.getItem(keyStoreMnemonicWords);
+  let encryptionKey;
+
+  if (params.askWordsPassword) {
+    encryptionKey = await params.askWordsPassword();
+  }
+  const mnemonic = await AsyncStorage.getItem(
+    keyStoreMnemonicWords,
+    undefined,
+    encryptionKey
+  );
+
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const root = new BIP84.fromMnemonic(mnemonic);
 

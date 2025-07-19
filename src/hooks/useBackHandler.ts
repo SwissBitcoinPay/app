@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { BackHandler } from "react-native";
 import { useLocation, useNavigate } from "@components/Router";
-import { platform } from "@config";
+import { platform } from "@config/platform";
 
 const { isWeb } = platform;
 

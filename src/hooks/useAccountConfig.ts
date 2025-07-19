@@ -33,6 +33,7 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
 
   const validateApiKey = useCallback(
     async (testApiKey?: string) => {
+      let _accountConfig: AccountConfigType;
       try {
         const { data } = await axios.get<AccountConfigType>(
           `${apiRootUrl}/account`,
@@ -42,11 +43,11 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
           }
         );
 
-        const fullConfig = { ...data, apiKey: testApiKey || data.apiKey };
+        _accountConfig = { ...data, apiKey: testApiKey || data.apiKey };
 
         await AsyncStorage.setItem(
           keyStoreAccountConfig,
-          JSON.stringify(fullConfig)
+          JSON.stringify(_accountConfig)
         );
 
         if (
@@ -56,13 +57,13 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
           await AsyncStorage.setItem(keyStoreHmac, data.hmacSecret);
         }
 
-        setAccountConfig(fullConfig);
+        setAccountConfig(_accountConfig);
       } catch (e) {
         setIsLoading(false);
         return false;
       }
       setIsLoading(false);
-      return true;
+      return _accountConfig;
     },
     [setAccountConfig]
   );
@@ -175,7 +176,7 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
       await axios.post(`${apiRootUrl}/auth`, loginData, {
         withCredentials: true
       });
-      await validateApiKey();
+      const _accountConfig = await validateApiKey();
 
       if (withSuccessToast) {
         toast.show(t("setupComplete"), { type: "success" });
@@ -183,6 +184,7 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
       if (withNavigate) {
         navigate("/");
       }
+      return _accountConfig;
     },
     [navigate, t, toast, validateApiKey]
   );

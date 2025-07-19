@@ -62,6 +62,7 @@ const { isIos } = platform;
 
 export type SignatureData = {
   zPub: string;
+  words?: string;
   message: string;
   signature: string;
   walletType: WalletType;
@@ -367,6 +368,10 @@ export const BitcoinSettings = ({
   >(
     (signatureData) => {
       if (signatureData) {
+        if (signatureData.words) {
+          setValue("words", signatureData.words);
+        }
+
         setValue("walletType", signatureData.walletType);
         setValue("depositAddress", signatureData.zPub, {
           shouldValidate: false

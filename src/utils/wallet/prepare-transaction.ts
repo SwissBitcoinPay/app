@@ -18,6 +18,7 @@ import { Bip84Account } from "@types";
 import { DEFAULT_NETWORK } from "@config";
 import { AsyncStorage } from "@utils/AsyncStorage";
 import { keyStoreWalletPath } from "@config/settingsKeys";
+import { AskWordsPassword } from "@config/SBPAskPasswordModalContext/SBPAskPasswordModalContext";
 
 const types = {
   // MULTISIG-* do not include pubkeys or signatures yet (this is calculated at runtime)
@@ -96,6 +97,7 @@ export type PrepareTransactionParams = {
   changeAddress?: AddressDetail;
   feeRate: number;
   walletType: string;
+  askWordsPassword?: AskWordsPassword;
 } & Partial<HardwareReadyFunctionParams>;
 
 export const prepareTransaction = async ({
@@ -107,7 +109,8 @@ export const prepareTransaction = async ({
   feeRate,
   wallet: hardwareWallet,
   account,
-  walletType
+  walletType,
+  askWordsPassword
 }: PrepareTransactionParams) => {
   let wallet: Wallet;
   let pathPrefix = "";
@@ -143,7 +146,8 @@ export const prepareTransaction = async ({
   const { bip84Account, masterFingerprint } = await wallet.prepareTransaction({
     hardwareWallet,
     account,
-    rootPath
+    rootPath,
+    askWordsPassword
   });
 
   const receiveAddressType = getAddressType(receiveAddress);
@@ -273,10 +277,10 @@ const getByteCount = (inputs: InputsTypes, outputs: OutputsTypes) => {
     return number < 0xfd
       ? 1
       : number <= 0xffff
-      ? 3
-      : number <= 0xffffffff
-      ? 5
-      : 9;
+        ? 3
+        : number <= 0xffffffff
+          ? 5
+          : 9;
   }
 
   Object.keys(inputs).forEach(function (key) {

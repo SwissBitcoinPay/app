@@ -31,6 +31,7 @@ export type WalletType = "local" | "bitbox02" | "ledger";
 
 type BitcoinSettingsForm = {
   depositAddress?: string;
+  words?: string;
   btcAddressTypes: {
     [k in "onchain" | "xpub" | "lightning"]: boolean | "loading" | "error";
   };
