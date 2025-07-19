@@ -68,7 +68,8 @@
       "enter12wordsDescription3": "Ainda, este método de ligação não é considerado 100% seguro, uma vez que o seu dispositivo está ligado à Internet e, por consequência, vulnerável. Não nos responsabilizamos por qualquer perda causada pela utilização deste método de início de sessão.",
       "error": {
         "invalidSignature": "Assinatura inválida",
-        "invalidWord": "Palavra inválida"
+        "invalidWord": "Palavra inválida",
+        "invalidPassword": "Invalid password"
       }
     },
     "signup": {
@@ -162,7 +163,9 @@
       "scanToWithdraw": "Digitalizar para receber bitcoin através de",
       "printReceipt": "Imprimir recibo",
       "receipt": "Receipt",
-      "downloadReceipt": "Download receipt"
+      "downloadReceipt": "Download receipt",
+      "readingBoltCard": "Reading BoltCard",
+      "boltcardSupported": "BoltCard supported"
     },
     "history": {
       "title": "Histórico de transações",
@@ -463,6 +466,14 @@
         "insuranceLetter": "Letter from insurance provider confirming payout"
       }
     }
+  },
+  "askPasswordModal": {
+    "enterPassword": "Enter your account password",
+    "login": "Login",
+    "accountName": "Account name",
+    "accountEmail": "Account email",
+    "password": "Password",
+    "errorGettingPassword": "Error while getting password"
   },
   "createWalletModal": {
     "continue": "Continuar",

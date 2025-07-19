@@ -68,7 +68,8 @@
       "enter12wordsDescription3": "Kaikesta huolimatta, tämä yhteystapa ei välttämättä ole 100% turvallinen, sillä laitteesi on kytkettynä internettiin, sekä siten se on haavoittuvainen. Emme vastaa mistään haitoista jota tämän kirjaantumismenetelmän käyttö saattaa aiheuttaa.",
       "error": {
         "invalidSignature": "Virheellinen allekirjoitus",
-        "invalidWord": "Virheellinen sana"
+        "invalidWord": "Virheellinen sana",
+        "invalidPassword": "Invalid password"
       }
     },
     "signup": {
@@ -162,7 +163,9 @@
       "scanToWithdraw": "Scannaa vastaanottaaksesi bitcoinia",
       "printReceipt": "Tulosta kuitti",
       "receipt": "Receipt",
-      "downloadReceipt": "Download receipt"
+      "downloadReceipt": "Download receipt",
+      "readingBoltCard": "Reading BoltCard",
+      "boltcardSupported": "BoltCard supported"
     },
     "history": {
       "title": "Tapahtuma historia",
@@ -463,6 +466,14 @@
         "insuranceLetter": "Vakuutuksenantajan kirje, joka vahvistaa maksun"
       }
     }
+  },
+  "askPasswordModal": {
+    "enterPassword": "Enter your account password",
+    "login": "Login",
+    "accountName": "Account name",
+    "accountEmail": "Account email",
+    "password": "Password",
+    "errorGettingPassword": "Error while getting password"
   },
   "createWalletModal": {
     "continue": "Jatka",

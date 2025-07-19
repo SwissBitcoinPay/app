@@ -68,7 +68,8 @@
       "enter12wordsDescription3": "Toutefois, cette méthode de connexion n'est pas considérée comme sûre à 100 %, car votre appareil est connecté à internet et donc vulnérable. Nous ne sommes pas responsables des pertes causées par l'utilisation de cette méthode de connexion.",
       "error": {
         "invalidSignature": "Signature invalide",
-        "invalidWord": "Mot non valide"
+        "invalidWord": "Mot non valide",
+        "invalidPassword": "Mot de passe invalide"
       }
     },
     "signup": {
@@ -127,7 +128,7 @@
     "invoice": {
       "creatingInvoice": "Création de la facture",
       "fetchingInvoice": "Obtention de la facture",
-      "invoiceQrTitle": "Payment link QR code",
+      "invoiceQrTitle": "Code QR du lien de paiement",
       "invoiceQr": "Accédez à cette facture sur un autre appareil en scannant ce code QR",
       "save": "Sauvegarder",
       "status": "Statut",
@@ -162,7 +163,9 @@
       "scanToWithdraw": "Scanner pour recevoir des bitcoins via",
       "printReceipt": "Imprimer reçu",
       "receipt": "Reçu",
-      "downloadReceipt": "Télécharger le reçu"
+      "downloadReceipt": "Télécharger le reçu",
+      "readingBoltCard": "Lecture BoltCard",
+      "boltcardSupported": "BoltCard pris en charge"
     },
     "history": {
       "title": "Historique des transactions",
@@ -463,6 +466,14 @@
         "insuranceLetter": "Lettre de l'assureur confirmant le paiement"
       }
     }
+  },
+  "askPasswordModal": {
+    "enterPassword": "Saisissez le mot de passe de votre compte",
+    "login": "Connexion",
+    "accountName": "Nom du compte",
+    "accountEmail": "Email du compte",
+    "password": "Mot de passe",
+    "errorGettingPassword": "Impossible d'obtenir le mot de passe"
   },
   "createWalletModal": {
     "continue": "Continuer",
