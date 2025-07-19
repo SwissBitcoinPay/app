@@ -16,7 +16,7 @@ then
     EXPORT_OPTIONS_FILE="exportOptions.dev.plist"
 fi
 
-npm run bundle:ios -- --dev "$DEV"
+DEV=$DEV npm run bundle:ios
 
 cd ios
 

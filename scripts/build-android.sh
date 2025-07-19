@@ -9,8 +9,7 @@ npm remove react-native-vision-camera
 
 ANDROID_BUILD_ASSETS=android/app/src/main/assets
 
-npm run bundle:android -- --dev "$DEV"
-
+DEV=$DEV npm run bundle:android
 # Sourcemaps uploading
 
 node_modules/react-native/sdks/hermesc/osx-bin/hermesc \
