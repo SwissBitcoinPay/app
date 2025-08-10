@@ -23,8 +23,8 @@ export const SBPTrezorContextProvider = ({ children }: PropsWithChildren) => {
       lazyLoad: true,
       manifest: {
         email: "hello@swiss-bitcoin-pay.ch",
-        appName: "Swiss Bitcoin Pay Checkout",
-        appUrl: "https://localhost:7474",
+        appName: "Swiss Bitcoin Pay PoS",
+        appUrl: "https://app.swiss-bitcoin-pay.ch",
         appIcon:
           "https://dashboard.swiss-bitcoin-pay.ch/e12a18c11792966d0494.png"
       }
