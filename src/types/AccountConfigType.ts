@@ -1,5 +1,16 @@
 import { currencies } from "@config";
 
+type VerifiedAddress = {
+  address: string;
+  walletConfig: {
+    walletType: string;
+    label: string;
+    account: string;
+    path: string;
+    fingerprint: string;
+  };
+};
+
 export type AccountConfigType = {
   // Visible by all users
   id: string;
@@ -14,7 +25,7 @@ export type AccountConfigType = {
   // Visible by admin only
   createdAt?: number;
   mail?: string;
-  verifiedAddresses?: string[];
+  verifiedAddresses?: VerifiedAddress[];
   btcPercent?: number;
   hmacSecret?: string;
   isCheckoutSecure?: boolean;

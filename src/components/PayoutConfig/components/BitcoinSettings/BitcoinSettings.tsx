@@ -101,7 +101,8 @@ export const BitcoinSettings = ({
   const btcPercent = watch("btcPercent");
 
   const alreadyVerifiedAddresses = useMemo(
-    () => accountConfig?.verifiedAddresses || [],
+    () =>
+      accountConfig?.verifiedAddresses?.map((address) => address.address) || [],
     [accountConfig?.verifiedAddresses]
   );
 

@@ -39,7 +39,10 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
           `${apiRootUrl}/account`,
           {
             withCredentials: true,
-            headers: { "Api-Key": testApiKey }
+            headers: {
+              "Api-Key": testApiKey,
+              appBuild: process.env.APP_BUILD_NUMBER
+            }
           }
         );
 
