@@ -89,6 +89,7 @@ export const BitcoinSettings = ({
   const nextAddresses = watch("nextAddresses");
   const finalDepositAddress = watch("finalDepositAddress");
   const walletType = watch("walletType");
+  const walletConfig = watch("walletConfig");
 
   // Signature stuff
   const messageToSign = watch("messageToSign");
@@ -169,6 +170,7 @@ export const BitcoinSettings = ({
     setValue("hash", undefined);
     setValue("finalDepositAddress", undefined);
     setValue("walletType", undefined);
+    setValue("walletConfig", undefined);
 
     resetField("signature");
     resetField("messageToSign");
@@ -179,6 +181,7 @@ export const BitcoinSettings = ({
     resetField("hash");
     resetField("finalDepositAddress");
     resetField("walletType");
+    resetField("walletConfig");
   }, [resetField, setValue]);
 
   const onPressConnectWallet = useCallback(() => {
@@ -386,7 +389,7 @@ export const BitcoinSettings = ({
   );
 
   const onBitboxWalletModalClose = useCallback<
-    ComponentProps<typeof CreateWalletModal>["onClose"]
+    ComponentProps<typeof ConnectWalletModal>["onClose"]
   >(
     async (signatureData) => {
       setIsConnectWalletModalOpen(false);
@@ -394,6 +397,14 @@ export const BitcoinSettings = ({
         const verifySignatureData = await validateSignature(signatureData);
 
         if (verifySignatureData === true) {
+          setValue(
+            "walletConfig",
+            {
+              ...signatureData.walletConfig,
+              type: signatureData.walletType
+            },
+            { shouldDirty: true }
+          );
           toast.show(
             t("hardwareConnectSuccess", {
               hardwareWallet: hardwareNames[signatureData.walletType]
@@ -513,13 +524,19 @@ export const BitcoinSettings = ({
             <TextField
               label={t("bitcoinPayoutWallet")}
               value={
-                walletType === "local"
-                  ? t("localWallet")
-                  : walletType === "bitbox02"
-                    ? "BitBox02"
-                    : walletType === "ledger"
-                      ? "Ledger"
-                      : value
+                value
+                  ? `${
+                      walletType === "local"
+                        ? t("localWallet")
+                        : walletType === "bitbox02"
+                          ? "BitBox02"
+                          : walletType === "ledger"
+                            ? "Ledger"
+                            : walletType === "trezor"
+                              ? "Trezor"
+                              : value
+                    }${walletConfig?.path ? ` - ${walletConfig.path}` : ""}`
+                  : ""
               }
               onChangeText={(newValue) => {
                 if (newValue !== undefined && newValue !== null) {

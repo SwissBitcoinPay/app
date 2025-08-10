@@ -1,7 +1,6 @@
 import jseu from "js-encoding-utils";
 import { useCallback } from "react";
 import { ScriptType } from "@utils/Bitbox/api/account";
-import { useTranslation } from "react-i18next";
 // @ts-ignore
 import BIP84 from "bip84";
 import axios from "axios";
@@ -14,11 +13,7 @@ const uint8ArrayToBase64 = (uint8Array: Uint8Array) => {
 
 const ROOT_PATH = `m/84'/0'`;
 
-export const useSignature = ({ wallet, error }: UseSignatureParams) => {
-  const { t } = useTranslation(undefined, {
-    keyPrefix: "connectWalletModal.signature"
-  });
-
+export const useSignature = ({ wallet }: UseSignatureParams) => {
   const getAccounts = useCallback(async () => {
     const accounts = [];
     let index = 0;
@@ -27,12 +22,14 @@ export const useSignature = ({ wallet, error }: UseSignatureParams) => {
       const path = `${ROOT_PATH}/${index}'`;
 
       const accountXpub = await wallet.btcXpub("btc", path, "zpub", false);
+      const rootFingerprint = await wallet.rootFingerprint();
 
       accounts.push({
         label: `Bitcoin ${index + 1}`,
         account: path,
         path,
-        zpub: accountXpub
+        zpub: accountXpub,
+        fingerprint: rootFingerprint
       });
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -51,24 +48,6 @@ export const useSignature = ({ wallet, error }: UseSignatureParams) => {
       index += 1;
     }
   }, [wallet]);
-
-  const getAccountFirstAddress = useCallback(
-    async (format: ScriptType, account: string) => {
-      try {
-        if (pairedBitbox) {
-          const firstAddress = await wallet.btcAddress(
-            "btc",
-            `${account}/0/0`,
-            { simpleType: format },
-            false
-          );
-          return firstAddress;
-        }
-      } catch (e) {}
-      error(t("cannotGetAccount"));
-    },
-    [error, wallet, t]
-  );
 
   const signMessage = useCallback(
     async (format: ScriptType, message: string, account: string) => {
@@ -95,7 +74,6 @@ export const useSignature = ({ wallet, error }: UseSignatureParams) => {
 
   return {
     getAccounts,
-    getAccountFirstAddress,
     signMessage
   };
 };

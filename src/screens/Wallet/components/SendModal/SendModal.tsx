@@ -1,4 +1,10 @@
-import { ComponentProps, useCallback, useEffect, useState } from "react";
+import {
+  ComponentProps,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from "react";
 import { useTranslation } from "react-i18next";
 import queryString from "query-string";
 import {
@@ -80,8 +86,13 @@ export const SendModal = ({
 }: SendModalProps) => {
   const rates = useRates();
   const toast = useToast();
-  const { accountConfig: { currency: accountCurrency } = {} } =
-    useAccountConfig({ refresh: false });
+  const {
+    accountConfig: {
+      currency: accountCurrency,
+      depositAddress,
+      verifiedAddresses
+    } = {}
+  } = useAccountConfig({ refresh: false });
   const { colors } = useTheme();
   const { t: tRoot } = useTranslation();
   const { t } = useTranslation(undefined, {
@@ -90,6 +101,12 @@ export const SendModal = ({
   const isMedium = useIsScreenSizeMin("medium");
   const [isLoading, setIsLoading] = useState(false);
   const setError = useErrorBoundary();
+
+  const walletType = useMemo(
+    () =>
+      (verifiedAddresses || []).find((v) => v.address)?.walletConfig.walletType,
+    [verifiedAddresses]
+  );
 
   const [wallet, setWallet] = useState<{
     type: WalletType;
@@ -122,7 +139,10 @@ export const SendModal = ({
   useEffect(() => {
     (async () => {
       setWallet({
-        type: (await AsyncStorage.getItem(keyStoreWalletType)) || "local",
+        type:
+          walletType ||
+          (await AsyncStorage.getItem(keyStoreWalletType)) ||
+          "local",
         transport: (await AsyncStorage.getItem(keyStoreLedgerBluetoothId))
           ? "bluetooth"
           : undefined

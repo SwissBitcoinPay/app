@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { ScriptType } from "@utils/Bitbox/api/account";
 import { useTranslation } from "react-i18next";
+import { AppClient } from "ledger-bitcoin";
 // @ts-ignore
 import BIP84 from "bip84";
 import axios from "axios";
@@ -8,75 +9,69 @@ import { Bip84Account, MempoolTX } from "@types";
 import { UseSignatureParams } from "./useSignature";
 import xpubConverter from "xpub-converter";
 import Btc from "@ledgerhq/hw-app-btc";
+import Transport from "@ledgerhq/hw-transport";
 
 const ROOT_PATH = `84'/0'`;
 
 export type UseSignatureParams = {
-  wallet: Btc;
+  wallet?: Btc;
+  transport?: Transport;
   error: (msg: string) => void;
 };
 
-export const useSignature = ({ wallet, error }: UseSignatureParams) => {
-  const { t } = useTranslation(undefined, {
-    keyPrefix: "connectWalletModal.signature"
-  });
-
+export const useSignature = ({
+  wallet,
+  transport,
+  error
+}: UseSignatureParams) => {
   const getAccounts = useCallback(async () => {
-    try {
-      const accounts = [];
-      let index = 0;
+    if (wallet && transport) {
+      try {
+        const accounts = [];
+        let index = 0;
 
-      while (true) {
-        const path = `${ROOT_PATH}/${index}'`;
+        while (true) {
+          const path = `${ROOT_PATH}/${index}'`;
 
-        const accountXpub = await wallet.getWalletXpub({
-          path,
-          xpubVersion: 0x0488b21e
-        });
+          const accountXpub = await wallet.getWalletXpub({
+            path,
+            xpubVersion: 0x0488b21e
+          });
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        const zpub: string = xpubConverter(accountXpub, "zpub");
+          const app = new AppClient(transport);
+          const masterFingerprint = await app.getMasterFingerprint();
 
-        accounts.push({
-          label: `Bitcoin ${index + 1}`,
-          account: path,
-          path,
-          zpub
-        });
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+          const zpub: string = xpubConverter(accountXpub, "zpub");
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        const bip84Account: Bip84Account = new BIP84.fromZPub(zpub);
+          accounts.push({
+            label: `Bitcoin ${index + 1}`,
+            account: path,
+            path,
+            zpub,
+            fingerprint: masterFingerprint
+          });
 
-        const firstAddress = bip84Account.getAddress(0);
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+          const bip84Account: Bip84Account = new BIP84.fromZPub(zpub);
 
-        const { data: addressTxs } = await axios.get<MempoolTX[]>(
-          `https://mempool.space/api/address/${firstAddress}/txs`
-        );
+          const firstAddress = bip84Account.getAddress(0);
 
-        if (addressTxs.length === 0) {
-          return accounts;
+          const { data: addressTxs } = await axios.get<MempoolTX[]>(
+            `https://mempool.space/api/address/${firstAddress}/txs`
+          );
+
+          if (addressTxs.length === 0) {
+            return accounts;
+          }
+
+          index += 1;
         }
-
-        index += 1;
+      } catch (e) {
+        error(e.message as string);
       }
-    } catch (e) {
-      error(e.message as string);
     }
   }, [error, wallet]);
-
-  const getAccountFirstAddress = useCallback(
-    async (format: ScriptType, account: string) => {
-      // const path = scriptTypeToPath(format);
-      try {
-        const firstAddress = await wallet.getWalletPublicKey(`${account}/0/0`, {
-          format
-        });
-        return firstAddress;
-      } catch (e) {}
-      error(t("cannotGetAccount"));
-    },
-    [error, wallet, t]
-  );
 
   const signMessage = useCallback(
     async (format: ScriptType, message: string, account: string) => {
@@ -105,7 +100,6 @@ export const useSignature = ({ wallet, error }: UseSignatureParams) => {
 
   return {
     getAccounts,
-    getAccountFirstAddress,
     signMessage
   };
 };

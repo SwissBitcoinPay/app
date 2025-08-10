@@ -9,9 +9,9 @@ import * as ConnectStyled from "../../styled";
 import { DEFAULT_SCRIPT_TYPE } from "@config";
 import * as S from "./styled";
 import { AccountBalance } from "./components/AccountBalance";
-import { keyStoreWalletPath } from "@config/settingsKeys";
 import { AsyncStorage, hardwareNames } from "@utils";
 import { SBPHardwareWalletContext } from "@config/SBPHardwareWallet";
+import { keyStoreWalletPath } from "@config/settingsKeys";
 
 export type Account = {
   label: string;
@@ -65,9 +65,9 @@ export const Signature = ({
 
       const walletPath = await AsyncStorage.getItem(keyStoreWalletPath);
 
-      let finalAccount: Account;
+      let finalAccount: (typeof _accounts)[number];
 
-      if (walletPath) {
+      if (walletPath && customFunction) {
         finalAccount = _accounts.find((a) => a.path === walletPath);
       } else if (_accounts.length > 1) {
         const promise = new Promise<Account>((resolve) => {
@@ -140,6 +140,14 @@ export const Signature = ({
 
           setValue("message", messageToSign);
           setValue("signature", signature);
+          setValue("walletConfig", {
+            account: finalAccount.account,
+            label: finalAccount.label,
+            path: finalAccount.path,
+            type: hardwareType,
+            zpub: finalAccount.zpub,
+            fingerprint: finalAccount.fingerprint
+          });
 
           success = true;
         }

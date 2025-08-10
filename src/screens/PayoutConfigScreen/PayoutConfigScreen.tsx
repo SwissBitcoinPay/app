@@ -8,8 +8,12 @@ import { apiRootUrl, currencyToCountry } from "@config";
 import { isApiError } from "@utils";
 import axios from "axios";
 import { useToast } from "react-native-toast-notifications";
-import { PayoutConfigForm } from "@components/PayoutConfig/PayoutConfig";
+import {
+  PayoutConfigForm,
+  WalletType
+} from "@components/PayoutConfig/PayoutConfig";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { WalletConfig } from "@components/ConnectWalletModal/ConnectWalletModal";
 
 export const PayoutConfigScreen = () => {
   const navigate = useNavigate();
@@ -48,7 +52,11 @@ export const PayoutConfigScreen = () => {
       ownerComplement: accountConfig?.ownerComplement,
       ownerZip: accountConfig?.ownerZip,
       ownerCity: accountConfig?.ownerCity,
-      reference: accountConfig?.reference
+      reference: accountConfig?.reference,
+      walletType: accountConfig?.verifiedAddresses?.find((v) => v.current)
+        ?.walletConfig?.type as WalletType,
+      walletConfig: accountConfig?.verifiedAddresses?.find((v) => v.current)
+        ?.walletConfig as WalletConfig
     }
   });
 
@@ -79,7 +87,8 @@ export const PayoutConfigScreen = () => {
         ownerComplement,
         ownerZip,
         ownerCity,
-        ownerCountry
+        ownerCountry,
+        walletConfig
       } = values;
 
       const isReceiveBitcoin = btcPercent >= 1;
@@ -89,7 +98,12 @@ export const PayoutConfigScreen = () => {
         const patchData = {
           btcPercent,
           ...(isReceiveBitcoin
-            ? { depositAddress, message: messageToSign, signature }
+            ? {
+                depositAddress,
+                message: messageToSign,
+                signature,
+                walletConfig
+              }
             : {}),
           ...(isReceiveFiat
             ? {

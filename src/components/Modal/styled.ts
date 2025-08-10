@@ -16,7 +16,7 @@ export const ModalContent = styled(View)<{ isScreenExtraLarge?: boolean }>`
   ${({ theme, isScreenExtraLarge }) => `
     background-color: ${theme.colors.primary};
     border-radius: ${theme.borderRadius}px;
-    width: ${isScreenExtraLarge ? "30%" : "90%"};
+    width: ${isScreenExtraLarge ? "40%" : "90%"};
     border: 4px solid ${theme.colors.primaryLight};
   `}
 `;

@@ -10,6 +10,7 @@ import TransportRNBLE from "@ledgerhq/react-native-hw-transport-ble";
 import { useSignature } from "./hooks";
 import { AsyncStorage } from "@utils";
 import { keyStoreLedgerBluetoothId } from "@config/settingsKeys";
+import Transport from "@ledgerhq/hw-transport";
 
 export const IS_LEDGER_SUPPORTED: boolean = true;
 
@@ -24,6 +25,7 @@ export const SBPLedgerContext = React.createContext<SBPLedgerContextType>({});
 
 export const SBPLedgerContextProvider = ({ children }: PropsWithChildren) => {
   const [wallet, setWallet] = useState<Btc>();
+  const [transport, setTransport] = useState<Transport>();
   const [state, setState] = useState<HardwareState>();
 
   const toast = useToast();
@@ -38,14 +40,14 @@ export const SBPLedgerContextProvider = ({ children }: PropsWithChildren) => {
     [toast]
   );
 
-  const signatureFunctions = useSignature({ wallet, error });
+  const signatureFunctions = useSignature({ wallet, transport, error });
 
   const _setWallet = useCallback((value: Btc) => {
     setWallet(value);
     setState(HardwareState.Signature);
   }, []);
 
-  const setTransport = useCallback(
+  const _setTransport = useCallback(
     async (value: LedgerTransportType) => {
       setState(HardwareState.Connect);
 
@@ -57,6 +59,7 @@ export const SBPLedgerContextProvider = ({ children }: PropsWithChildren) => {
             scrambleKey: "BTC",
             currency: "bitcoin"
           });
+          setTransport(transport);
           _setWallet(ledger);
         } else if (value === "bluetooth") {
           setState(HardwareState.SelectDevice);
@@ -89,7 +92,7 @@ export const SBPLedgerContextProvider = ({ children }: PropsWithChildren) => {
         state,
         init,
         close,
-        setTransport,
+        setTransport: _setTransport,
         onDisconnect,
         setWallet: _setWallet,
         wallet,

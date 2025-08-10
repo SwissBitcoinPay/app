@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useContext, useState } from "react";
-import { SBPLedgerContext } from "@config";
+import { SBPLedgerContext, SBPTrezorContext } from "@config";
 import { AddressSignResponse, ScriptType } from "@utils/Bitbox/api/account";
 import { BitboxWallets, SBPBitboxContext } from "./hardware/bitbox02";
 import Btc from "@ledgerhq/hw-app-btc";
@@ -18,7 +18,7 @@ export enum HardwareState {
 
 export type BackupMode = "sdcard" | "12-words" | "24-words";
 
-export type HardwareType = "bitbox02" | "ledger";
+export type HardwareType = "bitbox02" | "ledger" | "trezor";
 
 export type AllHardwareTypes = BitboxWallets | Btc;
 
@@ -48,12 +48,9 @@ export type SBPHardwareWalletContextType<T = AllHardwareTypes> = {
       account: string;
       path: string | undefined;
       zpub: string | undefined;
+      fingerprint: string;
     }[]
   >;
-  getAccountFirstAddress: (
-    scriptType: ScriptType,
-    account: string
-  ) => Promise<string | undefined>;
   signMessage: (
     format: ScriptType,
     message: string,
@@ -80,7 +77,9 @@ export const SBPHardwareWalletContextProvider = ({
       ? SBPBitboxContext
       : hardwareType === "ledger"
         ? SBPLedgerContext
-        : SBPHardwareWalletContext;
+        : hardwareType === "trezor"
+          ? SBPTrezorContext
+          : SBPHardwareWalletContext;
 
   const context = useContext(hardwareContext);
 

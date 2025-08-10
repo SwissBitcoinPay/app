@@ -6,6 +6,7 @@ import * as S from "./styled";
 import {
   IS_BITBOX_SUPPORTED,
   IS_LEDGER_SUPPORTED,
+  IS_TREZOR_SUPPORTED,
   SBPHardwareWalletContext
 } from "@config/SBPHardwareWallet";
 import { useIsScreenSizeMin } from "@hooks";
@@ -19,12 +20,14 @@ export const Empty = () => {
 
   const { setHardwareType } = useContext(SBPHardwareWalletContext);
 
-  const imageRatio = useMemo(() => (isLarge ? 1 : 0.8), [isLarge]);
+  const imageRatio = useMemo(() => (isLarge ? 0.75 : 0.7), [isLarge]);
 
   return (
     <ComponentStack gapSize={10} style={{ alignItems: "center" }}>
       <ConnectStyled.Title>{t("title")}</ConnectStyled.Title>
-      <S.SelectHardwareContainer direction="horizontal">
+      <S.SelectHardwareContainer
+        direction={isLarge ? "horizontal" : "vertical"}
+      >
         <S.HardwareContainer
           disabled={!IS_LEDGER_SUPPORTED}
           onPress={() => {
@@ -55,6 +58,25 @@ export const Empty = () => {
             }}
           />
           {!IS_BITBOX_SUPPORTED && (
+            <S.NotSupportedText>
+              {tRoot("common.notSupported")}
+            </S.NotSupportedText>
+          )}
+        </S.HardwareContainer>
+        <S.HardwareContainer
+          disabled={!IS_TREZOR_SUPPORTED}
+          onPress={() => {
+            setHardwareType("trezor");
+          }}
+        >
+          <S.HardwareImage
+            source={require("@assets/images/trezor.png")}
+            style={{
+              aspectRatio: "192/49",
+              transform: [{ scale: imageRatio * 0.82 }]
+            }}
+          />
+          {!IS_TREZOR_SUPPORTED && (
             <S.NotSupportedText>
               {tRoot("common.notSupported")}
             </S.NotSupportedText>
