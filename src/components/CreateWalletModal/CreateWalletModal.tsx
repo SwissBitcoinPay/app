@@ -13,7 +13,7 @@ import { Step1, Step2, Step3, Step4, Step5 } from "./components";
 import { useToast } from "react-native-toast-notifications";
 import axios from "axios";
 import { AsyncStorage, sleep } from "@utils";
-import { keyStoreUserType, keyStoreWalletType } from "@config/settingsKeys";
+import { keyStoreUserType } from "@config/settingsKeys";
 import { UserType } from "@types";
 import { apiRootUrl } from "@config";
 import { SignatureData } from "@components/PayoutConfig/components/BitcoinSettings/BitcoinSettings";
@@ -116,7 +116,6 @@ export const CreateWalletModal = ({
           });
 
           await AsyncStorage.setItem(keyStoreUserType, UserType.Wallet);
-          await AsyncStorage.setItem(keyStoreWalletType, "local");
 
           onClose({
             zPub: data.zPub,

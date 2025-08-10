@@ -6,6 +6,7 @@ import TransportWebHID from "@ledgerhq/hw-transport-webhid";
 import { HardwareState } from "../../SBPHardwareWalletContext";
 import { useToast } from "react-native-toast-notifications";
 import { useSignature } from "./hooks";
+import Transport from "@ledgerhq/hw-transport";
 
 export const IS_LEDGER_SUPPORTED = true;
 
@@ -14,6 +15,7 @@ export const SBPLedgerContext = React.createContext<SBPLedgerContextType>({});
 
 export const SBPLedgerContextProvider = ({ children }: PropsWithChildren) => {
   const [wallet, setWallet] = useState<Btc>();
+  const [transport, setTransport] = useState<Transport>();
   const [state, setState] = useState<HardwareState>();
 
   const toast = useToast();
@@ -28,7 +30,7 @@ export const SBPLedgerContextProvider = ({ children }: PropsWithChildren) => {
     [toast]
   );
 
-  const signatureFunctions = useSignature({ wallet, error });
+  const signatureFunctions = useSignature({ wallet, transport, error });
 
   const _setTransport = useCallback(async () => {
     setState(HardwareState.Connect);
@@ -39,6 +41,7 @@ export const SBPLedgerContextProvider = ({ children }: PropsWithChildren) => {
         ? await TransportWebUSB.create()
         : await TransportWebHID.create();
 
+      setTransport(_transport);
       const ledger = new Btc({
         transport: _transport,
         scrambleKey: "BTC",

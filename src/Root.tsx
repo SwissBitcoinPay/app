@@ -9,7 +9,8 @@ import {
   platform,
   SBPHardwareWalletContextProvider,
   SBPLedgerContextProvider,
-  SBPAskPasswordModalContextProvider
+  SBPAskPasswordModalContextProvider,
+  SBPTrezorContextProvider
 } from "@config";
 import App from "./App";
 import { SafeAreaProvider, initialWindowMetrics } from "@components/SafeArea";
@@ -28,13 +29,15 @@ export const Root = () => (
             <SBPThemeContextProvider>
               <SBPAskPasswordModalContextProvider>
                 <SBPModalContextProvider>
-                  <SBPLedgerContextProvider>
-                    <SBPBitboxContextProvider>
-                      <SBPHardwareWalletContextProvider>
-                        <App />
-                      </SBPHardwareWalletContextProvider>
-                    </SBPBitboxContextProvider>
-                  </SBPLedgerContextProvider>
+                  <SBPTrezorContextProvider>
+                    <SBPLedgerContextProvider>
+                      <SBPBitboxContextProvider>
+                        <SBPHardwareWalletContextProvider>
+                          <App />
+                        </SBPHardwareWalletContextProvider>
+                      </SBPBitboxContextProvider>
+                    </SBPLedgerContextProvider>
+                  </SBPTrezorContextProvider>
                 </SBPModalContextProvider>
               </SBPAskPasswordModalContextProvider>
             </SBPThemeContextProvider>

@@ -3,11 +3,12 @@ import styled from "styled-components";
 
 export const SelectHardwareContainer = styled(ComponentStack)`
   max-width: 100%;
+  align-items: center;
 `;
 
 export const HardwareContainer = styled(Pressable)`
-  height: 100px;
-  flex: 1;
+  height: 80px;
+  flex-shrink: 1;
   width: 200px;
   max-width: 100%;
   border: 2px solid ${({ theme }) => theme.colors.white};

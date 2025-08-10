@@ -22,12 +22,18 @@ import { AccountConfigType } from "@types";
 import { Vibration } from "react-native";
 import { useRates } from "@hooks";
 import { RatesType } from "@hooks/useRates";
-import { bankCurrencyMap, fiatCurrencies, platform } from "@config";
+import {
+  bankCurrencyMap,
+  fiatCurrencies,
+  HardwareType,
+  platform
+} from "@config";
 import * as S from "./styled";
+import { WalletConfig } from "@components/ConnectWalletModal/ConnectWalletModal";
 
 const { isIos } = platform;
 
-export type WalletType = "local" | "bitbox02" | "ledger";
+export type WalletType = "local" | HardwareType;
 
 type BitcoinSettingsForm = {
   depositAddress?: string;
@@ -44,6 +50,7 @@ type BitcoinSettingsForm = {
   isPrPaid?: boolean;
   signature?: string;
   walletType?: WalletType;
+  walletConfig?: WalletConfig;
 };
 
 const bitcoinSettingsKeys: (keyof BitcoinSettingsForm)[] = [

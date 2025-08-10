@@ -9,11 +9,7 @@ import { useTranslation } from "react-i18next";
 import { Modal } from "@components";
 import { UseFormSetValue, useForm } from "react-hook-form";
 import { AsyncStorage, hardwareNames, sleep } from "@utils";
-import {
-  keyStoreUserType,
-  keyStoreWalletPath,
-  keyStoreWalletType
-} from "@config/settingsKeys";
+import { keyStoreUserType } from "@config/settingsKeys";
 import { UserType } from "@types";
 import {
   Empty as EmptyScreen,
@@ -30,22 +26,31 @@ import {
 } from "./components";
 import { TStatus as BootloaderStatus } from "@utils/Bitbox/api/bitbox02bootloader";
 import { TStatus as Status } from "@utils/Bitbox/api/bitbox02";
-import { SignatureData } from "@components/PayoutConfig/components/BitcoinSettings/BitcoinSettings";
 import { XOR } from "ts-essentials";
 import { PairedBitBox } from "bitbox-api";
-import { ACCESS_CONTROL } from "react-native-keychain";
 import {
   HardwareState,
+  HardwareType,
   SBPHardwareWalletContext
 } from "@config/SBPHardwareWallet";
 import { HardwareWallet } from "@utils/wallet/types";
 import { WalletType } from "@components/PayoutConfig/PayoutConfig";
+
+export type WalletConfig = {
+  account: string;
+  label: string;
+  path?: string;
+  type: WalletType;
+  zpub?: string;
+  fingerprint?: string;
+};
 
 type ConnectWalletForm = {
   zPub: string;
   path: string;
   message: string;
   signature: string;
+  walletConfig: WalletConfig;
 };
 
 export type CustomFunctionType = (
@@ -56,7 +61,9 @@ type ConnectWalletModalProps = Omit<
   ComponentProps<typeof Modal>,
   "children" | "onClose" | "title"
 > & {
-  onClose: (signatureData?: SignatureData) => void;
+  onClose: (
+    signatureData?: ConnectWalletForm & { walletType: HardwareType }
+  ) => void;
   customFunction?: CustomFunctionType;
   walletType?: WalletType;
 };
@@ -175,9 +182,7 @@ export const ConnectWalletModal = ({
     async (withData = false) => {
       if (withData === true) {
         const data = watch();
-        await AsyncStorage.setItem(keyStoreWalletPath, data.path);
         await AsyncStorage.setItem(keyStoreUserType, UserType.Wallet);
-        await AsyncStorage.setItem(keyStoreWalletType, hardwareType);
         onClose({ ...data, walletType: hardwareType });
       } else {
         onClose();

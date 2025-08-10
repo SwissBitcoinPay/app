@@ -20,11 +20,7 @@ import { Bip84Account, UserType } from "@types";
 import { TextInput } from "react-native";
 import { useTheme } from "styled-components";
 import { useAccountConfig, useIsBiometrySupported } from "@hooks";
-import {
-  keyStoreMnemonicWords,
-  keyStoreWalletType,
-  keyStoreZpub
-} from "@config/settingsKeys";
+import { keyStoreMnemonicWords, keyStoreZpub } from "@config/settingsKeys";
 import { ACCESS_CONTROL } from "react-native-keychain";
 import * as BIP39 from "bip39";
 import * as S from "./styled";
@@ -154,7 +150,6 @@ export const SignatureLogin = () => {
       }
 
       setUserType(UserType.Wallet);
-      await AsyncStorage.setItem(keyStoreWalletType, walletType);
     },
     [isBiometrySupported, clearContext]
   );

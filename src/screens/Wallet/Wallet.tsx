@@ -244,12 +244,7 @@ export const Wallet = () => {
 
     if (!zPub) {
       (async () => {
-        setZpub(
-          await AsyncStorage.getItem(keyStoreZpub, {
-            title: t("unlockYourWallet"),
-            cancel: tRoot("common.cancel")
-          })
-        );
+        setZpub(accountConfig?.depositAddress);
       })();
     }
   }, [zPub]);

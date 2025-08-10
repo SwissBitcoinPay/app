@@ -160,7 +160,8 @@ export const Signup = () => {
         ownerZip,
         ownerCity,
         ownerCountry,
-        words
+        words,
+        walletConfig
       } = values;
 
       if (!name || !email || !password || !currency || btcPercent === undefined)
@@ -186,7 +187,12 @@ export const Signup = () => {
           btcPercent,
           referredBy: referralCode?.toUpperCase(),
           ...(isReceiveBitcoin
-            ? { address: depositAddress, message: messageToSign, signature }
+            ? {
+                address: depositAddress,
+                message: messageToSign,
+                signature,
+                walletConfig
+              }
             : {}),
           ...(isReceiveFiat
             ? {

@@ -5,10 +5,8 @@ import {
   getAccounts as getBitboxAccounts,
   getInfo,
   signAddress as bitboxSignMessage,
-  AddressSignResponse,
-  getReceiveAddressList
+  AddressSignResponse
 } from "@utils/Bitbox/api/account";
-import { useTranslation } from "react-i18next";
 import { PairedBitBox } from "bitbox-api";
 
 export type UseSignatureParams = {
@@ -16,11 +14,7 @@ export type UseSignatureParams = {
   error: (msg: string) => void;
 };
 
-export const useSignature = ({ error }: UseSignatureParams) => {
-  const { t } = useTranslation(undefined, {
-    keyPrefix: "connectWalletModal.signature"
-  });
-
+export const useSignature = () => {
   const getAccounts = useCallback(async () => {
     try {
       while (true) {
@@ -37,11 +31,14 @@ export const useSignature = ({ error }: UseSignatureParams) => {
               const signingConfiguration = a.signingConfigurations.find((e) =>
                 e.bitcoinSimple?.keyInfo.keypath.startsWith("m/84'/0'")
               );
+
               return {
                 label: accounts[i].name,
                 account: accounts[i].code,
                 path: signingConfiguration?.bitcoinSimple.keyInfo.keypath,
-                zpub: signingConfiguration?.bitcoinSimple.keyInfo.xpub
+                zpub: signingConfiguration?.bitcoinSimple.keyInfo.xpub,
+                fingerprint:
+                  signingConfiguration?.bitcoinSimple.keyInfo.rootFingerprint
               };
             })
             .filter((v) => v.zpub);
@@ -56,20 +53,6 @@ export const useSignature = ({ error }: UseSignatureParams) => {
     return [];
   }, []);
 
-  const getAccountFirstAddress = useCallback(
-    async (scriptType: ScriptType, account: string) => {
-      try {
-        const receiveAddressList = await getReceiveAddressList(account);
-        if (receiveAddressList) {
-          return receiveAddressList.find((v) => v.scriptType === scriptType)
-            .addresses[0].address;
-        }
-      } catch (e) {}
-      error(t("cannotGetAccount"));
-    },
-    [error, t]
-  );
-
   const signMessage = useCallback(
     async (format: ScriptType, message: string, account: string) => {
       try {
@@ -82,5 +65,5 @@ export const useSignature = ({ error }: UseSignatureParams) => {
     []
   );
 
-  return { getAccounts, getAccountFirstAddress, signMessage };
+  return { getAccounts, signMessage };
 };

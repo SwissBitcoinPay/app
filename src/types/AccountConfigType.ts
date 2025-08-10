@@ -2,8 +2,9 @@ import { currencies } from "@config";
 
 type VerifiedAddress = {
   address: string;
+  current: boolean;
   walletConfig: {
-    walletType: string;
+    type: string;
     label: string;
     account: string;
     path: string;
