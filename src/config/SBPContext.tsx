@@ -8,6 +8,7 @@ import {
   useState
 } from "react";
 import { keyStoreUserType } from "./settingsKeys";
+import { useLocation } from "@components/Router";
 import { useIsCameraAvailable } from "@hooks/useIsCameraAvailable";
 
 type SBPContextType = {
@@ -28,6 +29,7 @@ type SBPContextType = {
 export const SBPContext = createContext<SBPContextType>({});
 
 export const SBPContextProvider = ({ children }: PropsWithChildren) => {
+  const { pathname } = useLocation();
   const [userType, setUserType] = useState<UserType>();
   const [preferredCurrency, setPreferredCurrency] = useState<string>();
   const [accountConfig, setAccountConfig] = useState<AccountConfigType>();
@@ -80,7 +82,7 @@ export const SBPContextProvider = ({ children }: PropsWithChildren) => {
         setUserType: _setUserType,
         preferredCurrency,
         setPreferredCurrency: _setPreferredCurrency,
-        accountConfig,
+        accountConfig: pathname !== "/signup" ? accountConfig : undefined,
         setAccountConfig: setPartialAccountConfig,
         headerHeight,
         setHeaderHeight
