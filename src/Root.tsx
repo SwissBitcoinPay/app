@@ -20,12 +20,12 @@ const { isIos } = platform;
 
 export const Root = () => (
   <Suspense fallback={<Loader />}>
-    <SBPContextProvider>
-      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-        <KeyboardAvoidingView>
-          <Router
-            future={{ v7_startTransition: !isIos, v7_relativeSplatPath: true }}
-          >
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      <KeyboardAvoidingView>
+        <Router
+          future={{ v7_startTransition: !isIos, v7_relativeSplatPath: true }}
+        >
+          <SBPContextProvider>
             <SBPThemeContextProvider>
               <SBPAskPasswordModalContextProvider>
                 <SBPModalContextProvider>
@@ -41,9 +41,9 @@ export const Root = () => (
                 </SBPModalContextProvider>
               </SBPAskPasswordModalContextProvider>
             </SBPThemeContextProvider>
-          </Router>
-        </KeyboardAvoidingView>
-      </SafeAreaProvider>
-    </SBPContextProvider>
+          </SBPContextProvider>
+        </Router>
+      </KeyboardAvoidingView>
+    </SafeAreaProvider>
   </Suspense>
 );
