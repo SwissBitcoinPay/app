@@ -599,7 +599,10 @@ export const Invoice = () => {
           // don't remove description if it already stored
           setDescription(getInvoiceData.description);
         }
-        setAmount(getInvoiceData.amount * 1000);
+
+        const amountInSats = Math.round(getInvoiceData.amount * 1000);
+
+        setAmount(amountInSats);
         setPaidAt(getInvoiceData.paidAt);
         setInvoiceCurrency(getInvoiceData.input.unit || "CHF");
         setInvoiceFiatAmount(getInvoiceData.input.amount);
@@ -611,7 +614,7 @@ export const Invoice = () => {
           status !== "settled" &&
           !isExternalInvoice
         ) {
-          onFullScreenPaid(getInvoiceData);
+          onFullScreenPaid({ ...getInvoiceData, amount: amountInSats });
           AsyncStorage.getItem(keyStoreTransactionsHistory).then(
             (transactionsHistory = "[]") => {
               let localTransactionsHistory: InvoiceType[] =
