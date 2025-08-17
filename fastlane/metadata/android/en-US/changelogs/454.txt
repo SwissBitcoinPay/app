@@ -1,0 +1,1 @@
+- [Bitcoinize] Fixed wrong BTC amount on ticket auto-printing
