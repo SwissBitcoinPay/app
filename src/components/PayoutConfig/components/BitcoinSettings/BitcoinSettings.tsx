@@ -57,6 +57,7 @@ import * as S from "./styled";
 import { faBluetooth, faUsb } from "@fortawesome/free-brands-svg-icons";
 import { useToast } from "react-native-toast-notifications";
 import { useIsScreenSizeMin } from "@hooks";
+import { WalletConfig } from "@components/ConnectWalletModal/ConnectWalletModal";
 
 const { isIos } = platform;
 
@@ -66,6 +67,7 @@ export type SignatureData = {
   message: string;
   signature: string;
   walletType: WalletType;
+  walletConfig: WalletConfig;
 };
 
 export const BitcoinSettings = ({
@@ -375,8 +377,15 @@ export const BitcoinSettings = ({
         if (signatureData.words) {
           setValue("words", signatureData.words);
         }
+        setValue(
+          "walletConfig",
+          {
+            ...signatureData.walletConfig,
+            type: signatureData.walletType
+          },
+          { shouldDirty: true }
+        );
 
-        setValue("walletType", signatureData.walletType);
         setValue("depositAddress", signatureData.zPub, {
           shouldValidate: false
         });
