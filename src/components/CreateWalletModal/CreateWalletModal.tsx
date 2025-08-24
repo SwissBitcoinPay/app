@@ -122,7 +122,13 @@ export const CreateWalletModal = ({
             words: data.words.join(" "),
             message,
             signature,
-            walletType: "local"
+            walletType: "local",
+            walletConfig: {
+              type: "local",
+              label: "Bitcoin 1",
+              path: "m/84'/0'/0'",
+              account: "m/84'/0'/0'"
+            }
           });
         } catch (e) {
           toast.show(t("autoSignatureError"));
