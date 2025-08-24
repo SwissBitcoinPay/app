@@ -124,6 +124,7 @@ export const CreateWalletModal = ({
             signature,
             walletType: "local",
             walletConfig: {
+              zpub: data.zPub,
               type: "local",
               label: "Bitcoin 1",
               path: "m/84'/0'/0'",
