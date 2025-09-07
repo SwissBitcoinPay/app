@@ -1,4 +1,17 @@
 {
+  "accountConfigHook": {
+    "setupComplete": "Käyttöönotto on valmis",
+    "checkInternet": "Tarkista Internet-yhteys",
+    "invalidActivationCode": "Aktivoinitikoodi ei kelpaa"
+  },
+  "askPasswordModal": {
+    "enterPassword": "Syötä tilisi salasana",
+    "login": "Kirjaudu sisään",
+    "accountName": "Tilin nimi",
+    "accountEmail": "Tilin sähköpostiosoite",
+    "password": "Salasana",
+    "errorGettingPassword": "Virhe salasanan saamisen aikana"
+  },
   "common": {
     "login": "Kirjaudu",
     "enabled": "Käytössä",
@@ -33,22 +46,160 @@
       "unknown": "Tuntematon virhe"
     }
   },
-  "screens": {
-    "welcome": {
-      "introTitle": "Aloita {{bitcoin}}-maksujen vastaanotto",
-      "easily": "Helposti",
-      "worldwide": "Globaalisti",
-      "nonCustodial": "Varat omasäilössä",
-      "noKyc": "Ilman tunnistautumista",
-      "in1minute": "Minuutissa",
-      "licensedBy": "toimiluvan myöntäjä",
-      "finma": "Swiss Financial Market Supervisory Authority",
-      "createAccount": "Luo tili ja Bitcoin-omasäilö",
-      "orConnectBy": "tai kirjaudu käyttäen",
-      "scanActivationQRcode": "QR-maksupäätekoodia",
-      "email": "Sähköposti",
-      "signature": "allekirjoitusta"
+  "connectWalletModal": {
+    "title": "Yhdistä laittelompakko",
+    "iUnderstand": "Ymmärrän",
+    "afterSetup": {
+      "sdcard": "SD-kortti",
+      "12-words": "12 sanaa",
+      "24-words": "24 sanaa",
+      "title": "Salaa varmuuskopio",
+      "removeSdCard": "Jatkaaksesi, sinun pitää poistaa SD-kortti BitBox02-laitteesta.",
+      "instructions1": "Pidä sinun {{backup}} turvallisessa paikassa, jonne vain sinulla on pääsy.",
+      "understand1": "Ainoastaan sivä olet vastuussa {{backup}} turvallisesta säilyttämisestä.",
+      "understand2": "Kadottaessasi {{backup}} tai varkaan päästessä siihen käsiksi, menetät kaikki lompakkosi varat.",
+      "understand3": "Kukaan ei voi auttaa sinua palauttamaan varojasi jos hukkaat {{backup}}, ei edes sovelluksen valmistaja."
     },
+    "afterUpgrade": {
+      "title": "Avaa BitBox02",
+      "instruction": "Kosketa yhtä 2:sta puolesta tekstillä \"Tap this side\"",
+      "rebooting": "BitBox02 käynnistetään uudellen"
+    },
+    "bootloader": {
+      "title": "Laiteohjelmistoa asennetaan",
+      "instruction1": "Asennamme parhaillaan virallista laiteohjelmistoa sinun BitBox02:iin",
+      "instruction2": "Älä irroita BitBox02:ia laitteestasi "
+    },
+    "connect": {
+      "title": "Yhdistä {{hardwareWallet}}",
+      "connecting": "Odottaa {{hardwareWallet}}:a",
+      "disconnected": "Yhteys lompakkoon katkaistu",
+      "updateBitbox": "Varmista että BitBox02:ssa on laiteohjelmisto asennettuna"
+    },
+    "connected": {
+      "title": "Avaa",
+      "instruction": "Avaa BitBox02 sen salasanalla"
+    },
+    "empty": {
+      "title": "Valitse laittelompakko"
+    },
+    "pairing": {
+      "title": "Varmista yhdistämiskoodi",
+      "instruction": "Varmista että seuraava yhdistämiskoodi on sama mikä näkyy BitBox02:",
+      "confirm1": "Jos koodit ovat samat, tee vahvistaminen painamalla",
+      "confirm2": "BitBox02:n kyljessä",
+      "notInitialized": "BitBox02 on alustamatta",
+      "pairingFailed": "Yhdistäminen epäonnistui"
+    },
+    "selectDevice": {
+      "title": "Valitse laite",
+      "selectDevice": "Valitse {{hardwareWallet}} listalta",
+      "connecting": "Yhdistetään {{hardwareWallet}}",
+      "select": "Valitse"
+    },
+    "setup": {
+      "title": "Asenna lompakkosi",
+      "myBitbox": "Oma BitBox02",
+      "instruction1": "Kuinka haluat varmuuskopioida BitBox02:in lompakon?",
+      "sdcard": "SD-kortille (suositeltu)",
+      "sdcardDetectionError": "SD-kortin tunnistamisen virhe",
+      "createBackupAborted": "Varmuuskopiointi keskeytyi",
+      "createBackupFailed": "Varmuuskopion luonti epäonnistui",
+      "setPasswordAborted": "Salasanan asetus keskeytyi",
+      "setPasswordFailed": "Salasanan asetuksessa tapahtui virhe",
+      "advancedOptions": "Lisämääritykset",
+      "bitboxName": "BitBox:in nimi",
+      "24words": "Palautus sanat (24 sanaa)",
+      "12words": "Palautus sanat (12 sanaa)",
+      "insertSdCard": "Syötä SD-kortti BitBox02:een",
+      "setPassword1": "Syötä salasanasi BitBox02:een.",
+      "setPassword2": "Tätä salasanaa tarvitaan aina kun se halutaan avata käyttöä varten.",
+      "creatingWallet": "Lompakkoa luodaan",
+      "confirmName1": "Vahvista laitteen nimi painamalla",
+      "confirmName2": "BitBox02:n kyljessä",
+      "uninitBitboxNoWeb": "Alustamaton BitBox02 ei ole tuettu web-käytössä. Ota lompakkosi käyttöö virallisella BitBoxApp:illa"
+    },
+    "signature": {
+      "title": "Allekirjoitus",
+      "getAccount": "Haetaan tiliä",
+      "selectAccount": "Valitse käytettävä tili",
+      "select": "Valitse",
+      "prepareSignature": "Valmistele allekirjoitus",
+      "waitingForSignature": "Allekirjoita viesti {{hardwareWallet}}:lla",
+      "verifySignature": "Vahvista allekirjoitus",
+      "cannotGetAccount": "Tiliä ei löydetty",
+      "cannotGetXpub": "xpub ei löydetty",
+      "bitcoinAppNotOpened": "Avaa laitteessa Bitcoin-sovellus ja yritä uudestaan",
+      "signatureError": "Viestin allekirjoitus epäonnistui. Yritä uudelleen.",
+      "accountBalance": {
+        "transactions": "{{txs}} tapahtumaa",
+        "newAccount": "Uusi tili (suositus)"
+      }
+    },
+    "transport": {
+      "title": "Valitse yhdistystapa"
+    }
+  },
+  "createWalletModal": {
+    "continue": "Jatka",
+    "showMySeedPhrase": "Näytä siemenlause",
+    "IwroteMyWords": "Kirjoitin 12 sanan siemenlauseen talteen",
+    "validateWords": "Tarkista sanat",
+    "returnToForm": "Palaa lomakkeelle",
+    "autoSignatureError": "Virhe automaattisessa allekirjoituksessa",
+    "step1": {
+      "instructions_title": "Vastuuvapauslauseke",
+      "instructions1": "Bitcoin-lompakon omistaminen tarkoittaa, että sinä vastaa kaikesta siihen liittyvästä.",
+      "instructions2": "Varaa pieni hetki aikaa, ja opiskele seuraava johdanto, että mitä se todellakin tarkoittaa. Varojen kadottamisen ja varastamisen riski pienenee kun ymmärrät paremmin.",
+      "instructions3": "Jos varasi varastetaan tai kadotat ne, niin sinun tulee ymmärtää että kukaan ei voi auttaa sinua - ei edes tähän sovelluksen tekijät.",
+      "instructions4": "Sovellus tai sen tekijät eivät talleta kopiota lompakkosi salaisista sanoista, eikä varoilla ole missään takausta tai panttia. Tekijät eivät pääse varoihin kiinni eivätkä voi niitä pelastaa. Lompakkosi turvallisuudesta vastuussa olet ainoastaan sinä itse."
+    },
+    "step2": {
+      "seedPhrase": "Siemenlause",
+      "instructions1": "Seuraavaksi näytämme sinulle 12 sanaa (eli siemenlauseen). Siemanlause on ainut tapa päästä käyttämään bitcoinejasi.",
+      "instructions2": "Siemenlause luodaan turvallisesti ja paikallisesti laitteessasi, eikä sitä lähetetä sovelluksen käyttämille palvelimille, eikä minnekkään muuallekaan.",
+      "instructions3": "Kirjoita se siis talteen kestävälle materiaalille ja talleta se turvalliseen paikkaan.",
+      "instructions4": "Mikäli kadotat lauseen, ovat lompakkosi varat menetetty ikuisiksi ajoiksi. On siis ensiarvoisen kriittistä säilyttää turvallisesti ja suojata lause ulkopuolisilta.",
+      "agree1": "Ymmärrän että olen ainut joka on vastuussa siemanlauseen säilyttämisestä.",
+      "agree2": "Ymmärrän että siemenlauseen hävittäminen tai sen joutuminen vääriin käsiin johtaa kaikkien lompakon varojen häviämiseen.",
+      "agree3": "Ymmärrän että kukaan ei voi auttaa palauttamaan varojani jos lause katoaa, ei edes tämän sovelluksen tekijät."
+    },
+    "step3": {
+      "instructions1": "Kirjoita 12 sanasi siemenlause talteen selkeästi ja varmista että teksti on hyvin luettavissa.",
+      "instructions2": "Pidä myös huoli että sanojen järjestys on selkeä!",
+      "instructions3": "Tämä siemenlause luotiin 100% avoimen lähdekoodin avulla, eikä sitä lähetetä laitteestasi ulos milloinkaan.",
+      "generatingYourWallet": "Lompakkoasi luodaan",
+      "confidential": "Luottamuksellinen"
+    },
+    "step4": {
+      "instructions1": "Tarkistetaanpa",
+      "wordNumber": "Sana numero",
+      "seedWord": "Siemen sana",
+      "invalidWord": "Virheellinen sana"
+    },
+    "step5": {
+      "instructions1": "Lompakko luotiin onnistuneesti",
+      "instructions2": "Talleta siemenlause turvalliseen paikkaa, äläkä ikinä näytä sitä kenellekään!"
+    }
+  },
+  "errors": {
+    "serverInMaintenance": "Palvelussa on huoltokatko. Yritä myöhemmin uudelleen.",
+    "noKycLimit": "Suurin ilman tunnistatumista sallittu määrä on tullut täyteen",
+    "accountNotVerified": "Varmista talletusosoitteesi ohjauspanelista"
+  },
+  "printTicket": {
+    "paidInBitcoin": "Maksettu Bitcoinilla",
+    "amount": "Määrä",
+    "fiatAmount": "Fiatin määrä",
+    "rate": "Kurssi",
+    "paidVia": "Maksettu",
+    "paidAt": "Maksettu klo",
+    "note": "Huomautus",
+    "invoiceId": "Laskun ID",
+    "thanks": "Kiitos kun maksoit ₿itcoinilla",
+    "poweredBy": "toteuttaja"
+  },
+  "screens": {
     "emailLogin": {
       "title": "Kirjautuminen sähköpostilla",
       "email": "sähköpostiosoite",
@@ -59,76 +210,19 @@
         "invalidCredentials": "Virheelliset kirjautumistiedot"
       }
     },
-    "signatureLogin": {
-      "titleWallet": "Allekirjoitus laitteistolompakolla",
-      "titleWords": "Allekirjoitus 12 sanalla",
-      "word": "{{number}}. sana ",
-      "enter12wordsDescription1": "Antamasi 12 sanaa pidetään laitteessasi ja niillä allekirjoitetaan tunnistamiseesi käytettävä viesti.",
-      "enter12wordsDescription2": "Varmista että syötät sanasi vain turvallisesta lähteestä ladattuun ja varmistettuun avoimen lähdekoodin sovelukseen.",
-      "enter12wordsDescription3": "Kaikesta huolimatta, tämä yhteystapa ei välttämättä ole 100% turvallinen, sillä laitteesi on kytkettynä internettiin, sekä siten se on haavoittuvainen. Emme vastaa mistään haitoista jota tämän kirjaantumismenetelmän käyttö saattaa aiheuttaa.",
-      "error": {
-        "invalidSignature": "Virheellinen allekirjoitus",
-        "invalidWord": "Virheellinen sana",
-        "invalidPassword": "Invalid password"
-      }
-    },
-    "signup": {
-      "title": "Tilin avaus",
-      "yourAccountName": "Nimeä tilisi",
-      "accountName": "tilin nimi",
-      "accountNameInvalid": "Anna tilille kelvollinen nimi",
-      "yourEmail": "Anna sähköposti osoitteesi",
-      "emailInvalid": "Anna kelvollinen sähköpostiosoite",
-      "email": "sähköposti",
-      "emailDescription": "käytetään vain tiliisi liittyvien tärkeiden tietojen lähettämiseen. Osoitettasi ei ikinä jaeta kolmansille osapuolille.",
-      "yourPassword": "Luo salasana",
-      "password": "salasana",
-      "passwordInvalid": "Anna kelvollinen salasana",
-      "yourCurrency": "Käytettävä valuutta",
-      "currency": "valuutta",
-      "currencyDescription": "Oletusvaluutta",
-      "referralCode": "Anna suosittelijatunnus",
-      "referralCodeDescription": "Jos joku ohjeisti sinut tämän sovelluksen pariin, niin kirjoita hänen suosittelijatunnus tähän",
-      "submitDescription1": "Luomalla tilisi, hyväksyt meidän",
-      "submitDescription2": "ja",
-      "termsAndConditions": "Käyttöehdot",
-      "privacyPolicy": "Tietosuojaselosteen",
-      "letter": "kirjain",
-      "number": "numero",
-      "size8to64": "8-64 pituus",
-      "errorDescription": "Tilin luonnissa tapahtui virhe. Yritä hetkisen päästä uudelleen tai pyydä apua sähköpostilla hello@swiss-bitcoin-pay.ch",
-      "error": {
-        "address": {
-          "alreadyExists": "Katuosoite on käytössä jo toisessa tilissä",
-          "invalid": "Tämä katuosoite on virheellinen"
-        },
-        "iban": {
-          "blacklisted": "IBAN-tilinumeron on pankissa joka on kieltolistalla"
-        },
-        "email": {
-          "alreadyExists": "Tämä sähköposti on käytössä jo toisessa tilissä"
-        },
-        "referralCode": {
-          "doesntExists": "Suosittelijakoodia ei tunnistettu"
-        }
-      }
-    },
-    "pos": {
-      "deviceName": "Laitteen nimi",
-      "enterDeviceName": "Nimeä laite",
-      "deviceNameDescription": "Anna ohjauspaneelissa näytettävä laitteen nimi",
-      "downloadApp": "Lataa sovellus",
-      "note": "Maksun aihe",
-      "atmAccount": "Pankkiautomaattitili",
-      "guestMode": "Vierailijatila",
-      "allowWithdraw": "Salli nostot",
-      "cannotGoHigher": "Enimmäismäärä on {{maxAmount}}",
-      "addToHomeScreen": "Lisää aloitusruudulle"
+    "history": {
+      "title": "Tapahtuma historia",
+      "cashedToday": "Tilitetty tänään",
+      "previous": "Edellinen",
+      "noData": "Ei tietoja",
+      "total": "Yhteensä",
+      "me": "Minä",
+      "myEmployees": "Työntekijäni"
     },
     "invoice": {
       "creatingInvoice": "Laskua luodaan ",
       "fetchingInvoice": "Haetaan laskua",
-      "invoiceQrTitle": "Payment link QR code",
+      "invoiceQrTitle": "Maksulinkki QR-koodi",
       "invoiceQr": "Nähdäksesi laskun toisessa laitteessa, lue QR-koodi",
       "save": "Tallenna",
       "status": "Tila",
@@ -162,58 +256,153 @@
       "or": "tai",
       "scanToWithdraw": "Scannaa vastaanottaaksesi bitcoinia",
       "printReceipt": "Tulosta kuitti",
-      "receipt": "Receipt",
-      "downloadReceipt": "Download receipt",
-      "readingBoltCard": "Reading BoltCard",
-      "boltcardSupported": "BoltCard supported"
+      "receipt": "Kuitti",
+      "downloadReceipt": "Lataa kuitti",
+      "readingBoltCard": "Lukeminen BoltCard",
+      "boltcardSupported": "BoltCard tuettu"
     },
-    "history": {
-      "title": "Tapahtuma historia",
-      "cashedToday": "Tilitetty tänään",
-      "previous": "Edellinen",
-      "noData": "Ei tietoja",
-      "total": "Yhteensä",
-      "me": "Minä",
-      "myEmployees": "Työntekijäni"
-    },
-    "settings": {
-      "title": "Asetukset",
-      "loading": "Tiliä ladataan",
-      "activationCode": "Aktivointikoodi",
-      "scanOtherColleagues": "Työntekijät voivat scannaamalla veloittaa",
-      "editableSettings": "Muokattavissa olevat asetukset",
-      "connectedAs": "Yhdeyden laji",
-      "userType": "Käyttäjätyyppi",
-      "patchSettingSuccessful": "Asetukset on päivitetty",
-      "patchSettingError": "Asetusten päivytys epäonnistui",
-      "tickets": "Automaattiset kuitit",
-      "ticketsPrinting": "Automaattinen kuitin tulostus",
-      "testPrint": "Testitulostus",
-      "ticketsPrintingDescription": "Maksukuitit voidaan tulostaa automaattisesti jokaisen laskun maksamisen jälkeen.",
-      "merchantName": "Kauppiaan nimi",
-      "merchantNameDescription": "Kaikissa sinun ja työntekijöiden veloittamissa laskuissa näkyy kauppiaan nimi",
-      "currency": "Valuutta",
-      "currencyDescription": "Tilisi oletusvaluutta",
-      "currencyChangeWarning": "{{fiatPercent}}%:ia tilityksissä saat {{currency}}:ssa. Jos vaihdat tilisi valuutan, seuraavat tilitykset muunnetaan uuteen valuutaan.",
-      "onchainAvailable": "Onchain käytettävissä",
-      "onchainAvailableDescription": "Laskut sisältävät myös Onchain-maksujen osoitteen, mikäli tämä valinta on aktiivinen (suositeltavaa)",
-      "email": "Sähköposti",
-      "emailDescription": "Sähköpostiosoite, johon haluat vastaanottaa tiedotteet ja tärkeät ilmoitukset",
-      "payout": "Tilitykset",
-      "allInBtc": "100% bitcoinissa",
-      "allInFiat": "100% {{currency}}:ssa",
-      "percentInBtcAndFiat": "{{btcPercent}}% bitcoineina | {{fiatPercent}}% {{currency}}:issa",
-      "wallet": "Lompakko",
-      "accessWallet": "Avaa lompakko",
-      "contactSupport": "Tukipalvelut",
-      "logout": "Uloskirjaus",
-      "confirmLogout": "Vahvista uloskirjautuminen",
-      "confirmLogoutDescription": "Uloskirjauksen jälkeen tarvitset aktivointi koodin tai käyttäjätunnuksen",
-      "logoutSuccessful": "Uloskirjautuminen onnistui",
-      "shareMyLink": "Jaa aktivointilinkkini",
-      "copyMyLink": "Kopioi aktivointilinkki",
-      "acceptBitcoinPayments": "Hyväksy Bitcoin-maksut",
-      "invitationText": "Käytä linkkiä hyväksyä Bitcoin maksut {{merchantName}}:"
+    "kyc": {
+      "title": "Henkilöllisyyden varmentaminen",
+      "description": "Säänösten vuoksi meidän pitää varmistaa sinulta jotain tietoja. Toimi alla olevien ohjeiden mukaan, ennen laskun maksamista.",
+      "relatedInvoice": "Liittyvä lasku",
+      "invoiceSeller": "Myyjä",
+      "invoiceTitle": "Laskun otsikko",
+      "invoiceFiatAmount": "Valuutan määrä",
+      "invoiceBtcAmount": "Bitcoin määrä",
+      "sourceOfFundsType": "Varojen lähteen tyyppi",
+      "questionnaire": "Kysely",
+      "documents": "Dokumentit",
+      "payerName": "Maksajan nimi",
+      "payerOccupation": "Maksajan ammatti",
+      "payerEmail": "Maksajan sähköposti",
+      "pendingVerification": "Odottaa varmistusta",
+      "pendingVerificationDescription": "Antamasi tiedot ja asiakirjat on lähetetty. Tarkastamme ne manuaalisesti ja palaamme sähköpostitse asiaan 24 tunnin arkityötyöajan kuluessa.",
+      "sourceOfFund": "Varojen lähde",
+      "addSourceOfFund": "Lisää varojen lähde",
+      "details": "Tarkat tiedot",
+      "documentType": "Asiakirjan tyyppi",
+      "detailsData": {
+        "salaryPerAnnum": "Palkka vuodessa",
+        "employerName": "Työntekijän nimi",
+        "employerAddress": "Yrityksen osoite",
+        "employerNature": "Liiketoiminnan luonne",
+        "sharesDescription": "Osakkeiden/osuuksien/talletusten kuvaus",
+        "sellerName": "Myyjän nimi",
+        "howLongHeld": "Kuinka kauan oli pidetty",
+        "saleAmount": "Myynnin määrä",
+        "dateFundsReceived": "Vastaanotettujen varojen päivämäärä",
+        "soldPropertyAddress": "Myydyn kiinteistön osoite",
+        "propertyDateOfSale": "Kaupantekopäivä",
+        "propertyTotalSaleAmount": "Myyntihinta yhteensä",
+        "companyName": "Yrityksen nimi",
+        "companyNature": "Yhtiön toimiala",
+        "companyDateOfSale": "Kaupantekopäivä",
+        "companyTotalSaleAmount": "Myyntihinta yhteensä",
+        "companyShares": "Asiakkaan osuus",
+        "deceasedName": "Edesmenneen nimi",
+        "deathDate": "Kuolinpäivämäärä",
+        "inheritanceRelationship": "Suhde asiakkaaseen",
+        "dateReceived": "Vastaanotto päivämäärä",
+        "inheritanceAmount": "Yhteensä",
+        "inheritanceSolicitorDetails": "Asianajajan tiedot",
+        "divorceDateReceived": "Päivämäärä",
+        "divorceAmountReceived": "Saatu määrä yhteensä",
+        "divorcedPartnerName": "Entisen aviopuolison nimi",
+        "companyProfitsName": "Yhtiön toimiala",
+        "companyProfitsAddress": "Yrityksen osoite",
+        "companyProfitsNature": "Yhtiön toimiala",
+        "companyAnnualProfitAmount": "Vuosittaisen voiton määrä",
+        "retirementDate": "Eläkkeelle jäämisen päivämäärä",
+        "previousOccupationDetails": "Tiedot aiemmasta työstä/ammatista",
+        "previousEmployerName": "Työnantajan nimi",
+        "previousEmployerAddress": "Työnantajan osoite",
+        "pensionIncomeDetails": "Eläketulolähteen tiedot",
+        "depositsInstitutionName": "Laitoksen nimi, jossa säästöjä säilytetään",
+        "accountEstablishmentDate": "Päivä, jona tili on luotiin",
+        "savingsAcquirementDetails": "Yksityiskohtaiset tiedot siitä, miten säästöt on saatu",
+        "dividendReceiptDate": "Päivämäärä, jona osinko on vastaanotettu",
+        "dividendAmountReceived": "Saatu määrä yhteensä",
+        "dividendCompanyName": "Osinkoa maksavan yhtiön nimi",
+        "dividendLength": "Kuinka pitkään osakkeet ovat olleet yhtiön omistuksessa",
+        "giftDate": "Lahjan saanti päivämäärä",
+        "giftAmount": "Lahjan määrä",
+        "giftPerson": "Lahjan antaneen henkilön sähköpostiosoite",
+        "giftReason": "Lahjan peruste",
+        "giftPersonRelationship": "Suhteen luonne",
+        "loanProviderName": "Lainanantajan nimi",
+        "loanDate": "Lainan päivämäärä",
+        "loanAmount": "Lainan määrä",
+        "sourceName": "Lähteen nimi",
+        "windfallDetails": "Lisätiedot odottamattomasta tulosta",
+        "compensationPayoutDetails": "Yksityiskohtaiset tiedot korvaukseen johtaneista tapahtumista",
+        "lifeInsuranceAmountReceived": "Saatu määrä",
+        "lifeInsurancePolicyProvider": "Henkivakuutuksen myöntäjä",
+        "lifeInsuranceNumber": "Henkivakuutuksen numero",
+        "lifeInsurancePayoutDate": "Tilitysajankohta"
+      },
+      "documentsData": {
+        "payslip": "Palkkalaskelmat (tai bonusmaksut) kolmelta edelliseltä kuukaudelta",
+        "employerLetter": "Palkan vahvistava asiakirja",
+        "incomeBankStatement": "Tiliote joka osoittaa selvästi säännölliset palkka maksut nimetyltä työnantajalta",
+        "investmentSaleCertificate": "Sijoitus-/säästötodistukset, sopimustodistukset tai luovutusilmoitukset.",
+        "fundsBankStatement": "Pankkitiliotteet, joista käy selvästi ilmi varojen vastaanotto ja sijoitusyhtiön nimi.",
+        "signedLetter": "Säännellyn kirjanpitäjän allekirjoittama, kirjepaperilla varustettu kirje, jossa eritellään varat.",
+        "propertySaleSolicitorLetter": "Luvan saaneen asianajajan tai valvotun kirjanpitäjän kirje, jossa ilmoitetaan kiinteistön osoite, myyntipäivä, saatu tuotto ja ostajan nimi.",
+        "propertySaleContract": "Jäljennös myyntisopimuksesta",
+        "companySaleLetter": "Luvan saaneen asianajajan tai säännellyn kirjanpitäjän allekirjoittama kirje, jossa ilmoitetaan yksityiskohtaisesti yrityksen myynnistä, kirjelomakkeella varustetulla paperilla.",
+        "companySaleContract": "Sopimuksen jäljennös myynnistä",
+        "companySaleBankStatement": "Kopio pankin tiliotteesta, josta käy ilmi tulot",
+        "companySaleMediaCoverage": "Kopiot tiedotusvälineiden uutisoinnista (tarvittaessa) todisteena.",
+        "probateGrant": "Testamentin myöntäminen (testamentin jäljennöksen kanssa), jossa on mainittava kuolinpesän arvo.",
+        "willLetter": "Testamentin vahvistusasiakirja lakimieheltä tai perukirjoittajalta",
+        "courtOrderCopy": "Jäljennös tuomioistuimen päätöksestä",
+        "divorceSettlementLetter": "Luvan saaneen asianajajan allekirjoittama kirje avioeroratkaisusta kirjepaperilla varustetulla kirjeellä.",
+        "companyAccountsAudit": "Jäljennös viimeisimmästä tarkastetusta yrityskirjanpidosta",
+        "companyActivityLetter": "Säännellyn kirjanpitäjän kirjeessä esitetty vahvistus yritystoiminnan luonteesta ja liikevaihdosta.",
+        "pensionStatement": "Eläkelaskelma",
+        "retirementAccountantLetter": "Säännellyn tilintarkastajan kirje",
+        "retirementBankStatementReceipt": "Pankkitodistus, josta käy ilmi viimeisimpien eläketulojen saanti ja eläkkeen maksajan nimi.",
+        "savingsAccountStatement": "Säästötilin laskelma",
+        "savingsStatement": "Säästölaskelma",
+        "accountStartEvidence": "Todisteet tilin avaamisesta (tilin tarjoajan asiakirja)",
+        "dividendContract": "Osingonjakosopimuksen ilmoitus",
+        "dividendBankStatement": "Pankin tiliote, josta käy selvästi ilmi varojen vastaanotto ja osinkoa maksavan yrityksen nimi.",
+        "dividendDetailsLetter": "Säännellyn kirjanpitäjän allekirjoittama kirje, jossa ilmoitetaan osingonjakoa koskevat yksityiskohdat, kirjelomakkeella varustetulla paperilla.",
+        "companyAccountsSet": "Yrityksen tilinpäätös, josta ilmenevät osinkotiedot",
+        "donorLetter": "Asiakas lahjan luovuttajan antama kirje, jossa vahvistetaan lahjan tiedot",
+        "donorSourceOfWealth": "Dokumentoidut todisteet lahjoittajan varallisuuslähteestä",
+        "loanAgreement": "Jäljennös lainasopimuksesta ja tiedot mahdollisista vakuuksista",
+        "loanStatements": "Jäljennös lainalaskelmasta",
+        "lotteryCompanyEvidence": "Todistus arpajaisyhtiöltä",
+        "chequeWinningsReceipt": "Sekkivoittojen kuitti",
+        "compensatingBodyLetter": "Kirje tai tuomioistuimen päätös korvaavalta taholta.",
+        "solicitorLetter": "Asianajajan kirje",
+        "payoutStatement": "Maksulaskelma",
+        "insuranceLetter": "Vakuutuksenantajan kirje, joka vahvistaa maksun"
+      },
+      "sourceOfFundData": {
+        "income": "Tulot – säästöt palkasta (perus- ja/tai bonus)",
+        "investmentSale": "Sijoitusten myynti / sijoitussalkun tulouttaminen",
+        "propertySale": "Omaisuuden myynti",
+        "companySale": "Yrityksen myynti",
+        "inheritance": "Perintö",
+        "divorceSettlement": "Avioero-ositus",
+        "companyProfits": "Yrityksen voitot",
+        "retirementIncome": "Eläketulot",
+        "fixedDeposits": "Kiinteät talletukset/säästöt",
+        "dividendPayments": "Osinkomaksut",
+        "gift": "Lahja",
+        "loan": "Laina",
+        "lottery": "Lotto / uhkapeli voitto",
+        "compensationPayout": "Kompensaatiokorvaus",
+        "lifeInsurance": "Henkivakuutus tai muu vakuutus korvaus"
+      },
+      "status": {
+        "identity": "Henkilöllisyys",
+        "documentation": "Varojen dokumentaatio",
+        "verification": "Varmennus",
+        "payment": "Maksu"
+      }
     },
     "payoutConfig": {
       "title": "Tilitys määrittelyt",
@@ -280,12 +469,117 @@
       "hardwareConnectSuccess": "Yhdistäminen {{hardwareWallet}}:een on nyt valmis onnistuneesti. Voit irroittaa sen.",
       "patchSettingNeedsEmailValidation": "Sähköpostiisi on lähetty viesti uusien asetusten aktivoimiseksi",
       "error": {
+        "depositAddress": {
+          "depositAddressAlreadyUsed": "Tilitysosoite on jo käytetty"
+        },
         "iban": {
           "ibanAlreadyUsed": "Tämä IBAN-tilinumero on jo käytössä.",
           "wiseBankNotSupported": "Wise-neopankin palveluita ei tueta."
+        }
+      }
+    },
+    "pos": {
+      "deviceName": "Laitteen nimi",
+      "enterDeviceName": "Nimeä laite",
+      "deviceNameDescription": "Anna ohjauspaneelissa näytettävä laitteen nimi",
+      "downloadApp": "Lataa sovellus",
+      "note": "Maksun aihe",
+      "atmAccount": "Pankkiautomaattitili",
+      "guestMode": "Vierailijatila",
+      "allowWithdraw": "Salli nostot",
+      "cannotGoHigher": "Enimmäismäärä on {{maxAmount}}",
+      "addToHomeScreen": "Lisää aloitusruudulle"
+    },
+    "settings": {
+      "title": "Asetukset",
+      "loading": "Tiliä ladataan",
+      "activationCode": "Aktivointikoodi",
+      "scanOtherColleagues": "Työntekijät voivat scannaamalla veloittaa",
+      "editableSettings": "Muokattavissa olevat asetukset",
+      "connectedAs": "Yhdeyden laji",
+      "userType": "Käyttäjätyyppi",
+      "patchSettingSuccessful": "Asetukset on päivitetty",
+      "patchSettingError": "Asetusten päivytys epäonnistui",
+      "tickets": "Automaattiset kuitit",
+      "ticketsPrinting": "Automaattinen kuitin tulostus",
+      "testPrint": "Testitulostus",
+      "ticketsPrintingDescription": "Maksukuitit voidaan tulostaa automaattisesti jokaisen laskun maksamisen jälkeen.",
+      "merchantName": "Kauppiaan nimi",
+      "merchantNameDescription": "Kaikissa sinun ja työntekijöiden veloittamissa laskuissa näkyy kauppiaan nimi",
+      "currency": "Valuutta",
+      "currencyDescription": "Tilisi oletusvaluutta",
+      "currencyChangeWarning": "{{fiatPercent}}%:ia tilityksissä saat {{currency}}:ssa. Jos vaihdat tilisi valuutan, seuraavat tilitykset muunnetaan uuteen valuutaan.",
+      "onchainAvailable": "Onchain käytettävissä",
+      "onchainAvailableDescription": "Laskut sisältävät myös Onchain-maksujen osoitteen, mikäli tämä valinta on aktiivinen (suositeltavaa)",
+      "email": "Sähköposti",
+      "emailDescription": "Sähköpostiosoite, johon haluat vastaanottaa tiedotteet ja tärkeät ilmoitukset",
+      "payout": "Tilitykset",
+      "allInBtc": "100% bitcoinissa",
+      "allInFiat": "100% {{currency}}:ssa",
+      "percentInBtcAndFiat": "{{btcPercent}}% bitcoineina | {{fiatPercent}}% {{currency}}:issa",
+      "wallet": "Lompakko",
+      "accessWallet": "Avaa lompakko",
+      "contactSupport": "Tukipalvelut",
+      "logout": "Uloskirjaus",
+      "confirmLogout": "Vahvista uloskirjautuminen",
+      "confirmLogoutDescription": "Uloskirjauksen jälkeen tarvitset aktivointi koodin tai käyttäjätunnuksen",
+      "logoutSuccessful": "Uloskirjautuminen onnistui",
+      "shareMyLink": "Jaa aktivointilinkkini",
+      "copyMyLink": "Kopioi aktivointilinkki",
+      "acceptBitcoinPayments": "Hyväksy Bitcoin-maksut",
+      "invitationText": "Käytä linkkiä hyväksyä Bitcoin maksut {{merchantName}}:"
+    },
+    "signatureLogin": {
+      "titleWallet": "Allekirjoitus laitteistolompakolla",
+      "titleWords": "Allekirjoitus 12 sanalla",
+      "word": "{{number}}. sana ",
+      "enter12wordsDescription1": "Antamasi 12 sanaa pidetään laitteessasi ja niillä allekirjoitetaan tunnistamiseesi käytettävä viesti.",
+      "enter12wordsDescription2": "Varmista että syötät sanasi vain turvallisesta lähteestä ladattuun ja varmistettuun avoimen lähdekoodin sovelukseen.",
+      "enter12wordsDescription3": "Kaikesta huolimatta, tämä yhteystapa ei välttämättä ole 100% turvallinen, sillä laitteesi on kytkettynä internettiin, sekä siten se on haavoittuvainen. Emme vastaa mistään haitoista jota tämän kirjaantumismenetelmän käyttö saattaa aiheuttaa.",
+      "error": {
+        "invalidSignature": "Virheellinen allekirjoitus",
+        "invalidWord": "Virheellinen sana",
+        "invalidPassword": "Virheellinen salasana"
+      }
+    },
+    "signup": {
+      "title": "Tilin avaus",
+      "yourAccountName": "Nimeä tilisi",
+      "accountName": "tilin nimi",
+      "accountNameInvalid": "Anna tilille kelvollinen nimi",
+      "yourEmail": "Anna sähköposti osoitteesi",
+      "emailInvalid": "Anna kelvollinen sähköpostiosoite",
+      "email": "sähköposti",
+      "emailDescription": "käytetään vain tiliisi liittyvien tärkeiden tietojen lähettämiseen. Osoitettasi ei ikinä jaeta kolmansille osapuolille.",
+      "yourPassword": "Luo salasana",
+      "password": "salasana",
+      "passwordInvalid": "Anna kelvollinen salasana",
+      "yourCurrency": "Käytettävä valuutta",
+      "currency": "valuutta",
+      "currencyDescription": "Oletusvaluutta",
+      "referralCode": "Anna suosittelijatunnus",
+      "referralCodeDescription": "Jos joku ohjeisti sinut tämän sovelluksen pariin, niin kirjoita hänen suosittelijatunnus tähän",
+      "submitDescription1": "Luomalla tilisi, hyväksyt meidän",
+      "submitDescription2": "ja",
+      "termsAndConditions": "Käyttöehdot",
+      "privacyPolicy": "Tietosuojaselosteen",
+      "letter": "kirjain",
+      "number": "numero",
+      "size8to64": "8-64 pituus",
+      "errorDescription": "Tilin luonnissa tapahtui virhe. Yritä hetkisen päästä uudelleen tai pyydä apua sähköpostilla hello@swiss-bitcoin-pay.ch",
+      "error": {
+        "address": {
+          "alreadyExists": "Katuosoite on käytössä jo toisessa tilissä",
+          "invalid": "Tämä katuosoite on virheellinen"
         },
-        "depositAddress": {
-          "depositAddressAlreadyUsed": "Tilitysosoite on jo käytetty"
+        "email": {
+          "alreadyExists": "Tämä sähköposti on käytössä jo toisessa tilissä"
+        },
+        "iban": {
+          "blacklisted": "IBAN-tilinumeron on pankissa joka on kieltolistalla"
+        },
+        "referralCode": {
+          "doesntExists": "Suosittelijakoodia ei tunnistettu"
         }
       }
     },
@@ -323,319 +617,25 @@
         "broadcast": "Lähetä"
       }
     },
-    "kyc": {
-      "title": "Henkilöllisyyden varmentaminen",
-      "description": "Säänösten vuoksi meidän pitää varmistaa sinulta jotain tietoja. Toimi alla olevien ohjeiden mukaan, ennen laskun maksamista.",
-      "relatedInvoice": "Liittyvä lasku",
-      "invoiceSeller": "Myyjä",
-      "invoiceTitle": "Laskun otsikko",
-      "invoiceFiatAmount": "Valuutan määrä",
-      "invoiceBtcAmount": "Bitcoin määrä",
-      "sourceOfFundsType": "Varojen lähteen tyyppi",
-      "questionnaire": "Kysely",
-      "documents": "Dokumentit",
-      "payerName": "Maksajan nimi",
-      "payerOccupation": "Maksajan ammatti",
-      "payerEmail": "Maksajan sähköposti",
-      "pendingVerification": "Odottaa varmistusta",
-      "pendingVerificationDescription": "Antamasi tiedot ja asiakirjat on lähetetty. Tarkastamme ne manuaalisesti ja palaamme sähköpostitse asiaan 24 tunnin arkityötyöajan kuluessa.",
-      "status": {
-        "identity": "Henkilöllisyys",
-        "documentation": "Varojen dokumentaatio",
-        "verification": "Varmennus",
-        "payment": "Maksu"
-      },
-      "sourceOfFund": "Varojen lähde",
-      "sourceOfFundData": {
-        "income": "Tulot – säästöt palkasta (perus- ja/tai bonus)",
-        "investmentSale": "Sijoitusten myynti / sijoitussalkun tulouttaminen",
-        "propertySale": "Omaisuuden myynti",
-        "companySale": "Yrityksen myynti",
-        "inheritance": "Perintö",
-        "divorceSettlement": "Avioero-ositus",
-        "companyProfits": "Yrityksen voitot",
-        "retirementIncome": "Eläketulot",
-        "fixedDeposits": "Kiinteät talletukset/säästöt",
-        "dividendPayments": "Osinkomaksut",
-        "gift": "Lahja",
-        "loan": "Laina",
-        "lottery": "Lotto / uhkapeli voitto",
-        "compensationPayout": "Kompensaatiokorvaus",
-        "lifeInsurance": "Henkivakuutus tai muu vakuutus korvaus"
-      },
-      "addSourceOfFund": "Lisää varojen lähde",
-      "details": "Tarkat tiedot",
-      "detailsData": {
-        "salaryPerAnnum": "Palkka vuodessa",
-        "employerName": "Työntekijän nimi",
-        "employerAddress": "Yrityksen osoite",
-        "employerNature": "Liiketoiminnan luonne",
-        "sharesDescription": "Osakkeiden/osuuksien/talletusten kuvaus",
-        "sellerName": "Myyjän nimi",
-        "howLongHeld": "Kuinka kauan oli pidetty",
-        "saleAmount": "Myynnin määrä",
-        "dateFundsReceived": "Vastaanotettujen varojen päivämäärä",
-        "soldPropertyAddress": "Myydyn kiinteistön osoite",
-        "propertyDateOfSale": "Kaupantekopäivä",
-        "propertyTotalSaleAmount": "Myyntihinta yhteensä",
-        "companyName": "Yrityksen nimi",
-        "companyNature": "Yhtiön toimiala",
-        "companyDateOfSale": "Kaupantekopäivä",
-        "companyTotalSaleAmount": "Myyntihinta yhteensä",
-        "companyShares": "Asiakkaan osuus",
-        "deceasedName": "Edesmenneen nimi",
-        "deathDate": "Kuolinpäivämäärä",
-        "inheritanceRelationship": "Suhde asiakkaaseen",
-        "dateReceived": "Vastaanotto päivämäärä",
-        "inheritanceAmount": "Yhteensä",
-        "inheritanceSolicitorDetails": "Asianajajan tiedot",
-        "divorceDateReceived": "Päivämäärä",
-        "divorceAmountReceived": "Saatu määrä yhteensä",
-        "divorcedPartnerName": "Entisen aviopuolison nimi",
-        "companyProfitsName": "Yhtiön toimiala",
-        "companyProfitsAddress": "Yrityksen osoite",
-        "companyProfitsNature": "Yhtiön toimiala",
-        "companyAnnualProfitAmount": "Vuosittaisen voiton määrä",
-        "retirementDate": "Eläkkeelle jäämisen päivämäärä",
-        "previousOccupationDetails": "Tiedot aiemmasta työstä/ammatista",
-        "previousEmployerName": "Työnantajan nimi",
-        "previousEmployerAddress": "Työnantajan osoite",
-        "pensionIncomeDetails": "Eläketulolähteen tiedot",
-        "depositsInstitutionName": "Laitoksen nimi, jossa säästöjä säilytetään",
-        "accountEstablishmentDate": "Päivä, jona tili on luotiin",
-        "savingsAcquirementDetails": "Yksityiskohtaiset tiedot siitä, miten säästöt on saatu",
-        "dividendReceiptDate": "Päivämäärä, jona osinko on vastaanotettu",
-        "dividendAmountReceived": "Saatu määrä yhteensä",
-        "dividendCompanyName": "Osinkoa maksavan yhtiön nimi",
-        "dividendLength": "Kuinka pitkään osakkeet ovat olleet yhtiön omistuksessa",
-        "giftDate": "Lahjan saanti päivämäärä",
-        "giftAmount": "Lahjan määrä",
-        "giftPerson": "Lahjan antaneen henkilön sähköpostiosoite",
-        "giftReason": "Lahjan peruste",
-        "giftPersonRelationship": "Suhteen luonne",
-        "loanProviderName": "Lainanantajan nimi",
-        "loanDate": "Lainan päivämäärä",
-        "loanAmount": "Lainan määrä",
-        "sourceName": "Lähteen nimi",
-        "windfallDetails": "Lisätiedot odottamattomasta tulosta",
-        "compensationPayoutDetails": "Yksityiskohtaiset tiedot korvaukseen johtaneista tapahtumista",
-        "lifeInsuranceAmountReceived": "Saatu määrä",
-        "lifeInsurancePolicyProvider": "Henkivakuutuksen myöntäjä",
-        "lifeInsuranceNumber": "Henkivakuutuksen numero",
-        "lifeInsurancePayoutDate": "Tilitysajankohta"
-      },
-      "documentType": "Asiakirjan tyyppi",
-      "documentsData": {
-        "payslip": "Palkkalaskelmat (tai bonusmaksut) kolmelta edelliseltä kuukaudelta",
-        "employerLetter": "Palkan vahvistava asiakirja",
-        "incomeBankStatement": "Tiliote joka osoittaa selvästi säännölliset palkka maksut nimetyltä työnantajalta",
-        "investmentSaleCertificate": "Investment/savings certificates, contract notes, or surrender statements",
-        "fundsBankStatement": "Bank statements clearly showing receipt of funds and investment company name",
-        "signedLetter": "Signed letter detailing funds from a regulated accountant on letter-headed paper",
-        "propertySaleSolicitorLetter": "Letter from a licensed solicitor or regulated accountant stating property address, date of sale, proceeds received, and name of purchaser",
-        "propertySaleContract": "Jäljennös myyntisopimuksesta",
-        "companySaleLetter": "Letter detailing company sale signed by a licensed solicitor or regulated accountant on letter-headed paper",
-        "companySaleContract": "Sopimuksen jäljennös myynnistä",
-        "companySaleBankStatement": "Copy of bank statement showing proceeds",
-        "companySaleMediaCoverage": "Copies of media coverage (if applicable) as supporting evidence",
-        "probateGrant": "Grant of probate (with a copy of the will) which must include the value of estate",
-        "willLetter": "Testamentin vahvistusasiakirja lakimieheltä tai perukirjoittajalta",
-        "courtOrderCopy": "Jäljennös tuomioistuimen päätöksestä",
-        "divorceSettlementLetter": "Letter detailing divorce settlement signed by a licensed solicitor on letter-headed paper",
-        "companyAccountsAudit": "Jäljennös viimeisimmästä tarkastetusta yrityskirjanpidosta",
-        "companyActivityLetter": "Confirmation of the nature of business activity and turnover detailed in a letter from a regulated accountant",
-        "pensionStatement": "Eläkelaskelma",
-        "retirementAccountantLetter": "Säännellyn tilintarkastajan kirje",
-        "retirementBankStatementReceipt": "Bank statement showing receipt of latest pension income and name of provider",
-        "savingsAccountStatement": "Säästötilin laskelma",
-        "savingsStatement": "Säästölaskelma",
-        "accountStartEvidence": "Todisteet tilin avaamisesta (tilin tarjoajan asiakirja)",
-        "dividendContract": "Osingonjakosopimuksen ilmoitus",
-        "dividendBankStatement": "Bank statement clearly showing receipt of funds and name of company paying dividend",
-        "dividendDetailsLetter": "Letter detailing dividend details signed by a regulated accountant on letter-headed paper",
-        "companyAccountsSet": "Set of company accounts showing the dividend details",
-        "donorLetter": "Asiakas lahjan luovuttajan antama kirje, jossa vahvistetaan lahjan tiedot",
-        "donorSourceOfWealth": "Documented evidence of donor’s source of wealth",
-        "loanAgreement": "Jäljennös lainasopimuksesta ja tiedot mahdollisista vakuuksista",
-        "loanStatements": "Jäljennös lainalaskelmasta",
-        "lotteryCompanyEvidence": "Todistus arpajaisyhtiöltä",
-        "chequeWinningsReceipt": "Cheque winnings' receipt",
-        "compensatingBodyLetter": "Kirje tai tuomioistuimen päätös korvaavalta taholta.",
-        "solicitorLetter": "Asianajajan kirje",
-        "payoutStatement": "Maksulaskelma",
-        "insuranceLetter": "Vakuutuksenantajan kirje, joka vahvistaa maksun"
-      }
-    }
-  },
-  "askPasswordModal": {
-    "enterPassword": "Enter your account password",
-    "login": "Login",
-    "accountName": "Account name",
-    "accountEmail": "Account email",
-    "password": "Password",
-    "errorGettingPassword": "Error while getting password"
-  },
-  "createWalletModal": {
-    "continue": "Jatka",
-    "showMySeedPhrase": "Näytä siemenlause",
-    "IwroteMyWords": "Kirjoitin 12 sanan siemenlauseen talteen",
-    "validateWords": "Tarkista sanat",
-    "returnToForm": "Palaa lomakkeelle",
-    "autoSignatureError": "Virhe automaattisessa allekirjoituksessa",
-    "step1": {
-      "instructions_title": "Vastuuvapauslauseke",
-      "instructions1": "Bitcoin-lompakon omistaminen tarkoittaa, että sinä vastaa kaikesta siihen liittyvästä.",
-      "instructions2": "Varaa pieni hetki aikaa, ja opiskele seuraava johdanto, että mitä se todellakin tarkoittaa. Varojen kadottamisen ja varastamisen riski pienenee kun ymmärrät paremmin.",
-      "instructions3": "Jos varasi varastetaan tai kadotat ne, niin sinun tulee ymmärtää että kukaan ei voi auttaa sinua - ei edes tähän sovelluksen tekijät.",
-      "instructions4": "Sovellus tai sen tekijät eivät talleta kopiota lompakkosi salaisista sanoista, eikä varoilla ole missään takausta tai panttia. Tekijät eivät pääse varoihin kiinni eivätkä voi niitä pelastaa. Lompakkosi turvallisuudesta vastuussa olet ainoastaan sinä itse."
-    },
-    "step2": {
-      "seedPhrase": "Siemenlause",
-      "instructions1": "Seuraavaksi näytämme sinulle 12 sanaa (eli siemenlauseen). Siemanlause on ainut tapa päästä käyttämään bitcoinejasi.",
-      "instructions2": "Siemenlause luodaan turvallisesti ja paikallisesti laitteessasi, eikä sitä lähetetä sovelluksen käyttämille palvelimille, eikä minnekkään muuallekaan.",
-      "instructions3": "Kirjoita se siis talteen kestävälle materiaalille ja talleta se turvalliseen paikkaan.",
-      "instructions4": "Mikäli kadotat lauseen, ovat lompakkosi varat menetetty ikuisiksi ajoiksi. On siis ensiarvoisen kriittistä säilyttää turvallisesti ja suojata lause ulkopuolisilta.",
-      "agree1": "Ymmärrän että olen ainut joka on vastuussa siemanlauseen säilyttämisestä.",
-      "agree2": "Ymmärrän että siemenlauseen hävittäminen tai sen joutuminen vääriin käsiin johtaa kaikkien lompakon varojen häviämiseen.",
-      "agree3": "Ymmärrän että kukaan ei voi auttaa palauttamaan varojani jos lause katoaa, ei edes tämän sovelluksen tekijät."
-    },
-    "step3": {
-      "instructions1": "Kirjoita 12 sanasi siemenlause talteen selkeästi ja varmista että teksti on hyvin luettavissa.",
-      "instructions2": "Pidä myös huoli että sanojen järjestys on selkeä!",
-      "instructions3": "Tämä siemenlause luotiin 100% avoimen lähdekoodin avulla, eikä sitä lähetetä laitteestasi ulos milloinkaan.",
-      "generatingYourWallet": "Lompakkoasi luodaan",
-      "confidential": "Luottamuksellinen"
-    },
-    "step4": {
-      "instructions1": "Tarkistetaanpa",
-      "wordNumber": "Sana numero",
-      "seedWord": "Siemen sana",
-      "invalidWord": "Virheellinen sana"
-    },
-    "step5": {
-      "instructions1": "Lompakko luotiin onnistuneesti",
-      "instructions2": "Talleta siemenlause turvalliseen paikkaa, äläkä ikinä näytä sitä kenellekään!"
+    "welcome": {
+      "introTitle": "Aloita {{bitcoin}}-maksujen vastaanotto",
+      "easily": "Helposti",
+      "worldwide": "Globaalisti",
+      "nonCustodial": "Varat omasäilössä",
+      "noKyc": "Ilman tunnistautumista",
+      "in1minute": "Minuutissa",
+      "licensedBy": "toimiluvan myöntäjä",
+      "finma": "Sveitsin rahoitusmarkkinoiden valvontaviranomainen",
+      "createAccount": "Luo tili ja Bitcoin-omasäilö",
+      "orConnectBy": "tai kirjaudu käyttäen",
+      "scanActivationQRcode": "QR-maksupäätekoodia",
+      "email": "Sähköposti",
+      "signature": "allekirjoitusta"
     }
   },
   "secureWallet": {
     "instructions1": "Bitcoinien käyttämiseksi et ole riippuvainen tästä sovelluksesta. Voit käyttää sinun {{backup}} lähes missä tahansa bitcoin-lompakossa.",
     "instructions2": "Älä ikinä tee siemenlauseesta kopiota pilvipalveluun, puhelimellesi, tietokoneellesi äläkä myöskään ota siitä valokuvia. Mikä tahansa internettiin kytketty laite on riski!",
     "instructions3": "Älä ikinä jaa sinun {{backup}} nkenellekkään. Mikäli joku pääsee käsiksi sinun {{backup}}, on hänen mahdollista varastaa varasi."
-  },
-  "connectWalletModal": {
-    "title": "Yhdistä laittelompakko",
-    "iUnderstand": "Ymmärrän",
-    "afterUpgrade": {
-      "title": "Avaa BitBox02",
-      "instruction": "Kosketa yhtä 2:sta puolesta tekstillä \"Tap this side\"",
-      "rebooting": "BitBox02 käynnistetään uudellen"
-    },
-    "afterSetup": {
-      "sdcard": "SD-kortti",
-      "12-words": "12 sanaa",
-      "24-words": "24 sanaa",
-      "title": "Salaa varmuuskopio",
-      "removeSdCard": "Jatkaaksesi, sinun pitää poistaa SD-kortti BitBox02-laitteesta.",
-      "instructions1": "Pidä sinun {{backup}} turvallisessa paikassa, jonne vain sinulla on pääsy.",
-      "understand1": "Ainoastaan sivä olet vastuussa {{backup}} turvallisesta säilyttämisestä.",
-      "understand2": "Kadottaessasi {{backup}} tai varkaan päästessä siihen käsiksi, menetät kaikki lompakkosi varat.",
-      "understand3": "Kukaan ei voi auttaa sinua palauttamaan varojasi jos hukkaat {{backup}}, ei edes sovelluksen valmistaja."
-    },
-    "bootloader": {
-      "title": "Laiteohjelmistoa asennetaan",
-      "instruction1": "Asennamme parhaillaan virallista laiteohjelmistoa sinun BitBox02:iin",
-      "instruction2": "Älä irroita BitBox02:ia laitteestasi "
-    },
-    "empty": {
-      "title": "Valitse laittelompakko"
-    },
-    "transport": {
-      "title": "Valitse yhdistystapa"
-    },
-    "selectDevice": {
-      "title": "Valitse laite",
-      "selectDevice": "Valitse {{hardwareWallet}} listalta",
-      "connecting": "Yhdistetään {{hardwareWallet}}",
-      "select": "Valitse"
-    },
-    "connect": {
-      "title": "Yhdistä {{hardwareWallet}}",
-      "connecting": "Odottaa {{hardwareWallet}}:a",
-      "disconnected": "Yhteys lompakkoon katkaistu",
-      "updateBitbox": "Varmista että BitBox02:ssa on laiteohjelmisto asennettuna"
-    },
-    "connected": {
-      "title": "Avaa",
-      "instruction": "Avaa BitBox02 sen salasanalla"
-    },
-    "pairing": {
-      "title": "Varmista yhdistämiskoodi",
-      "instruction": "Varmista että seuraava yhdistämiskoodi on sama mikä näkyy BitBox02:",
-      "confirm1": "Jos koodit ovat samat, tee vahvistaminen painamalla",
-      "confirm2": "BitBox02:n kyljessä",
-      "notInitialized": "BitBox02 on alustamatta",
-      "pairingFailed": "Yhdistäminen epäonnistui"
-    },
-    "setup": {
-      "title": "Asenna lompakkosi",
-      "myBitbox": "Oma BitBox02",
-      "instruction1": "Kuinka haluat varmuuskopioida BitBox02:in lompakon?",
-      "sdcard": "SD-kortille (suositeltu)",
-      "sdcardDetectionError": "SD-kortin tunnistamisen virhe",
-      "createBackupAborted": "Varmuuskopiointi keskeytyi",
-      "createBackupFailed": "Varmuuskopion luonti epäonnistui",
-      "setPasswordAborted": "Salasanan asetus keskeytyi",
-      "setPasswordFailed": "Salasanan asetuksessa tapahtui virhe",
-      "advancedOptions": "Lisämääritykset",
-      "bitboxName": "BitBox:in nimi",
-      "24words": "Palautus sanat (24 sanaa)",
-      "12words": "Palautus sanat (12 sanaa)",
-      "insertSdCard": "Syötä SD-kortti BitBox02:een",
-      "setPassword1": "Syötä salasanasi BitBox02:een.",
-      "setPassword2": "Tätä salasanaa tarvitaan aina kun se halutaan avata käyttöä varten.",
-      "creatingWallet": "Lompakkoa luodaan",
-      "confirmName1": "Vahvista laitteen nimi painamalla",
-      "confirmName2": "BitBox02:n kyljessä",
-      "uninitBitboxNoWeb": "Alustamaton BitBox02 ei ole tuettu web-käytössä. Ota lompakkosi käyttöö virallisella BitBoxApp:illa"
-    },
-    "signature": {
-      "title": "Allekirjoitus",
-      "getAccount": "Haetaan tiliä",
-      "selectAccount": "Valitse käytettävä tili",
-      "select": "Valitse",
-      "prepareSignature": "Valmistele allekirjoitus",
-      "waitingForSignature": "Allekirjoita viesti {{hardwareWallet}}:lla",
-      "verifySignature": "Vahvista allekirjoitus",
-      "cannotGetAccount": "Tiliä ei löydetty",
-      "cannotGetXpub": "xpub ei löydetty",
-      "bitcoinAppNotOpened": "Avaa laitteessa Bitcoin-sovellus ja yritä uudestaan",
-      "signatureError": "Viestin allekirjoitus epäonnistui. Yritä uudelleen.",
-      "accountBalance": {
-        "transactions": "{{txs}} tapahtumaa",
-        "newAccount": "Uusi tili (suositus)"
-      }
-    }
-  },
-  "accountConfigHook": {
-    "setupComplete": "Käyttöönotto on valmis",
-    "checkInternet": "Tarkista Internet-yhteys",
-    "invalidActivationCode": "Aktivoinitikoodi ei kelpaa"
-  },
-  "errors": {
-    "serverInMaintenance": "Palvelussa on huoltokatko. Yritä myöhemmin uudelleen.",
-    "noKycLimit": "Suurin ilman tunnistatumista sallittu määrä on tullut täyteen",
-    "accountNotVerified": "Varmista talletusosoitteesi ohjauspanelista"
-  },
-  "printTicket": {
-    "paidInBitcoin": "Maksettu Bitcoinilla",
-    "amount": "Määrä",
-    "fiatAmount": "Fiatin määrä",
-    "rate": "Kurssi",
-    "paidVia": "Maksettu",
-    "paidAt": "Maksettu klo",
-    "note": "Huomautus",
-    "invoiceId": "Laskun ID",
-    "thanks": "Kiitos kun maksoit ₿itcoinilla",
-    "poweredBy": "toteuttaja"
   }
 }
