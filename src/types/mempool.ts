@@ -1,8 +1,8 @@
 import { XOR } from "ts-essentials";
 
 export type ConfirmedWithBlockTime = XOR<
-  { confirmed: true; block_time: number },
-  { confirmed: false }
+  { in_active_chain: true; blocktime: number },
+  { in_active_chain: false }
 >;
 
 export type MempoolTX = {

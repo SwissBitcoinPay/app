@@ -37,7 +37,7 @@ export const createTransaction: CreateFunction = async ({
   if (proposeTxData.success) {
     const sendTxData = await sendTx(account);
     if (sendTxData.success) {
-      return { txHex: sendTxData.txHex };
+      return { txHex: sendTxData.txHex, psbt };
     }
   }
 

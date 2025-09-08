@@ -51,6 +51,7 @@ export const createTransaction: CreateFunction = async ({
   psbt.finalizeAllInputs();
 
   return {
-    txHex: psbt.extractTransaction().toHex()
+    txHex: psbt.extractTransaction().toHex(),
+    psbt
   };
 };
