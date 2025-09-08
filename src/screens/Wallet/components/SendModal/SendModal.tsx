@@ -103,8 +103,7 @@ export const SendModal = ({
   const setError = useErrorBoundary();
 
   const walletType = useMemo(
-    () =>
-      (verifiedAddresses || []).find((v) => v.address)?.walletConfig.walletType,
+    () => (verifiedAddresses || []).find((v) => v.address)?.walletConfig.type,
     [verifiedAddresses]
   );
 
@@ -148,7 +147,7 @@ export const SendModal = ({
           : undefined
       });
     })();
-  }, []);
+  }, [walletType]);
 
   const askPassword = useAskPassword();
 
@@ -315,7 +314,7 @@ export const SendModal = ({
         isOpen={!!customWalletFunction}
         customFunction={customWalletFunction}
         onClose={onCloseBitboxModal}
-        walletType={wallet?.type}
+        walletType={walletType}
       />
       <Modal
         {...props}

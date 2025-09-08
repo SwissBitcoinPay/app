@@ -590,7 +590,7 @@
       "pending": "Pending",
       "transactions": "Transactions",
       "send": "Send",
-      "receive": "Receive",
+      "sell": "Sell",
       "receiveBitcoins": "Receive bitcoins",
       "sent": "Sent",
       "received": "Received",

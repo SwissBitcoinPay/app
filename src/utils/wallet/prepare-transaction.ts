@@ -123,7 +123,7 @@ export const prepareTransaction = async ({
       break;
     case "ledger":
       wallet = ledger;
-      pathPrefix = "m/";
+      // pathPrefix = "m/";
       break;
     default:
       break;
