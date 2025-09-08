@@ -34,7 +34,11 @@ import { useTheme } from "styled-components";
 import { XOR } from "ts-essentials";
 import * as S from "./styled";
 import { useAccountConfig, useIsScreenSizeMin, useRates } from "@hooks";
-import { AddressDetail, WalletTransaction } from "@screens/Wallet/Wallet";
+import {
+  AddressDetail,
+  FormattedUtxo,
+  WalletTransaction
+} from "@screens/Wallet/Wallet";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useToast } from "react-native-toast-notifications";
 import { HardwareReadyFunctionParams } from "@components/ConnectWalletModal/ConnectWalletModal";
@@ -68,7 +72,7 @@ const isValidFiatAmount = (value: string) =>
   isValidIntegerOrFloat(value) && decimalsNb(value) <= 2;
 
 type SendModalProps = Omit<ComponentProps<typeof Modal>, "onClose"> & {
-  txs: WalletTransaction[];
+  utxos: FormattedUtxo[];
   nextChangeAddress: AddressDetail;
   zPub: string;
   onClose: (success: boolean) => void;
@@ -76,7 +80,7 @@ type SendModalProps = Omit<ComponentProps<typeof Modal>, "onClose"> & {
 };
 
 export const SendModal = ({
-  txs,
+  utxos,
   isOpen,
   nextChangeAddress,
   onClose,
@@ -152,7 +156,7 @@ export const SendModal = ({
   const askPassword = useAskPassword();
 
   const awaitWalletTransaction = useCallback(
-    async (params: PrepareTransactionParams) => {
+    async (params: Omit<PrepareTransactionParams, "walletType">) => {
       return new Promise<CreateTransactionReturn>((resolver, reject) => {
         try {
           const walletType = wallet?.type;
@@ -193,8 +197,6 @@ export const SendModal = ({
       setIsLoading(true);
       await sleep(500);
       try {
-        const utxos = txs.filter((tx) => tx.value > 0 && !tx.isSpent);
-
         const receiveAddress = data.address;
         const amount = Math.round((data.btcAmount || 0) * 100000000);
 
@@ -244,7 +246,7 @@ export const SendModal = ({
       setError,
       t,
       toast,
-      txs,
+      utxos,
       zPub
     ]
   );

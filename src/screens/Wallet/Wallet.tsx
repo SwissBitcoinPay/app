@@ -15,6 +15,7 @@ import { getFormattedUnit, sleep } from "@utils";
 import BIP84 from "bip84";
 import {
   faArrowLeft,
+  faArrowUpRightFromSquare,
   faBuildingColumns,
   faClock,
   faPaperPlane,
@@ -61,6 +62,17 @@ export type WalletTransaction = {
   vout: Vout[];
 } & ConfirmedWithBlockTime;
 
+export type FormattedUtxo = {
+  txid: string;
+  rawTx?: string;
+  address: string;
+  scriptPubKeyHex: string;
+  value: number;
+  vIndex: number;
+  addressIndex: number;
+  change: boolean;
+};
+
 export const Wallet = () => {
   const { t: tRoot } = useTranslation();
   const { t } = useTranslation(undefined, {
@@ -105,6 +117,7 @@ export const Wallet = () => {
 
     setTxs(walletData.txs);
     setBalance(currentBalance);
+    setNextChangeAddress(walletData.nextChangeAddress);
 
     setIsInitialLoading(false);
     setIsRefreshing(false);
@@ -144,6 +157,33 @@ export const Wallet = () => {
     [accountConfig?.currency]
   );
 
+  const utxos = useMemo(
+    () =>
+      (txs || [])
+        .filter((e) => e.blocktime)
+        .reduce((result, tx) => {
+          const ourUtxos = tx.vout.filter(
+            (vout) => vout.ourAddressConfig && !vout.ourAddressConfig.isSpent
+          );
+
+          const all = ourUtxos.map(
+            (vout) =>
+              ({
+                txid: tx.txid,
+                rawTx: tx.hex,
+                vIndex: vout.n,
+                addressIndex: vout.ourAddressConfig?.index,
+                change: vout.ourAddressConfig?.change,
+                address: vout.scriptPubKey.address,
+                value: vout.value,
+                scriptPubKeyHex: vout.scriptPubKey.hex
+              }) as FormattedUtxo
+          );
+          return [...result, ...all];
+        }, [] as FormattedUtxo[]),
+    [txs]
+  );
+
   return (
     <>
       {nextAddress && (
@@ -166,10 +206,10 @@ export const Wallet = () => {
           </ComponentStack>
         </Modal>
       )}
-      {zPub && (
+      {zPub && nextChangeAddress && (
         <SendModal
           isOpen={isSendModalOpen}
-          txs={txs}
+          utxos={utxos}
           nextChangeAddress={nextChangeAddress}
           onClose={onSendModalClose}
           zPub={zPub}
@@ -231,8 +271,8 @@ export const Wallet = () => {
             />
             <Button
               title={t("sell")}
-              onPress={onReceive}
-              icon={faBuildingColumns}
+              onPress="https://dashboard.swiss-bitcoin-pay.ch/wallet"
+              icon={faArrowUpRightFromSquare}
               disabled={isInitialLoading}
             />
           </S.ActionButtonsContainer>
@@ -265,7 +305,7 @@ export const Wallet = () => {
                   ],
                   title: isPositive ? t("received") : t("sent"),
                   onPress: `https://mempool.space/tx/${tx.txid}${
-                    voutIndex ? `#vout=${voutIndex}` : ""
+                    voutIndex !== undefined ? `#vout=${voutIndex}` : ""
                   }`
                 };
               })}
