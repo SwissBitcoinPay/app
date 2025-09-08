@@ -527,7 +527,8 @@
       "shareMyLink": "Jaa aktivointilinkkini",
       "copyMyLink": "Kopioi aktivointilinkki",
       "acceptBitcoinPayments": "Hyväksy Bitcoin-maksut",
-      "invitationText": "Käytä linkkiä hyväksyä Bitcoin maksut {{merchantName}}:"
+      "invitationText": "Käytä linkkiä hyväksyä Bitcoin maksut {{merchantName}}:",
+      "dashboard": "Kojelauta"
     },
     "signatureLogin": {
       "titleWallet": "Allekirjoitus laitteistolompakolla",
@@ -590,7 +591,6 @@
       "pending": "Odottaa",
       "transactions": "Tapahtumat",
       "send": "Lähetä",
-      "receive": "Vastaanota",
       "receiveBitcoins": "Vastaanota bitcoinia",
       "sent": "Lähetetty",
       "received": "Vastaanotettu",
@@ -598,6 +598,7 @@
       "btcAmount": "Summa",
       "fees": "Kulut",
       "errorFetchingWallet": "Lompakon tietojen hakemisessa tapahtui virhe",
+      "sell": "Myy",
       "sendModal": {
         "send": "Lähetä bitcoinit",
         "fastestFee": "nopea",

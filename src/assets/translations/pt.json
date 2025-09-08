@@ -527,7 +527,8 @@
       "shareMyLink": "Partilhar a minha ligação de ativação",
       "copyMyLink": "Copiar a minha ligação de ativação",
       "acceptBitcoinPayments": "Aceitar pagamentos em Bitcoin",
-      "invitationText": "Utilize o meu link para aceitar pagamentos em Bitcoin para {{merchantName}}:"
+      "invitationText": "Utilize o meu link para aceitar pagamentos em Bitcoin para {{merchantName}}:",
+      "dashboard": "Painel de controlo"
     },
     "signatureLogin": {
       "titleWallet": "Assinatura com carteira de ferragens",
@@ -590,7 +591,6 @@
       "pending": "Pendente",
       "transactions": "Transacções",
       "send": "Enviar",
-      "receive": "Receber",
       "receiveBitcoins": "Recebe bitcoins",
       "sent": "Enviado",
       "received": "Recebido",
@@ -598,6 +598,7 @@
       "btcAmount": "Montante",
       "fees": "Taxas",
       "errorFetchingWallet": "Erro ao obter a sua carteira",
+      "sell": "Vender",
       "sendModal": {
         "send": "Enviar os seus bitcoins",
         "fastestFee": "Mais rápido",

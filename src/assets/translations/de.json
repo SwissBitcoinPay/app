@@ -527,7 +527,8 @@
       "shareMyLink": "Meinen Aktivierungslink freigeben",
       "copyMyLink": "Kopieren Sie meinen Aktivierungslink",
       "acceptBitcoinPayments": "Bitcoin-Zahlungen akzeptieren",
-      "invitationText": "Verwenden Sie meinen Link, um Bitcoin-Zahlungen für {{merchantName}} zu akzeptieren:"
+      "invitationText": "Verwenden Sie meinen Link, um Bitcoin-Zahlungen für {{merchantName}} zu akzeptieren:",
+      "dashboard": "Dashboard"
     },
     "signatureLogin": {
       "titleWallet": "Unterschrift mit Hardware-Geldbörse",
@@ -590,7 +591,6 @@
       "pending": "Anhängig",
       "transactions": "Transaktionen",
       "send": "Senden Sie",
-      "receive": "Empfangen",
       "receiveBitcoins": "Bitcoins erhalten",
       "sent": "Gesendet",
       "received": "Empfangen",
@@ -598,6 +598,7 @@
       "btcAmount": "Betrag",
       "fees": "Gebühren",
       "errorFetchingWallet": "Fehler beim Abrufen Ihrer Brieftasche",
+      "sell": "Verkaufen",
       "sendModal": {
         "send": "Senden Sie Ihre Bitcoins",
         "fastestFee": "Schnellste",

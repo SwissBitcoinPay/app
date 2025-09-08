@@ -527,7 +527,8 @@
       "shareMyLink": "Partager mon lien d'activation",
       "copyMyLink": "Copier mon lien d'activation",
       "acceptBitcoinPayments": "Accepter les paiements en bitcoins",
-      "invitationText": "Utilisez mon lien pour accepter les paiements en bitcoins pour {{merchantName}}:"
+      "invitationText": "Utilisez mon lien pour accepter les paiements en bitcoins pour {{merchantName}}:",
+      "dashboard": "Tableau de bord"
     },
     "signatureLogin": {
       "titleWallet": "Signature avec portefeuille matériel",
@@ -590,7 +591,6 @@
       "pending": "En attente",
       "transactions": "Transactions",
       "send": "Envoyer",
-      "receive": "Recevoir",
       "receiveBitcoins": "Recevoir des bitcoins",
       "sent": "Envoyé",
       "received": "Reçu",
@@ -598,6 +598,7 @@
       "btcAmount": "Montant",
       "fees": "Frais",
       "errorFetchingWallet": "Erreur lors de la récupération de votre portefeuille",
+      "sell": "Vendre",
       "sendModal": {
         "send": "Envoyer vos bitcoins",
         "fastestFee": "Rapide",

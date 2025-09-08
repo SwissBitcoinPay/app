@@ -527,7 +527,8 @@
       "shareMyLink": "Condividi il mio link di attivazione",
       "copyMyLink": "Copia il mio link di attivazione",
       "acceptBitcoinPayments": "Accettare pagamenti in Bitcoin",
-      "invitationText": "Utilizza il mio link per accettare pagamenti in Bitcoin per {{merchantName}}:"
+      "invitationText": "Utilizza il mio link per accettare pagamenti in Bitcoin per {{merchantName}}:",
+      "dashboard": "Cruscotto"
     },
     "signatureLogin": {
       "titleWallet": "Firma con portafoglio hardware",
@@ -590,7 +591,6 @@
       "pending": "In attesa",
       "transactions": "Transazioni",
       "send": "Inviare",
-      "receive": "Ricevi",
       "receiveBitcoins": "Ricevere bitcoin",
       "sent": "Inviati",
       "received": "Ricevuti",
@@ -598,6 +598,7 @@
       "btcAmount": "Importo",
       "fees": "Commissione",
       "errorFetchingWallet": "Errore durante il recupero del portafoglio",
+      "sell": "Vendere",
       "sendModal": {
         "send": "Invia i tuoi bitcoin",
         "fastestFee": "Il più veloce",
