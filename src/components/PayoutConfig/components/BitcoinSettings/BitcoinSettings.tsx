@@ -385,6 +385,7 @@ export const BitcoinSettings = ({
           },
           { shouldDirty: true }
         );
+        setValue("walletType", signatureData.walletType, { shouldDirty: true });
 
         setValue("depositAddress", signatureData.zPub, {
           shouldValidate: false
@@ -414,6 +415,7 @@ export const BitcoinSettings = ({
             },
             { shouldDirty: true }
           );
+          setValue("walletType", signatureData.walletType, { shouldDirty: true });
           toast.show(
             t("hardwareConnectSuccess", {
               hardwareWallet: hardwareNames[signatureData.walletType]
