@@ -1,0 +1,1 @@
+- Corrigé une erreur dans l'écran Portefeuille
