@@ -527,7 +527,8 @@
       "shareMyLink": "Share my activation link",
       "copyMyLink": "Copy my activation link",
       "acceptBitcoinPayments": "Accept Bitcoin payments",
-      "invitationText": "Use my link to accept Bitcoin payments for {{merchantName}}:"
+      "invitationText": "Use my link to accept Bitcoin payments for {{merchantName}}:",
+      "dashboard": "Dashboard"
     },
     "signatureLogin": {
       "titleWallet": "Signature with hardware wallet",
@@ -590,7 +591,6 @@
       "pending": "Pending",
       "transactions": "Transactions",
       "send": "Send",
-      "receive": "Receive",
       "receiveBitcoins": "Receive bitcoins",
       "sent": "Sent",
       "received": "Received",
@@ -598,6 +598,7 @@
       "btcAmount": "Amount",
       "fees": "Fees",
       "errorFetchingWallet": "Error while fetching your wallet",
+      "sell": "Sell",
       "sendModal": {
         "send": "Send your bitcoins",
         "fastestFee": "Fastest",
