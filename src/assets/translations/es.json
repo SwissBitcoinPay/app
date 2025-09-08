@@ -527,7 +527,8 @@
       "shareMyLink": "Compartir mi enlace de activación",
       "copyMyLink": "Copiar mi enlace de activación",
       "acceptBitcoinPayments": "Aceptar pagos con Bitcoin",
-      "invitationText": "Utilice mi enlace para aceptar pagos Bitcoin para {{merchantName}}:"
+      "invitationText": "Utilice mi enlace para aceptar pagos Bitcoin para {{merchantName}}:",
+      "dashboard": "Cuadro de mandos"
     },
     "signatureLogin": {
       "titleWallet": "Firma con monedero de herrajes",
@@ -597,6 +598,7 @@
       "btcAmount": "Importe",
       "fees": "Comisiones",
       "errorFetchingWallet": "Error al recuperar su monedero",
+      "sell": "Vender",
       "sendModal": {
         "send": "Envía tus bitcoins",
         "fastestFee": "Más rápido",
