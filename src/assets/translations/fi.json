@@ -590,7 +590,6 @@
       "pending": "Odottaa",
       "transactions": "Tapahtumat",
       "send": "Lähetä",
-      "receive": "Vastaanota",
       "receiveBitcoins": "Vastaanota bitcoinia",
       "sent": "Lähetetty",
       "received": "Vastaanotettu",
