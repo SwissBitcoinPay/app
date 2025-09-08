@@ -47,7 +47,7 @@ export const useSignature = ({
           accounts.push({
             label: `Bitcoin ${index + 1}`,
             account: path,
-            path,
+            path: `m/${path}`,
             zpub,
             fingerprint: masterFingerprint
           });

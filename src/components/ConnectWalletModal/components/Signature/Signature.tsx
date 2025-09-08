@@ -12,6 +12,7 @@ import { AccountBalance } from "./components/AccountBalance";
 import { AsyncStorage, hardwareNames } from "@utils";
 import { SBPHardwareWalletContext } from "@config/SBPHardwareWallet";
 import { keyStoreWalletPath } from "@config/settingsKeys";
+import { useAccountConfig } from "@hooks";
 
 export type Account = {
   label: string;
@@ -34,6 +35,8 @@ export const Signature = ({
   const [state, setState] = useState<
     "getAccount" | "selectAccount" | "prepareSignature" | "waitingForSignature"
   >("getAccount");
+
+  const { accountConfig } = useAccountConfig();
 
   const {
     setAttentionToHardware,
@@ -63,7 +66,9 @@ export const Signature = ({
         return;
       }
 
-      const walletPath = await AsyncStorage.getItem(keyStoreWalletPath);
+      const walletPath =
+        accountConfig?.verifiedAddresses?.find((a) => a.current)?.walletConfig
+          .account || (await AsyncStorage.getItem(keyStoreWalletPath));
 
       let finalAccount: (typeof _accounts)[number];
 

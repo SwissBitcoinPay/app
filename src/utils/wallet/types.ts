@@ -1,5 +1,5 @@
 import Btc from "@ledgerhq/hw-app-btc";
-import { WalletTransaction } from "@screens/Wallet/Wallet";
+import { FormattedUtxo, WalletTransaction } from "@screens/Wallet/Wallet";
 import { Bip84PrivateAccount } from "@types";
 import { PairedBitBox } from "bitbox-api";
 import { Psbt } from "bitcoinjs-lib";
@@ -28,7 +28,7 @@ export type PrepareFunction = (
 type CreateTransactionParams = {
   psbt: Psbt;
   feeRate: number;
-  usedUtxos: WalletTransaction[];
+  usedUtxos: FormattedUtxo[];
   rootPath: string;
   masterFingerprint: string;
 
@@ -43,12 +43,13 @@ type CreateTransactionParams = {
 };
 
 export type CreateTransactionReturn = {
-  txHex?: string;
+  txHex: string;
+  psbt: Psbt;
 };
 
 export type CreateFunction = (
   _params: CreateTransactionParams
-) => Promise<CreateTransactionReturn>;
+) => Promise<CreateTransactionReturn | undefined>;
 
 export type Wallet = {
   prepareTransaction: PrepareFunction;

@@ -1,7 +1,7 @@
 import { Psbt } from "bitcoinjs-lib";
 import ECPairFactory from "ecpair";
 import ecc from "@bitcoinerlab/secp256k1";
-import { WalletTransaction } from "@screens/Wallet/Wallet";
+import { FormattedUtxo, WalletTransaction } from "@screens/Wallet/Wallet";
 import { Bip84PrivateAccount } from "@types";
 import { DEFAULT_NETWORK } from "@config";
 
@@ -9,7 +9,7 @@ const ECPair = ECPairFactory(ecc);
 
 type CreateTransactionParams = {
   psbt: Psbt;
-  usedUtxos: WalletTransaction[];
+  usedUtxos: FormattedUtxo[];
   bip84Account: Bip84PrivateAccount;
 };
 
@@ -27,5 +27,5 @@ export const createTransaction = ({
   });
 
   psbt.finalizeAllInputs();
-  return { txHex: psbt.extractTransaction().toHex() };
+  return { txHex: psbt.extractTransaction().toHex(), psbt };
 };

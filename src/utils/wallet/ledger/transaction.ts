@@ -13,11 +13,11 @@ export const createTransaction: CreateFunction = async ({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const app = new AppClient(hardwareWallet._transport);
 
-  const xpub = await app.getExtendedPubkey(`m/${rootPath}`, false);
+  const xpub = await app.getExtendedPubkey(`${rootPath}`, false);
 
   const signingPolicy = new DefaultWalletPolicy(
     "wpkh(@0/**)",
-    `[${masterFingerprint}/${rootPath}]${xpub}`
+    `[${masterFingerprint}/${rootPath.replace("m/", "")}]${xpub}`
   );
 
   const ledgerSignature = await app.signPsbt(psbt.toBase64(), signingPolicy);
@@ -51,6 +51,7 @@ export const createTransaction: CreateFunction = async ({
   psbt.finalizeAllInputs();
 
   return {
-    txHex: psbt.extractTransaction().toHex()
+    txHex: psbt.extractTransaction().toHex(),
+    psbt: psbt
   };
 };

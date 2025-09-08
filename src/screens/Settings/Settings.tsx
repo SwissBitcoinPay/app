@@ -34,6 +34,7 @@ import {
   faRightFromBracket,
   faShareNodes,
   faStore,
+  faTableColumns,
   faUser,
   faUserTie,
   faWallet
@@ -397,8 +398,8 @@ export const Settings = () => {
                       userType === UserType.Wallet
                         ? faWallet
                         : userType === UserType.Admin
-                        ? faUserTie
-                        : faUser
+                          ? faUserTie
+                          : faUser
                     }
                     size={12}
                   />
@@ -433,6 +434,11 @@ export const Settings = () => {
         >
           <FieldDescription>{t("confirmLogoutDescription")}</FieldDescription>
         </Modal>
+        <Button
+          title={t("dashboard")}
+          icon={faTableColumns}
+          onPress="https://dashboard.swiss-bitcoin-pay.ch"
+        />
         <ComponentStack direction={isLarge ? "horizontal" : "vertical"}>
           <Button
             title={t("contactSupport")}

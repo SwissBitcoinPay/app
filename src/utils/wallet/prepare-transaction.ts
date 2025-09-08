@@ -1,11 +1,11 @@
-import { Psbt } from "bitcoinjs-lib";
+import { Psbt, initEccLib } from "bitcoinjs-lib";
 import _ecc from "@bitcoinerlab/secp256k1";
 // @ts-ignore
 import BIP84 from "bip84";
 import * as local from "./local";
 import * as bitbox02 from "./bitbox02";
 import * as ledger from "./ledger";
-import { AddressDetail, WalletTransaction } from "@screens/Wallet/Wallet";
+import { AddressDetail, FormattedUtxo } from "@screens/Wallet/Wallet";
 import {
   AddressType,
   getAddressInfo,
@@ -19,6 +19,8 @@ import { DEFAULT_NETWORK } from "@config";
 import { AsyncStorage } from "@utils/AsyncStorage";
 import { keyStoreWalletPath } from "@config/settingsKeys";
 import { AskWordsPassword } from "@config/SBPAskPasswordModalContext/SBPAskPasswordModalContext";
+
+initEccLib(_ecc);
 
 const types = {
   // MULTISIG-* do not include pubkeys or signatures yet (this is calculated at runtime)
@@ -91,7 +93,7 @@ const getAddressType: (
 
 export type PrepareTransactionParams = {
   zPub: string;
-  utxos: WalletTransaction[];
+  utxos: FormattedUtxo[];
   receiveAddress: string;
   amount: number;
   changeAddress?: AddressDetail;
@@ -123,7 +125,7 @@ export const prepareTransaction = async ({
       break;
     case "ledger":
       wallet = ledger;
-      pathPrefix = "m/";
+      // pathPrefix = "m/";
       break;
     default:
       break;
@@ -164,7 +166,7 @@ export const prepareTransaction = async ({
     };
   }
 
-  const usedUtxos: WalletTransaction[] = [];
+  const usedUtxos: FormattedUtxo[] = [];
   let inputAmount = 0;
   let finalFee = 0;
 
@@ -184,9 +186,9 @@ export const prepareTransaction = async ({
     try {
       psbt.addInput({
         hash: utxo.txid,
-        index: parseInt(utxo.voutIndex),
+        index: utxo.vIndex,
         witnessUtxo: {
-          script: Buffer.from(utxo.scriptPubKey, "hex"),
+          script: Buffer.from(utxo.scriptPubKeyHex, "hex"),
           value: BigInt(utxo.value)
         },
         nonWitnessUtxo: Buffer.from(rawTx, "hex"),
