@@ -1,4 +1,5 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { View } from "react-native";
 import {
   SBPContext,
   apiRootUrl,
@@ -272,6 +273,7 @@ export const Settings = () => {
         left: { icon: faArrowLeft, onPress: -1 }
       }}
     >
+      <View>
       <S.FlexComponentStack>
         {accountConfig ? (
           !accountConfig.isAtm &&
@@ -459,6 +461,7 @@ export const Settings = () => {
           <S.VersionText>{versionTag}</S.VersionText>
         </S.PressableVersion>
       </S.FlexComponentStack>
+      </View>
     </PageContainer>
   );
 };

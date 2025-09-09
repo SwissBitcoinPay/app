@@ -10,12 +10,12 @@ export enum FieldsType {
 }
 
 export const FieldByType = {
-  [FieldsType.Text]: (props) => <TextField {...props} />,
-  [FieldsType.Multiline]: (props) => (
+  [FieldsType.Text]: (props: any) => <TextField {...props} />,
+  [FieldsType.Multiline]: (props: any) => (
     <TextField {...props} multiline numberOfLines={3} />
   ),
-  [FieldsType.Number]: (props) => <TextField inputMode="decimal" {...props} />,
-  [FieldsType.Email]: (props) => <TextField inputMode="email" {...props} />,
-  [FieldsType.Date]: (props) => <DateField {...props} />,
-  [FieldsType.File]: (props) => <FileField {...props} />
+  [FieldsType.Number]: (props: any) => <TextField inputMode="decimal" {...props} />,
+  [FieldsType.Email]: (props: any) => <TextField inputMode="email" {...props} />,
+  [FieldsType.Date]: (props: any) => <DateField {...props} />,
+  [FieldsType.File]: (props: any) => <FileField {...props} />
 };

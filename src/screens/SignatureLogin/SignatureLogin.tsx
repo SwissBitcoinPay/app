@@ -1,4 +1,5 @@
 import { useCallback, useContext, useRef, useState } from "react";
+import { View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { SBPContext, apiRootUrl, platform } from "@config";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -216,7 +217,13 @@ export const SignatureLogin = () => {
           signature,
           zPub,
           words: words.join(" "),
-          walletType: "local"
+          walletType: "local",
+          walletConfig: {
+            account: "local",
+            label: "Local Wallet",
+            type: "local",
+            zpub: zPub
+          }
         });
       } catch (e) {
         if (isApiError(e)) {
@@ -296,7 +303,8 @@ export const SignatureLogin = () => {
           signature: data.signature,
           zPub: data.zPub,
           words: data.words,
-          walletType: data.walletType
+          walletType: data.walletType,
+          walletConfig: data.walletConfig
         });
       }
     },
@@ -347,6 +355,7 @@ export const SignatureLogin = () => {
         title: tRoot("common.login")
       }}
     >
+      <View>
       <ConnectWalletModal
         isOpen={!!customWalletFunction}
         onClose={onConnectWalletModalClose}
@@ -446,6 +455,7 @@ export const SignatureLogin = () => {
           </ComponentStack>
         </LoginView>
       </ComponentStack>
+      </View>
     </S.StyledPageContainer>
   );
 };

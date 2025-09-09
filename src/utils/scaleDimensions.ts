@@ -1,4 +1,4 @@
-export const scaleDimensions = (width, height, maxWidth, maxHeight) => {
+export const scaleDimensions = (width: number, height: number, maxWidth: number, maxHeight: number) => {
   const widthRatio = maxWidth / width;
   const heightRatio = maxHeight / height;
 

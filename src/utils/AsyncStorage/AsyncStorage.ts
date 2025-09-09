@@ -6,10 +6,10 @@ const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
 
 // Convert between binary and Base64
-const arrayBufferToBase64 = (buffer) =>
+const arrayBufferToBase64 = (buffer: ArrayBuffer) =>
   btoa(String.fromCharCode(...new Uint8Array(buffer)));
 
-const base64ToArrayBuffer = (base64) =>
+const base64ToArrayBuffer = (base64: string) =>
   Uint8Array.from(atob(base64), (c) => c.charCodeAt(0)).buffer;
 
 // eslint-disable-next-line @typescript-eslint/require-await

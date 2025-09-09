@@ -40,11 +40,13 @@ export const PageContainer = ({
         keyboardShouldPersistTaps="handled"
         noVerticalPadding={noVerticalPadding}
       >
-        {!header || headerHeight ? children : null}
-        {footerButton && <S.PageFooterGap />}
-        {bottom > 0 && !noBottomMargin && !noVerticalPadding && (
-          <View style={{ height: bottom }} />
-        )}
+        <View>
+          {!header || headerHeight ? children : null}
+          {footerButton && <S.PageFooterGap />}
+          {bottom > 0 && !noBottomMargin && !noVerticalPadding && (
+            <View style={{ height: bottom }} />
+          )}
+        </View>
       </S.StyledPageContainer>
       {footerButton && (
         <S.PageFooterButton

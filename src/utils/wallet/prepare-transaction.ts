@@ -13,7 +13,7 @@ import {
 } from "bitcoin-address-validation";
 import axios from "axios";
 import { HardwareReadyFunctionParams } from "@components/ConnectWalletModal/ConnectWalletModal";
-import { Wallet } from "./types";
+import { Wallet, PrepareTransactionParams as WalletPrepareTransactionParams, CreateTransactionParams as WalletCreateTransactionParams } from "./types";
 import { Bip84Account } from "@types";
 import { DEFAULT_NETWORK } from "@config";
 import { AsyncStorage } from "@utils/AsyncStorage";
@@ -71,7 +71,7 @@ type OutputsTypes = {
 
 const getAddressType: (
   address: string
-) => InputAddressTypes | OutputAddressTypes = (address: string) => {
+) => InputAddressTypes | OutputAddressTypes | undefined = (address: string) => {
   if (validate(address)) {
     const addressInfo = getAddressInfo(address);
 
@@ -87,11 +87,12 @@ const getAddressType: (
       case AddressType.p2tr:
         return "P2TR";
     }
-    return addressInfo.type;
+    return addressInfo.type as any;
   }
+  return undefined;
 };
 
-export type PrepareTransactionParams = {
+export type LocalPrepareTransactionParams = {
   zPub: string;
   utxos: FormattedUtxo[];
   receiveAddress: string;
@@ -113,26 +114,30 @@ export const prepareTransaction = async ({
   account,
   walletType,
   askWordsPassword
-}: PrepareTransactionParams) => {
-  let wallet: Wallet;
+}: LocalPrepareTransactionParams) => {
+  let wallet: Wallet | undefined;
   let pathPrefix = "";
   switch (walletType) {
     case "local":
-      wallet = local;
+      wallet = local as any;
       break;
     case "bitbox02":
-      wallet = bitbox02;
+      wallet = bitbox02 as any;
       break;
     case "ledger":
-      wallet = ledger;
+      wallet = ledger as any;
       // pathPrefix = "m/";
       break;
     default:
-      break;
+      throw new Error(`Unsupported wallet type: ${walletType}`);
   }
 
-  let inputs: InputsTypes = {};
-  let outputs: OutputsTypes = {};
+  if (!wallet) {
+    throw new Error("Wallet not initialized");
+  }
+
+  let inputs: Partial<InputsTypes> = {};
+  let outputs: Partial<OutputsTypes> = {};
 
   const psbt = new Psbt({ network: DEFAULT_NETWORK });
 
@@ -150,20 +155,24 @@ export const prepareTransaction = async ({
     account,
     rootPath,
     askWordsPassword
-  });
+  } as any);
 
   const receiveAddressType = getAddressType(receiveAddress);
-  outputs = {
-    ...outputs,
-    [receiveAddressType]: (outputs[receiveAddressType] || 0) + 1
-  };
+  if (receiveAddressType) {
+    outputs = {
+      ...outputs,
+      [receiveAddressType]: ((outputs as any)[receiveAddressType] || 0) + 1
+    };
+  }
 
   if (changeAddress) {
     const changeAddressType = getAddressType(changeAddress.address);
-    outputs = {
-      ...outputs,
-      [changeAddressType]: (outputs[changeAddressType] || 0) + 1
-    };
+    if (changeAddressType) {
+      outputs = {
+        ...outputs,
+        [changeAddressType]: ((outputs as any)[changeAddressType] || 0) + 1
+      };
+    }
   }
 
   const usedUtxos: FormattedUtxo[] = [];
@@ -172,10 +181,12 @@ export const prepareTransaction = async ({
 
   for (const utxo of utxos) {
     const addressType = getAddressType(utxo.address);
-    inputs = {
-      ...inputs,
-      [addressType]: (inputs[addressType] || 0) + 1
-    };
+    if (addressType) {
+      inputs = {
+        ...inputs,
+        [addressType]: ((inputs as any)[addressType] || 0) + 1
+      };
+    }
 
     const { data: rawTx } = await axios.get<string>(
       `https://mempool.space/api/tx/${utxo.txid}/hex`
@@ -261,19 +272,19 @@ export const prepareTransaction = async ({
 };
 
 // Inspired by https://gist.github.com/junderw/b43af3253ea5865ed52cb51c200ac19c
-const getByteCount = (inputs: InputsTypes, outputs: OutputsTypes) => {
+const getByteCount = (inputs: Partial<InputsTypes>, outputs: Partial<OutputsTypes>) => {
   let totalWeight = 0;
   let hasWitness = false;
   let inputCount = 0;
   let outputCount = 0;
   // assumes compressed pubkeys in all cases.
 
-  function checkUInt53(n) {
+  function checkUInt53(n: number) {
     if (n < 0 || n > Number.MAX_SAFE_INTEGER || n % 1 !== 0)
       throw new RangeError("value out of range");
   }
 
-  function varIntLength(number) {
+  function varIntLength(number: number) {
     checkUInt53(number);
 
     return number < 0xfd
@@ -286,30 +297,36 @@ const getByteCount = (inputs: InputsTypes, outputs: OutputsTypes) => {
   }
 
   Object.keys(inputs).forEach(function (key) {
-    checkUInt53(inputs[key]);
-    if (key.slice(0, 8) === "MULTISIG") {
-      // ex. "MULTISIG-P2SH:2-3" would mean 2 of 3 P2SH MULTISIG
-      const keyParts = key.split(":");
-      if (keyParts.length !== 2) throw new Error("invalid input: " + key);
-      const newKey = keyParts[0];
-      const mAndN = keyParts[1].split("-").map(function (item) {
-        return parseInt(item);
-      });
+    const inputCountValue = inputs[key as keyof InputsTypes];
+    if (inputCountValue) {
+      checkUInt53(inputCountValue);
+      if (key.slice(0, 8) === "MULTISIG") {
+        // ex. "MULTISIG-P2SH:2-3" would mean 2 of 3 P2SH MULTISIG
+        const keyParts = key.split(":");
+        if (keyParts.length !== 2) throw new Error("invalid input: " + key);
+        const newKey = keyParts[0] as keyof typeof types.inputs;
+        const mAndN = keyParts[1].split("-").map(function (item) {
+          return parseInt(item);
+        });
 
-      totalWeight += types.inputs[newKey] * inputs[key];
-      const multiplyer = newKey === "MULTISIG-P2SH" ? 4 : 1;
-      totalWeight += (73 * mAndN[0] + 34 * mAndN[1]) * multiplyer * inputs[key];
-    } else {
-      totalWeight += types.inputs[key] * inputs[key];
+        totalWeight += types.inputs[newKey] * inputCountValue;
+        const multiplyer = newKey === "MULTISIG-P2SH" ? 4 : 1;
+        totalWeight += (73 * mAndN[0] + 34 * mAndN[1]) * multiplyer * inputCountValue;
+      } else {
+        totalWeight += types.inputs[key as keyof typeof types.inputs] * inputCountValue;
+      }
+      inputCount += inputCountValue;
+      if (key.indexOf("W") >= 0) hasWitness = true;
     }
-    inputCount += inputs[key];
-    if (key.indexOf("W") >= 0) hasWitness = true;
   });
 
   Object.keys(outputs).forEach(function (key) {
-    checkUInt53(outputs[key]);
-    totalWeight += types.outputs[key] * outputs[key];
-    outputCount += outputs[key];
+    const outputCountValue = outputs[key as keyof OutputsTypes];
+    if (outputCountValue) {
+      checkUInt53(outputCountValue);
+      totalWeight += types.outputs[key as keyof typeof types.outputs] * outputCountValue;
+      outputCount += outputCountValue;
+    }
   });
 
   if (hasWitness) totalWeight += 2;

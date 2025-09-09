@@ -1,7 +1,7 @@
 import { ComponentPropsWithRef } from "react";
-import { AnyStyledComponent } from "styled-components";
+import { IStyledComponent } from "styled-components";
 
-export type StyledComponentComponentProps<T extends AnyStyledComponent> =
-  ComponentPropsWithRef<T> & T extends AnyStyledComponent
+export type StyledComponentComponentProps<T extends IStyledComponent<any, any>> =
+  ComponentPropsWithRef<T> & T extends IStyledComponent<any, any>
     ? React.ComponentProps<T>
     : never;

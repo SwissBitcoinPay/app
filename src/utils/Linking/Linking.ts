@@ -5,5 +5,5 @@ export const Linking: Pick<typeof NativeLinking, "openURL" | "canOpenURL"> = {
     window.location.href = url;
     return new Promise(() => null);
   },
-  canOpenURL: (url: string) => true
+  canOpenURL: (url: string) => Promise.resolve(true)
 };

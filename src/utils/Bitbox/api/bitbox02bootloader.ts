@@ -27,11 +27,12 @@ export type TStatus = {
 };
 
 export const getStatus = (deviceID: string): Promise<TStatus> => {
-  return apiGet(`devices/bitbox02-bootloader/${deviceID}/status`);
+  return apiGet(`devices/bitbox02-bootloader/${deviceID}/status`) as Promise<TStatus>;
 };
 
 export const useSyncStatus = () => {
-  const { subscribeEndpoint } = useContext(SBPBitboxContext);
+  const context = useContext(SBPBitboxContext);
+  const subscribeEndpoint = (context as any).subscribeEndpoint;
 
   return (deviceID: string) => (cb: TSubscriptionCallback<TStatus>) => {
     return subscribeEndpoint(
@@ -53,13 +54,13 @@ export type TVersionInfo = {
 };
 
 export const getVersionInfo = (deviceID: string): Promise<TVersionInfo> => {
-  return apiGet(`devices/bitbox02-bootloader/${deviceID}/version-info`);
+  return apiGet(`devices/bitbox02-bootloader/${deviceID}/version-info`) as Promise<TVersionInfo>;
 };
 
 export const upgradeFirmware = (deviceID: string): Promise<void> => {
-  return apiPost(`devices/bitbox02-bootloader/${deviceID}/upgrade-firmware`);
+  return apiPost(`devices/bitbox02-bootloader/${deviceID}/upgrade-firmware`) as Promise<void>;
 };
 
 export const screenRotate = (deviceID: string): Promise<void> => {
-  return apiPost(`devices/bitbox02-bootloader/${deviceID}/screen-rotate`);
+  return apiPost(`devices/bitbox02-bootloader/${deviceID}/screen-rotate`) as Promise<void>;
 };

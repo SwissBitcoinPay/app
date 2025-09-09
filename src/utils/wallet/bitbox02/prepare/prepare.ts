@@ -1,5 +1,7 @@
-import { PrepareFunction } from "@utils/wallet/types";
+import { PrepareFunction, PrepareTransactionParams, PrepareTransactionReturn } from "@utils/wallet/types";
 
-export const prepareTransaction: PrepareFunction = (
+export const prepareTransaction: PrepareFunction = async (
   _params: PrepareTransactionParams
-): Promise<PrepareTransactionReturn> => ({});
+): Promise<PrepareTransactionReturn> => {
+  return { masterFingerprint: "" };
+};

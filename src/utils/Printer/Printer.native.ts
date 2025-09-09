@@ -19,7 +19,13 @@ export const printLabelValue = async (label: string, value: string) => {
       TOTAL_WIDTH - label.length - value.length
     )}${THOUSAND_SPACE.repeat(thousandsSpaceNb)}${value}`;
     await printText(text, {
-      font: NyxFont.monospace
+      font: NyxFont.monospace,
+      textSize: 12,
+      underline: false,
+      textScaleX: 1.0,
+      textScaleY: 1.0,
+      align: 0,
+      color: 0x000000
     });
   } catch (e) {
     console.error("error", e);

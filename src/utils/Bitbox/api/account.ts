@@ -16,6 +16,11 @@
 
 import { apiGet, apiPost } from "./request";
 
+// Mock types for missing imports
+type CoinCode = string;
+type Conversions = any;
+type CoinUnit = string;
+
 export type AccountCode = string;
 
 export type TKeystore = {
@@ -40,7 +45,7 @@ export interface IAccount {
 }
 
 export const getAccounts = (): Promise<IAccount[]> => {
-  return apiGet("accounts");
+  return apiGet("accounts") as Promise<IAccount[]>;
 };
 
 export interface IReceiveAddress {
@@ -56,7 +61,7 @@ export interface ReceiveAddressList {
 export const getReceiveAddressList = (
   code: AccountCode
 ): Promise<ReceiveAddressList[] | null> => {
-  return apiGet(`account/${code}/receive-addresses`);
+  return apiGet(`account/${code}/receive-addresses`) as Promise<ReceiveAddressList[] | null>;
 };
 
 export type ScriptType = "p2pkh" | "p2wpkh-p2sh" | "p2wpkh" | "p2tr";
@@ -90,7 +95,7 @@ export type TSigningConfigurationList = null | {
 export const getInfo = (
   code: AccountCode
 ): Promise<TSigningConfigurationList> => {
-  return apiGet(`account/${code}/info`);
+  return apiGet(`account/${code}/info`) as Promise<TSigningConfigurationList>;
 };
 
 export type AddressSignResponse =
@@ -110,7 +115,7 @@ export const signAddress = (
   msg: string,
   code: AccountCode
 ): Promise<AddressSignResponse> => {
-  return apiPost(`account/${code}/sign-address`, { format, msg, code });
+  return apiPost(`account/${code}/sign-address`, { format, msg, code }) as Promise<AddressSignResponse>;
 };
 
 export type FeeTargetCode = "custom" | "low" | "economy" | "normal" | "high";
@@ -147,7 +152,7 @@ export const proposeTx = (
   accountCode: AccountCode,
   txInput: TTxInput
 ): Promise<TTxProposalResult> => {
-  return apiPost(`account/${accountCode}/tx-proposal`, txInput);
+  return apiPost(`account/${accountCode}/tx-proposal`, txInput) as Promise<TTxProposalResult>;
 };
 
 export type ISendTx =
@@ -163,5 +168,5 @@ export type ISendTx =
     };
 
 export const sendTx = (code: AccountCode): Promise<ISendTx> => {
-  return apiPost(`account/${code}/sendtx`);
+  return apiPost(`account/${code}/sendtx`) as Promise<ISendTx>;
 };

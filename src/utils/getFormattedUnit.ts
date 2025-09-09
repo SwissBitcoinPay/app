@@ -23,7 +23,7 @@ export const getFormattedUnit = (
   amount: number,
   unit: string,
   floating?: number,
-  trailingDecimal?: boolean = false
+  trailingDecimal: boolean = false
 ) => {
   let prefix = "";
   if (amount > 0 && amount < 0.01 && unit !== "BTC") {

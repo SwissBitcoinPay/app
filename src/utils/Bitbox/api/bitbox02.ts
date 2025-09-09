@@ -35,17 +35,17 @@ type DeviceInfoResponse = SuccessResponse & {
 export const getDeviceInfo = (
   deviceID: string
 ): Promise<DeviceInfoResponse | FailResponse> => {
-  return apiGet(`devices/bitbox02/${deviceID}/info`);
+  return apiGet(`devices/bitbox02/${deviceID}/info`) as Promise<FailResponse | DeviceInfoResponse>;
 };
 
 export const checkSDCard = (deviceID: string): Promise<boolean> => {
-  return apiGet(`devices/bitbox02/${deviceID}/check-sdcard`);
+  return apiGet(`devices/bitbox02/${deviceID}/check-sdcard`) as Promise<boolean>;
 };
 
 export const insertSDCard = (
   deviceID: string
 ): Promise<SuccessResponse | FailResponse> => {
-  return apiPost(`devices/bitbox02/${deviceID}/insert-sdcard`);
+  return apiPost(`devices/bitbox02/${deviceID}/insert-sdcard`) as Promise<SuccessResponse | FailResponse>;
 };
 
 export const setDeviceName = (
@@ -54,18 +54,18 @@ export const setDeviceName = (
 ): Promise<SuccessResponse | FailResponse> => {
   return apiPost(`devices/bitbox02/${deviceID}/set-device-name`, {
     name: newDeviceName
-  });
+  }) as Promise<SuccessResponse | FailResponse>;
 };
 
 export const createBackup = (
   deviceID: string,
   method: "sdcard" | "recovery-words"
 ): Promise<FailResponse | SuccessResponse> => {
-  return apiPost(`devices/bitbox02/${deviceID}/backups/create`, method);
+  return apiPost(`devices/bitbox02/${deviceID}/backups/create`, method) as Promise<SuccessResponse | FailResponse>;
 };
 
 export const upgradeDeviceFirmware = (deviceID: string): Promise<void> => {
-  return apiPost(`devices/bitbox02/${deviceID}/upgrade-firmware`);
+  return apiPost(`devices/bitbox02/${deviceID}/upgrade-firmware`) as Promise<void>;
 };
 
 export type TStatus =
@@ -79,7 +79,7 @@ export type TStatus =
   | "uninitialized";
 
 export const getStatus = (deviceID: string): Promise<TStatus> => {
-  return apiGet(`devices/bitbox02/${deviceID}/status`);
+  return apiGet(`devices/bitbox02/${deviceID}/status`) as Promise<TStatus>;
 };
 
 type TChannelHash = {
@@ -88,19 +88,19 @@ type TChannelHash = {
 };
 
 export const getChannelHash = (deviceID: string): Promise<TChannelHash> => {
-  return apiGet(`devices/bitbox02/${deviceID}/channel-hash`);
+  return apiGet(`devices/bitbox02/${deviceID}/channel-hash`) as Promise<TChannelHash>;
 };
 
 export const verifyChannelHash = (
   deviceID: string,
   ok: boolean
 ): Promise<void> => {
-  return apiPost(`devices/bitbox02/${deviceID}/channel-hash-verify`, ok);
+  return apiPost(`devices/bitbox02/${deviceID}/channel-hash-verify`, ok) as Promise<void>;
 };
 
 export const setPassword = (
   deviceID: string,
   seedLen: 16 | 32
 ): Promise<SuccessResponse | FailResponse> => {
-  return apiPost(`devices/bitbox02/${deviceID}/set-password`, seedLen);
+  return apiPost(`devices/bitbox02/${deviceID}/set-password`, seedLen) as Promise<SuccessResponse | FailResponse>;
 };

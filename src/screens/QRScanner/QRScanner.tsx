@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
+import { View } from "react-native";
 import { useWindowDimensions } from "react-native";
 import { useLocation, useNavigate } from "@components/Router";
 import { Image, Loader, PageContainer } from "@components";
@@ -99,6 +100,7 @@ export const QRScanner = () => {
         />
       )}
       <PageContainer noHorizontalPadding isStrictTopMargin>
+        <View>
         {!isCameraLoading && !isLoading ? (
           <>
             <S.VerticialPart>
@@ -132,6 +134,7 @@ export const QRScanner = () => {
         ) : (
           <Loader />
         )}
+        </View>
       </PageContainer>
     </>
   );

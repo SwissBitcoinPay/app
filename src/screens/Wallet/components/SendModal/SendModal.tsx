@@ -42,7 +42,7 @@ import {
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useToast } from "react-native-toast-notifications";
 import { HardwareReadyFunctionParams } from "@components/ConnectWalletModal/ConnectWalletModal";
-import { PrepareTransactionParams } from "@utils/wallet/prepare-transaction";
+import { LocalPrepareTransactionParams } from "@utils/wallet/prepare-transaction";
 import { Platform } from "react-native";
 import { faBluetooth, faUsb } from "@fortawesome/free-brands-svg-icons";
 import { WalletType } from "@components/PayoutConfig/PayoutConfig";
@@ -121,7 +121,8 @@ export const SendModal = ({
     useForm<SendForm>({
       mode: "onTouched",
       defaultValues: {
-        isMax: false
+        address: "",
+        feeRate: "1"
       }
     });
 
@@ -142,10 +143,9 @@ export const SendModal = ({
   useEffect(() => {
     (async () => {
       setWallet({
-        type:
-          walletType ||
+        type: (walletType ||
           (await AsyncStorage.getItem(keyStoreWalletType)) ||
-          "local",
+          "local") as WalletType,
         transport: (await AsyncStorage.getItem(keyStoreLedgerBluetoothId))
           ? "bluetooth"
           : undefined
@@ -156,13 +156,13 @@ export const SendModal = ({
   const askPassword = useAskPassword();
 
   const awaitWalletTransaction = useCallback(
-    async (params: Omit<PrepareTransactionParams, "walletType">) => {
+    async (params: Omit<LocalPrepareTransactionParams, "walletType">) => {
       return new Promise<CreateTransactionReturn>((resolver, reject) => {
         try {
           const walletType = wallet?.type;
           if (walletType === "local") {
             prepareTransaction({
-              walletType,
+              walletType: walletType as string,
               askWordsPassword: askPassword,
               ...params
             })
@@ -173,14 +173,19 @@ export const SendModal = ({
               () => async (walletReadyProps: HardwareReadyFunctionParams) => {
                 try {
                   const result = await prepareTransaction({
-                    walletType,
+                    walletType: walletType as string,
                     ...walletReadyProps,
                     ...params
                   });
-                  resolver(result);
+                  if (result) {
+                    resolver(result);
+                  } else {
+                    reject(new Error("Transaction preparation failed"));
+                  }
                 } catch (e) {
                   reject(e);
                 }
+                return { messageToSign: "Transaction prepared" };
               }
             );
           }
@@ -316,7 +321,7 @@ export const SendModal = ({
         isOpen={!!customWalletFunction}
         customFunction={customWalletFunction}
         onClose={onCloseBitboxModal}
-        walletType={walletType}
+        walletType={walletType as WalletType}
       />
       <Modal
         {...props}
@@ -379,7 +384,7 @@ export const SendModal = ({
                           setValue("fiatAmount", btcToFiat(query.amount), {
                             shouldDirty: true
                           });
-                          setValue("isMax", false);
+                          setValue("isMax", undefined);
                         }
                       }
                       onChange(bitcoinAddress);
@@ -406,7 +411,7 @@ export const SendModal = ({
                   required: !isMax,
                   validate: (v) =>
                     isMax ||
-                    (isValidBitcoinAmount(v) && parseFloat(v) <= currentBalance)
+                    (v && isValidBitcoinAmount(v) && parseFloat(v) <= currentBalance)
                 }}
                 render={({
                   field: { onChange, onBlur, value = "" },
@@ -446,7 +451,7 @@ export const SendModal = ({
                 control={control}
                 rules={{
                   required: !isMax,
-                  validate: (v) => isMax || isValidFiatAmount(v)
+                  validate: (v) => isMax || (v && isValidFiatAmount(v))
                 }}
                 render={({
                   field: { onChange, onBlur, value = "" },
@@ -490,7 +495,7 @@ export const SendModal = ({
               <S.AmountDescription>
                 {t("balance")} : {currentBalance} BTC (~{" "}
                 {accountCurrency
-                  ? getFormattedUnit(btcToFiat(currentBalance), accountCurrency)
+                  ? getFormattedUnit(btcToFiat(currentBalance), accountCurrency, 2)
                   : ""}
                 )
               </S.AmountDescription>
@@ -539,16 +544,20 @@ export const SendModal = ({
                   required: true
                 }}
                 render={({ field: { onChange, value } }) => {
-                  return feesOptions.map((option, index) => (
-                    <FeeOption
-                      key={index}
-                      option={option}
-                      isFirst={index === 0}
-                      isEnabled={value === option.label}
-                      isLast={index === feesOptions.length - 1}
-                      onSelect={onChange}
-                    />
-                  ));
+                  return (
+                    <>
+                      {feesOptions.map((option, index) => (
+                        <FeeOption
+                          key={index}
+                          option={option}
+                          isFirst={index === 0}
+                          isEnabled={value === option.label}
+                          isLast={index === feesOptions.length - 1}
+                          onSelect={onChange}
+                        />
+                      ))}
+                    </>
+                  );
                 }}
               />
             </ComponentStack>
@@ -579,8 +588,8 @@ const FeeOption = ({
   const isMedium = useIsScreenSizeMin("medium");
 
   const onPress = useCallback(() => {
-    onSelect(option.label);
-  }, [onSelect, option.label]);
+    onSelect(option.value);
+  }, [onSelect, option.value]);
 
   return (
     <S.FeesOptionContainer

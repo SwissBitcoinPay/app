@@ -8,6 +8,6 @@ export const measureText = (
   return RNTextSize.measure({
     text,
     fontSize,
-    fontFamily
+    fontFamily: fontFamily as string
   });
 };
