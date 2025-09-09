@@ -3,6 +3,7 @@ import { Loader, PageContainer, PayoutConfig } from "@components";
 import { useNavigate } from "@components/Router";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { View } from "react-native";
 import { useAccountConfig } from "@hooks";
 import { apiRootUrl, currencyToCountry } from "@config";
 import { isApiError } from "@utils";
@@ -171,6 +172,7 @@ export const PayoutConfigScreen = () => {
         onPress: handleSubmit(onSubmit)
       }}
     >
+      <View>
       <PayoutConfig
         control={control}
         watch={watch}
@@ -181,6 +183,7 @@ export const PayoutConfigScreen = () => {
         getFieldState={getFieldState}
         currency={currency}
       />
+      </View>
     </PageContainer>
   );
 };

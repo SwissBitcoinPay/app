@@ -9,7 +9,7 @@ const getItem = async (key: string, prompt?: Keychain.AuthenticationPrompt) => {
   try {
     const encryptedValue = await Keychain.getGenericPassword({
       service: key,
-      rules: SECURE_RULES,
+      // rules: SECURE_RULES // Commented out as rules is not a valid property,
       authenticationPrompt: prompt
     });
     if (encryptedValue) return encryptedValue.password;
@@ -36,7 +36,7 @@ const setItem = async (
   return await Keychain.setGenericPassword(key, value, {
     service: key,
     accessControl,
-    rules: SECURE_RULES
+    // rules: SECURE_RULES // Commented out as rules is not a valid property
   });
 };
 

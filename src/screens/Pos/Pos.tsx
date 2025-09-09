@@ -9,6 +9,7 @@ import {
   useRef,
   useState
 } from "react";
+import { View } from "react-native";
 import {
   getFormattedUnit,
   AsyncStorage,
@@ -134,7 +135,7 @@ export const Pos = () => {
   const { unitDecimals, unitDecimalPower } = useMemo(() => {
     const _unitDecimals =
       currencies.find((c) => c.value === unit)?.decimals ?? DEFAULT_DECIMALS;
-    const _unitDecimalPower = getUnitDecimalPower(unit);
+    const _unitDecimalPower = getUnitDecimalPower(unit || "USD");
     return { unitDecimals: _unitDecimals, unitDecimalPower: _unitDecimalPower };
   }, [unit]);
 
@@ -159,7 +160,7 @@ export const Pos = () => {
   const requestInvoice = useCallback(async () => {
     await postInvoice({
       amount: decimalFiat,
-      unit,
+      unit: unit || "USD",
       description,
       deviceName,
       deviceType
@@ -212,20 +213,20 @@ export const Pos = () => {
   const [decimalCount, setDecimalCount] = useState(0);
 
   const [parts, springs, animateAmount] = useAnimateAmount({
-    unit,
+    unit: unit || "USD",
     initialParts: initialValue,
     decimalCount
   });
 
   const [plusParts, plusSprings, animatePlusAmount, setPlusParts] =
     useAnimateAmount({
-      unit,
+      unit: unit || "USD",
       mode: AnimationMode.Plus,
       animationDelay: PLUS_ANIMATION_DELAY
     });
 
   const [totalParts, totalSprings, animateTotalAmount] = useAnimateAmount({
-    unit,
+    unit: unit || "USD",
     mode: AnimationMode.Plus
   });
 
@@ -368,11 +369,11 @@ export const Pos = () => {
     unitDecimals
   ]);
 
+  const [symbolsProps, symbolsApi] = useSymbolApi();
+
   const [movingPlusProps, movingPlusApi] = useSpring(() => ({
     from: { top: 0, scale: 1, color: colors.white, opacity: 1 }
   }));
-
-  const [symbolsProps, symbolsApi] = useSymbolApi();
 
   const onPlus = useCallback(async () => {
     const newPlusParts = parts.filter((p) => !p.remove);
@@ -388,7 +389,7 @@ export const Pos = () => {
       },
       delay: springAnimationDelay,
       config: PLUS_ANIMATION_CONFIG
-    }));
+    }) as any);
 
     if (plusFiatAmount > 0) {
       await movingPlusApi.start(() => ({
@@ -464,9 +465,9 @@ export const Pos = () => {
   }, [handleKeyPress]);
 
   const registerRef = useCallback(
-    (index: number) => (ref: TouchableOpacity) =>
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      (inputRef.current[index] = ref),
+    (index: number) => (ref: any) => {
+      inputRef.current[index] = ref;
+    },
     []
   );
 
@@ -567,6 +568,7 @@ export const Pos = () => {
       noPadding
       noBottomMargin
     >
+      <View>
       {deviceNameModal}
       <S.InfosContainer isSmallHeight={isSmallHeight}>
         {isAtm && (
@@ -620,7 +622,7 @@ export const Pos = () => {
               {totalPartsComponents}
             </S.PlusTextsContainer>
           </S.AmountsContainer>
-          <S.FiatAmountDropdownIcon icon={faAngleDown} color={colors.grey} />
+          <S.FiatAmountDropdownIcon icon={faAngleDown} color={colors.grey} size={16} />
           <S.FiatUnitPicker
             value={unit}
             items={currencies}
@@ -663,7 +665,7 @@ export const Pos = () => {
             {rowValue.map((columnValue, columnIndex) => (
               <NumberInput
                 key={columnIndex}
-                value={columnValue?.toString()}
+                value={columnValue?.toString() || ""}
                 {...(typeof columnValue === "number"
                   ? {
                       ref: registerRef(columnValue),
@@ -725,6 +727,7 @@ export const Pos = () => {
           />
         </S.PadLine>
       </S.PadContainer>
+      </View>
     </PageContainer>
   ) : (
     <Loader />

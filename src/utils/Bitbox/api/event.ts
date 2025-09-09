@@ -15,7 +15,8 @@
  * limitations under the License.
  */
 
-import { TUnsubscribe } from "./websocket";
+// Mock type for missing websocket import
+type TUnsubscribe = () => void;
 import { TEvent } from "./transport-common";
 
 export type { TEvent, TUnsubscribe };

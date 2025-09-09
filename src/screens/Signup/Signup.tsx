@@ -1,4 +1,5 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { View } from "react-native";
 import {
   faArrowLeft,
   faAt,
@@ -490,6 +491,7 @@ export const Signup = () => {
         onPress: handleSubmit(onSubmit)
       }}
     >
+      <View>
       <ComponentStack gapSize={32}>
         <FieldContainer icon={faShop} title={t("yourAccountName")}>
           <Controller
@@ -593,6 +595,7 @@ export const Signup = () => {
           />
         </S.TermsText>
       </ComponentStack>
+      </View>
     </PageContainer>
   );
 };

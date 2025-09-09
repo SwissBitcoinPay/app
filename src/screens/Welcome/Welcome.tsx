@@ -1,4 +1,4 @@
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import {
   Image,
@@ -84,6 +84,7 @@ export const Welcome = () => {
       )} */}
 
       <PageContainer noVerticalPadding>
+        <View>
         <Pressable onPress="https://swiss-bitcoin-pay.ch">
           <Image
             style={{
@@ -156,6 +157,7 @@ export const Welcome = () => {
             {versionTag}
           </S.VersionText>
         </S.PressableVersion>
+        </View>
       </PageContainer>
     </>
   );

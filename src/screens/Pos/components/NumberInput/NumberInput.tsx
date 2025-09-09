@@ -21,7 +21,7 @@ type NumberInputProps = {
   paddingBottom?: number;
 };
 
-export const NumberInput = forwardRef<TouchableOpacity, NumberInputProps>(
+export const NumberInput = forwardRef<typeof TouchableOpacity, NumberInputProps>(
   (
     {
       value,

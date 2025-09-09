@@ -25,8 +25,6 @@ export const printLabelValue = async (label: string, value: string) => {
       textScaleX: 1.0,
       textScaleY: 1.0,
       align: 0,
-      italic: false,
-      strikethrough: false,
       color: 0x000000
     });
   } catch (e) {

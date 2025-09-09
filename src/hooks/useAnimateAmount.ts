@@ -28,6 +28,7 @@ export type StringPart = {
   text: string;
   add?: boolean;
   remove?: boolean;
+  width?: number;
 };
 
 const VISIBLE_STYLE = {

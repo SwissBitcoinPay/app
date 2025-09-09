@@ -119,13 +119,13 @@ export const prepareTransaction = async ({
   let pathPrefix = "";
   switch (walletType) {
     case "local":
-      wallet = local;
+      wallet = local as any;
       break;
     case "bitbox02":
-      wallet = bitbox02;
+      wallet = bitbox02 as any;
       break;
     case "ledger":
-      wallet = ledger;
+      wallet = ledger as any;
       // pathPrefix = "m/";
       break;
     default:
@@ -161,7 +161,7 @@ export const prepareTransaction = async ({
   if (receiveAddressType) {
     outputs = {
       ...outputs,
-      [receiveAddressType]: (outputs[receiveAddressType] || 0) + 1
+      [receiveAddressType]: ((outputs as any)[receiveAddressType] || 0) + 1
     };
   }
 
@@ -170,7 +170,7 @@ export const prepareTransaction = async ({
     if (changeAddressType) {
       outputs = {
         ...outputs,
-        [changeAddressType]: (outputs[changeAddressType] || 0) + 1
+        [changeAddressType]: ((outputs as any)[changeAddressType] || 0) + 1
       };
     }
   }
@@ -184,7 +184,7 @@ export const prepareTransaction = async ({
     if (addressType) {
       inputs = {
         ...inputs,
-        [addressType]: (inputs[addressType] || 0) + 1
+        [addressType]: ((inputs as any)[addressType] || 0) + 1
       };
     }
 

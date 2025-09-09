@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { View } from "react-native";
 import { useTranslation } from "react-i18next";
 import {
   Button,
@@ -214,7 +215,9 @@ export const Wallet = () => {
           onClose={onSendModalClose}
           zPub={zPub}
           currentBalance={balance / 100000000}
-        />
+        >
+          <></>
+        </SendModal>
       )}
       <PageContainer
         header={{ left: { onPress: -1, icon: faArrowLeft }, title: t("title") }}
@@ -230,6 +233,7 @@ export const Wallet = () => {
             }
           : {})}
       >
+        <View>
         <ComponentStack>
           <S.BalanceComponentStack gapSize={6}>
             <S.BalanceTitle h4 weight={500}>
@@ -311,6 +315,7 @@ export const Wallet = () => {
               })}
           />
         </ComponentStack>
+        </View>
       </PageContainer>
     </>
   );
