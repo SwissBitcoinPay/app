@@ -1,5 +1,5 @@
 import { TTxInput, proposeTx, sendTx } from "@utils/Bitbox/api/account";
-import { CreateFunction } from "@utils/wallet/types";
+import { CreateFunction, CreateTransactionParams, CreateTransactionReturn } from "@utils/wallet/types";
 
 const txInputHashToString = (txInputHash: Uint8Array) => {
   return Array.from(txInputHash)
@@ -12,11 +12,19 @@ export const createTransaction: CreateFunction = async ({
   account,
   psbt,
   feeRate
-}) => {
+}: CreateTransactionParams): Promise<CreateTransactionReturn | undefined> => {
+  if (!account) {
+    throw new Error("Account is required for Android BitBox02");
+  }
+
   const psbtOutput =
     psbt.txOutputs[psbt.data.outputs.findIndex((v) => !v.bip32Derivation)];
 
   const outputAddress = psbtOutput.address;
+  if (!outputAddress) {
+    throw new Error("Output address not found");
+  }
+
   const outputValue = (Number(psbtOutput.value) / 100000000).toString();
 
   const selectedUTXOs = psbt.txInputs.map(
@@ -41,5 +49,5 @@ export const createTransaction: CreateFunction = async ({
     }
   }
 
-  return {};
+  return undefined;
 };

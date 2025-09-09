@@ -20,7 +20,7 @@ export const diffStrings = (
         newIndex < newAmount.length &&
         oldAmount[oldIndex] === newAmount[newIndex]
       ) {
-        array.push({ text: oldAmount[oldIndex] });
+        array.push({ id: uuidv4(), text: oldAmount[oldIndex] });
         oldIndex++;
         newIndex++;
       } else if (
@@ -28,26 +28,26 @@ export const diffStrings = (
         newAmount[newIndex] === decimalSeparator
       ) {
         if (oldIndex < oldAmount.length) {
-          array.push({ text: oldAmount[oldIndex], remove: true });
+          array.push({ id: uuidv4(), text: oldAmount[oldIndex], remove: true });
           oldIndex++;
         }
         if (newIndex < newAmount.length) {
-          array.push({ text: newAmount[newIndex], add: true });
+          array.push({ id: uuidv4(), text: newAmount[newIndex], add: true });
           newIndex++;
         }
       } else {
         if (oldIndex < oldAmount.length) {
-          array.push({ text: oldAmount[oldIndex], remove: true });
+          array.push({ id: uuidv4(), text: oldAmount[oldIndex], remove: true });
           oldIndex++;
         }
         if (newIndex < newAmount.length) {
-          array.push({ text: newAmount[newIndex], add: true });
+          array.push({ id: uuidv4(), text: newAmount[newIndex], add: true });
           newIndex++;
         }
       }
     }
   } else {
-    array.push({ text: oldStr, remove: true });
+    array.push({ id: uuidv4(), text: oldStr, remove: true });
   }
 
   return degroup(array);

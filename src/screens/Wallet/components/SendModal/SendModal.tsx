@@ -42,7 +42,7 @@ import {
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useToast } from "react-native-toast-notifications";
 import { HardwareReadyFunctionParams } from "@components/ConnectWalletModal/ConnectWalletModal";
-import { PrepareTransactionParams } from "@utils/wallet/prepare-transaction";
+import { LocalPrepareTransactionParams } from "@utils/wallet/prepare-transaction";
 import { Platform } from "react-native";
 import { faBluetooth, faUsb } from "@fortawesome/free-brands-svg-icons";
 import { WalletType } from "@components/PayoutConfig/PayoutConfig";

@@ -8,11 +8,11 @@ export enum PrinterAlignValue {
 
 type PrinterType = (typeof PrinterNative)["Printer"];
 
-const printLabelValue: PrinterType["printLabelValue"] = () => {};
-const printText: PrinterType["printText"] = () => {};
-const printQrCode: PrinterType["printQrCode"] = () => {};
-const paperOut: PrinterType["paperOut"] = () => {};
-const printBitmap: PrinterType["printBitmap"] = () => {};
+const printLabelValue: PrinterType["printLabelValue"] = async () => {};
+const printText: PrinterType["printText"] = async () => 0;
+const printQrCode: PrinterType["printQrCode"] = async () => 0;
+const paperOut: PrinterType["paperOut"] = async () => 0;
+const printBitmap: PrinterType["printBitmap"] = async () => 0;
 
 const Printer = {
   printLabelValue,

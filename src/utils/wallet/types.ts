@@ -6,7 +6,7 @@ import { Psbt } from "bitcoinjs-lib";
 
 export type HardwareWallet = PairedBitBox | Btc;
 
-type PrepareTransactionParams = {
+export type PrepareTransactionParams = {
   // ledger, bitbox-web
   hardwareWallet?: HardwareWallet;
 
@@ -16,7 +16,7 @@ type PrepareTransactionParams = {
   rootPath: string;
 };
 
-type PrepareTransactionReturn = {
+export type PrepareTransactionReturn = {
   masterFingerprint: string;
   bip84Account?: Bip84PrivateAccount;
 };
@@ -25,7 +25,7 @@ export type PrepareFunction = (
   _params: PrepareTransactionParams
 ) => Promise<PrepareTransactionReturn>;
 
-type CreateTransactionParams = {
+export type CreateTransactionParams = {
   psbt: Psbt;
   feeRate: number;
   usedUtxos: FormattedUtxo[];

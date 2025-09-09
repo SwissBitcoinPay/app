@@ -5,7 +5,7 @@ const ctx = document.createElement("canvas").getContext("2d");
 
 export type MeasureTextFont = {
   fontSize: number;
-  fontFamily: number;
+  fontFamily: string;
 };
 
 export const measureText = (
@@ -14,7 +14,11 @@ export const measureText = (
 ) => {
   return new Promise<{ width: number }>((resolve) => {
     const elem = document.createElement("div");
-    ctx.font = `${fontSize}px ${fontFamily}`;
-    resolve({ width: ctx?.measureText(text).width || 0 });
+    if (ctx) {
+      ctx.font = `${fontSize}px ${fontFamily}`;
+      resolve({ width: ctx.measureText(text).width || 0 });
+    } else {
+      resolve({ width: 0 });
+    }
   });
 };
