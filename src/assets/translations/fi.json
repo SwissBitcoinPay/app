@@ -527,8 +527,7 @@
       "shareMyLink": "Jaa aktivointilinkkini",
       "copyMyLink": "Kopioi aktivointilinkki",
       "acceptBitcoinPayments": "Hyväksy Bitcoin-maksut",
-      "invitationText": "Käytä linkkiä hyväksyä Bitcoin maksut {{merchantName}}:",
-      "dashboard": "Kojelauta"
+      "invitationText": "Käytä linkkiä hyväksyä Bitcoin maksut {{merchantName}}:"
     },
     "signatureLogin": {
       "titleWallet": "Allekirjoitus laitteistolompakolla",
