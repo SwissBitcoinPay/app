@@ -630,7 +630,8 @@
       "orConnectBy": "ou se connecter",
       "scanActivationQRcode": "Scanner le code QR d'activation",
       "email": "E-mail",
-      "signature": "Signature"
+      "signature": "Signature",
+      "supervisedBy": "Supervisé par"
     }
   },
   "secureWallet": {
