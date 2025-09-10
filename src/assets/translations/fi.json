@@ -629,7 +629,8 @@
       "orConnectBy": "tai kirjaudu käyttäen",
       "scanActivationQRcode": "QR-maksupäätekoodia",
       "email": "Sähköposti",
-      "signature": "allekirjoitusta"
+      "signature": "allekirjoitusta",
+      "supervisedBy": "Valvoo"
     }
   },
   "secureWallet": {
