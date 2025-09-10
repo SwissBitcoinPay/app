@@ -110,7 +110,7 @@ export const Welcome = () => {
         <S.FinmaContainer {...finmaSizes.container}>
           <S.FinmaTextsContainer {...finmaSizes.textsContainer}>
             <S.FinmaText {...finmaSizes.text}>
-              {t("licensedBy")} FINMA
+              {t("supervisedBy")} FINMA
             </S.FinmaText>
             <S.FinmaText {...finmaSizes.text}>{t("finma")}</S.FinmaText>
           </S.FinmaTextsContainer>
