@@ -527,8 +527,7 @@
       "shareMyLink": "Jaa aktivointilinkkini",
       "copyMyLink": "Kopioi aktivointilinkki",
       "acceptBitcoinPayments": "Hyväksy Bitcoin-maksut",
-      "invitationText": "Käytä linkkiä hyväksyä Bitcoin maksut {{merchantName}}:",
-      "dashboard": "Kojelauta"
+      "invitationText": "Käytä linkkiä hyväksyä Bitcoin maksut {{merchantName}}:"
     },
     "signatureLogin": {
       "titleWallet": "Allekirjoitus laitteistolompakolla",
@@ -625,13 +624,13 @@
       "nonCustodial": "Varat omasäilössä",
       "noKyc": "Ilman tunnistautumista",
       "in1minute": "Minuutissa",
-      "licensedBy": "toimiluvan myöntäjä",
       "finma": "Swiss Financial Market Supervisory Authority",
       "createAccount": "Luo tili ja Bitcoin-omasäilö",
       "orConnectBy": "tai kirjaudu käyttäen",
       "scanActivationQRcode": "QR-maksupäätekoodia",
       "email": "Sähköposti",
-      "signature": "allekirjoitusta"
+      "signature": "allekirjoitusta",
+      "supervisedBy": "Valvoo"
     }
   },
   "secureWallet": {

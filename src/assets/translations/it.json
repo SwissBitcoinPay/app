@@ -625,13 +625,13 @@
       "nonCustodial": "Detieni i tuoi fondi",
       "noKyc": "Nessun KYC",
       "in1minute": "In 1 minuto",
-      "licensedBy": "Approvato dalla",
       "finma": "Autorità federale di vigilanza sui mercati finanziari",
       "createAccount": "Crea un account",
       "orConnectBy": "oppure collegati con",
       "scanActivationQRcode": "Scansiona il QR code d'accesso",
       "email": "Email",
-      "signature": "Firma"
+      "signature": "Firma",
+      "supervisedBy": "Supervisionato da"
     }
   },
   "secureWallet": {

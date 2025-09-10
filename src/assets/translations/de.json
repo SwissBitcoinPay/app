@@ -625,13 +625,13 @@
       "nonCustodial": "Ohne Verwahrung",
       "noKyc": "Ohne KYC",
       "in1minute": "In 1 Minute",
-      "licensedBy": "lizenziert durch die",
       "finma": "Eidgenössische Finanzmarktaufsicht",
       "createAccount": "Konto erstellen",
       "orConnectBy": "oder verbinden durch",
       "scanActivationQRcode": "QR-Code zur Aktivierung scannen",
       "email": "E-Mail",
-      "signature": "Unterschrift"
+      "signature": "Unterschrift",
+      "supervisedBy": "Beaufsichtigt von"
     }
   },
   "secureWallet": {

@@ -519,7 +519,6 @@
       "percentInBtcAndFiat": "{{btcPercent}}% in bitcoin | {{fiatPercent}}% in {{currency}}",
       "wallet": "Wallet",
       "accessWallet": "Access wallet",
-      "dashboard": "Dashboard",
       "contactSupport": "Contact support",
       "logout": "Logout",
       "confirmLogout": "Confirm logout",
@@ -626,13 +625,13 @@
       "nonCustodial": "Non-custodial",
       "noKyc": "No KYC",
       "in1minute": "In 1 minute",
-      "supervisedBy": "Supervised by",
       "finma": "Swiss Financial Market Supervisory Authority",
       "createAccount": "Create account",
       "orConnectBy": "or connect by",
       "scanActivationQRcode": "Scan activation QR code",
       "email": "Email",
-      "signature": "Signature"
+      "signature": "Signature",
+      "supervisedBy": "Supervised by"
     }
   },
   "secureWallet": {

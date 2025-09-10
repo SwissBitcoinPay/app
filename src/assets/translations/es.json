@@ -625,13 +625,13 @@
       "nonCustodial": "Sin custodia",
       "noKyc": "No KYC",
       "in1minute": "En 1 minuto",
-      "licensedBy": "Aprobado por",
       "finma": "Autoridad suiza de supervisión de los mercados financieros",
       "createAccount": "Crear una cuenta",
       "orConnectBy": "o conectarse con",
       "scanActivationQRcode": "Código QR de activación",
       "email": "Correo electrónico",
-      "signature": "Firma"
+      "signature": "Firma",
+      "supervisedBy": "Supervisado por"
     }
   },
   "secureWallet": {
