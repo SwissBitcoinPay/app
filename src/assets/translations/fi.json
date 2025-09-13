@@ -6,7 +6,6 @@
   },
   "askPasswordModal": {
     "enterPassword": "Syötä tilisi salasana",
-    "login": "Kirjaudu sisään",
     "accountName": "Tilin nimi",
     "accountEmail": "Tilin sähköpostiosoite",
     "password": "Salasana",
@@ -47,7 +46,6 @@
     }
   },
   "connectWalletModal": {
-    "title": "Yhdistä laittelompakko",
     "iUnderstand": "Ymmärrän",
     "afterSetup": {
       "sdcard": "SD-kortti",
