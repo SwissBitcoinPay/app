@@ -25,7 +25,7 @@ import {
 import ErrorBoundary, {
   FallbackComponentProps
 } from "react-native-error-boundary";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "react-native-toast-notifications";
 import { useTranslation } from "react-i18next";
 import * as Sentry from "@sentry/react-native";
@@ -46,18 +46,29 @@ const ErrorComponent = ({ resetError }: FallbackComponentProps) => {
 };
 
 const App = () => {
+  const toast = useToast();
+  const [isToastLoaded, setIsToastLoaded] = useState(false);
+
   const { accountConfig } = useAccountConfig({
     refresh: false,
     listenAppState: true
   });
   const navigate = useNavigate();
 
+  const getIsToastLoaded = () => Object.entries(toast).length === 0;
+
+  useEffect(() => {
+    if (getIsToastLoaded()) {
+      setIsToastLoaded(true);
+    }
+  }, [getIsToastLoaded()]);
+
   useDeepLink();
   useRefCode();
   useBackHandler();
   useSplashScreen();
 
-  return (
+  return isToastLoaded ? (
     <>
       <ErrorBoundary
         FallbackComponent={ErrorComponent}
@@ -92,7 +103,7 @@ const App = () => {
       </ErrorBoundary>
       <TopLeftLogo />
     </>
-  );
+  ) : null;
 };
 
 export default App;

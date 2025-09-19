@@ -121,19 +121,53 @@ export const Signup = () => {
   const [passwordCheck3, setPasswordCheck3] = useState(false);
 
   const [isRefCodePrefilled, setIsRefCodePrefilled] = useState(false);
+  const [isRefCodeValid, setIsRefCodeValid] = useState(false);
+
+  const checkRefCode = useCallback(
+    async (_referralCode?: string) => {
+      setIsRefCodeValid(false);
+
+      if (_referralCode) {
+        try {
+          await axios.get(`${apiRootUrl}/check-referral-code`, {
+            params: { refCode: _referralCode }
+          });
+          setIsRefCodeValid(true);
+        } catch (e) {
+          if (isApiError(e)) {
+            const errorField = e.response.data.field as keyof SignupForm;
+            const errorKey = e.response.data.detail;
+
+            const errorMessage = t(`error.${errorField}.${errorKey}`);
+
+            setError(errorField, { message: errorMessage });
+
+            toast.show(errorMessage, {
+              type: "error"
+            });
+          } else {
+            toast.show("error.unknown", {
+              type: "error"
+            });
+          }
+        }
+      }
+    },
+    [toast, t, setError]
+  );
 
   useEffect(() => {
-    const fn = async () => {
+    (async () => {
       const refCode =
         (await AsyncStorage.getItem(keyStoreRefCode)) ||
         searchParams.get("refCode");
 
       if (refCode) {
         setValue("referralCode", refCode);
+        checkRefCode(refCode);
         setIsRefCodePrefilled(true);
       }
-    };
-    fn();
+    })();
   }, []);
 
   const walletType = watch("walletType");
@@ -415,12 +449,18 @@ export const Signup = () => {
           label={tRoot("common.optional")}
           value={value}
           onChangeText={(v) => onChange(v.toUpperCase())}
-          onBlur={onBlur}
+          onBlur={() => {
+            void checkRefCode(value);
+            onBlur();
+          }}
           autoCapitalize="characters"
           error={error?.message}
           disabled={isRefCodePrefilled}
-          pastable
+          pastable={(pastedValue) => {
+            void checkRefCode(pastedValue);
+          }}
           deletable={() => {
+            setIsRefCodeValid(false);
             setIsRefCodePrefilled(false);
             void AsyncStorage.removeItem(keyStoreRefCode);
           }}
@@ -562,21 +602,29 @@ export const Signup = () => {
             trigger={trigger}
             getFieldState={getFieldState}
             currency={watch("currency") as AccountConfigType["currency"]}
+            isDiscountFees={isRefCodeValid}
           />
         )}
         {!isAtm && (
-          <FieldContainer
-            icon={faUserFriends}
-            title={t("referralCode")}
-            isOptionnal
-            isDefaultOpen={isRefCodePrefilled}
-          >
-            <Controller
-              name="referralCode"
-              control={control}
-              render={ReferralCodeField}
-            />
-          </FieldContainer>
+          <>
+            <FieldContainer
+              icon={faUserFriends}
+              title={t("referralCode")}
+              isOptionnal
+              isDefaultOpen={isRefCodePrefilled}
+            >
+              <Controller
+                name="referralCode"
+                control={control}
+                render={ReferralCodeField}
+              />
+              {isRefCodeValid && (
+                <S.ValidRefCodeContainer>
+                  <S.ValidRefCode>🎁 {t("feesDiscount")}</S.ValidRefCode>
+                </S.ValidRefCodeContainer>
+              )}
+            </FieldContainer>
+          </>
         )}
         <S.TermsText>
           {t("submitDescription1")}{" "}
