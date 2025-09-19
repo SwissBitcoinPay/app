@@ -39,7 +39,8 @@ export const FiatSettings = ({
   control,
   watch,
   isEURInstantSEPA,
-  isGBPFasterPayments
+  isGBPFasterPayments,
+  isDiscountFees
 }: FiatSettingsProps) => {
   const { colors } = useTheme();
   const { t: tRoot } = useTranslation();
@@ -272,25 +273,32 @@ export const FiatSettings = ({
   return (
     <ComponentStack gapSize={32}>
       <ComponentStack gapSize={14}>
-        <FieldDescription>💶 {t("feesDetails1")}</FieldDescription>
-        <ComponentStack gapSize={2}>
-          <DescriptionLine>
-            <FieldDescription isHighlighted={isNewAccount}>
-              {t("feesFirstYear")}
-            </FieldDescription>
-            <FieldDescription isHighlighted={isNewAccount}>
-              0.21%
-            </FieldDescription>
-          </DescriptionLine>
-          <DescriptionLine>
-            <FieldDescription isHighlighted={!isNewAccount}>
-              {t("feesAfterwards")}
-            </FieldDescription>
-            <FieldDescription isHighlighted={!isNewAccount}>
-              1.5%
-            </FieldDescription>
-          </DescriptionLine>
-        </ComponentStack>
+        <DescriptionLine>
+          <FieldDescription>💶 {t("feesDetails1")}</FieldDescription>
+          {!isDiscountFees ? <FieldDescription>1.5%</FieldDescription> : null}
+        </DescriptionLine>
+        {isDiscountFees ? (
+          <>
+            <ComponentStack gapSize={2}>
+              <DescriptionLine>
+                <FieldDescription isHighlighted={isNewAccount}>
+                  {t("firstThreeMonths")}
+                </FieldDescription>
+                <FieldDescription isHighlighted={isNewAccount}>
+                  0%
+                </FieldDescription>
+              </DescriptionLine>
+              <DescriptionLine>
+                <FieldDescription isHighlighted={!isNewAccount}>
+                  {t("feesAfterwards")}
+                </FieldDescription>
+                <FieldDescription isHighlighted={!isNewAccount}>
+                  1.5%
+                </FieldDescription>
+              </DescriptionLine>
+            </ComponentStack>
+          </>
+        ) : null}
         <FieldDescription>
           🏦{" "}
           {t("receiveInBankDescription1", {

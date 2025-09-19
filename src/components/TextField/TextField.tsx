@@ -40,7 +40,7 @@ type TextInputProps = Omit<
 
 type TextFieldProps = TextInputProps & {
   copyable?: boolean;
-  pastable?: boolean;
+  pastable?: boolean | ((pastedValue?: string) => void);
   qrDisplayable?: boolean;
   qrDisplayValue?: string;
   qrScannable?: boolean;
@@ -131,12 +131,16 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
     }, [value]);
 
     const onPaste = useCallback(async () => {
+      const pastedValue = await Clipboard.getString();
+      _onChangeText(pastedValue);
+      if (typeof pastable === "function") {
+        pastable(pastedValue);
+      }
       setIsPasted(true);
-      _onChangeText(await Clipboard.getString());
       setTimeout(() => {
         setIsPasted(false);
       }, 1500);
-    }, [_onChangeText]);
+    }, [_onChangeText, pastable]);
 
     const onToggleScanQrModal = useCallback(() => {
       setIsScanModalOpen(!isScanModalOpen);
