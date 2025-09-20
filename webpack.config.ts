@@ -100,7 +100,7 @@ const providePlugin = new webpack.ProvidePlugin({
 });
 
 const ignorePlugin = new webpack.IgnorePlugin({
-  checkResource(resource) {
+  checkResource(resource: string) {
     return /.*\/wordlists\/(?!english).*\.json/.test(resource);
   }
 });
