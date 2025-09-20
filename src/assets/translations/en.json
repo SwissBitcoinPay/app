@@ -408,10 +408,7 @@
       "title": "Payout configuration",
       "iWantToReceive": "I want to receive my funds...",
       "in": "in",
-      "fees": "From {{percent}}% fees",
       "feesDetails1": "Fees",
-      "feesFirstYear": "1st year of registration",
-      "feesAfterwards": "After the 1st year",
       "cryptoSignature": "Required signature",
       "instantTransfer": "Instant transfer",
       "dailyTransfer": "Daily transfer",
@@ -468,6 +465,7 @@
       "submit": "Submit",
       "hardwareConnectSuccess": "Your {{hardwareWallet}} has been connected sucessfully. You can disconnect it.",
       "patchSettingNeedsEmailValidation": "Confirm the new settings via the email you received",
+      "firstThreeMonths": "3 first months",
       "error": {
         "depositAddress": {
           "depositAddressAlreadyUsed": "Deposit address already used"
@@ -558,7 +556,6 @@
       "yourCurrency": "Your currency",
       "currency": "Currency",
       "currencyDescription": "The default currency of your Business",
-      "referralCode": "Referral code",
       "referralCodeDescription": "If someone brought you to Swiss Bitcoin Pay, please write their referral code here",
       "submitDescription1": "By creating your account, you're accepting our",
       "submitDescription2": "and",
@@ -568,6 +565,7 @@
       "number": "number",
       "size8to64": "8-64 length",
       "errorDescription": "Error while creating your account. Please try again later or contact us at hello@swiss-bitcoin-pay.ch",
+      "feesDiscount": "First 3 months at 0% fees !",
       "error": {
         "address": {
           "alreadyExists": "This address is already used by another account",
