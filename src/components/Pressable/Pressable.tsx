@@ -9,7 +9,7 @@ import {
 import { useNavigate } from "@components/Router";
 import { Link } from "@components";
 import { routesList } from "@config";
-import { NavigateOptions } from "react-router-dom";
+import { NavigateOptions } from "react-router";
 import { platform } from "@config";
 import { Linking } from "@utils";
 
