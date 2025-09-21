@@ -406,7 +406,9 @@
       "title": "Tilitys määrittelyt",
       "iWantToReceive": "Haluan vastaanottaa varani...",
       "in": "ssa",
+      "fees": "Alkaen {{percent}}% kulut",
       "feesDetails1": "Kulut",
+      "feesAfterwards": "Ensimmäisen vuoden jälkeen",
       "cryptoSignature": "Allekirjoitus vaaditaan",
       "instantTransfer": "Välitön siirto",
       "dailyTransfer": "Päivittäinen siirto",
@@ -463,6 +465,7 @@
       "submit": "LÄHETÄ",
       "hardwareConnectSuccess": "Yhdistäminen {{hardwareWallet}}:een on nyt valmis onnistuneesti. Voit irroittaa sen.",
       "patchSettingNeedsEmailValidation": "Sähköpostiisi on lähetty viesti uusien asetusten aktivoimiseksi",
+      "firstThreeMonths": "3 ensimmäistä kuukautta",
       "error": {
         "depositAddress": {
           "depositAddressAlreadyUsed": "Tilitysosoite on jo käytetty"
@@ -552,6 +555,7 @@
       "yourCurrency": "Käytettävä valuutta",
       "currency": "valuutta",
       "currencyDescription": "Oletusvaluutta",
+      "referralCode": "Anna suosittelijatunnus",
       "referralCodeDescription": "Jos joku ohjeisti sinut tämän sovelluksen pariin, niin kirjoita hänen suosittelijatunnus tähän",
       "submitDescription1": "Luomalla tilisi, hyväksyt meidän",
       "submitDescription2": "ja",
@@ -561,6 +565,7 @@
       "number": "numero",
       "size8to64": "8-64 pituus",
       "errorDescription": "Tilin luonnissa tapahtui virhe. Yritä hetkisen päästä uudelleen tai pyydä apua sähköpostilla hello@swiss-bitcoin-pay.ch",
+      "feesDiscount": "Ensimmäiset 3 kuukautta 0 % maksua !",
       "error": {
         "address": {
           "alreadyExists": "Katuosoite on käytössä jo toisessa tilissä",
