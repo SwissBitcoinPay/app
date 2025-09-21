@@ -15,7 +15,6 @@ export { useVersionTag } from "./useVersionTag";
 export { useScanQr } from "./useScanQr";
 export { useQrLoginScan } from "./useQrLoginScan";
 export { usePrintInvoiceTicket } from "./usePrintInvoiceTicket";
-export { useAnimateAmount } from "./useAnimateAmount";
 export { useSymbolApi } from "./useSymbolApi";
 export { useAskPassword } from "./useAskPassword";
 export { useIsBiometrySupported } from "./useIsBiometrySupported";

@@ -1,7 +1,7 @@
 import axios from "axios";
 import {
   KeyboardEvent,
-  MutableRefObject,
+  RefObject,
   useCallback,
   useContext,
   useEffect,
@@ -14,7 +14,6 @@ import {
   AsyncStorage,
   decimalSeparator,
   decimalSeparatorNameMapping,
-  sleep,
   getUnitDecimalPower
 } from "@utils";
 import { Keyboard, Loader, TextField, PageContainer } from "@components";
@@ -32,9 +31,7 @@ import {
   useSafeAreaInsets,
   useAccountConfig,
   usePostInvoice,
-  useModalInput,
-  useAnimateAmount,
-  useSymbolApi
+  useModalInput
 } from "@hooks";
 import {
   DEFAULT_DECIMALS,
@@ -47,17 +44,8 @@ import { keyStoreDeviceName, keyStoreIsGuest } from "@config/settingsKeys";
 import { useToast } from "react-native-toast-notifications";
 import { useTheme } from "styled-components";
 import { v4 as uuidv4 } from "uuid";
-import {
-  TextInput,
-  Touchable,
-  TouchableOpacity,
-  useWindowDimensions
-} from "react-native";
+import { TextInput, Touchable, useWindowDimensions } from "react-native";
 import * as S from "./styled";
-import { animated, easings, useSpring } from "@react-spring/native";
-import { AddActions, AnimationMode } from "@hooks/useAnimateAmount";
-
-const { springAnimationDelay } = platform;
 
 const DECIMAL_REF_INDEX = 10;
 const PLUS_REF_INDEX = 11;
@@ -71,14 +59,6 @@ const {
   deviceIcon,
   deviceType
 } = platform;
-
-const PLUS_ANIMATION_CONFIG = {
-  duration: 350,
-  easing: easings.easeInOutQuad
-};
-
-const PLUS_ANIMATION_OPACITY_DURATION = PLUS_ANIMATION_CONFIG.duration / 6;
-const PLUS_ANIMATION_DELAY = PLUS_ANIMATION_OPACITY_DURATION * 5;
 
 export const Pos = () => {
   const { colors } = useTheme();
@@ -119,14 +99,13 @@ export const Pos = () => {
     [unit]
   );
 
-  const [movingPlusAmount, setMovingPlusAmount] = useState<string>();
   const [plusFiatAmount, setPlusFiatAmount] = useState<number>(0);
 
   const [maxFiatAmount, setMaxFiatAmount] = useState<number>();
   const [deviceName, setDeviceName] = useState<string>();
   const [description, setDescription] = useState<string>();
 
-  const totalAmount = useMemo(
+  const totalFiatAmount = useMemo(
     () => fiatAmount + plusFiatAmount,
     [fiatAmount, plusFiatAmount]
   );
@@ -139,13 +118,13 @@ export const Pos = () => {
   }, [unit]);
 
   const decimalFiat = useMemo(
-    () => totalAmount / unitDecimalPower,
-    [totalAmount, unitDecimalPower]
+    () => totalFiatAmount / unitDecimalPower,
+    [totalFiatAmount, unitDecimalPower]
   );
 
   const isActionButtonsDisabled = useMemo(
-    () => totalAmount === 0,
-    [totalAmount]
+    () => totalFiatAmount === 0,
+    [totalFiatAmount]
   );
 
   const haveDecimals = useMemo(() => unitDecimals !== 0, [unitDecimals]);
@@ -211,24 +190,6 @@ export const Pos = () => {
 
   const [decimalCount, setDecimalCount] = useState(0);
 
-  const [parts, springs, animateAmount] = useAnimateAmount({
-    unit,
-    initialParts: initialValue,
-    decimalCount
-  });
-
-  const [plusParts, plusSprings, animatePlusAmount, setPlusParts] =
-    useAnimateAmount({
-      unit,
-      mode: AnimationMode.Plus,
-      animationDelay: PLUS_ANIMATION_DELAY
-    });
-
-  const [totalParts, totalSprings, animateTotalAmount] = useAnimateAmount({
-    unit,
-    mode: AnimationMode.Plus
-  });
-
   const isBelowMaxFiatAmount = useCallback(
     (newFiatAmount: number) => {
       if (maxFiatAmount && newFiatAmount / unitDecimalPower > maxFiatAmount) {
@@ -247,28 +208,13 @@ export const Pos = () => {
     [maxFiatAmount, unitDecimalPower, toast, t, unit]
   );
 
-  const updateTotalAmount = useCallback(
-    async (newTotalFiatAmount: number) => {
-      await animateTotalAmount(newTotalFiatAmount);
-    },
-    [animateTotalAmount]
-  );
+  const updateAmount = useCallback(async (newFiatAmount: number) => {
+    setFiatAmount(newFiatAmount);
+  }, []);
 
-  const updateAmount = useCallback(
-    async (newFiatAmount: number, add: AddActions) => {
-      await animateAmount(newFiatAmount, add);
-      setFiatAmount(newFiatAmount);
-    },
-    [animateAmount]
-  );
-
-  const updatePlusAmount = useCallback(
-    async (newPlusFiatAmount: number) => {
-      await animatePlusAmount(newPlusFiatAmount);
-      setPlusFiatAmount(newPlusFiatAmount);
-    },
-    [animatePlusAmount]
-  );
+  const updatePlusAmount = useCallback(async (newPlusFiatAmount: number) => {
+    setPlusFiatAmount(newPlusFiatAmount);
+  }, []);
 
   const onPressNumber = useCallback(
     (newNumber: number) => {
@@ -282,10 +228,7 @@ export const Pos = () => {
       }
 
       if (isBelowMaxFiatAmount(newFiatAmount + plusFiatAmount)) {
-        void updateAmount(newFiatAmount, newNumber);
-        if (plusFiatAmount > 0) {
-          void updateTotalAmount(newFiatAmount + plusFiatAmount);
-        }
+        void updateAmount(newFiatAmount);
       }
     },
     [
@@ -293,52 +236,31 @@ export const Pos = () => {
       isBelowMaxFiatAmount,
       plusFiatAmount,
       fiatAmount,
-      updateAmount,
-      updateTotalAmount
+      updateAmount
     ]
   );
 
   const clearAmount = useCallback(() => {
     setDecimalCount(0);
-    void updateAmount(0, "clear");
+    void updateAmount(0);
 
     if (plusFiatAmount > 0) {
       void updatePlusAmount(0);
-      void updateTotalAmount(0);
-      void symbolsApi(false);
     }
-  }, [
-    updateAmount,
-    updatePlusAmount,
-    updateTotalAmount,
-    symbolsApi,
-    plusFiatAmount
-  ]);
+  }, [updateAmount, updatePlusAmount, plusFiatAmount]);
 
   const delAmount = useCallback(() => {
     if (decimalCount > 0) {
       setDecimalCount(0);
     }
     if (fiatAmount <= 9) {
-      void updateAmount(0, "clear");
-      if (plusFiatAmount > 0) {
-        void updateTotalAmount(plusFiatAmount);
-      }
+      void updateAmount(0);
       setDecimalCount(0);
     } else {
       const newAmount = parseInt(fiatAmount.toString().slice(0, -1));
-      void updateAmount(newAmount, "delete");
-      if (plusFiatAmount > 0) {
-        void updateTotalAmount(plusFiatAmount + newAmount);
-      }
+      void updateAmount(newAmount);
     }
-  }, [
-    fiatAmount,
-    updateAmount,
-    updateTotalAmount,
-    decimalCount,
-    plusFiatAmount
-  ]);
+  }, [fiatAmount, updateAmount, decimalCount]);
 
   useEffect(() => {
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
@@ -357,7 +279,7 @@ export const Pos = () => {
     ) {
       return;
     }
-    void updateAmount(fiatAmount * unitDecimalPower, "decimal");
+    void updateAmount(fiatAmount * unitDecimalPower);
     setDecimalCount(unitDecimals);
   }, [
     fiatAmount,
@@ -368,66 +290,22 @@ export const Pos = () => {
     unitDecimals
   ]);
 
-  const [movingPlusProps, movingPlusApi] = useSpring(() => ({
-    from: { top: 0, scale: 1, color: colors.white, opacity: 1 }
-  }));
-
-  const [symbolsProps, symbolsApi] = useSymbolApi();
-
   const onPlus = useCallback(async () => {
-    const newPlusParts = parts.filter((p) => !p.remove);
-    const currentParts = newPlusParts.map((e) => e.text).join("");
-    setMovingPlusAmount(currentParts);
-
-    await movingPlusApi.start(() => ({
-      from: { top: 0, scale: 1, color: colors.white, opacity: 1 },
-      to: {
-        top: -(S.PLUS_TEXTS_TRANSLATE_Y + (isWeb ? 0 : 1.5)),
-        scale: S.PLUS_TEXTS_SCALE,
-        color: colors.greyLight
-      },
-      delay: springAnimationDelay,
-      config: PLUS_ANIMATION_CONFIG
-    }));
-
-    if (plusFiatAmount > 0) {
-      await movingPlusApi.start(() => ({
-        from: { opacity: 1 },
-        to: { opacity: 0 },
-        delay: springAnimationDelay + PLUS_ANIMATION_DELAY,
-        config: {
-          ...PLUS_ANIMATION_CONFIG,
-          duration: PLUS_ANIMATION_OPACITY_DURATION
-        }
-      }));
-    }
-
-    void updateAmount(0, "clear");
+    void updateAmount(0);
     setDecimalCount(0);
 
     const newPlusFiatAmount = plusFiatAmount + fiatAmount;
     setPlusFiatAmount(newPlusFiatAmount);
 
-    if (plusFiatAmount === 0) {
-      void symbolsApi(true);
-      void updateTotalAmount(newPlusFiatAmount);
-      await sleep(PLUS_ANIMATION_OPACITY_DURATION * 6);
-      setPlusParts(newPlusParts);
-      setMovingPlusAmount(undefined);
-    } else {
+    if (plusFiatAmount !== 0) {
       void updatePlusAmount(newPlusFiatAmount);
     }
   }, [
-    parts,
-    movingPlusApi,
     plusFiatAmount,
     updateAmount,
     fiatAmount,
     colors.white,
     colors.greyLight,
-    symbolsApi,
-    updateTotalAmount,
-    setPlusParts,
     updatePlusAmount
   ]);
 
@@ -435,7 +313,7 @@ export const Pos = () => {
     // @ts-ignore
     (e: KeyboardEvent) => {
       const pressedKey = parseInt(e?.nativeEvent?.key);
-      const refs = inputRef as unknown as MutableRefObject<HTMLButtonElement[]>;
+      const refs = inputRef as unknown as RefObject<HTMLButtonElement[]>;
       const pressCode = e?.nativeEvent?.code;
       if (Number.isInteger(pressedKey)) {
         refs.current[pressedKey]?.click?.();
@@ -480,74 +358,14 @@ export const Pos = () => {
     clearAmount();
   }, [initialValue]);
 
-  const renderParts = useMemo(
-    () =>
-      parts.map((part, index) => {
-        const spring = springs[index];
-        const width = part.width ? part.width + 0.01 : undefined;
-        return (
-          <animated.View
-            key={part.id}
-            style={{
-              willChange: "transform, opacity, width",
-              opacity: spring.opacity,
-              width: spring.width,
-              transform: [{ scale: spring.scale }]
-            }}
-          >
-            <S.AnimatedText style={{ width }}>{part.text}</S.AnimatedText>
-          </animated.View>
-        );
-      }),
-    [parts, springs]
-  );
-
-  const renderPlusParts = useMemo(
-    () =>
-      plusParts.map((part, index) => {
-        const spring = plusSprings[index];
-        const width = part.width ? part.width + 0.01 : undefined;
-
-        return (
-          <animated.View
-            key={part.id}
-            style={{
-              willChange: "transform, opacity, width",
-              opacity: spring.opacity,
-              width: spring.width,
-              transform: [{ scale: spring.scale }]
-            }}
-          >
-            <S.PlusText style={{ width }}>{part.text}</S.PlusText>
-          </animated.View>
-        );
-      }),
-    [plusParts, plusSprings]
-  );
-
-  const totalPartsComponents = useMemo(
-    () =>
-      totalParts.map((part, index) => {
-        const spring = totalSprings[index];
-        const width = part.width ? part.width + 0.01 : undefined;
-
-        return (
-          <animated.View
-            key={part.id}
-            style={{
-              willChange: "transform, opacity, width",
-              opacity: spring.opacity,
-              width: spring.width,
-              transform: [{ scale: spring.scale }]
-            }}
-          >
-            <S.PlusText style={{ width, color: colors.bitcoin }}>
-              {part.text}
-            </S.PlusText>
-          </animated.View>
-        );
-      }),
-    [totalParts, totalSprings, colors.bitcoin]
+  const formatToUnit = useCallback(
+    (amount: number) =>
+      getFormattedUnit(
+        amount / unitDecimalPower,
+        unit,
+        amount !== 0 ? unitDecimals : undefined
+      ),
+    [unitDecimalPower, unit, unitDecimals]
   );
 
   return accountConfig ? (
@@ -594,31 +412,21 @@ export const Pos = () => {
           style={{ overflow: "visible" }}
         >
           <S.AmountsContainer>
-            {renderParts}
-            <S.PlusTextsContainer isTop>{renderPlusParts}</S.PlusTextsContainer>
-            <S.PlusTextsContainer
-              style={{
-                willChange: "opacity, transform",
-                opacity: movingPlusProps.opacity,
-                transform: [
-                  { translateY: movingPlusProps.top },
-                  { scale: movingPlusProps.scale }
-                ]
-              }}
-            >
-              <S.PlusText
-                style={{ willChange: "color", color: movingPlusProps.color }}
-              >
-                {movingPlusAmount}
-              </S.PlusText>
-            </S.PlusTextsContainer>
-            <S.SymbolText style={symbolsProps}>+</S.SymbolText>
-            <S.SymbolText isBottom style={symbolsProps}>
-              =
-            </S.SymbolText>
-            <S.PlusTextsContainer isBottom>
-              {totalPartsComponents}
-            </S.PlusTextsContainer>
+            <S.FiatAmountText>{formatToUnit(fiatAmount)}</S.FiatAmountText>
+            {plusFiatAmount ? (
+              <S.PlusTextsContainer isTop>
+                <S.PlusText>{formatToUnit(plusFiatAmount)}</S.PlusText>
+              </S.PlusTextsContainer>
+            ) : null}
+            {plusFiatAmount ? <S.SymbolText>+</S.SymbolText> : null}
+            {plusFiatAmount ? <S.SymbolText isBottom>=</S.SymbolText> : null}
+            {plusFiatAmount ? (
+              <S.PlusTextsContainer isBottom>
+                <S.PlusText style={{ color: colors.bitcoin }}>
+                  {formatToUnit(totalFiatAmount)}
+                </S.PlusText>
+              </S.PlusTextsContainer>
+            ) : null}
           </S.AmountsContainer>
           <S.FiatAmountDropdownIcon icon={faAngleDown} color={colors.grey} />
           <S.FiatUnitPicker

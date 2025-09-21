@@ -135,14 +135,13 @@ export const PlusTextsContainer = styled(AnimatedView)<{
       : ""}
 `;
 
-export const AnimatedText = styled(_AnimatedText).attrs(({ theme }) => ({
+export const FiatAmountText = styled(Text).attrs(({ theme }) => ({
   h2: true,
-  weight: 700
-}))`
-  color: ${({ theme }) => theme.colors.white};
-`;
+  weight: 700,
+  color: theme.colors.white
+}))``;
 
-export const PlusText = styled(AnimatedText)`
+export const PlusText = styled(FiatAmountText)`
   color: ${({ theme }) => theme.colors.greyLight};
 `;
 
