@@ -1,9 +1,5 @@
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 
-const {
-  withSentryConfig
-} = require("@sentry/react-native/metro");
-
 const defaultConfig = getDefaultConfig(__dirname);
 
 const { assetExts, sourceExts } = defaultConfig.resolver;
@@ -27,4 +23,4 @@ const config = {
   }
 };
 
-module.exports = withSentryConfig(mergeConfig(defaultConfig, config));
+module.exports = mergeConfig(defaultConfig, config);
