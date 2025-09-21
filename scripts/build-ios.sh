@@ -40,21 +40,17 @@ node \
   main.jsbundle.packager.map \
   main.jsbundle.hbc.map \
   -o main.jsbundle.map
-# node \
-#   ../node_modules/@sentry/react-native/scripts/copy-debugid.js \
-#   main.jsbundle.packager.map main.jsbundle.map
+node \
+  ../node_modules/@sentry/react-native/scripts/copy-debugid.js \
+  main.jsbundle.packager.map main.jsbundle.map
 
-# rm -f main.jsbundle.packager.map
+rm -f main.jsbundle.packager.map
 
-# ../node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload \
-#   --debug-id-reference \
-#   main.jsbundle main.jsbundle.map
+../node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload \
+  --debug-id-reference \
+  main.jsbundle main.jsbundle.map
 
 ###
-
-cd Pods/../../
-ln -sf "$(pwd)/node_modules/react-native/scripts/react-native-xcode.sh" ios/react-native-xcode.sh
-cd ios
 
 xcodebuild -quiet archive -workspace SwissBitcoinPay.xcworkspace -scheme SwissBitcoinPay -configuration "$CONFIGURATION" -archivePath SwissBitcoinPay.xcarchive
 xcodebuild -quiet -exportArchive -archivePath SwissBitcoinPay.xcarchive -exportOptionsPlist "$EXPORT_OPTIONS_FILE" -exportPath "export"
