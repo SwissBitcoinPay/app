@@ -110,6 +110,7 @@
     "react-native-toast-notifications": "3.4.0",
     "react-native-use-keyboard": "1.1.0",
     "react-native-video": "6.16.1",
+    "react-native-vision-camera": "4.7.2",
     "react-native-web": "0.21.1",
     "react-native-web-linear-gradient": "1.1.2",
     "react-native-webview": "13.16.0",

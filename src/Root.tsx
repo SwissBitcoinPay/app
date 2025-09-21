@@ -14,11 +14,12 @@ import {
 } from "@config";
 import App from "./App";
 import { SafeAreaProvider, initialWindowMetrics } from "@components/SafeArea";
+import * as Sentry from "@sentry/react-native";
 import "./config/i18n";
 
 const { isIos } = platform;
 
-export const Root = () => (
+const Root = () => (
   <Suspense fallback={<Loader />}>
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <KeyboardAvoidingView>
@@ -47,3 +48,5 @@ export const Root = () => (
     </SafeAreaProvider>
   </Suspense>
 );
+
+export default Sentry.wrap(Root);
