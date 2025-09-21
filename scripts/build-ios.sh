@@ -40,15 +40,15 @@ node \
   main.jsbundle.packager.map \
   main.jsbundle.hbc.map \
   -o main.jsbundle.map
-node \
-  ../node_modules/@sentry/react-native/scripts/copy-debugid.js \
-  main.jsbundle.packager.map main.jsbundle.map
+# node \
+#   ../node_modules/@sentry/react-native/scripts/copy-debugid.js \
+#   main.jsbundle.packager.map main.jsbundle.map
 
-rm -f main.jsbundle.packager.map
+# rm -f main.jsbundle.packager.map
 
-../node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload \
-  --debug-id-reference \
-  main.jsbundle main.jsbundle.map
+# ../node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload \
+#   --debug-id-reference \
+#   main.jsbundle main.jsbundle.map
 
 ###
 
