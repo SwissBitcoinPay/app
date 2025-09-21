@@ -52,6 +52,10 @@ node \
 
 ###
 
+cd Pods/../../
+ln -sf "$(pwd)/node_modules/react-native/scripts/react-native-xcode.sh" ios/react-native-xcode.sh
+cd ios
+
 xcodebuild -quiet archive -workspace SwissBitcoinPay.xcworkspace -scheme SwissBitcoinPay -configuration "$CONFIGURATION" -archivePath SwissBitcoinPay.xcarchive
 xcodebuild -quiet -exportArchive -archivePath SwissBitcoinPay.xcarchive -exportOptionsPlist "$EXPORT_OPTIONS_FILE" -exportPath "export"
 
