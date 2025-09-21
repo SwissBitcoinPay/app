@@ -19,6 +19,7 @@
   "dependencies": {
     "@bam.tech/react-native-image-resizer": "3.0.11",
     "@bitcoinerlab/secp256k1": "1.2.0",
+    "@d11/react-native-fast-image": "8.12.0",
     "@fortawesome/fontawesome-svg-core": "7.0.1",
     "@fortawesome/free-brands-svg-icons": "7.0.1",
     "@fortawesome/free-regular-svg-icons": "7.0.1",
@@ -90,7 +91,6 @@
     "react-native-dotenv": "3.4.11",
     "react-native-encrypted-storage": "4.0.3",
     "react-native-error-boundary": "2.0.0",
-    "react-native-fast-image": "8.6.3",
     "react-native-fs": "2.20.0",
     "react-native-get-random-values": "1.11.0",
     "react-native-keychain": "10.0.0",
