@@ -1,15 +1,14 @@
 import { useCallback } from "react";
 import { ScriptType } from "@utils/Bitbox/api/account";
-import { useTranslation } from "react-i18next";
 import { AppClient } from "ledger-bitcoin";
 // @ts-ignore
 import BIP84 from "bip84";
 import axios from "axios";
-import { Bip84Account, MempoolTX } from "@types";
-import { UseSignatureParams } from "./useSignature";
+import { Bip84Account } from "@types";
 import xpubConverter from "xpub-converter";
 import Btc from "@ledgerhq/hw-app-btc";
 import Transport from "@ledgerhq/hw-transport";
+import { WalletTransaction } from "@screens/Wallet/Wallet";
 
 const ROOT_PATH = `84'/0'`;
 
@@ -57,11 +56,11 @@ export const useSignature = ({
 
           const firstAddress = bip84Account.getAddress(0);
 
-          const { data: addressTxs } = await axios.get<MempoolTX[]>(
-            `https://mempool.space/api/address/${firstAddress}/txs`
-          );
+          const { data: addressTxs } = await axios.get<{
+            txs: WalletTransaction[];
+          }>(`https://stats.swiss-bitcoin-pay.ch/txs/${firstAddress}`);
 
-          if (addressTxs.length === 0) {
+          if (addressTxs.txs.length === 0) {
             return accounts;
           }
 
@@ -71,7 +70,7 @@ export const useSignature = ({
         error(e.message as string);
       }
     }
-  }, [error, wallet]);
+  }, [error, wallet, transport]);
 
   const signMessage = useCallback(
     async (format: ScriptType, message: string, account: string) => {

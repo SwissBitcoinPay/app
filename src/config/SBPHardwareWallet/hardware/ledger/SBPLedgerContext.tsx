@@ -43,6 +43,7 @@ export const SBPLedgerContextProvider = ({ children }: PropsWithChildren) => {
   const signatureFunctions = useSignature({ wallet, transport, error });
 
   const _setWallet = useCallback((value: Btc) => {
+    setTransport(value._transport);
     setWallet(value);
     setState(HardwareState.Signature);
   }, []);

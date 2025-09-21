@@ -117,44 +117,54 @@ export const SelectDevice = ({ onClose }: ConnectWalletComponentProps) => {
     [error, setWallet]
   );
 
+  const [currentLedgerBluetoothId, setCurrentLedgerBluetoothId] =
+    useState<string>();
+
+  useEffect(() => {
+    (async () => {
+      setCurrentLedgerBluetoothId(
+        await AsyncStorage.getItem(keyStoreLedgerBluetoothId)
+      );
+    })();
+  }, []);
+
   useEffect(() => {
     if (isBluetoothAvailable && hasPermissions) {
-      (async () => {
-        const currentLedgerBluetoothId = await AsyncStorage.getItem(
-          keyStoreLedgerBluetoothId
-        );
-
-        const subscription = TransportRNBLE.listen({
-          complete: () => {},
-          next: (e) => {
-            if (e.type === "add") {
-              const device: Device = {
-                id: e.descriptor.id,
-                name: e.descriptor.name
-              };
-              if (currentLedgerBluetoothId === device.id) {
-                onSelectDevice(currentLedgerBluetoothId);
-              }
-              setDevices((oldState) => {
-                if (oldState.find((d) => d.id === device.id)) {
-                  return oldState;
-                } else {
-                  return [...oldState, device];
-                }
-              });
+      const subscription = TransportRNBLE.listen({
+        complete: () => {},
+        next: (e) => {
+          if (e.type === "add" && !isConnecting) {
+            const device: Device = {
+              id: e.descriptor.id,
+              name: e.descriptor.name
+            };
+            if (currentLedgerBluetoothId === device.id) {
+              onSelectDevice(currentLedgerBluetoothId);
             }
-          },
-          error: (err) => {
-            error(err.message);
-            onClose();
+            setDevices((oldState) => {
+              if (oldState.find((d) => d.id === device.id)) {
+                return oldState;
+              } else {
+                return [...oldState, device];
+              }
+            });
           }
-        });
-        return () => {
-          subscription.unsubscribe();
-        };
-      })();
+        },
+        error: (err) => {
+          error(err.message);
+          onClose();
+        }
+      });
+      return () => {
+        subscription.unsubscribe();
+      };
     }
-  }, [isBluetoothAvailable, hasPermissions]);
+  }, [
+    isBluetoothAvailable,
+    hasPermissions,
+    currentLedgerBluetoothId,
+    isConnecting
+  ]);
 
   return (
     <ComponentStack gapSize={10} style={{ alignItems: "center" }}>
