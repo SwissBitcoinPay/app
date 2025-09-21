@@ -47,6 +47,7 @@ type TextFieldProps = TextInputProps & {
   deletable?: boolean | (() => void);
   suggestions?: string[];
   charMask?: RegExp;
+  baseStyle?: BaseFieldProps["style"];
 } & Pick<
     BaseFieldProps,
     "label" | "left" | "right" | "error" | "disabled" | "isLabelAsPlaceholder"
@@ -56,6 +57,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
   (
     {
       style,
+      baseStyle,
       label: labelProps,
       value,
       onChange,
@@ -308,6 +310,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
           isFlexHeight={multiline}
           left={left}
           right={right}
+          style={baseStyle}
           error={error}
           onFocus={onFocusHandler}
           onBlur={onBlurHandler}

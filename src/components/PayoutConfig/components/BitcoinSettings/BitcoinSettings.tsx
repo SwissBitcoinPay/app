@@ -732,6 +732,7 @@ export const BitcoinSettings = ({
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
+              autoCorrect={false}
               label={t("yourSignature")}
               error={error?.message}
               pastable
@@ -830,6 +831,7 @@ export const BitcoinSettings = ({
                   label={t("signWithAddress")}
                   value={signWithAddress}
                   disabled
+                  autoCorrect={false}
                   copyable
                   qrDisplayable
                 />
@@ -844,6 +846,7 @@ export const BitcoinSettings = ({
                 label={t("messageToSign")}
                 value={messageToSign}
                 multiline
+                autoCorrect={false}
                 disabled
                 copyable
                 qrDisplayable

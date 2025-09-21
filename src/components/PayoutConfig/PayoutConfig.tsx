@@ -155,8 +155,13 @@ export const PayoutConfig = ({
       const _isReceiveBitcoin = currentBtcPercent >= 1;
       const _isReceiveFiat = currentBtcPercent <= 99;
 
-      if (_isReceiveBitcoin) {
-        setIsBtcSettingsValid(await trigger(bitcoinSettingsKeys));
+      if (_isReceiveBitcoin && !isBtcSettingsValid) {
+        // Avoid infinite loop: only validate if depositAddress is not empty
+        // or if other Bitcoin fields have changed
+        const hasDepositAddress = !!fields.depositAddress;
+        if (hasDepositAddress) {
+          setIsBtcSettingsValid(await trigger(bitcoinSettingsKeys));
+        }
       }
 
       const touchedFiatSettingsKeys = fiatSettingsKeys.filter(

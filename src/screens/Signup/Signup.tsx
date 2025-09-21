@@ -446,6 +446,9 @@ export const Signup = () => {
     ({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
       return (
         <TextField
+          baseStyle={
+            isRefCodeValid ? { borderColor: colors.bitcoin } : undefined
+          }
           label={tRoot("common.optional")}
           value={value}
           onChangeText={(v) => onChange(v.toUpperCase())}
@@ -454,6 +457,7 @@ export const Signup = () => {
             onBlur();
           }}
           autoCapitalize="characters"
+          autoCorrect={false}
           error={error?.message}
           disabled={isRefCodePrefilled}
           pastable={(pastedValue) => {
@@ -467,7 +471,7 @@ export const Signup = () => {
         />
       );
     },
-    [isRefCodePrefilled, tRoot]
+    [isRefCodePrefilled, tRoot, isRefCodeValid]
   );
 
   const passwordChecksComponent = useMemo(
