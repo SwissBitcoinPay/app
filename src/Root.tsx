@@ -14,7 +14,6 @@ import {
 } from "@config";
 import App from "./App";
 import { SafeAreaProvider, initialWindowMetrics } from "@components/SafeArea";
-import * as Sentry from "@sentry/react-native";
 import "./config/i18n";
 
 const { isIos } = platform;
@@ -49,4 +48,4 @@ const Root = () => (
   </Suspense>
 );
 
-export default Sentry.wrap(Root);
+export default Root;

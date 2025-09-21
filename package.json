@@ -42,7 +42,7 @@
     "@react-native/assets-registry": "0.81.1",
     "@react-spring/native": "10.0.3",
     "@react-spring/web": "10.0.3",
-    "@sentry/react-native": "7.1.0",
+    "@sentry/react-native": "6.17.0",
     "@sentry/webpack-plugin": "4.3.0",
     "@trezor/connect-web": "9.6.3",
     "@yudiel/react-qr-scanner": "2.1.0",
