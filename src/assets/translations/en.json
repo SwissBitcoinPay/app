@@ -467,6 +467,7 @@
       "submit": "Submit",
       "hardwareConnectSuccess": "Your {{hardwareWallet}} has been connected sucessfully. You can disconnect it.",
       "patchSettingNeedsEmailValidation": "Confirm the new settings via the email you received",
+      "firstThreeMonths": "3 first months",
       "error": {
         "depositAddress": {
           "depositAddressAlreadyUsed": "Deposit address already used"
