@@ -6,7 +6,6 @@
   },
   "askPasswordModal": {
     "enterPassword": "Syötä tilisi salasana",
-    "login": "Kirjaudu sisään",
     "accountName": "Tilin nimi",
     "accountEmail": "Tilin sähköpostiosoite",
     "password": "Salasana",
@@ -47,7 +46,6 @@
     }
   },
   "connectWalletModal": {
-    "title": "Yhdistä laittelompakko",
     "iUnderstand": "Ymmärrän",
     "afterSetup": {
       "sdcard": "SD-kortti",
@@ -408,10 +406,8 @@
       "title": "Tilitys määrittelyt",
       "iWantToReceive": "Haluan vastaanottaa varani...",
       "in": "ssa",
-      "fees": "Alkaen {{percent}}% kulut",
+      "fees": "{{percent}}% maksut",
       "feesDetails1": "Kulut",
-      "feesFirstYear": "Ensimmäinen vuosi rekisteröitymisestä",
-      "feesAfterwards": "Ensimmäisen vuoden jälkeen",
       "cryptoSignature": "Allekirjoitus vaaditaan",
       "instantTransfer": "Välitön siirto",
       "dailyTransfer": "Päivittäinen siirto",
@@ -468,6 +464,7 @@
       "submit": "LÄHETÄ",
       "hardwareConnectSuccess": "Yhdistäminen {{hardwareWallet}}:een on nyt valmis onnistuneesti. Voit irroittaa sen.",
       "patchSettingNeedsEmailValidation": "Sähköpostiisi on lähetty viesti uusien asetusten aktivoimiseksi",
+      "firstThreeMonths": "Ensimmäiset 3 kuukautta",
       "error": {
         "depositAddress": {
           "depositAddressAlreadyUsed": "Tilitysosoite on jo käytetty"
@@ -567,6 +564,7 @@
       "number": "numero",
       "size8to64": "8-64 pituus",
       "errorDescription": "Tilin luonnissa tapahtui virhe. Yritä hetkisen päästä uudelleen tai pyydä apua sähköpostilla hello@swiss-bitcoin-pay.ch",
+      "feesDiscount": "Ensimmäiset 3 kuukautta 0 % maksua !",
       "error": {
         "address": {
           "alreadyExists": "Katuosoite on käytössä jo toisessa tilissä",

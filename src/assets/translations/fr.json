@@ -410,8 +410,6 @@
       "in": "en",
       "fees": "{{percent}}% de frais",
       "feesDetails1": "Frais",
-      "firstThreeMonths": "3 premiers mois",
-      "feesAfterwards": "Après les 3 premiers mois",
       "cryptoSignature": "Signature obligatoire",
       "instantTransfer": "Transfert instantané",
       "dailyTransfer": "Transfert quotidien",
@@ -468,6 +466,7 @@
       "submit": "Soumettre",
       "hardwareConnectSuccess": "Votre {{hardwareWallet}} a été connecté avec succès. Vous pouvez le débrancher.",
       "patchSettingNeedsEmailValidation": "Confirmez les nouveaux paramètres via le mail que vous avez reçu",
+      "firstThreeMonths": "3 premiers mois",
       "error": {
         "depositAddress": {
           "depositAddressAlreadyUsed": "Cette adresse de dépôt est déjà utilisée"
@@ -559,7 +558,6 @@
       "currency": "Devise",
       "currencyDescription": "La devise par défaut de votre entreprise",
       "referralCode": "Code promo/parrainage",
-      "feesDiscount": "3 premiers mois à 0% de frais !",
       "referralCodeDescription": "Si quelqu'un vous a amené à Swiss Bitcoin Pay, écrivez ici son code de parrainage",
       "submitDescription1": "En créant votre compte, vous acceptez nos",
       "submitDescription2": "et notre",
@@ -569,6 +567,7 @@
       "number": "nombre",
       "size8to64": "8-64 caractères",
       "errorDescription": "Erreur lors de la création de votre compte. Veuillez réessayer plus tard ou nous contacter à l'adresse suivante : hello@swiss-bitcoin-pay.ch",
+      "feesDiscount": "3 premiers mois à 0% de frais !",
       "error": {
         "address": {
           "alreadyExists": "Cette adresse est déjà utilisée par un autre compte",

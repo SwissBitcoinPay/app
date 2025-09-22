@@ -408,10 +408,8 @@
       "title": "Configuración de pago",
       "iWantToReceive": "Quiero recibir mis fondos...",
       "in": "en",
-      "fees": "Desde el {{percent}}% comisiones",
+      "fees": "{{percent}}% tasas",
       "feesDetails1": "Tarifas",
-      "feesFirstYear": "1er año de registro",
-      "feesAfterwards": "Después del 1er año",
       "cryptoSignature": "Firma obligatoria",
       "instantTransfer": "Transferencia instantánea",
       "dailyTransfer": "Transferencia diaria",
@@ -468,6 +466,7 @@
       "submit": "Enviar",
       "hardwareConnectSuccess": "Tu {{hardwareWallet}} se ha conectado correctamente. Puede desconectarla.",
       "patchSettingNeedsEmailValidation": "Confirme la nueva configuración a través del correo electrónico que ha recibido",
+      "firstThreeMonths": "3 primeros meses",
       "error": {
         "depositAddress": {
           "depositAddressAlreadyUsed": "Dirección de depósito ya utilizada"
@@ -568,6 +567,7 @@
       "number": "número",
       "size8to64": "longitud 8-64",
       "errorDescription": "Error al crear su cuenta. Vuelva a intentarlo más tarde o póngase en contacto con nosotros en hello@swiss-bitcoin-pay.ch",
+      "feesDiscount": "¡Primeros 3 meses al 0% de comisiones !",
       "error": {
         "address": {
           "alreadyExists": "Esta dirección ya está siendo utilizada por otra cuenta",
