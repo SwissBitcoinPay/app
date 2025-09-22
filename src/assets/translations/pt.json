@@ -410,7 +410,6 @@
       "in": "em",
       "fees": "{{percent}}% taxas",
       "feesDetails1": "Taxas",
-      "feesAfterwards": "Após os 3 primeiros meses",
       "cryptoSignature": "Assinatura obrigatória",
       "instantTransfer": "Transferência imediata",
       "dailyTransfer": "Transferência diária",
@@ -467,6 +466,7 @@
       "submit": "Enviar",
       "hardwareConnectSuccess": "A sua {{hardwareWallet}} foi ligada com sucesso. Pode desligá-la.",
       "patchSettingNeedsEmailValidation": "Confirmar as novas definições através da mensagem de e-mail recebida",
+      "firstThreeMonths": "Primeiros 3 meses",
       "error": {
         "depositAddress": {
           "depositAddressAlreadyUsed": "Endereço de depósito já utilizado"
