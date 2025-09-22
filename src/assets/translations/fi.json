@@ -565,7 +565,6 @@
       "number": "numero",
       "size8to64": "8-64 pituus",
       "errorDescription": "Tilin luonnissa tapahtui virhe. Yritä hetkisen päästä uudelleen tai pyydä apua sähköpostilla hello@swiss-bitcoin-pay.ch",
-      "feesDiscount": "Ensimmäiset 3 kuukautta 0 % maksua !",
       "error": {
         "address": {
           "alreadyExists": "Katuosoite on käytössä jo toisessa tilissä",
