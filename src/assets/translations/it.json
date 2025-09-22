@@ -410,7 +410,6 @@
       "in": "in",
       "fees": "{{percent}}% tasse",
       "feesDetails1": "Commissioni",
-      "feesAfterwards": "Dopo i primi 3 mesi",
       "cryptoSignature": "Firma richiesta",
       "instantTransfer": "Trasferimento istantaneo",
       "dailyTransfer": "Trasferimento giornaliero",
@@ -467,6 +466,7 @@
       "submit": "Invia",
       "hardwareConnectSuccess": "Il {{hardwareWallet}} è stato collegato con successo. È possibile scollegarlo.",
       "patchSettingNeedsEmailValidation": "Conferma le nuove impostazioni tramite l'e-mail ricevuta",
+      "firstThreeMonths": "Primi 3 mesi",
       "error": {
         "depositAddress": {
           "depositAddressAlreadyUsed": "Indirizzo di deposito già utilizzato"
