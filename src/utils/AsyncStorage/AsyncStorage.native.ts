@@ -3,13 +3,13 @@ import EncryptedStorage from "react-native-encrypted-storage";
 import * as Keychain from "react-native-keychain";
 import * as keys from "@config/settingsKeys";
 
-const SECURE_RULES = Keychain.SECURITY_RULES.AUTOMATIC_UPGRADE;
+// const SECURE_RULES = Keychain.SECURITY_RULES.AUTOMATIC_UPGRADE;
 
 const getItem = async (key: string, prompt?: Keychain.AuthenticationPrompt) => {
   try {
     const encryptedValue = await Keychain.getGenericPassword({
       service: key,
-      rules: SECURE_RULES,
+      // rules: SECURE_RULES,
       authenticationPrompt: prompt
     });
     if (encryptedValue) return encryptedValue.password;
@@ -35,8 +35,8 @@ const setItem = async (
 ) => {
   return await Keychain.setGenericPassword(key, value, {
     service: key,
-    accessControl,
-    rules: SECURE_RULES
+    accessControl
+    // rules: SECURE_RULES
   });
 };
 

@@ -74,7 +74,8 @@ export const BitcoinSettings = ({
   setValue,
   resetField,
   watch,
-  control
+  control,
+  isDiscountFees
 }: BitcoinFiatFormSettings) => {
   const isLarge = useIsScreenSizeMin("large");
   const { t } = useTranslation(undefined, {
@@ -415,7 +416,9 @@ export const BitcoinSettings = ({
             },
             { shouldDirty: true }
           );
-          setValue("walletType", signatureData.walletType, { shouldDirty: true });
+          setValue("walletType", signatureData.walletType, {
+            shouldDirty: true
+          });
           toast.show(
             t("hardwareConnectSuccess", {
               hardwareWallet: hardwareNames[signatureData.walletType]
@@ -729,6 +732,7 @@ export const BitcoinSettings = ({
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
+              autoCorrect={false}
               label={t("yourSignature")}
               error={error?.message}
               pastable
@@ -765,25 +769,32 @@ export const BitcoinSettings = ({
       />
       <ComponentStack>
         <ComponentStack gapSize={14}>
-          <FieldDescription>💶 {t("feesDetails1")}</FieldDescription>
-          <ComponentStack gapSize={2}>
-            <DescriptionLine>
-              <FieldDescription isHighlighted={isNewAccount}>
-                {t("feesFirstYear")}
-              </FieldDescription>
-              <FieldDescription isHighlighted={isNewAccount}>
-                0.21%
-              </FieldDescription>
-            </DescriptionLine>
-            <DescriptionLine>
-              <FieldDescription isHighlighted={!isNewAccount}>
-                {t("feesAfterwards")}
-              </FieldDescription>
-              <FieldDescription isHighlighted={!isNewAccount}>
-                1%
-              </FieldDescription>
-            </DescriptionLine>
-          </ComponentStack>
+          <DescriptionLine>
+            <FieldDescription>💶 {t("feesDetails1")}</FieldDescription>
+            {!isDiscountFees ? <FieldDescription>1%</FieldDescription> : null}
+          </DescriptionLine>
+          {isDiscountFees ? (
+            <>
+              <ComponentStack gapSize={2}>
+                <DescriptionLine>
+                  <FieldDescription isHighlighted={isNewAccount}>
+                    {t("firstThreeMonths")}
+                  </FieldDescription>
+                  <FieldDescription isHighlighted={isNewAccount}>
+                    0%
+                  </FieldDescription>
+                </DescriptionLine>
+                <DescriptionLine>
+                  <FieldDescription isHighlighted={!isNewAccount}>
+                    {t("feesAfterwards")}
+                  </FieldDescription>
+                  <FieldDescription isHighlighted={!isNewAccount}>
+                    1%
+                  </FieldDescription>
+                </DescriptionLine>
+              </ComponentStack>
+            </>
+          ) : null}
           <FieldDescription>
             🔐 {t("receiveInBtcDescription1", { percent: btcPercent })}
           </FieldDescription>
@@ -820,6 +831,7 @@ export const BitcoinSettings = ({
                   label={t("signWithAddress")}
                   value={signWithAddress}
                   disabled
+                  autoCorrect={false}
                   copyable
                   qrDisplayable
                 />
@@ -834,6 +846,7 @@ export const BitcoinSettings = ({
                 label={t("messageToSign")}
                 value={messageToSign}
                 multiline
+                autoCorrect={false}
                 disabled
                 copyable
                 qrDisplayable

@@ -66,6 +66,7 @@ local.properties
 *.keystore
 *.android.bundle
 android/app/src/main/res/drawable-mdpi
+.kotlin/
 
 
 # VS Code

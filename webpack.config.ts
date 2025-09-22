@@ -24,7 +24,6 @@ const babelLoaderConfiguration = {
     path.resolve(__dirname, "node_modules/@react-native-community/slider"),
     path.resolve(__dirname, "node_modules/react-native-picker-select"),
     path.resolve(__dirname, "node_modules/@dotlottie"),
-    path.resolve(__dirname, "node_modules/react-native-screenguard"),
     path.resolve(__dirname, "node_modules/@yudiel/react-qr-scanner"),
     path.resolve(__dirname, "node_modules/barcode-detector"),
     path.resolve(__dirname, "node_modules/@sentry/react-native"),
@@ -101,7 +100,7 @@ const providePlugin = new webpack.ProvidePlugin({
 });
 
 const ignorePlugin = new webpack.IgnorePlugin({
-  checkResource(resource) {
+  checkResource(resource: string) {
     return /.*\/wordlists\/(?!english).*\.json/.test(resource);
   }
 });

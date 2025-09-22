@@ -1,4 +1,4 @@
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import { useTheme } from "styled-components";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { Button, ComponentStack, Icon, Text } from "@components";
@@ -31,6 +31,10 @@ export const FieldContainer = ({
 
   const [isOpen, setIsOpen] = useState(isDefaultOpen);
 
+  useEffect(() => {
+    setIsOpen(isDefaultOpen);
+  }, [isDefaultOpen]);
+
   return (
     <S.StyledFieldContainer
       {...(isLarge
@@ -51,7 +55,6 @@ export const FieldContainer = ({
     >
       <S.FieldTitleContainer
         isOpen={isOpen}
-        direction="vertical"
         {...(isLarge
           ? {
               direction: "horizontal",
@@ -108,7 +111,11 @@ export const FieldContainer = ({
           {isOptionnal && (!isLarge || !isOpen) && (
             <Button
               size="small"
-              title={t(isOpen ? "common.close" : "common.enter")}
+              title={
+                isLarge
+                  ? t(isOpen ? "common.close" : "common.enter")
+                  : undefined
+              }
               icon={!isOpen ? faAdd : faMinus}
               onPress={() => {
                 setIsOpen(!isOpen);

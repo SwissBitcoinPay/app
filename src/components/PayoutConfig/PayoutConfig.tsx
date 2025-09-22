@@ -104,6 +104,7 @@ export type BitcoinFiatFormSettings = {
   rates?: RatesType;
   currency: AccountConfigType["currency"];
   setIsValid: (value: boolean) => void;
+  isDiscountFees: boolean;
 };
 
 export type PayoutConfigProps = Omit<
@@ -122,7 +123,8 @@ export const PayoutConfig = ({
   setValue,
   setError,
   trigger,
-  currency
+  currency,
+  isDiscountFees
 }: PayoutConfigProps) => {
   const { t } = useTranslation(undefined, {
     keyPrefix: "screens.payoutConfig"
@@ -153,8 +155,13 @@ export const PayoutConfig = ({
       const _isReceiveBitcoin = currentBtcPercent >= 1;
       const _isReceiveFiat = currentBtcPercent <= 99;
 
-      if (_isReceiveBitcoin) {
-        setIsBtcSettingsValid(await trigger(bitcoinSettingsKeys));
+      if (_isReceiveBitcoin && !isBtcSettingsValid) {
+        // Avoid infinite loop: only validate if depositAddress is not empty
+        // or if other Bitcoin fields have changed
+        const hasDepositAddress = !!fields.depositAddress;
+        if (hasDepositAddress) {
+          setIsBtcSettingsValid(await trigger(bitcoinSettingsKeys));
+        }
       }
 
       const touchedFiatSettingsKeys = fiatSettingsKeys.filter(
@@ -174,7 +181,7 @@ export const PayoutConfig = ({
 
   const isEURInstantSEPA = useMemo(
     () =>
-      false &&
+      true &&
       currency === "EUR" &&
       (!ownerCountry || isSEPACountry(ownerCountry || "")),
     [currency, ownerCountry]
@@ -284,7 +291,7 @@ export const PayoutConfig = ({
                 </S.SubPercentageView>
               </S.ValueContent>
               <S.SliderDetailsText>
-                💸 {t("fees", { percent: 0.21 })}
+                💸 {t("fees", { percent: 1 })}
               </S.SliderDetailsText>
               <S.SliderDetailsText>
                 🔑 {t("cryptoSignature")}
@@ -305,7 +312,7 @@ export const PayoutConfig = ({
                 </S.SubPercentageView>
               </S.ValueContent>
               <S.SliderDetailsText>
-                {t("fees", { percent: 0.21 })} 💸
+                {t("fees", { percent: 1.5 })} 💸
               </S.SliderDetailsText>
               <S.SliderDetailsText>
                 {isInstant
@@ -322,7 +329,11 @@ export const PayoutConfig = ({
             title={t("bitcoinSettings")}
             isValid={isBtcSettingsValid}
           />
-          <BitcoinSettings {...formProps} currency={currency} />
+          <BitcoinSettings
+            {...formProps}
+            currency={currency}
+            isDiscountFees={isDiscountFees}
+          />
         </ComponentStack>
       )}
       {isReceiveFiat && (
@@ -336,6 +347,7 @@ export const PayoutConfig = ({
             currency={bankCurrency}
             isEURInstantSEPA={isEURInstantSEPA}
             isGBPFasterPayments={isGBPFasterPayments}
+            isDiscountFees={isDiscountFees}
           />
         </ComponentStack>
       )}

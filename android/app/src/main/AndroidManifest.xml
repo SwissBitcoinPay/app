@@ -38,6 +38,7 @@
       android:largeHeap="true"
       android:hardwareAccelerated="true"
       android:theme="@style/AppTheme"
+      android:usesCleartextTraffic="${usesCleartextTraffic}"
       android:supportsRtl="true">
       <profileable android:shell="true" />
       <activity

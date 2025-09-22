@@ -1,4 +1,5 @@
 import { Psbt } from "bitcoinjs-lib";
+import "text-encoding-polyfill";
 import ECPairFactory from "ecpair";
 import ecc from "@bitcoinerlab/secp256k1";
 import { FormattedUtxo, WalletTransaction } from "@screens/Wallet/Wallet";
