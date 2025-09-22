@@ -408,7 +408,6 @@
       "in": "ssa",
       "fees": "{{percent}}% maksut",
       "feesDetails1": "Kulut",
-      "feesAfterwards": "3 ensimmäisen kuukauden jälkeen",
       "cryptoSignature": "Allekirjoitus vaaditaan",
       "instantTransfer": "Välitön siirto",
       "dailyTransfer": "Päivittäinen siirto",
@@ -465,6 +464,7 @@
       "submit": "LÄHETÄ",
       "hardwareConnectSuccess": "Yhdistäminen {{hardwareWallet}}:een on nyt valmis onnistuneesti. Voit irroittaa sen.",
       "patchSettingNeedsEmailValidation": "Sähköpostiisi on lähetty viesti uusien asetusten aktivoimiseksi",
+      "firstThreeMonths": "Ensimmäiset 3 kuukautta",
       "error": {
         "depositAddress": {
           "depositAddressAlreadyUsed": "Tilitysosoite on jo käytetty"
