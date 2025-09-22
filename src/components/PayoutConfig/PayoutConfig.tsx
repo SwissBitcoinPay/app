@@ -181,7 +181,7 @@ export const PayoutConfig = ({
 
   const isEURInstantSEPA = useMemo(
     () =>
-      true &&
+      false &&
       currency === "EUR" &&
       (!ownerCountry || isSEPACountry(ownerCountry || "")),
     [currency, ownerCountry]
