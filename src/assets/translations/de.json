@@ -410,7 +410,6 @@
       "in": "in",
       "fees": "{{percent}}% Gebühren",
       "feesDetails1": "Gebühren",
-      "feesAfterwards": "Nach den ersten 3 Monaten",
       "cryptoSignature": "Erforderliche Signatur",
       "instantTransfer": "Sofortige Übertragung",
       "dailyTransfer": "Täglicher Transfer",
@@ -467,6 +466,7 @@
       "submit": "Absenden",
       "hardwareConnectSuccess": "Ihre {{hardwareWallet}} wurde erfolgreich angeschlossen. Sie können sie ausstecken.",
       "patchSettingNeedsEmailValidation": "Bestätigen Sie die neuen Einstellungen mit der E-Mail, die Sie erhalten haben.",
+      "firstThreeMonths": "Erste 3 Monate",
       "error": {
         "depositAddress": {
           "depositAddressAlreadyUsed": "Hinterlegungsadresse bereits verwendet"
