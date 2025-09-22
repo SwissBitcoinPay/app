@@ -13,6 +13,7 @@ import {
   EmailLogin,
   SignatureLogin,
   Invoice,
+  Download,
   Aml
 } from "@screens";
 import {
@@ -96,6 +97,7 @@ const App = () => {
           <Route path="signature-login" element={<SignatureLogin />} />
           <Route path="wallet" element={<Wallet />} />
           <Route path="history" element={<History />} />
+          <Route path="download" element={<Download />} />
           <Route path="connect/:id" element={<Connect />} />
           <Route path="invoice/:id?" element={<Invoice />} />
           <Route path="aml/:id?" element={<Aml />} />
