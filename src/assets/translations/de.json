@@ -467,7 +467,6 @@
       "submit": "Absenden",
       "hardwareConnectSuccess": "Ihre {{hardwareWallet}} wurde erfolgreich angeschlossen. Sie können sie ausstecken.",
       "patchSettingNeedsEmailValidation": "Bestätigen Sie die neuen Einstellungen mit der E-Mail, die Sie erhalten haben.",
-      "firstThreeMonths": "3 erste Monate",
       "error": {
         "depositAddress": {
           "depositAddressAlreadyUsed": "Hinterlegungsadresse bereits verwendet"
