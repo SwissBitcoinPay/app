@@ -467,7 +467,6 @@
       "submit": "Invia",
       "hardwareConnectSuccess": "Il {{hardwareWallet}} è stato collegato con successo. È possibile scollegarlo.",
       "patchSettingNeedsEmailValidation": "Conferma le nuove impostazioni tramite l'e-mail ricevuta",
-      "firstThreeMonths": "3 primi mesi",
       "error": {
         "depositAddress": {
           "depositAddressAlreadyUsed": "Indirizzo di deposito già utilizzato"
