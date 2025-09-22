@@ -568,7 +568,6 @@
       "number": "number",
       "size8to64": "8-64 length",
       "errorDescription": "Error while creating your account. Please try again later or contact us at hello@swiss-bitcoin-pay.ch",
-      "feesDiscount": "First 3 months at 0% fees !",
       "error": {
         "address": {
           "alreadyExists": "This address is already used by another account",
