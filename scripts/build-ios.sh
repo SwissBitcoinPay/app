@@ -16,6 +16,8 @@ then
     EXPORT_OPTIONS_FILE="exportOptions.dev.plist"
 fi
 
+npm install @sentry/cli-darwin@2.54.0
+
 DEV=$DEV npm run bundle:ios
 
 cd ios
