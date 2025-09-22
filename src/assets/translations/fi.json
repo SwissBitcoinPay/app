@@ -465,6 +465,7 @@
       "submit": "LÄHETÄ",
       "hardwareConnectSuccess": "Yhdistäminen {{hardwareWallet}}:een on nyt valmis onnistuneesti. Voit irroittaa sen.",
       "patchSettingNeedsEmailValidation": "Sähköpostiisi on lähetty viesti uusien asetusten aktivoimiseksi",
+      "firstThreeMonths": "3 ensimmäistä kuukautta",
       "error": {
         "depositAddress": {
           "depositAddressAlreadyUsed": "Tilitysosoite on jo käytetty"
