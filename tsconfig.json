@@ -17,9 +17,7 @@
       "@types": ["types"],
       "@types/*": ["types/*"]
     },
-    "types": [
-      "react-native-web"
-    ],
+    "types": ["react-native-web", "node"],
     "target": "ES2022",
     "module": "esnext",
     "lib": ["es2022", "dom"],
@@ -40,9 +38,11 @@
 
   "exclude": [
     "node_modules",
+    "**/node_modules",
+    "**/Pods",
     "babel.config.js",
     "metro.config.js",
     "jest.config.js"
   ],
-  "include": ["src/**/*", "babel-plugins.js"]
+  "include": ["**/*.ts", "**/*.tsx", "src/**/*", "babel-plugins.js"]
 }

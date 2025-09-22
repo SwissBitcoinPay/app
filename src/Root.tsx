@@ -18,7 +18,7 @@ import "./config/i18n";
 
 const { isIos } = platform;
 
-export const Root = () => (
+const Root = () => (
   <Suspense fallback={<Loader />}>
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <KeyboardAvoidingView>
@@ -47,3 +47,5 @@ export const Root = () => (
     </SafeAreaProvider>
   </Suspense>
 );
+
+export default Root;

@@ -298,7 +298,7 @@ export const Settings = () => {
               </Text>
               <Button
                 size="small"
-                style={{ alignSelf: "center" }}
+                style={{ alignSelf: "center", flexGrow: 0, flex: 0 }}
                 {...(isShareAvailable
                   ? {
                       icon: faShareNodes,

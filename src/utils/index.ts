@@ -5,10 +5,6 @@ export {
   decimalSeparatorNameMapping,
   getUnitDecimalPower
 } from "./getFormattedUnit";
-export {
-  formattedUnitChanges,
-  countConsecutiveStringParts
-} from "./formattedUnitChanges";
 export { measureText } from "./measureText";
 export { Clipboard } from "./Clipboard";
 export { scriptTypeToPath } from "./scriptTypeToPath";

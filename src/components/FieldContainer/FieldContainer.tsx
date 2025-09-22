@@ -111,7 +111,11 @@ export const FieldContainer = ({
           {isOptionnal && (!isLarge || !isOpen) && (
             <Button
               size="small"
-              title={t(isOpen ? "common.close" : "common.enter")}
+              title={
+                isLarge
+                  ? t(isOpen ? "common.close" : "common.enter")
+                  : undefined
+              }
               icon={!isOpen ? faAdd : faMinus}
               onPress={() => {
                 setIsOpen(!isOpen);

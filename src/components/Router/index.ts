@@ -6,4 +6,4 @@ export {
   useParams,
   useNavigate,
   useSearchParams
-} from "react-router-dom";
+} from "react-router";

@@ -1,0 +1,23 @@
+diff --git a/node_modules/@sentry/react-native/dist/js/tools/utils.js b/node_modules/@sentry/react-native/dist/js/tools/utils.js
+index 10bbde3..a5fc332 100644
+--- a/node_modules/@sentry/react-native/dist/js/tools/utils.js
++++ b/node_modules/@sentry/react-native/dist/js/tools/utils.js
+@@ -2,13 +2,11 @@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.getExpoConfig = exports.createVirtualJSModule = exports.prependModule = exports.createSet = exports.determineDebugIdFromBundleSource = exports.stringToUUID = exports.createDebugIdSnippet = void 0;
+ const crypto = require("crypto");
+-let countLines;
+-try {
+-    countLines = require('metro/private/lib/countLines');
+-}
+-catch (e) {
+-    countLines = require('metro/src/lib/countLines');
+-}
++
++const newline = /\r\n?|\n|\u2028|\u2029/g;
++
++const countLines = (string) => (string.match(newline) || []).length + 1;
++
+ /**
+  * Returns minified Debug ID code snippet.
+  */
