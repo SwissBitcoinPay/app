@@ -410,7 +410,6 @@
       "in": "en",
       "fees": "{{percent}}% de frais",
       "feesDetails1": "Frais",
-      "feesAfterwards": "Après les 3 premiers mois",
       "cryptoSignature": "Signature obligatoire",
       "instantTransfer": "Transfert instantané",
       "dailyTransfer": "Transfert quotidien",
@@ -467,6 +466,7 @@
       "submit": "Soumettre",
       "hardwareConnectSuccess": "Votre {{hardwareWallet}} a été connecté avec succès. Vous pouvez le débrancher.",
       "patchSettingNeedsEmailValidation": "Confirmez les nouveaux paramètres via le mail que vous avez reçu",
+      "firstThreeMonths": "3 premiers mois",
       "error": {
         "depositAddress": {
           "depositAddressAlreadyUsed": "Cette adresse de dépôt est déjà utilisée"
