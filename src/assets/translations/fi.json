@@ -408,6 +408,7 @@
       "in": "ssa",
       "fees": "{{percent}}% maksut",
       "feesDetails1": "Kulut",
+      "feesAfterwards": "Ensimmäisten 3 kuukauden jälkeen",
       "cryptoSignature": "Allekirjoitus vaaditaan",
       "instantTransfer": "Välitön siirto",
       "dailyTransfer": "Päivittäinen siirto",
