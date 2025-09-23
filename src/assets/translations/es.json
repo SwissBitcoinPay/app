@@ -410,6 +410,7 @@
       "in": "en",
       "fees": "{{percent}}% tasas",
       "feesDetails1": "Tarifas",
+      "feesAfterwards": "Después de los 3 primeros meses",
       "cryptoSignature": "Firma obligatoria",
       "instantTransfer": "Transferencia instantánea",
       "dailyTransfer": "Transferencia diaria",
