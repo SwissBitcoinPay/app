@@ -410,6 +410,7 @@
       "in": "in",
       "fees": "{{percent}}% tasse",
       "feesDetails1": "Commissioni",
+      "feesAfterwards": "Dopo i primi 3 mesi",
       "cryptoSignature": "Firma richiesta",
       "instantTransfer": "Trasferimento istantaneo",
       "dailyTransfer": "Trasferimento giornaliero",
