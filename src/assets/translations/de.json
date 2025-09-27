@@ -81,7 +81,8 @@
       "instruction": "Geben Sie das Passwort der BitBox02 ein, um sie zu entsperren"
     },
     "empty": {
-      "title": "Hardware-Wallet auswählen"
+      "title": "Hardware-Wallet auswählen",
+      "buyHardware": "Kaufen Sie einen {{hardwareName}}"
     },
     "pairing": {
       "title": "Pairing-Code überprüfen",
