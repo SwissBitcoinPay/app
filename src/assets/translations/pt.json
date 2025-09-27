@@ -81,7 +81,8 @@
       "instruction": "Introduzir a palavra-passe da BitBox02 para a desbloquear"
     },
     "empty": {
-      "title": "Selecione a sua carteira de hardware"
+      "title": "Selecione a sua carteira de hardware",
+      "buyHardware": "Comprar um {{hardwareName}}"
     },
     "pairing": {
       "title": "Verificar o código de emparelhamento",
