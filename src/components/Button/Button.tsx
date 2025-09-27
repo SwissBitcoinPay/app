@@ -11,6 +11,7 @@ type RootButtonProps = StyledComponentComponentProps<typeof S.Button>;
 
 type ButtonProps = {
   title?: string;
+  subTitle?: string;
   icon?: IconProp;
   type?: "primary" | "success" | "error" | "bitcoin";
   isLoading?: boolean;
@@ -29,6 +30,7 @@ type ButtonProps = {
 
 export const Button = ({
   title,
+  subTitle,
   type,
   mode = "normal",
   size = "medium",
@@ -131,17 +133,30 @@ export const Button = ({
             color={secondaryColor}
           />
         )}
-        {title && (
-          <S.ButtonText
-            numberOfLines={1}
-            weight={700}
-            buttonSize={size}
-            color={!isLoading ? secondaryColor : "transparent"}
-            hasIcon={!!icon}
-          >
-            {title}
-          </S.ButtonText>
-        )}
+        <S.ButtonTitleContainer buttonSize={size} hasIcon={!!icon}>
+          {title && (
+            <S.ButtonTitle
+              numberOfLines={1}
+              weight={700}
+              color={!isLoading ? secondaryColor : "transparent"}
+              buttonSize={size}
+              hasIcon={!!icon}
+            >
+              {title}
+            </S.ButtonTitle>
+          )}
+          {subTitle && (
+            <S.ButtonSubTitle
+              numberOfLines={1}
+              h6
+              weight={600}
+              color={!isLoading ? secondaryColor : "transparent"}
+            >
+              {subTitle}
+            </S.ButtonSubTitle>
+          )}
+        </S.ButtonTitleContainer>
+
         {isLoading && <S.ButtonLoader size={loaderSize} />}
       </S.ButtonContent>
     </S.Button>

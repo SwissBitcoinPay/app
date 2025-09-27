@@ -121,14 +121,10 @@ type ButtonTextProps = {
 
 const TEXT_MARGIN = 6;
 
-export const ButtonText = styled(Text).attrs(
-  ({ buttonSize }: ButtonTextProps) => {
-    return {
-      h4: buttonSize === "medium" || buttonSize === "large",
-      h5: buttonSize === "small"
-    };
-  }
-)<ButtonTextProps>`
+export const ButtonTitleContainer = styled(View)<ButtonTextProps>`
+  flex: 1;
+  align-items: center;
+
   ${({ hasIcon, buttonSize }) => {
     const iconPlusMarginSize = hasIcon
       ? getIconSize(buttonSize) + TEXT_MARGIN
@@ -142,9 +138,21 @@ export const ButtonText = styled(Text).attrs(
       }
     `;
   }}
+`;
 
+export const ButtonTitle = styled(Text).attrs(
+  ({ buttonSize }: ButtonTextProps) => {
+    return {
+      h4: buttonSize === "medium" || buttonSize === "large",
+      h5: buttonSize === "small"
+    };
+  }
+)<ButtonTextProps>`
   position: relative;
-  text-align: center;
+`;
+
+export const ButtonSubTitle = styled(Text)`
+  margin-top: -5px;
 `;
 
 export const ButtonLoader = styled(Loader)`

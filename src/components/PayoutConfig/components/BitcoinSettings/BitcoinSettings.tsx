@@ -59,7 +59,7 @@ import { useToast } from "react-native-toast-notifications";
 import { useIsScreenSizeMin } from "@hooks";
 import { WalletConfig } from "@components/ConnectWalletModal/ConnectWalletModal";
 
-const { isIos } = platform;
+const { isNative } = platform;
 
 export type SignatureData = {
   zPub: string;
@@ -598,17 +598,18 @@ export const BitcoinSettings = ({
             direction={isLarge ? "horizontal" : "vertical"}
           >
             <Button
-              title={t("createWallet")}
+              title={tRoot("connectWalletModal.title")}
+              subTitle={t("recommended")}
               type="bitcoin"
+              icon={isNative ? faBluetooth : faUsb}
+              onPress={onPressConnectWallet}
+            />
+            <Button
+              title={t("createWallet")}
               icon={faAdd}
               onPress={() => {
                 setIsCreateWalletModalOpen(true);
               }}
-            />
-            <Button
-              title={tRoot("connectWalletModal.title")}
-              icon={isIos ? faBluetooth : faUsb}
-              onPress={onPressConnectWallet}
             />
           </ComponentStack>
           {!walletType && walletTypeInfoComponent}
