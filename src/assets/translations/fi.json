@@ -79,7 +79,8 @@
       "instruction": "Avaa BitBox02 sen salasanalla"
     },
     "empty": {
-      "title": "Valitse laittelompakko"
+      "title": "Valitse laittelompakko",
+      "buyHardware": "Osta {{hardwareName}}"
     },
     "pairing": {
       "title": "Varmista yhdistämiskoodi",
