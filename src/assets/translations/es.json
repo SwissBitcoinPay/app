@@ -81,7 +81,8 @@
       "instruction": "Introduce la contraseña de BitBox02 para desbloquearlo"
     },
     "empty": {
-      "title": "Seleccione su monedero de hardware"
+      "title": "Seleccione su monedero de hardware",
+      "buyHardware": "Compra un {{hardwareName}}"
     },
     "pairing": {
       "title": "Verificar el código de emparejamiento",
@@ -410,6 +411,7 @@
       "in": "en",
       "fees": "{{percent}}% tasas",
       "feesDetails1": "Tarifas",
+      "feesAfterwards": "Después de los 3 primeros meses",
       "cryptoSignature": "Firma obligatoria",
       "instantTransfer": "Transferencia instantánea",
       "dailyTransfer": "Transferencia diaria",

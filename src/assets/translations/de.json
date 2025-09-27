@@ -81,7 +81,8 @@
       "instruction": "Geben Sie das Passwort der BitBox02 ein, um sie zu entsperren"
     },
     "empty": {
-      "title": "Hardware-Wallet auswählen"
+      "title": "Hardware-Wallet auswählen",
+      "buyHardware": "Kaufen Sie einen {{hardwareName}}"
     },
     "pairing": {
       "title": "Pairing-Code überprüfen",
@@ -410,6 +411,7 @@
       "in": "in",
       "fees": "{{percent}}% Gebühren",
       "feesDetails1": "Gebühren",
+      "feesAfterwards": "Nach den ersten 3 Monaten",
       "cryptoSignature": "Erforderliche Signatur",
       "instantTransfer": "Sofortige Übertragung",
       "dailyTransfer": "Täglicher Transfer",

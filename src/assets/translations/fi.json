@@ -79,7 +79,8 @@
       "instruction": "Avaa BitBox02 sen salasanalla"
     },
     "empty": {
-      "title": "Valitse laittelompakko"
+      "title": "Valitse laittelompakko",
+      "buyHardware": "Osta {{hardwareName}}"
     },
     "pairing": {
       "title": "Varmista yhdistämiskoodi",
@@ -408,6 +409,7 @@
       "in": "ssa",
       "fees": "{{percent}}% maksut",
       "feesDetails1": "Kulut",
+      "feesAfterwards": "Ensimmäisten 3 kuukauden jälkeen",
       "cryptoSignature": "Allekirjoitus vaaditaan",
       "instantTransfer": "Välitön siirto",
       "dailyTransfer": "Päivittäinen siirto",

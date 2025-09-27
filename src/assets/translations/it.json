@@ -81,7 +81,8 @@
       "instruction": "Inserire la password di BitBox02 per sbloccarlo"
     },
     "empty": {
-      "title": "Selezionare il portafoglio hardware"
+      "title": "Selezionare il portafoglio hardware",
+      "buyHardware": "Comprare un {{hardwareName}}"
     },
     "pairing": {
       "title": "Verifica del codice di accoppiamento",
@@ -410,6 +411,7 @@
       "in": "in",
       "fees": "{{percent}}% tasse",
       "feesDetails1": "Commissioni",
+      "feesAfterwards": "Dopo i primi 3 mesi",
       "cryptoSignature": "Firma richiesta",
       "instantTransfer": "Trasferimento istantaneo",
       "dailyTransfer": "Trasferimento giornaliero",

@@ -411,7 +411,6 @@
       "in": "in",
       "fees": "{{percent}}% fees",
       "feesDetails1": "Fees",
-      "firstThreeMonths": "First 3 months",
       "feesAfterwards": "After the first 3 months",
       "cryptoSignature": "Required signature",
       "instantTransfer": "Instant transfer",
@@ -469,6 +468,7 @@
       "submit": "Submit",
       "hardwareConnectSuccess": "Your {{hardwareWallet}} has been connected sucessfully. You can disconnect it.",
       "patchSettingNeedsEmailValidation": "Confirm the new settings via the email you received",
+      "firstThreeMonths": "First 3 months",
       "error": {
         "depositAddress": {
           "depositAddressAlreadyUsed": "Deposit address already used"

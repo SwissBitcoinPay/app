@@ -81,7 +81,8 @@
       "instruction": "Introduzir a palavra-passe da BitBox02 para a desbloquear"
     },
     "empty": {
-      "title": "Selecione a sua carteira de hardware"
+      "title": "Selecione a sua carteira de hardware",
+      "buyHardware": "Comprar um {{hardwareName}}"
     },
     "pairing": {
       "title": "Verificar o código de emparelhamento",
@@ -410,6 +411,7 @@
       "in": "em",
       "fees": "{{percent}}% taxas",
       "feesDetails1": "Taxas",
+      "feesAfterwards": "Após os primeiros 3 meses",
       "cryptoSignature": "Assinatura obrigatória",
       "instantTransfer": "Transferência imediata",
       "dailyTransfer": "Transferência diária",
