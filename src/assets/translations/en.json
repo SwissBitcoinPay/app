@@ -81,7 +81,8 @@
       "instruction": "Enter BitBox02 password to unlock it"
     },
     "empty": {
-      "title": "Select your hardware wallet"
+      "title": "Select your hardware wallet",
+      "buyHardware": "Buy a {{hardwareName}}"
     },
     "pairing": {
       "title": "Verify pairing code",
