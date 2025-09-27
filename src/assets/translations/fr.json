@@ -81,7 +81,8 @@
       "instruction": "Entrez le mot de passe de BitBox02 pour le déverrouiller"
     },
     "empty": {
-      "title": "Sélectionnez votre portefeuille matériel"
+      "title": "Sélectionnez votre portefeuille matériel",
+      "buyHardware": "Acheter un {{hardwareName}}"
     },
     "pairing": {
       "title": "Vérifier le code de pairage",
