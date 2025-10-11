@@ -596,7 +596,6 @@
             "receiveBitcoins": "Recevoir des bitcoins",
             "sent": "Envoyé",
             "received": "Reçu",
-            "receiveInfo": "Les paiements reçus directement à cette adresse ne sont pas suivis par Swiss Bitcoin Pay et ne sont donc pas soumis à des frais et ne sont pas inclus dans les exports.",
             "btcAmount": "Montant",
             "fees": "Frais",
             "errorFetchingWallet": "Erreur lors de la récupération de votre portefeuille",
