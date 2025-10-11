@@ -4,6 +4,9 @@ workflows:
     triggering:
       events:
         - push
+      branch_patterns:
+        - pattern: "translations"
+          include: false
       cancel_previous_builds: true
     when:
       changeset:
@@ -63,6 +66,9 @@ workflows:
     triggering:
       events:
         - push
+      branch_patterns:
+        - pattern: "translations"
+          include: false
       cancel_previous_builds: true
     when:
       changeset:
