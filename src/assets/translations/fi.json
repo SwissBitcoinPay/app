@@ -66,7 +66,7 @@
         "bootloader": {
             "title": "Laiteohjelmistoa asennetaan",
             "instruction1": "Asennamme parhaillaan virallista laiteohjelmistoa sinun BitBox02:iin",
-            "instruction2": "Älä irroita BitBox02:ia laitteestasi "
+            "instruction2": "Älä irroita BitBox02:ia laitteestasi"
         },
         "connect": {
             "title": "Yhdistä {{hardwareWallet}}",
