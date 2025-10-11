@@ -186,26 +186,6 @@ export const Wallet = () => {
 
   return (
     <>
-      {nextAddress && (
-        <Modal
-          isOpen={isReceiveModalOpen}
-          title={t("receiveBitcoins")}
-          onClose={() => {
-            setIsReceiveModalOpen(false);
-          }}
-        >
-          <ComponentStack>
-            <S.ReceiveQR size={200} value={nextAddress.address} />
-            <Button
-              title={nextAddress.address}
-              copyContent={nextAddress.address}
-            />
-            <Text h4 weight={600} color={colors.white}>
-              {t("receiveInfo")}
-            </Text>
-          </ComponentStack>
-        </Modal>
-      )}
       {zPub && nextChangeAddress && (
         <SendModal
           isOpen={isSendModalOpen}
