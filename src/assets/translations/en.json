@@ -593,7 +593,6 @@
             "pending": "Pending",
             "transactions": "Transactions",
             "send": "Send",
-            "receiveBitcoins": "Receive bitcoins",
             "sent": "Sent",
             "received": "Received",
             "btcAmount": "Amount",
