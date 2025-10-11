@@ -532,7 +532,7 @@
       "dashboard": "Dashboard"
     },
     "signatureLogin": {
-      "titleWallet": "Unterschrift mit Hardware-Geldbörse",
+      "titleWallet": "Mit Hardware-Wallet signieren",
       "titleWords": "Unterschrift mit 12 Wörtern",
       "word": "Wort {{number}}",
       "enter12wordsDescription1": "Ihre 12 Wörter verbleiben auf Ihrem Gerät, um eine Nachricht zu signieren und Sie zu authentifizieren.",
@@ -609,7 +609,7 @@
         "economyFee": "Wirtschaft",
         "transactionSent": "Transaktion gesendet!",
         "errorBroadcast": "Fehler beim Übertragen einer Transaktion",
-        "sendInfo": "Senden Sie Geld von Ihrer selbstverwalteten Geldbörse an eine Bitcoin-Adresse",
+        "sendInfo": "Geld von Ihrem selbstverwalteten Wallet an eine Bitcoin-Adresse senden",
         "destinationAddress": "Zieladresse",
         "amount": "Betrag",
         "max": "Max",
