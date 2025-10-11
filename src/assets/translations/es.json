@@ -118,7 +118,7 @@
             "creatingWallet": "Crear cartera",
             "confirmName1": "Confirme el nombre del dispositivo pulsando",
             "confirmName2": "en el lateral de su BitBox02",
-            "uninitBitboxNoWeb": "Los BitBox02 no integrados no son compatibles con la web. Por favor, configura tu monedero usando la BitBoxApp oficial."
+            "uninitBitboxNoWeb": "Los BitBox02 no integrados no son compatibles con la web. Por favor, configura tu monedero usando la BitBoxApp oficial"
         },
         "signature": {
             "title": "Firma",
@@ -130,7 +130,7 @@
             "verifySignature": "Verificar la firma",
             "cannotGetAccount": "No se puede obtener la cuenta",
             "cannotGetXpub": "No se puede obtener xpub",
-            "bitcoinAppNotOpened": "Abra la aplicación Bitcoin de su monedero e inténtelo de nuevo.",
+            "bitcoinAppNotOpened": "Abra la aplicación Bitcoin de su monedero e inténtelo de nuevo",
             "signatureError": "Mensaje de error al firmar. Vuelva a intentarlo",
             "accountBalance": {
                 "transactions": "{{txs}} transacciones",
