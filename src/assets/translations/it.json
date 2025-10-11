@@ -62,13 +62,13 @@
         },
         "afterUpgrade": {
             "title": "Aprire il BitBox02",
-            "instruction": "Toccare uno dei 2 lati contrassegnati da \"Tap this side\".",
+            "instruction": "Toccare uno dei 2 lati contrassegnati da \"Tap this side\"",
             "rebooting": "Riavvio del BitBox02"
         },
         "bootloader": {
             "title": "Installazione del firmware",
             "instruction1": "Stiamo installando il firmware ufficiale nel vostro BitBox02",
-            "instruction2": "Non rimuovere il BitBox02 dal dispositivo."
+            "instruction2": "Non rimuovere il BitBox02 dal dispositivo"
         },
         "connect": {
             "title": "Collegare il {{hardwareWallet}}",
@@ -118,7 +118,7 @@
             "creatingWallet": "Creare un portafoglio",
             "confirmName1": "Confermare il nome del dispositivo premendo",
             "confirmName2": "sul lato del BitBox02",
-            "uninitBitboxNoWeb": "I BitBox02 non integrati non sono supportati sul web. Si prega di configurare il portafoglio utilizzando la BitBoxApp ufficiale."
+            "uninitBitboxNoWeb": "I BitBox02 non integrati non sono supportati sul web. Si prega di configurare il portafoglio utilizzando la BitBoxApp ufficiale"
         },
         "signature": {
             "title": "Firma",
@@ -130,7 +130,7 @@
             "verifySignature": "Verifica della firma",
             "cannotGetAccount": "Impossibile ottenere l'account",
             "cannotGetXpub": "Impossibile ottenere xpub",
-            "bitcoinAppNotOpened": "Aprire l'applicazione Bitcoin sul portafoglio e riprovare.",
+            "bitcoinAppNotOpened": "Aprire l'applicazione Bitcoin sul portafoglio e riprovare",
             "signatureError": "Messaggio di errore nella firma. Riprovare",
             "accountBalance": {
                 "transactions": "transazioni {{txs}}",
