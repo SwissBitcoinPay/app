@@ -593,7 +593,6 @@
             "pending": "En attente",
             "transactions": "Transactions",
             "send": "Envoyer",
-            "receiveBitcoins": "Recevoir des bitcoins",
             "sent": "Envoyé",
             "received": "Reçu",
             "btcAmount": "Montant",
