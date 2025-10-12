@@ -9,7 +9,8 @@
         "accountName": "Tilin nimi",
         "accountEmail": "Tilin sähköpostiosoite",
         "password": "Salasana",
-        "errorGettingPassword": "Virhe salasanan saamisen aikana"
+        "errorGettingPassword": "Virhe salasanan saamisen aikana",
+        "login": "Kirjaudu"
     },
     "common": {
         "login": "Kirjaudu",
@@ -129,7 +130,7 @@
             "cannotGetAccount": "Tiliä ei löydetty",
             "cannotGetXpub": "xpub ei löydetty",
             "bitcoinAppNotOpened": "Avaa laitteessa Bitcoin-sovellus ja yritä uudestaan",
-            "signatureError": "Viestin allekirjoitus epäonnistui. Yritä uudelleen.",
+            "signatureError": "Viestin allekirjoitus epäonnistui. Yritä uudelleen",
             "accountBalance": {
                 "transactions": "{{txs}} tapahtumaa",
                 "newAccount": "Uusi tili (suositus)"
@@ -137,7 +138,8 @@
         },
         "transport": {
             "title": "Valitse yhdistystapa"
-        }
+        },
+        "title": "Yhdistä laitelompakko"
     },
     "createWalletModal": {
         "continue": "Jatka",
@@ -182,7 +184,7 @@
         }
     },
     "errors": {
-        "serverInMaintenance": "Palvelussa on huoltokatko. Yritä myöhemmin uudelleen.",
+        "serverInMaintenance": "Palvelussa on huoltokatko. Yritä myöhemmin uudelleen",
         "noKycLimit": "Suurin ilman tunnistatumista sallittu määrä on tullut täyteen",
         "accountNotVerified": "Varmista talletusosoitteesi ohjauspanelista"
     },
@@ -191,7 +193,7 @@
         "amount": "Määrä",
         "fiatAmount": "Fiatin määrä",
         "rate": "Kurssi",
-        "paidVia": "Maksettu",
+        "paidVia": "Maksettu käyttäen",
         "paidAt": "Maksettu klo",
         "note": "Huomautus",
         "invoiceId": "Laskun ID",
@@ -219,7 +221,7 @@
             "myEmployees": "Työntekijäni"
         },
         "invoice": {
-            "creatingInvoice": "Laskua luodaan ",
+            "creatingInvoice": "Laskua luodaan",
             "fetchingInvoice": "Haetaan laskua",
             "invoiceQrTitle": "Maksulinkki QR-koodi",
             "invoiceQr": "Nähdäksesi laskun toisessa laitteessa, lue QR-koodi",
@@ -230,14 +232,14 @@
             "amount": "Summa",
             "alreadyPaid": "Maksettuna",
             "payTheRest": "Maksa loput ({{sats}} sats) joko salamaverkossa tai onchain",
-            "paidOn": "Maksettu",
+            "paidOn": "Maksettu {payment type}:llä",
             "awaitingPayment": "Maksua odotetaan",
             "returningToTerminal": "Palaa päätteeseen",
             "withdrawSuccess": "Nosto onnisstus",
             "confirmations": "Varmennuksia",
             "redirectingYou": "Sinut ohjataan",
             "invalidInvoiceId": "Virhellinen laskun tunnus",
-            "paidWith": "Maksettu",
+            "paidWith": "Maksettu käyttäen",
             "transactionId": "Tapatumatunus",
             "openWallet": "Avaa lompakko",
             "noAvailableWallet": "Lompakkoja ei ole",
@@ -247,7 +249,7 @@
             "invoicePaid": "Lasku maksettu",
             "tapAnywhereToSkip": "Napauta jossain ohittaaksesi vaiheen",
             "returnToWebsite": "Palaa verkkosivulle",
-            "copyBtc": "Kopioi osoite",
+            "copyBtc": "Kopioi osoite.",
             "copyLightning": "Kopioi lasku",
             "scanToYourPhone": "Avaa sovellus puhelimessa scannaamalla tämä",
             "scanToPayIn": "Scannaa maksaaksesi Bitcoinille",
@@ -283,7 +285,7 @@
             "detailsData": {
                 "salaryPerAnnum": "Palkka vuodessa",
                 "employerName": "Työntekijän nimi",
-                "employerAddress": "Yrityksen osoite",
+                "employerAddress": "Toimipaikan osoite",
                 "employerNature": "Liiketoiminnan luonne",
                 "sharesDescription": "Osakkeiden/osuuksien/talletusten kuvaus",
                 "sellerName": "Myyjän nimi",
@@ -343,30 +345,30 @@
                 "payslip": "Palkkalaskelmat (tai bonusmaksut) kolmelta edelliseltä kuukaudelta",
                 "employerLetter": "Palkan vahvistava asiakirja",
                 "incomeBankStatement": "Tiliote joka osoittaa selvästi säännölliset palkka maksut nimetyltä työnantajalta",
-                "investmentSaleCertificate": "Sijoitus-/säästötodistukset, sopimustodistukset tai luovutusilmoitukset.",
-                "fundsBankStatement": "Pankkitiliotteet, joista käy selvästi ilmi varojen vastaanotto ja sijoitusyhtiön nimi.",
-                "signedLetter": "Säännellyn kirjanpitäjän allekirjoittama, kirjepaperilla varustettu kirje, jossa eritellään varat.",
-                "propertySaleSolicitorLetter": "Luvan saaneen asianajajan tai valvotun kirjanpitäjän kirje, jossa ilmoitetaan kiinteistön osoite, myyntipäivä, saatu tuotto ja ostajan nimi.",
+                "investmentSaleCertificate": "Sijoitus-/säästötodistukset, sopimustodistukset tai luovutusilmoitukset",
+                "fundsBankStatement": "Pankkitiliotteet, joista käy selvästi ilmi varojen vastaanotto ja sijoitusyhtiön nimi",
+                "signedLetter": "Säännellyn kirjanpitäjän allekirjoittama, kirjepaperilla varustettu kirje, jossa eritellään varat",
+                "propertySaleSolicitorLetter": "Luvan saaneen asianajajan tai valvotun kirjanpitäjän kirje, jossa ilmoitetaan kiinteistön osoite, myyntipäivä, saatu tuotto ja ostajan nimi",
                 "propertySaleContract": "Jäljennös myyntisopimuksesta",
-                "companySaleLetter": "Luvan saaneen asianajajan tai säännellyn kirjanpitäjän allekirjoittama kirje, jossa ilmoitetaan yksityiskohtaisesti yrityksen myynnistä, kirjelomakkeella varustetulla paperilla.",
+                "companySaleLetter": "Luvan saaneen asianajajan tai säännellyn kirjanpitäjän allekirjoittama kirje, jossa ilmoitetaan yksityiskohtaisesti yrityksen myynnistä, kirjelomakkeella varustetulla paperilla",
                 "companySaleContract": "Sopimuksen jäljennös myynnistä",
                 "companySaleBankStatement": "Kopio pankin tiliotteesta, josta käy ilmi tulot",
-                "companySaleMediaCoverage": "Kopiot tiedotusvälineiden uutisoinnista (tarvittaessa) todisteena.",
-                "probateGrant": "Testamentin myöntäminen (testamentin jäljennöksen kanssa), jossa on mainittava kuolinpesän arvo.",
+                "companySaleMediaCoverage": "Kopiot tiedotusvälineiden uutisoinnista (tarvittaessa) todisteena",
+                "probateGrant": "Testamentin myöntäminen (testamentin jäljennöksen kanssa), jossa on mainittava kuolinpesän arvo",
                 "willLetter": "Testamentin vahvistusasiakirja lakimieheltä tai perukirjoittajalta",
                 "courtOrderCopy": "Jäljennös tuomioistuimen päätöksestä",
-                "divorceSettlementLetter": "Luvan saaneen asianajajan allekirjoittama kirje avioeroratkaisusta kirjepaperilla varustetulla kirjeellä.",
+                "divorceSettlementLetter": "Luvan saaneen asianajajan allekirjoittama kirje avioeroratkaisusta kirjepaperilla varustetulla kirjeellä",
                 "companyAccountsAudit": "Jäljennös viimeisimmästä tarkastetusta yrityskirjanpidosta",
-                "companyActivityLetter": "Säännellyn kirjanpitäjän kirjeessä esitetty vahvistus yritystoiminnan luonteesta ja liikevaihdosta.",
+                "companyActivityLetter": "Säännellyn kirjanpitäjän kirjeessä esitetty vahvistus yritystoiminnan luonteesta ja liikevaihdosta",
                 "pensionStatement": "Eläkelaskelma",
                 "retirementAccountantLetter": "Säännellyn tilintarkastajan kirje",
-                "retirementBankStatementReceipt": "Pankkitodistus, josta käy ilmi viimeisimpien eläketulojen saanti ja eläkkeen maksajan nimi.",
+                "retirementBankStatementReceipt": "Pankkitodistus, josta käy ilmi viimeisimpien eläketulojen saanti ja eläkkeen maksajan nimi",
                 "savingsAccountStatement": "Säästötilin laskelma",
                 "savingsStatement": "Säästölaskelma",
                 "accountStartEvidence": "Todisteet tilin avaamisesta (tilin tarjoajan asiakirja)",
                 "dividendContract": "Osingonjakosopimuksen ilmoitus",
-                "dividendBankStatement": "Pankin tiliote, josta käy selvästi ilmi varojen vastaanotto ja osinkoa maksavan yrityksen nimi.",
-                "dividendDetailsLetter": "Säännellyn kirjanpitäjän allekirjoittama kirje, jossa ilmoitetaan osingonjakoa koskevat yksityiskohdat, kirjelomakkeella varustetulla paperilla.",
+                "dividendBankStatement": "Pankin tiliote, josta käy selvästi ilmi varojen vastaanotto ja osinkoa maksavan yrityksen nimi",
+                "dividendDetailsLetter": "Säännellyn kirjanpitäjän allekirjoittama kirje, jossa ilmoitetaan osingonjakoa koskevat yksityiskohdat, kirjelomakkeella varustetulla paperilla",
                 "companyAccountsSet": "Yrityksen tilinpäätös, josta ilmenevät osinkotiedot",
                 "donorLetter": "Asiakas lahjan luovuttajan antama kirje, jossa vahvistetaan lahjan tiedot",
                 "donorSourceOfWealth": "Dokumentoidut todisteet lahjoittajan varallisuuslähteestä",
@@ -374,7 +376,7 @@
                 "loanStatements": "Jäljennös lainalaskelmasta",
                 "lotteryCompanyEvidence": "Todistus arpajaisyhtiöltä",
                 "chequeWinningsReceipt": "Sekkivoittojen kuitti",
-                "compensatingBodyLetter": "Kirje tai tuomioistuimen päätös korvaavalta taholta.",
+                "compensatingBodyLetter": "Kirje tai tuomioistuimen päätös korvaavalta taholta",
                 "solicitorLetter": "Asianajajan kirje",
                 "payoutStatement": "Maksulaskelma",
                 "insuranceLetter": "Vakuutuksenantajan kirje, joka vahvistaa maksun"
@@ -427,7 +429,7 @@
             "yourSignature": "Allekirjoituksesi",
             "yourSignatureDetails": "Lompakkosi antama allekirjoitus",
             "invalidSignature": "Virheellinen allekirjoitus",
-            "payInvoiceToCertify": "Vahvista Lightning Address -osoitteen omistajuus maksamalla tämä 1 satoshin lasku.",
+            "payInvoiceToCertify": "Vahvista Lightning Address -osoitteen omistajuus maksamalla tämä 1 satoshin lasku",
             "openWallet": "Avaa lompakko",
             "invoicePaid": "Osoite vahvistettiin",
             "signWithAddress": "Allekirjoita osoitteella",
@@ -435,7 +437,7 @@
             "receiveInBtcDescription1": "Määrittämääsi bitcoin-lompakkoon tilitetään myynneistäsi {{percent}}%:ia.",
             "receiveInBtcDescription2": "Tilityksien louhinta- ja vaihtokuluja Lightning-verkosta onchain-osoitteisiin ei veloiteta sinulta ikinä.",
             "receiveInBtcDescription3": "Oletuksena tilitykset saapuvat lompakkoosi jokaisen kuukauden ensimmäinen päivä, edellyttäen, että tilitettävia varoja on vähintään 1000 sat.",
-            "receiveInBtcDescription3Lightning": "Varasi tilitetään heti maksun jälkeen Lightning Address -osoitteeseesi. Käytä vain ammattimaisia Lightning Address -palvelujen tarjoajia!",
+            "receiveInBtcDescription3Lightning": "Varasi tilitetään heti maksun jälkeen Lightning Address -osoitteeseesi. Käytä vain ammattimaisia Lightning Address -palvelujen tarjoajia.",
             "receiveInBtcDescription4": "Lompakkosi omistajuuden vahvistamiseksi sinun pitää allekirjoittaa Bitcoin-yksityisavaimellasi viesti.",
             "receiveInBankDescription1": "Laskuttamistasi bitcoineista myydään automaattisesti {{percent}}%:ia {{currency}}-valuutaksi ja ne lähettää pankkiisi kumppanimme",
             "bankSettings": "Pankkimääritykset",
@@ -444,7 +446,7 @@
             "receiveInBankDescription2Swift": "Swift-siirrot {{currency}}-valuutassa edellyttävät Swift-kulujen maksamista. Niitä ei voi ennalta arvioida, mutta ne ovat vähintään {{formattedAmountLow}} ja enintään {{formattedAmountHigh}}.",
             "receiveInBankDescription3Swift": "Varojen tilitys tehdään automaattisesti pankkiisi kuukauden 1. päivänä, aina kun saldo on vähintään {{formattedAmount}}.",
             "receiveInBankDescription3": "Saldon ollessa tämän alle, on myös mahdollista manuaalisesti käynnistää tilitys hintaan {{formattedAmount}}.",
-            "receiveInBankDescriptionInstantSepa": "Varat näkyvät tililläsi välittömästi, mikäli pankkisi tulee Instant SEPA -maksujen vastaanottoa",
+            "receiveInBankDescriptionInstantSepa": "Varat näkyvät tililläsi välittömästi, jos pankkisi tukee Instant SEPA -maksujen vastaanottoa.",
             "receiveInBankDescriptionFasterPayments": "Varat saapuvat GBP-valuuttatilillesi välittömästi Faster Payments -maksuna.",
             "createYourBitcoinWallet": "Luo itsellesi Bitcoin-omasäilö",
             "iban": "täytä IBAN-tilinumero",
@@ -461,8 +463,8 @@
             "yourCountry": "Maa",
             "ownerCountry": "maa",
             "yourIban": "IBAN-tilinumero",
-            "ibanInvalid": "IBAN-tilinumero on virheellinen ",
-            "zipInvalid": "Postinumero on virheellinen ",
+            "ibanInvalid": "IBAN-tilinumero on virheellinen",
+            "zipInvalid": "Postinumero on virheellinen",
             "submit": "LÄHETÄ",
             "hardwareConnectSuccess": "Yhdistäminen {{hardwareWallet}}:een on nyt valmis onnistuneesti. Voit irroittaa sen.",
             "patchSettingNeedsEmailValidation": "Sähköpostiisi on lähetty viesti uusien asetusten aktivoimiseksi",
@@ -472,8 +474,8 @@
                     "depositAddressAlreadyUsed": "Tilitysosoite on jo käytetty"
                 },
                 "iban": {
-                    "ibanAlreadyUsed": "Tämä IBAN-tilinumero on jo käytössä.",
-                    "wiseBankNotSupported": "Wise-neopankin palveluita ei tueta."
+                    "ibanAlreadyUsed": "Tämä IBAN-tilinumero on jo käytössä",
+                    "wiseBankNotSupported": "Wise-neopankin palveluita ei tueta"
                 }
             }
         },
@@ -502,7 +504,7 @@
             "tickets": "Automaattiset kuitit",
             "ticketsPrinting": "Automaattinen kuitin tulostus",
             "testPrint": "Testitulostus",
-            "ticketsPrintingDescription": "Maksukuitit voidaan tulostaa automaattisesti jokaisen laskun maksamisen jälkeen.",
+            "ticketsPrintingDescription": "Maksukuitit voidaan tulostaa automaattisesti jokaisen laskun maksamisen jälkeen",
             "merchantName": "Kauppiaan nimi",
             "merchantNameDescription": "Kaikissa sinun ja työntekijöiden veloittamissa laskuissa näkyy kauppiaan nimi",
             "currency": "Valuutta",
@@ -517,7 +519,7 @@
             "allInFiat": "100% {{currency}}:ssa",
             "percentInBtcAndFiat": "{{btcPercent}}% bitcoineina | {{fiatPercent}}% {{currency}}:issa",
             "wallet": "Lompakko",
-            "accessWallet": "Avaa lompakko",
+            "accessWallet": "Käsittele lompakkoa",
             "contactSupport": "Tukipalvelut",
             "logout": "Uloskirjaus",
             "confirmLogout": "Vahvista uloskirjautuminen",
@@ -526,12 +528,13 @@
             "shareMyLink": "Jaa aktivointilinkkini",
             "copyMyLink": "Kopioi aktivointilinkki",
             "acceptBitcoinPayments": "Hyväksy Bitcoin-maksut",
-            "invitationText": "Käytä linkkiä hyväksyä Bitcoin maksut {{merchantName}}:"
+            "invitationText": "Käytä linkkiä hyväksyä Bitcoin maksut {{merchantName}}:",
+            "dashboard": "Ohjauspaneeli"
         },
         "signatureLogin": {
             "titleWallet": "Allekirjoitus laitteistolompakolla",
             "titleWords": "Allekirjoitus 12 sanalla",
-            "word": "{{number}}. sana ",
+            "word": "{{number}}. sana",
             "enter12wordsDescription1": "Antamasi 12 sanaa pidetään laitteessasi ja niillä allekirjoitetaan tunnistamiseesi käytettävä viesti.",
             "enter12wordsDescription2": "Varmista että syötät sanasi vain turvallisesta lähteestä ladattuun ja varmistettuun avoimen lähdekoodin sovelukseen.",
             "enter12wordsDescription3": "Kaikesta huolimatta, tämä yhteystapa ei välttämättä ole 100% turvallinen, sillä laitteesi on kytkettynä internettiin, sekä siten se on haavoittuvainen. Emme vastaa mistään haitoista jota tämän kirjaantumismenetelmän käyttö saattaa aiheuttaa.",
@@ -585,7 +588,7 @@
         },
         "wallet": {
             "title": "Onchain omasäilö-lompakko",
-            "unlockYourWallet": "Avaa lompakko",
+            "unlockYourWallet": "Avaa lompakon lukitus",
             "balance": "Saldo",
             "pending": "Odottaa",
             "transactions": "Tapahtumat",
@@ -610,7 +613,7 @@
                 "max": "Kaikki varat",
                 "balance": "Saldo",
                 "fees": "Siirtonopeus ja kulut",
-                "sendLastInfo": "Tapahtumasi luodaan ja lähetetään täysin paikallisesta laitteestasi. Yksityistä tietoa ei välitetä sovelluksen palvelinten kautta.",
+                "sendLastInfo": "Tapahtumasi luodaan ja lähetetään täysin paikallisesta laitteestasi. Yksityistä tietoa ei välitetä sovelluksen palvelinten kautta",
                 "signWithHardware": "Kirjaudu sisään {{hardwareWallet}} avulla",
                 "broadcast": "Lähetä"
             }
@@ -622,7 +625,7 @@
             "nonCustodial": "Varat omasäilössä",
             "noKyc": "Ilman tunnistautumista",
             "in1minute": "Minuutissa",
-            "finma": "Swiss Financial Market Supervisory Authority",
+            "finma": "FINMA (Sveitsin finanssivalvontaviranomainen)",
             "createAccount": "Luo tili ja Bitcoin-omasäilö",
             "orConnectBy": "tai kirjaudu käyttäen",
             "scanActivationQRcode": "QR-maksupäätekoodia",
