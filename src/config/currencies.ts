@@ -22,10 +22,6 @@ export const currencies = [
     value: "GBP" as const
   },
   {
-    label: "USD • United States dollar 🇺🇸",
-    value: "USD" as const
-  },
-  {
     label: "JPY • Japanese yen 🇯🇵",
     value: "JPY" as const,
     decimals: 0

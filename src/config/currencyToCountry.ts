@@ -8,6 +8,5 @@ export const currencyToCountry = {
   NZD: "NZ",
   SEK: "SE",
   SGD: "SG",
-  USD: "US",
   ZAR: "ZA"
 } as const;
