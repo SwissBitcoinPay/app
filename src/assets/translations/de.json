@@ -24,7 +24,7 @@
         "submit": "Absenden",
         "confirm": "Bestätigen",
         "cancel": "Abbrechen",
-        "wallet": "Brieftasche",
+        "wallet": "Wallet",
         "admin": "Verwaltung",
         "employee": "Mitarbeiter",
         "notSet": "Nicht festgelegt",
@@ -73,7 +73,7 @@
         "connect": {
             "title": "Verbinden Sie Ihr {{hardwareWallet}}",
             "connecting": "Warten auf {{hardwareWallet}}",
-            "disconnected": "Brieftasche nicht angeschlossen",
+            "disconnected": "Wallet nicht angeschlossen",
             "updateBitbox": "Stellen Sie sicher, dass auf Ihrer BitBox02 eine Firmware installiert ist"
         },
         "connected": {
@@ -99,9 +99,9 @@
             "select": "Wählen Sie"
         },
         "setup": {
-            "title": "Einrichten der Brieftasche",
+            "title": "Ihr Wallet einrichten",
             "myBitbox": "Meine BitBox02",
-            "instruction1": "Wie möchten Sie Ihre BitBox02-Brieftasche sichern?",
+            "instruction1": "Wie möchten Sie Ihr BitBox02-Wallet sichern?",
             "sdcard": "SD-Karte (empfohlen)",
             "sdcardDetectionError": "SD-Karten-Erkennungsfehler",
             "createBackupAborted": "Backup erstellen abgebrochen",
@@ -115,10 +115,10 @@
             "insertSdCard": "Bitte legen Sie die SD-Karte in Ihre BitBox02 ein",
             "setPassword1": "Bitte vergeben Sie ein Passwort für Ihre BitBox02.",
             "setPassword2": "Dieses Kennwort wird bei jeder Benutzung zum Entsperren des Geräts verwendet.",
-            "creatingWallet": "Brieftasche erstellen",
+            "creatingWallet": "Wallet erstellen",
             "confirmName1": "Bestätigen Sie den Gerätenamen durch Drücken von",
             "confirmName2": "an der Seite Ihrer BitBox02",
-            "uninitBitboxNoWeb": "Uninitlialisierte BitBox02 werden im Web nicht unterstützt. Bitte richten Sie Ihre Brieftasche mit der offiziellen BitBoxApp ein"
+            "uninitBitboxNoWeb": "Uninitlialisierte BitBox02 werden im Web nicht unterstützt. Bitte richten Sie Ihr Wallet mit der offiziellen BitBoxApp ein"
         },
         "signature": {
             "title": "Unterschrift",
@@ -235,7 +235,7 @@
             "paidOn": "Bezahlt am",
             "awaitingPayment": "Erwartete Zahlung",
             "returningToTerminal": "Rückkehr zum Terminal",
-            "withdrawSuccess": "Abhebung erfolgt",
+            "withdrawSuccess": "Auszahlung erfolgt",
             "confirmations": "Bestätigungen",
             "redirectingYou": "Sie werden umgeleitet",
             "invalidInvoiceId": "Ungültige Rechnungs-ID",
@@ -429,7 +429,7 @@
             "yourSignature": "Ihre Signatur",
             "yourSignatureDetails": "Signatur, die Sie aus Ihrer Wallet erhalten haben",
             "invalidSignature": "Ungültige Signatur",
-            "payInvoiceToCertify": "Bezahlen Sie diese 1-Sat-Rechnung, um zu bestätigen, dass Sie Ihre Lightning-Adresse kontrollieren.",
+            "payInvoiceToCertify": "Bezahlen Sie diese 1 Sat Rechnung um zu bestätigen, dass Sie Ihre Lightning-Adresse kontrollieren",
             "openWallet": "Wallet öffnen",
             "invoicePaid": "Adresse geprüft",
             "signWithAddress": "Signiere mit Adresse",
@@ -467,7 +467,7 @@
             "zipInvalid": "Ungültige Postleitzahl",
             "submit": "Absenden",
             "hardwareConnectSuccess": "Ihre {{hardwareWallet}} wurde erfolgreich angeschlossen. Sie können sie ausstecken.",
-            "patchSettingNeedsEmailValidation": "Bestätigen Sie die neuen Einstellungen mit der E-Mail, die Sie erhalten haben.",
+            "patchSettingNeedsEmailValidation": "Bestätigen Sie die neuen Einstellungen mit der E-Mail, die Sie erhalten haben",
             "firstThreeMonths": "Erste 3 Monate",
             "error": {
                 "depositAddress": {
@@ -487,7 +487,7 @@
             "note": "Hinweis",
             "atmAccount": "ATM-Konto",
             "guestMode": "Gast-Modus",
-            "allowWithdraw": "Abheben zulassen",
+            "allowWithdraw": "Auszahlung zulassen",
             "cannotGoHigher": "Der Höchstbetrag beträgt {{maxAmount}}",
             "addToHomeScreen": "Zum Startbildschirm hinzufügen"
         },
@@ -506,19 +506,19 @@
             "testPrint": "Testdruck",
             "ticketsPrintingDescription": "Zahlungsbelege können automatisch gedruckt werden, nachdem jede Rechnung bezahlt wurde",
             "merchantName": "Name des Händlers",
-            "merchantNameDescription": "Der Händlername ist in allen Rechnungen enthalten, die Sie und Ihre Mitarbeiter erstellen.",
+            "merchantNameDescription": "Der Händlername ist in allen Rechnungen enthalten, die Sie und Ihre Mitarbeiter erstellen",
             "currency": "Währung",
             "currencyDescription": "Die Standardwährung für Ihr Konto",
             "currencyChangeWarning": "Sie erhalten {{fiatPercent}}% Ihrer Zahlungen in {{currency}}. Wenn Sie die Währung Ihres Kontos ändern, werden Ihre nächsten Zahlungen in diese neue Währung umgerechnet.",
             "onchainAvailable": "Onchain verfügbar",
-            "onchainAvailableDescription": "Aktivieren Sie dieses Kästchen, wenn Sie möchten, dass die von der App erstellten Rechnungen auch Onchain-Zahlungen von Kunden akzeptieren (empfohlen).",
+            "onchainAvailableDescription": "Aktivieren Sie dieses Kästchen wenn Sie möchten, dass die von der App erstellten Rechnungen auch Onchain-Zahlungen von Kunden akzeptieren (empfohlen)",
             "email": "E-Mail",
             "emailDescription": "Die E-Mail, über die Sie Benachrichtigungen und wichtige Informationen erhalten können",
             "payout": "Auszahlungen",
             "allInBtc": "100% in Bitcoin",
             "allInFiat": "100% in {{currency}}",
             "percentInBtcAndFiat": "{{btcPercent}}% in Bitcoin | {{fiatPercent}}% in {{currency}}",
-            "wallet": "Brieftasche",
+            "wallet": "Wallet",
             "accessWallet": "Zugang zur Wallet",
             "contactSupport": "Kontakt zum Support",
             "logout": "Abmelden",
@@ -545,7 +545,7 @@
             }
         },
         "signup": {
-            "title": "Anmelden",
+            "title": "Registrieren",
             "yourAccountName": "Ihr Kontoname",
             "accountName": "Name des Kontos",
             "accountNameInvalid": "Bitte geben Sie einen gültigen Namen an",
@@ -597,7 +597,7 @@
             "received": "Empfangen",
             "btcAmount": "Betrag",
             "fees": "Gebühren",
-            "errorFetchingWallet": "Fehler beim Abrufen Ihrer Brieftasche",
+            "errorFetchingWallet": "Fehler beim Abrufen Ihres Wallets",
             "sell": "Verkaufen",
             "sendModal": {
                 "send": "Senden Sie Ihre Bitcoins",
