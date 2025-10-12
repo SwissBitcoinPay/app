@@ -6,6 +6,7 @@ Swiss Bitcoin Pay is an easy-to-use solution to accept bitcoin payments in your 
 
 [![MIT License](https://img.shields.io/github/license/frw/react-native-ssl-public-key-pinning)](LICENSE)
 ![Codemagic build status](https://api.codemagic.io/apps/6580220d95d4f2f104923fef/react-native-android/status_badge.svg)
+[![Translation status](https://weblate.swiss-bitcoin-pay.ch/widget/app/svg-badge.svg)](https://weblate.swiss-bitcoin-pay.ch/engage/app/)
 ![Netlify Status](https://api.netlify.com/api/v1/badges/0537dd5e-edb6-4a7a-ada0-0f3295e50a73/deploy-status)
 [![GitHub Repo stars](https://img.shields.io/github/stars/SwissBitcoinPay/app?style=social)](https://github.com/SwissBitcoinPay/app)
 
@@ -76,7 +77,10 @@ npm run android
 ## 🤝 Contributing
 
 - Help translate to your language on our Tolgee:
-  - [Tolgee](https://tolgee.swiss-bitcoin-pay.ch/)
+  - App: [![app](https://weblate.swiss-bitcoin-pay.ch/widget/app/svg-badge.svg)](https://weblate.swiss-bitcoin-pay.ch/engage/app/)
+  - Server: [![server](https://weblate.swiss-bitcoin-pay.ch/widget/server/svg-badge.svg)](https://weblate.swiss-bitcoin-pay.ch/engage/server/)
+  - Dashboard: [![dashboard](https://weblate.swiss-bitcoin-pay.ch/widget/dashboard/svg-badge.svg)](https://weblate.swiss-bitcoin-pay.ch/engage/dashboard/)
+  - Website: [![website](https://weblate.swiss-bitcoin-pay.ch/widget/website/svg-badge.svg)](https://weblate.swiss-bitcoin-pay.ch/engage/website/)
 - PRs are welcomed! Some ideas:
   - Imagine a new cool feature to further simplify merchant's experience with bitcoin payments
   - Improve testing & security
