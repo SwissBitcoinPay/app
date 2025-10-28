@@ -8,6 +8,7 @@ export const fiatCurrencies = [
   "NZD",
   "SEK",
   "SGD",
+  "USD",
   "ZAR",
   "AED",
   "AUD",
