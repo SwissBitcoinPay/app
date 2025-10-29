@@ -47,5 +47,5 @@ export const platform = {
   deviceLocale: getLocale(),
   isBitcoinize,
   isShareAvailable: true,
-  springAnimationDelay: isAndroid ? 50 : 0
+  springAnimationDelay: 0
 };
