@@ -157,6 +157,14 @@ module.exports = {
       {
         test: /\.node$/,
         loader: "node-loader"
+      },
+      {
+        // Allow extension-less imports (e.g. "process/browser") inside
+        // fully-specified ESM (.mjs) dependencies such as react-router.
+        test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false
+        }
       }
     ]
   },
