@@ -72,7 +72,7 @@ export const QRCamera = ({
   return (
     deviceIndex !== undefined && (
       <Scanner
-        components={{ audio: false, finder: false }}
+        components={{ finder: false }}
         constraints={{ deviceId: devices?.[deviceIndex]?.deviceId }}
         styles={{
           container: StyleSheet.flatten([
