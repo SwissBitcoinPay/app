@@ -19,7 +19,7 @@ import {
   fiatCurrencies,
   platform
 } from "@config";
-import LocaleCurrency from "locale-currency";
+import { getCurrency } from "locale-currency";
 import {
   ComponentStack,
   FieldContainer,
@@ -103,7 +103,7 @@ export const Signup = () => {
   } = useForm<SignupForm>({
     mode: "onTouched",
     defaultValues: {
-      currency: LocaleCurrency.getCurrency(
+      currency: getCurrency(
         deviceLocale
       ) as AccountConfigType["currency"],
       btcPercent: 100,
