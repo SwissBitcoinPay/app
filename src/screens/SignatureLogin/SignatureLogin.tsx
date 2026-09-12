@@ -78,8 +78,7 @@ export const SignatureLogin = () => {
       const signatureLoginData = {
         messageToSign: message,
         signature,
-        zPub,
-        words
+        zPub
       };
 
       const requireEncryptionPassword = !!words && !isBiometrySupported;

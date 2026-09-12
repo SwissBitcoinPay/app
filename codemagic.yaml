@@ -15,7 +15,6 @@ workflows:
     max_build_duration: 120
     instance_type: mac_mini_m2
     environment:
-      java: 17.0.15
       android_signing:
         - Swiss Bitcoin Pay Checkout
       groups:
@@ -77,8 +76,7 @@ workflows:
     max_build_duration: 120
     instance_type: mac_mini_m2
     environment:
-      xcode: 16.4
-      java: 17.0.15
+      xcode: 26.0
       groups:
         - testfairy
         - appstore_credentials
