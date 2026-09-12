@@ -285,7 +285,7 @@
             "detailsData": {
                 "salaryPerAnnum": "Salário por ano",
                 "employerName": "Nome da entidade patronal",
-                "employerAddress": "Endereço da empresa",
+                "employerAddress": "Endereço da entidade empregadora",
                 "employerNature": "Natureza da atividade",
                 "sharesDescription": "Descrição das acções/unidades de participação/depósitos",
                 "sellerName": "Nome do vendedor",
@@ -316,7 +316,7 @@
                 "retirementDate": "Data de reforma",
                 "previousOccupationDetails": "Dados sobre a atividade/profissão anterior",
                 "previousEmployerName": "Nome do empregador",
-                "previousEmployerAddress": "Endereço do empregador",
+                "previousEmployerAddress": "Endereço do empregador anterior",
                 "pensionIncomeDetails": "Dados sobre a fonte de rendimento da pensão",
                 "depositsInstitutionName": "Nome da instituição onde a conta poupança está aberta",
                 "accountEstablishmentDate": "Data de criação da conta",

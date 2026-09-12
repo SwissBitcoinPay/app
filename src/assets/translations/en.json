@@ -285,7 +285,7 @@
             "detailsData": {
                 "salaryPerAnnum": "Salary per annum",
                 "employerName": "Employer's name",
-                "employerAddress": "Address of business",
+                "employerAddress": "Address of employer",
                 "employerNature": "Nature of business",
                 "sharesDescription": "Description of shares/units/deposits",
                 "sellerName": "Name of seller",
@@ -316,7 +316,7 @@
                 "retirementDate": "Retirement date",
                 "previousOccupationDetails": "Details of previous occupation/profession",
                 "previousEmployerName": "Name of the employer",
-                "previousEmployerAddress": "Address of the employer",
+                "previousEmployerAddress": "Address of previous employer",
                 "pensionIncomeDetails": "Details of pension income source",
                 "depositsInstitutionName": "Institution name where savings account is held",
                 "accountEstablishmentDate": "Date the account was established",

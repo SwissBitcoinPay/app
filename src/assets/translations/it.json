@@ -285,7 +285,7 @@
             "detailsData": {
                 "salaryPerAnnum": "Stipendio annuo",
                 "employerName": "Nome del datore di lavoro",
-                "employerAddress": "Indirizzo dell'azienda",
+                "employerAddress": "Indirizzo del datore di lavoro",
                 "employerNature": "Natura dell'attività",
                 "sharesDescription": "Descrizione delle azioni/quote/depositi",
                 "sellerName": "Nome del venditore",
@@ -316,7 +316,7 @@
                 "retirementDate": "Data di pensionamento",
                 "previousOccupationDetails": "Dettagli sulla precedente occupazione/professione",
                 "previousEmployerName": "Nome del datore di lavoro",
-                "previousEmployerAddress": "Indirizzo del datore di lavoro",
+                "previousEmployerAddress": "Indirizzo del precedente datore di lavoro",
                 "pensionIncomeDetails": "Dettagli sulla fonte di reddito da pensione",
                 "depositsInstitutionName": "Nome dell'istituto presso il quale è depositato il conto di risparmio",
                 "accountEstablishmentDate": "Data di creazione del conto",
