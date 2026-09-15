@@ -7,6 +7,7 @@ import {
 import { useToast } from "react-native-toast-notifications";
 import { useSignature } from "./hooks";
 import TrezorConnect from "@trezor/connect-web";
+import { dashboardUrl } from "@config/dashboardUrl";
 
 export const IS_TREZOR_SUPPORTED = true;
 
@@ -25,8 +26,7 @@ export const SBPTrezorContextProvider = ({ children }: PropsWithChildren) => {
         email: "hello@swiss-bitcoin-pay.ch",
         appName: "Swiss Bitcoin Pay PoS",
         appUrl: "https://app.swiss-bitcoin-pay.ch",
-        appIcon:
-          "https://dashboard.swiss-bitcoin-pay.ch/e12a18c11792966d0494.png"
+        appIcon: `${dashboardUrl}/e12a18c11792966d0494.png`
       }
     });
 

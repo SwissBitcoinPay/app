@@ -16,28 +16,30 @@ import BIP84 from "bip84";
 import {
   faArrowLeft,
   faArrowUpRightFromSquare,
-  faBuildingColumns,
   faClock,
   faPaperPlane,
-  faPlus,
-  faQrcode
+  faPlus
 } from "@fortawesome/free-solid-svg-icons";
 import { AsyncStorage } from "@utils";
 import { keyStoreZpub } from "@config/settingsKeys";
-import axios from "axios";
+import { dashboardUrl, getMempoolBaseUrl, SATS_PER_BTC } from "@config";
 import { useTheme } from "styled-components";
 import * as S from "./styled";
 import { useAccountConfig, useRates } from "@hooks";
 import { SendModal } from "./components";
-import { useToast } from "react-native-toast-notifications";
 import { Platform, RefreshControl } from "react-native";
-import { ConfirmedWithBlockTime, MempoolTX } from "@types";
+import { ConfirmedWithBlockTime, MempoolTX, api } from "@types";
 
 export const ADDRESS_GAP = 1;
 
 export type AddressDetail = {
   address: string;
   index: number;
+};
+
+type Vin = {
+  txid?: string;
+  vout?: number;
 };
 
 type Vout = {
@@ -59,6 +61,7 @@ export type WalletTransaction = {
   hex: string;
   value: number;
   time?: number;
+  vin: Vin[];
   vout: Vout[];
 } & ConfirmedWithBlockTime;
 
@@ -79,8 +82,8 @@ export const Wallet = () => {
     keyPrefix: "screens.wallet"
   });
   const { colors } = useTheme();
-  const toast = useToast();
   const { accountConfig } = useAccountConfig();
+  const mempoolBaseUrl = getMempoolBaseUrl();
 
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -105,33 +108,29 @@ export const Wallet = () => {
       setIsRefreshing(true);
     }
 
-    const { data: walletData } = await axios.get<{
-      nextChangeAddress: AddressDetail;
-      txs: WalletTransaction[];
-    }>(`https://stats.swiss-bitcoin-pay.ch/txs/${zPub}`);
+    const walletData = await api.transactions.byAddress(zPub);
 
-    const currentBalance = walletData.txs.reduce(
-      (result, value) => result + value.value,
-      0
-    );
+    // Le backend rend des sats entiers, pour `tx.value` comme pour
+    // `vout[].value` : rien à convertir ici.
+    const txs = walletData.txs;
 
-    setTxs(walletData.txs);
+    const currentBalance = txs.reduce((result, tx) => result + tx.value, 0);
+
+    setTxs(txs as WalletTransaction[]);
     setBalance(currentBalance);
-    setNextChangeAddress(walletData.nextChangeAddress);
+    setNextChangeAddress(walletData.nextInternalAddress ?? undefined);
 
     setIsInitialLoading(false);
     setIsRefreshing(false);
-  }, [isInitialLoading, toast, zPub, t]);
+  }, [isInitialLoading, zPub]);
 
   useEffect(() => {
     void updateWallet();
 
     if (!zPub) {
-      (async () => {
-        setZpub(accountConfig?.depositAddress);
-      })();
+      setZpub(accountConfig?.deposit_address ?? undefined);
     }
-  }, [zPub]);
+  }, [zPub, accountConfig?.deposit_address]);
 
   const onReceive = useCallback(() => {
     setIsReceiveModalOpen(true);
@@ -156,6 +155,20 @@ export const Wallet = () => {
     () => accountConfig?.currency,
     [accountConfig?.currency]
   );
+
+  // `txid:n` → vout.value (sats). Permet de résoudre les vins de nos
+  // tx d'envoi vers les vouts précédents (présents dans la même réponse,
+  // car ils proviennent forcément de notre wallet) pour calculer
+  // `Σ(vins) − Σ(vouts) = fee`.
+  const prevoutValues = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const tx of txs) {
+      for (const vout of tx.vout) {
+        map.set(`${tx.txid}:${vout.n}`, vout.value);
+      }
+    }
+    return map;
+  }, [txs]);
 
   const utxos = useMemo(
     () =>
@@ -193,7 +206,7 @@ export const Wallet = () => {
           nextChangeAddress={nextChangeAddress}
           onClose={onSendModalClose}
           zPub={zPub}
-          currentBalance={balance / 100000000}
+          currentBalance={balance}
         />
       )}
       <PageContainer
@@ -218,12 +231,12 @@ export const Wallet = () => {
             {!isInitialLoading ? (
               <>
                 <S.Balance h2 weight={700}>
-                  {balance / 100000000} BTC
+                  {balance / SATS_PER_BTC} BTC
                 </S.Balance>
                 {rates && fiatCurrency && (
                   <S.Balance h3 weight={600}>
                     {getFormattedUnit(
-                      (balance * rates[fiatCurrency]) / 100000000,
+                      (balance * rates[fiatCurrency]) / SATS_PER_BTC,
                       fiatCurrency
                     )}
                   </S.Balance>
@@ -232,7 +245,7 @@ export const Wallet = () => {
                   <ComponentStack direction="horizontal" gapSize={6}>
                     <Icon icon={faClock} color={colors.grey} size={16} />
                     <Text h4 weight={600} color={colors.grey}>
-                      {t("pending")}: {pendingBalance / 100000000} BTC
+                      {t("pending")}: {pendingBalance / SATS_PER_BTC} BTC
                     </Text>
                   </ComponentStack>
                 )}
@@ -251,7 +264,7 @@ export const Wallet = () => {
             />
             <Button
               title={t("sell")}
-              onPress="https://dashboard.swiss-bitcoin-pay.ch/wallet"
+              onPress={`${dashboardUrl}/wallet`}
               icon={faArrowUpRightFromSquare}
               disabled={isInitialLoading}
             />
@@ -267,7 +280,37 @@ export const Wallet = () => {
                 const realValue = tx.value;
                 const isPositive = realValue > 0;
 
-                const voutIndex = tx.vout.find((v) => v.ourAddressConfig)?.n;
+                const voutIndex = tx.vout.findIndex((v) => !v.ourAddressConfig);
+
+                const effectiveValue = isPositive
+                  ? realValue
+                  : tx.vout
+                      .filter((v) => !v.ourAddressConfig)
+                      .reduce((sum, v) => sum + v.value, 0);
+
+                let fee = 0;
+                if (!isPositive) {
+                  let totalIn = 0;
+                  let allVinsResolved = true;
+                  for (const v of tx.vin) {
+                    const value =
+                      v.txid !== undefined && v.vout !== undefined
+                        ? prevoutValues.get(`${v.txid}:${v.vout}`)
+                        : undefined;
+                    if (value === undefined) {
+                      allVinsResolved = false;
+                      break;
+                    }
+                    totalIn += value;
+                  }
+                  if (allVinsResolved) {
+                    const totalOut = tx.vout.reduce(
+                      (sum, v) => sum + v.value,
+                      0
+                    );
+                    fee = totalIn - totalOut;
+                  }
+                }
 
                 return {
                   ...(isPending
@@ -275,16 +318,24 @@ export const Wallet = () => {
                     : { icon: isPositive ? faPlus : faPaperPlane }),
                   tags: [
                     {
-                      value: `${Math.abs(realValue) / 100000000} BTC`,
+                      value: `${(effectiveValue / SATS_PER_BTC).toFixed(8)} BTC`,
                       color: isPending
                         ? colors.bitcoin
                         : isPositive
                           ? colors.success
                           : colors.primaryLight
-                    }
+                    },
+                    ...(fee > 0
+                      ? [
+                          {
+                            value: `${t("fees")}: ${(fee / SATS_PER_BTC).toFixed(8)} BTC`,
+                            color: colors.grey
+                          }
+                        ]
+                      : [])
                   ],
                   title: isPositive ? t("received") : t("sent"),
-                  onPress: `https://mempool.space/tx/${tx.txid}${
+                  onPress: `${mempoolBaseUrl}/tx/${tx.txid}${
                     voutIndex !== undefined ? `#vout=${voutIndex}` : ""
                   }`
                 };

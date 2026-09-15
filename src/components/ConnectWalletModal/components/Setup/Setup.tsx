@@ -159,7 +159,7 @@ export const Setup = ({ deviceId, onClose }: ConnectWalletComponentProps) => {
           await ensurePassword();
           await makeBackup();
         }
-      } catch (e: Error) {
+      } catch (e: unknown) {
         setAttentionToHardware?.(false);
         setStatus("choose-backup-mode");
         setTmpBackupMode(undefined);

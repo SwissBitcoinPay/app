@@ -28,20 +28,20 @@ import {
   keyStoreLedgerBluetoothId,
   keyStoreWalletType
 } from "@config/settingsKeys";
+import { getMempoolBaseUrl, SATS_PER_BTC } from "@config";
 import { CreateTransactionReturn } from "@utils/wallet/types";
 import axios from "axios";
 import { useTheme } from "styled-components";
 import { XOR } from "ts-essentials";
 import * as S from "./styled";
 import { useAccountConfig, useIsScreenSizeMin, useRates } from "@hooks";
-import {
-  AddressDetail,
-  FormattedUtxo,
-  WalletTransaction
-} from "@screens/Wallet/Wallet";
+import { AddressDetail, FormattedUtxo } from "@screens/Wallet/Wallet";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useToast } from "react-native-toast-notifications";
-import { HardwareReadyFunctionParams } from "@components/ConnectWalletModal/ConnectWalletModal";
+import {
+  HardwareReadyFunctionParams,
+  WalletConfig
+} from "@components/ConnectWalletModal/ConnectWalletModal";
 import { PrepareTransactionParams } from "@utils/wallet/prepare-transaction";
 import { Platform } from "react-native";
 import { faBluetooth, faUsb } from "@fortawesome/free-brands-svg-icons";
@@ -71,7 +71,10 @@ const isValidBitcoinAmount = (value: string) =>
 const isValidFiatAmount = (value: string) =>
   isValidIntegerOrFloat(value) && decimalsNb(value) <= 2;
 
-type SendModalProps = Omit<ComponentProps<typeof Modal>, "onClose"> & {
+type SendModalProps = Omit<
+  ComponentProps<typeof Modal>,
+  "onClose" | "children"
+> & {
   utxos: FormattedUtxo[];
   nextChangeAddress: AddressDetail;
   zPub: string;
@@ -91,11 +94,7 @@ export const SendModal = ({
   const rates = useRates();
   const toast = useToast();
   const {
-    accountConfig: {
-      currency: accountCurrency,
-      depositAddress,
-      verifiedAddresses
-    } = {}
+    accountConfig: { currency: accountCurrency, verified_addresses } = {}
   } = useAccountConfig({ refresh: false });
   const { colors } = useTheme();
   const { t: tRoot } = useTranslation();
@@ -106,9 +105,16 @@ export const SendModal = ({
   const [isLoading, setIsLoading] = useState(false);
   const setError = useErrorBoundary();
 
+  const mempoolBaseUrl = useMemo(() => getMempoolBaseUrl(), []);
+
   const walletType = useMemo(
-    () => (verifiedAddresses || []).find((v) => v.address)?.walletConfig?.type,
-    [verifiedAddresses]
+    () =>
+      (
+        (verified_addresses || []).find((v) => v.address)?.walletConfig as
+          | WalletConfig
+          | undefined
+      )?.type,
+    [verified_addresses]
   );
 
   const [wallet, setWallet] = useState<{
@@ -144,7 +150,9 @@ export const SendModal = ({
       setWallet({
         type:
           walletType ||
-          (await AsyncStorage.getItem(keyStoreWalletType)) ||
+          ((await AsyncStorage.getItem(
+            keyStoreWalletType
+          )) as WalletType | null) ||
           "local",
         transport: (await AsyncStorage.getItem(keyStoreLedgerBluetoothId))
           ? "bluetooth"
@@ -189,7 +197,7 @@ export const SendModal = ({
         }
       });
     },
-    [wallet?.type, askPassword]
+    [wallet?.type, askPassword, toast]
   );
 
   const onSend = useCallback<SubmitHandler<SendForm>>(
@@ -198,7 +206,7 @@ export const SendModal = ({
       await sleep(500);
       try {
         const receiveAddress = data.address;
-        const amount = Math.round((data.btcAmount || 0) * 100000000);
+        const amount = Math.round((data.btcAmount || 0) * SATS_PER_BTC);
 
         const feeRate =
           feesOptions.find((v) => v.label === data.feeRate)?.value || 0;
@@ -214,7 +222,7 @@ export const SendModal = ({
 
         if (tx.txHex) {
           try {
-            await axios.post("https://mempool.space/api/tx", tx.txHex);
+            await axios.post(`${mempoolBaseUrl}/api/tx`, tx.txHex);
             toast.show(t("transactionSent"), { type: "success" });
             onClose(true);
             await sleep(500);
@@ -240,6 +248,7 @@ export const SendModal = ({
     [
       awaitWalletTransaction,
       feesOptions,
+      mempoolBaseUrl,
       nextChangeAddress,
       onClose,
       reset,
@@ -262,7 +271,7 @@ export const SendModal = ({
           halfHourFee: number;
           hourFee: number;
           economyFee: number;
-        }>("https://mempool.space/api/v1/fees/recommended");
+        }>(`${mempoolBaseUrl}/api/v1/fees/recommended`);
 
         setFeesOptions([
           { label: t("economyFee"), value: feesOptionsData.economyFee },
@@ -286,7 +295,7 @@ export const SendModal = ({
         reset();
       }
     })();
-  }, [isOpen]);
+  }, [isOpen, mempoolBaseUrl]);
 
   const fiatToBtc = useCallback(
     (amount: string) => {
@@ -406,7 +415,9 @@ export const SendModal = ({
                   required: !isMax,
                   validate: (v) =>
                     isMax ||
-                    (isValidBitcoinAmount(v) && parseFloat(v) <= currentBalance)
+                    (isValidBitcoinAmount(v) &&
+                      Math.round(parseFloat(v) * SATS_PER_BTC) <=
+                        currentBalance)
                 }}
                 render={({
                   field: { onChange, onBlur, value = "" },
@@ -488,9 +499,12 @@ export const SendModal = ({
               gapSize={0}
             >
               <S.AmountDescription>
-                {t("balance")} : {currentBalance} BTC (~{" "}
-                {accountCurrency
-                  ? getFormattedUnit(btcToFiat(currentBalance), accountCurrency)
+                {t("balance")} : {currentBalance / SATS_PER_BTC} BTC (~{" "}
+                {accountCurrency && rates
+                  ? getFormattedUnit(
+                      (currentBalance / SATS_PER_BTC) * rates[accountCurrency],
+                      accountCurrency
+                    )
                   : ""}
                 )
               </S.AmountDescription>

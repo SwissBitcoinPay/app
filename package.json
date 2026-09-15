@@ -14,7 +14,8 @@
     "lint": "eslint ./ && tsc --noemit",
     "eject": "react-scripts eject",
     "postinstall": "patch-package",
-    "clean": "react-native clean-project-auto"
+    "clean": "react-native clean-project-auto",
+    "gen:types": "bash ../server/scripts/gen-frontend-types.sh src/types/api"
   },
   "dependencies": {
     "@bam.tech/react-native-image-resizer": "3.0.11",
@@ -53,7 +54,7 @@
     "bip84": "0.2.9",
     "bitbox-api": "0.9.0",
     "bitcoin-address-validation": "3.0.0",
-    "bitcoinjs-lib": "7.0.0-rc.0",
+    "bitcoinjs-lib": "7.0.1",
     "crypto-browserify": "3.12.1",
     "date-fns": "4.1.0",
     "ecpair": "3.0.0",
@@ -121,6 +122,7 @@
     "stream-browserify": "3.0.0",
     "styled-components": "6.1.19",
     "text-encoding-polyfill": "^0.6.7",
+    "trailbase": "^0.12.1",
     "use-previous": "1.2.0",
     "uuid": "13.0.0",
     "vm-browserify": "1.1.2",

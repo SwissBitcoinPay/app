@@ -1,4 +1,4 @@
-import { currencies, DEFAULT_DECIMALS } from "@config";
+import { getCurrencyDecimals, DEFAULT_DECIMALS } from "@config";
 import { numberWithSpaces } from "./numberWithSpaces";
 
 export const decimalSeparator =
@@ -23,7 +23,7 @@ export const getFormattedUnit = (
   amount: number,
   unit: string,
   floating?: number,
-  trailingDecimal?: boolean = false
+  trailingDecimal: boolean = false
 ) => {
   let prefix = "";
   if (amount > 0 && amount < 0.01 && unit !== "BTC") {
@@ -42,8 +42,7 @@ export const getFormattedUnit = (
     if (Number(amount) % unitCount === 0) {
       floating = 0;
     } else {
-      floating =
-        currencies.find((c) => c.value === unit)?.decimals ?? DEFAULT_DECIMALS;
+      floating = getCurrencyDecimals(unit) ?? DEFAULT_DECIMALS;
     }
   }
 
@@ -86,7 +85,4 @@ export const decimalSeparatorNameMapping = {
 };
 
 export const getUnitDecimalPower = (unit: string) =>
-  Math.pow(
-    10,
-    currencies.find((c) => c.value === unit)?.decimals ?? DEFAULT_DECIMALS
-  );
+  Math.pow(10, getCurrencyDecimals(unit) ?? DEFAULT_DECIMALS);

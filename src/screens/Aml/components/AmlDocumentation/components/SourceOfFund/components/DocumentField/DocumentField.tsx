@@ -66,24 +66,34 @@ export const DocumentField = ({
           return;
         }
         if (files?.length !== 1) return;
+        const file = files[0];
 
         setIsUploading(true);
 
-        const data = new FormData();
-        data.append("file", files[0]);
+        // Le runtime WASM du backend ne parse pas le multipart : on envoie le
+        // fichier en base64 JSON vers l'endpoint /v1 (le path legacy
+        // /kyc-doc-upload n'est pas porté). Le backend pousse vers S3 (signé
+        // SigV4 côté serveur) et renvoie l'URL de l'objet.
+        const contentBase64 = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result));
+          reader.onerror = () => reject(reader.error);
+          reader.readAsDataURL(file); // "data:<mime>;base64,<data>"
+        });
 
         const {
           data: { url }
         } = await axios.post<{ url: string }>(
-          `${apiRootUrl}/kyc-doc-upload`,
-          data,
+          `${apiRootUrl}/v1/aml-info/document`,
           {
-            params: {
-              documentType: document,
-              invoiceId
-            },
+            invoiceId,
+            documentType: document,
+            filename: file.name,
+            contentBase64
+          },
+          {
             headers: {
-              "Content-Type": "multipart/form-data"
+              "Content-Type": "application/json"
             },
             onUploadProgress: (event) => {
               if (event.lengthComputable) {
@@ -98,7 +108,7 @@ export const DocumentField = ({
         if (url) {
           setIsSuccess(true);
           onUploaded(url);
-          setFileName(files[0].name);
+          setFileName(file.name);
         }
         setIsUploading(false);
       }}

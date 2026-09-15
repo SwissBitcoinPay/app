@@ -264,6 +264,12 @@
         },
         "kyc": {
             "title": "Henkilöllisyyden varmentaminen",
+            "invalidLink": "Virheellinen varmennuslinkki",
+            "invalidLinkDescription": "Tätä varmennustapausta ei löytynyt. Linkki voi olla virheellinen tai vanhentunut.",
+            "loadingFailed": "Varmennusta ei voitu ladata",
+            "loadingFailedDescription": "Tarkista internetyhteytesi ja yritä uudelleen.",
+            "retry": "Yritä uudelleen",
+            "goBack": "Takaisin",
             "description": "Säänösten vuoksi meidän pitää varmistaa sinulta jotain tietoja. Toimi alla olevien ohjeiden mukaan, ennen laskun maksamista.",
             "relatedInvoice": "Liittyvä lasku",
             "invoiceSeller": "Myyjä",

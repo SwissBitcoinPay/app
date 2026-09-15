@@ -1,14 +1,17 @@
 import * as BIP39 from "bip39";
 // @ts-ignore
 import BIP84 from "bip84";
+import { getBitcoinNetwork } from "@config";
 import { getRandom } from "./getRandom";
 
 export const generateBtcAddress = async (existingMnemonic?: string) => {
   const mnemonic =
     existingMnemonic || BIP39.entropyToMnemonic(await getRandom(16));
 
+  const { isTestnet } = getBitcoinNetwork();
+
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  const root = new BIP84.fromMnemonic(mnemonic);
+  const root = new BIP84.fromMnemonic(mnemonic, undefined, isTestnet);
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const child0 = root.deriveAccount(0);

@@ -1,7 +1,7 @@
 import { useCallback, useContext } from "react";
 import {
   keyStoreIsGuest,
-  keyStoreTransactionsHistory
+  keyStoreLocalTransactionsIds
 } from "@config/settingsKeys";
 import { AsyncStorage, Biometrics, getSha256 } from "@utils";
 import { useToast } from "react-native-toast-notifications";
@@ -9,6 +9,7 @@ import axios from "axios";
 import { useNavigate } from "@components/Router";
 import { useTranslation } from "react-i18next";
 import { SBPContext, apiRootUrl } from "@config";
+import { api, FetchError, handleApiError } from "@types";
 
 type PostInvoiceParams = {
   amount: number;
@@ -24,7 +25,7 @@ export const usePostInvoice = () => {
   const { t, i18n } = useTranslation();
   const { accountConfig } = useContext(SBPContext);
 
-  const { apiKey, currency, name, isOnchainAvailable, isAtm } =
+  const { invoice_key, currency, name, is_onchain_available, is_atm } =
     accountConfig || {};
 
   const postInvoice = useCallback(
@@ -39,28 +40,24 @@ export const usePostInvoice = () => {
         const isGuestMode =
           (await AsyncStorage.getItem(keyStoreIsGuest)) === "true";
 
-        const isLocalInvoice = isAtm || !isGuestMode;
+        const isLocalInvoice = is_atm || !isGuestMode;
 
         let decimalFiat = amount;
         let finalUrl = "";
         let id = "";
         let additionnalHistoryProps = {};
 
-        if (!isAtm) {
+        if (!is_atm) {
           navigate("/invoice", {
             state: {
               isLocalInvoice
             }
           });
 
-          const { data: checkoutResponseData } = await axios.post<{
-            checkoutUrl: string;
-            expiry: number;
-          }>(
-            `${apiRootUrl}/checkout`,
+          const checkoutResponseData = await api.apipayments.checkout(
             {
               amount,
-              unit: unit || currency,
+              unit: unit || currency || "",
               title: `${name || ""}`,
               description,
               tag: "invoice-tpos",
@@ -69,15 +66,11 @@ export const usePostInvoice = () => {
                 type: deviceType,
                 appVersion: process.env.APP_VERSION
               },
-              extra: {
-                isGuestMode
-              },
-              onChain: isOnchainAvailable,
+              extra: { isGuestMode },
+              onChain: is_onchain_available,
               delay: 10
             },
-            {
-              headers: { "Api-Key": apiKey }
-            }
+            invoice_key ? { apiKey: invoice_key } : undefined
           );
 
           additionnalHistoryProps = {
@@ -90,8 +83,9 @@ export const usePostInvoice = () => {
             expiry: checkoutResponseData.expiry
           };
 
-          const url = checkoutResponseData.checkoutUrl;
-          id = url.split("/").pop() || "";
+          console.log({ checkoutResponseData });
+
+          id = checkoutResponseData.id;
           finalUrl = `/invoice/${id}`;
         } else {
           const ret = await Biometrics.isSensorAvailable();
@@ -130,7 +124,7 @@ export const usePostInvoice = () => {
             fiatAmount: number;
           }>(`${apiRootUrl}/atm-withdraw`, data, {
             headers: {
-              "api-key": apiKey,
+              "api-key": invoice_key,
               "sbp-sig": `sha256=${
                 (await getSha256(JSON.stringify(data))) || ""
               }`
@@ -150,10 +144,6 @@ export const usePostInvoice = () => {
           decimalFiat = withdrawResponseData.fiatAmount;
         }
 
-        const transactionsHistory = await AsyncStorage.getItem(
-          keyStoreTransactionsHistory
-        );
-
         navigate(finalUrl, {
           replace: true,
           state: {
@@ -164,34 +154,20 @@ export const usePostInvoice = () => {
           }
         });
 
-        await AsyncStorage.setItem(
-          keyStoreTransactionsHistory,
-          JSON.stringify([
-            ...JSON.parse(transactionsHistory || "[]"),
-            {
-              id: id,
-              status: "open",
-              createdAt: Math.round(new Date().getTime() / 1000),
-              input: {
-                unit: unit || currency,
-                amount: decimalFiat
-              },
-              tag: "invoice-tpos",
-              ...(deviceName
-                ? {
-                    device: {
-                      name: deviceName,
-                      type: deviceType
-                    }
-                  }
-                : {}),
-              ...additionnalHistoryProps
-            }
-          ])
+        const localTransactionsIds = await AsyncStorage.getItem(
+          keyStoreLocalTransactionsIds
+        );
+
+        void AsyncStorage.setItem(
+          keyStoreLocalTransactionsIds,
+          JSON.stringify([...JSON.parse(localTransactionsIds || "[]"), id])
         );
       } catch (e) {
-        if (axios.isAxiosError<{ reason: string }>(e)) {
-          navigate("/");
+        navigate("/");
+        if (e instanceof FetchError) {
+          const { message } = handleApiError(e, t);
+          toast.show(message, { type: "error" });
+        } else if (axios.isAxiosError<{ reason: string }>(e)) {
           if (e.response?.data) {
             toast.show(t(e.response.data.reason), {
               type: "error"
@@ -204,12 +180,12 @@ export const usePostInvoice = () => {
     },
     [
       navigate,
-      isAtm,
+      is_atm,
       currency,
       name,
       i18n.language,
-      isOnchainAvailable,
-      apiKey,
+      is_onchain_available,
+      invoice_key,
       t,
       toast
     ]

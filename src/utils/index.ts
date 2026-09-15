@@ -24,6 +24,10 @@ export { tupulize } from "./tupulize";
 export { getRandomNumber } from "./getRandomNumber";
 export { generateBtcAddress } from "./generateBtcAddress";
 export { validateBitcoinAddress } from "./validateBitcoinAddress";
+export {
+  isExtendedPublicKey,
+  isNativeSegwitExtendedPublicKey
+} from "./extendedPublicKey";
 export { hexToRgb } from "./hexToRgb";
 export { mergeDeep } from "./mergeDeep";
 export { isMinUserType } from "./isMinUserType";
@@ -36,7 +40,6 @@ export { base64ToBitmapArray } from "./base64ToBitmapArray";
 export { Printer } from "./Printer";
 export { getImageSize } from "./getImageSize";
 export { scaleDimensions } from "./scaleDimensions";
-export { base64ToHex } from "./base64ToHex";
 export { formatSecondsToMMSS } from "./formatSecondsToMMSS";
 export { FS } from "./FS";
 export { isNewAccount } from "./isNewAccount";

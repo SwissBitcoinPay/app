@@ -5,6 +5,11 @@ export const StyledComponentStack = styled(ComponentStack)`
   align-items: center;
 `;
 
+export const LoadErrorContainer = styled(StyledComponentStack)`
+  flex: 1;
+  justify-content: center;
+`;
+
 export const InvoicePreviewContainer = styled(ComponentStack)`
   border: 3px solid ${({ theme }) => theme.colors.bitcoin};
   border-radius: ${({ theme }) => theme.borderRadius}px;

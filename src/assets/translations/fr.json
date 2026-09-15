@@ -208,7 +208,7 @@
             "forgotPassword": "J'ai oublié mon mot de passe",
             "password": "Mot de passe",
             "error": {
-                "invalidCredentials": "Informations invalides"
+                "invalidCredentials": "Identifiants invalides"
             }
         },
         "history": {
@@ -264,6 +264,12 @@
         },
         "kyc": {
             "title": "Vérification d'identité",
+            "invalidLink": "Lien de vérification invalide",
+            "invalidLinkDescription": "Ce dossier de vérification est introuvable. Le lien est peut-être invalide ou expiré.",
+            "loadingFailed": "Impossible de charger la vérification",
+            "loadingFailedDescription": "Vérifiez votre connexion internet, puis réessayez.",
+            "retry": "Réessayer",
+            "goBack": "Revenir",
             "description": "En raison de la réglementation, nous devons vérifier certaines informations vous concernant. Veuillez suivre les étapes ci-dessous avant de payer la facture.",
             "relatedInvoice": "Facture concernée",
             "invoiceSeller": "Vendeur",
@@ -471,11 +477,13 @@
             "firstThreeMonths": "3 premiers mois",
             "error": {
                 "depositAddress": {
-                    "depositAddressAlreadyUsed": "Cette adresse de dépôt est déjà utilisée"
+                    "depositAddressAlreadyUsed": "Cette adresse de dépôt est déjà utilisée",
+                    "alreadyExists": "Cette adresse de dépôt est déjà utilisée"
                 },
                 "iban": {
                     "ibanAlreadyUsed": "Cet IBAN est déjà utilisé",
-                    "wiseBankNotSupported": "La banque Wise n'est pas supportée"
+                    "wiseBankNotSupported": "La banque Wise n'est pas supportée",
+                    "alreadyExists": "Cet IBAN est déjà utilisé"
                 }
             }
         },

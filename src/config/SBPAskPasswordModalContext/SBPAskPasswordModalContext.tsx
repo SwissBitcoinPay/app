@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { useToast } from "react-native-toast-notifications";
 import * as S from "./styled";
 import { useIsBiometrySupported } from "@hooks";
+import { dashboardUrl } from "../dashboardUrl";
 
 type PartialAccountConfig = Pick<AccountConfigType, "name" | "mail">;
 
@@ -59,7 +60,7 @@ export const SBPAskPasswordModalContextProvider = ({
       }
       setIsOpen(false);
     },
-    [toast]
+    [toast, t]
   );
 
   const onSubmit = useCallback(() => {
@@ -70,7 +71,7 @@ export const SBPAskPasswordModalContextProvider = ({
         setValue(undefined);
       }, 500);
     }
-  }, [promiseData?.resolve, value]);
+  }, [promiseData, value]);
 
   const isBiometrySupported = useIsBiometrySupported();
 
@@ -126,7 +127,7 @@ export const SBPAskPasswordModalContextProvider = ({
             />
             <Url
               as={S.ForgotPasswordText}
-              href="https://dashboard.swiss-bitcoin-pay.ch/reset-password"
+              href={`${dashboardUrl}/reset-password`}
               title={tRoot("screens.emailLogin.forgotPassword")}
             />
           </ComponentStack>

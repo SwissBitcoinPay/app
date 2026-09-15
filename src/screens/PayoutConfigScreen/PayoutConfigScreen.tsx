@@ -2,26 +2,43 @@ import { useTranslation } from "react-i18next";
 import { Loader, PageContainer, PayoutConfig } from "@components";
 import { useNavigate } from "@components/Router";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { useAccountConfig } from "@hooks";
-import { apiRootUrl, currencyToCountry } from "@config";
-import { isApiError } from "@utils";
-import axios from "axios";
 import { useToast } from "react-native-toast-notifications";
-import {
-  PayoutConfigForm,
-  WalletType
-} from "@components/PayoutConfig/PayoutConfig";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { WalletConfig } from "@components/ConnectWalletModal/ConnectWalletModal";
+import type { PayoutConfigForm } from "@components/PayoutConfig/PayoutConfig";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { api, FetchError, type AccountConfigType } from "@types";
+import { getPayoutConfigDefaultValues } from "./getPayoutConfigDefaultValues";
 
-export const PayoutConfigScreen = () => {
+// Refus de saisie du back-end : `{field, detail}` en corps JSON, remonté par
+// `client.fetch` dans `FetchError.message` (cf. helpers/errors.ts côté server).
+const parseFieldError = (e: unknown) => {
+  if (!(e instanceof FetchError)) return undefined;
+  try {
+    const { field, detail } = JSON.parse(e.message) as {
+      field?: string;
+      detail?: string;
+    };
+    return field && detail ? { field, detail } : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
+type PayoutConfigFormScreenProps = {
+  accountConfig: AccountConfigType;
+  currency: NonNullable<AccountConfigType["currency"]>;
+};
+
+const PayoutConfigFormScreen = ({
+  accountConfig,
+  currency
+}: PayoutConfigFormScreenProps) => {
   const navigate = useNavigate();
   const { t: tRoot } = useTranslation();
   const { t } = useTranslation(undefined, {
     keyPrefix: "screens.payoutConfig"
   });
-  const { accountConfig } = useAccountConfig();
   const toast = useToast();
 
   const {
@@ -36,40 +53,10 @@ export const PayoutConfigScreen = () => {
     trigger
   } = useForm<PayoutConfigForm>({
     mode: "onTouched",
-    defaultValues: {
-      depositAddress: accountConfig?.depositAddress,
-      btcAddressTypes: {
-        onchain: false,
-        lightning: false,
-        xpub: false
-      },
-      ownerCountry:
-        // @ts-ignore
-        accountConfig?.ownerCountry || currencyToCountry[currency],
-      iban: accountConfig?.iban,
-      ownerName: accountConfig?.ownerName,
-      ownerAddress: accountConfig?.ownerAddress,
-      ownerComplement: accountConfig?.ownerComplement,
-      ownerZip: accountConfig?.ownerZip,
-      ownerCity: accountConfig?.ownerCity,
-      reference: accountConfig?.reference,
-      walletType: accountConfig?.verifiedAddresses?.find((v) => v.current)
-        ?.walletConfig?.type as WalletType,
-      walletConfig: accountConfig?.verifiedAddresses?.find((v) => v.current)
-        ?.walletConfig as WalletConfig
-    }
+    defaultValues: getPayoutConfigDefaultValues(accountConfig)
   });
 
-  useEffect(() => {
-    setValue("btcPercent", accountConfig?.btcPercent || 0);
-  }, []);
-
   const [isSubmiting, setIsSubmiting] = useState(false);
-
-  const currency = useMemo(
-    () => accountConfig?.currency,
-    [accountConfig?.currency]
-  );
 
   const onSubmit = useCallback<SubmitHandler<PayoutConfigForm>>(
     async (values) => {
@@ -79,7 +66,6 @@ export const PayoutConfigScreen = () => {
         btcPercent,
         depositAddress,
         messageToSign,
-        signature,
         iban,
         reference,
         ownerName,
@@ -95,32 +81,29 @@ export const PayoutConfigScreen = () => {
       const isReceiveFiat = btcPercent <= 99;
 
       try {
-        const patchData = {
-          btcPercent,
+        // La signature a déjà été consommée par `accounts.verifySignature`
+        // (cf. BitcoinSettings) : le PATCH ne transmet que `message`.
+        await api.accounts.update(accountConfig.id, {
+          btc_percent: btcPercent,
           ...(isReceiveBitcoin
             ? {
-                depositAddress,
+                deposit_address: depositAddress,
                 message: messageToSign,
-                signature,
-                walletConfig
+                wallet_config: walletConfig
               }
             : {}),
           ...(isReceiveFiat
             ? {
                 iban,
-                reference,
-                ownerName,
-                ownerAddress,
-                ownerComplement,
-                ownerZip,
-                ownerCity,
-                ownerCountry
+                bank_reference: reference || undefined,
+                owner_name: ownerName,
+                owner_address: ownerAddress,
+                owner_complement: ownerComplement || undefined,
+                owner_zip: ownerZip,
+                owner_city: ownerCity,
+                owner_country: ownerCountry
               }
             : {})
-        };
-
-        await axios.patch(`${apiRootUrl}/account`, patchData, {
-          withCredentials: true
         });
 
         toast.show(t("patchSettingNeedsEmailValidation"), {
@@ -128,33 +111,32 @@ export const PayoutConfigScreen = () => {
         });
         navigate(-1);
       } catch (e) {
-        if (isApiError(e)) {
-          const errorField = e.response.data.field as keyof PayoutConfigForm;
-          const errorKey = e.response.data.detail;
+        const fieldError = parseFieldError(e);
 
-          const errorMessage = t(`error.${errorField}.${errorKey}`);
+        // Le back-end renvoie le nom de colonne (snake_case) ; le formulaire
+        // est en camelCase.
+        const errorField = fieldError?.field.replace(/_(.)/g, (_, c: string) =>
+          c.toUpperCase()
+        ) as keyof PayoutConfigForm | undefined;
 
-          if (errorField) {
-            setError(errorField, { message: errorMessage });
-          }
+        const errorMessage = fieldError
+          ? t(`error.${errorField}.${fieldError.detail}`, {
+              defaultValue: tRoot("common.errors.unknown")
+            })
+          : tRoot("common.errors.unknown");
 
-          toast.show(errorMessage, {
-            type: "error"
-          });
-        } else {
-          toast.show("error.unknown", {
-            type: "error"
-          });
+        if (errorField) {
+          setError(errorField, { message: errorMessage });
         }
+
+        toast.show(errorMessage, {
+          type: "error"
+        });
       }
       setIsSubmiting(false);
     },
-    [navigate, t, toast]
+    [accountConfig.id, navigate, t, tRoot, toast, setError]
   );
-
-  if (!currency) {
-    return <Loader />;
-  }
 
   return (
     <PageContainer
@@ -180,7 +162,21 @@ export const PayoutConfigScreen = () => {
         trigger={trigger}
         getFieldState={getFieldState}
         currency={currency}
+        isDiscountFees={false}
       />
     </PageContainer>
+  );
+};
+
+export const PayoutConfigScreen = () => {
+  const { accountConfig, isLoading } = useAccountConfig();
+  const currency = accountConfig?.currency;
+
+  if (isLoading || !accountConfig || !currency) {
+    return <Loader />;
+  }
+
+  return (
+    <PayoutConfigFormScreen accountConfig={accountConfig} currency={currency} />
   );
 };

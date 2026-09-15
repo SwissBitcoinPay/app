@@ -50,7 +50,7 @@ export default [
       sourceType: "script",
 
       parserOptions: {
-        tsconfigRootDir: "/home/swiss-bitcoin-pay/sbp/app",
+        tsconfigRootDir: __dirname,
         project: ["./tsconfig.json"]
       }
     },

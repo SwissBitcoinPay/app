@@ -264,6 +264,12 @@
         },
         "kyc": {
             "title": "Verificación de identidad",
+            "invalidLink": "Enlace de verificación no válido",
+            "invalidLinkDescription": "No se ha encontrado este expediente de verificación. Es posible que el enlace no sea válido o haya caducado.",
+            "loadingFailed": "No se puede cargar la verificación",
+            "loadingFailedDescription": "Compruebe su conexión a internet e inténtelo de nuevo.",
+            "retry": "Intentar de nuevo",
+            "goBack": "Volver",
             "description": "Debido a la normativa, tenemos que verificar algunos datos sobre usted. Por favor, siga los siguientes pasos antes de pagar la factura.",
             "relatedInvoice": "Factura relacionada",
             "invoiceSeller": "Vendedor",

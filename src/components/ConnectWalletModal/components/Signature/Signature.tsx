@@ -3,8 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Button, ComponentStack, FieldDescription, Loader } from "@components";
 import { ConnectWalletComponentProps } from "../../ConnectWalletModal";
 import { useToast } from "react-native-toast-notifications";
-import axios from "axios";
-import { apiRootUrl } from "@config";
+import { api } from "@types";
 import * as ConnectStyled from "../../styled";
 import { DEFAULT_SCRIPT_TYPE } from "@config";
 import * as S from "./styled";
@@ -66,9 +65,15 @@ export const Signature = ({
         return;
       }
 
+      const currentVerifiedAddress = accountConfig?.verified_addresses?.find(
+        (a) => a.address === accountConfig?.deposit_address
+      );
+      const verifiedWalletConfig = currentVerifiedAddress?.walletConfig as
+        | { account?: string }
+        | undefined;
       const walletPath =
-        accountConfig?.verifiedAddresses?.find((a) => a.current)?.walletConfig
-          .account || (await AsyncStorage.getItem(keyStoreWalletPath));
+        verifiedWalletConfig?.account ||
+        (await AsyncStorage.getItem(keyStoreWalletPath));
 
       let finalAccount: (typeof _accounts)[number];
 
@@ -99,9 +104,7 @@ export const Signature = ({
       let signature: string;
 
       if (!customFunction) {
-        const { data: verifyData } = await axios.post<{
-          message: string;
-        }>(`${apiRootUrl}/verify-address`, {
+        const verifyData = await api.accounts.verifyAddress({
           depositAddress: accountZpub
         });
         messageToSign = verifyData.message;

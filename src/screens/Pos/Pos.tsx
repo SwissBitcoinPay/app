@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   KeyboardEvent,
   RefObject,
@@ -36,15 +35,21 @@ import {
 import {
   DEFAULT_DECIMALS,
   SBPContext,
-  apiRootUrl,
-  currencies,
+  getCurrencyDecimals,
+  getEnabledCurrencies,
   platform
 } from "@config";
+import { api } from "@types";
 import { keyStoreDeviceName, keyStoreIsGuest } from "@config/settingsKeys";
 import { useToast } from "react-native-toast-notifications";
 import { useTheme } from "styled-components";
 import { v4 as uuidv4 } from "uuid";
-import { TextInput, Touchable, useWindowDimensions } from "react-native";
+import {
+  TextInput,
+  Touchable,
+  TouchableOpacity,
+  useWindowDimensions
+} from "react-native";
 import * as S from "./styled";
 
 const DECIMAL_REF_INDEX = 10;
@@ -74,16 +79,34 @@ export const Pos = () => {
 
   const { accountConfig, isLoading } = useAccountConfig();
   const {
-    isAtm,
-    currency: accountCurrency,
+    is_atm,
+    currency: rawAccountCurrency,
     name,
-    hasKyc
+    has_kyc
   } = accountConfig || {};
 
-  const unit = useMemo(
-    () => preferredCurrency || accountCurrency,
-    [accountCurrency, preferredCurrency]
-  );
+  const accountCurrency = rawAccountCurrency ?? undefined;
+
+  const availableCurrencies = getEnabledCurrencies();
+
+  const unit = useMemo(() => {
+    const preferred = availableCurrencies.find(
+      ({ value }) => value === preferredCurrency
+    )?.value;
+    const account = availableCurrencies.find(
+      ({ value }) => value === accountCurrency
+    )?.value;
+
+    if (preferred || account) return preferred || account;
+    if (!preferredCurrency && !accountCurrency) return undefined;
+
+    return (
+      availableCurrencies.find(({ value }) => value === "CHF")?.value ??
+      availableCurrencies.find(({ value }) => !["sat", "BTC"].includes(value))
+        ?.value ??
+      availableCurrencies[0]?.value
+    );
+  }, [accountCurrency, availableCurrencies, preferredCurrency]);
 
   const isBackgroundLoading = useMemo(
     () => !!accountConfig && isLoading,
@@ -111,9 +134,8 @@ export const Pos = () => {
   );
 
   const { unitDecimals, unitDecimalPower } = useMemo(() => {
-    const _unitDecimals =
-      currencies.find((c) => c.value === unit)?.decimals ?? DEFAULT_DECIMALS;
-    const _unitDecimalPower = getUnitDecimalPower(unit);
+    const _unitDecimals = getCurrencyDecimals(unit || "") ?? DEFAULT_DECIMALS;
+    const _unitDecimalPower = getUnitDecimalPower(unit || "");
     return { unitDecimals: _unitDecimals, unitDecimalPower: _unitDecimalPower };
   }, [unit]);
 
@@ -146,14 +168,15 @@ export const Pos = () => {
   }, [postInvoice, decimalFiat, unit, description, deviceName]);
 
   const saveMaxFiatAmount = useCallback(async () => {
-    if (unit && !hasKyc) {
-      const { data: getTransactionLimitData } = await axios.get<number>(
-        `${apiRootUrl}/transaction-limit/${unit}`
-      );
-
-      setMaxFiatAmount(getTransactionLimitData);
+    if (unit) {
+      if (!has_kyc) {
+        const limit = await api.apipayments.limit({ currency: unit });
+        setMaxFiatAmount(limit);
+      } else {
+        setMaxFiatAmount(undefined);
+      }
     }
-  }, [unit, hasKyc]);
+  }, [unit, has_kyc]);
 
   useEffect(() => {
     saveMaxFiatAmount();
@@ -300,14 +323,7 @@ export const Pos = () => {
     if (plusFiatAmount !== 0) {
       void updatePlusAmount(newPlusFiatAmount);
     }
-  }, [
-    plusFiatAmount,
-    updateAmount,
-    fiatAmount,
-    colors.white,
-    colors.greyLight,
-    updatePlusAmount
-  ]);
+  }, [plusFiatAmount, updateAmount, fiatAmount, updatePlusAmount]);
 
   const handleKeyPress = useCallback<EventListener>(
     // @ts-ignore
@@ -387,7 +403,7 @@ export const Pos = () => {
     >
       {deviceNameModal}
       <S.InfosContainer isSmallHeight={isSmallHeight}>
-        {isAtm && (
+        {is_atm && (
           <S.ATMButton
             secondaryColor={colors.primary}
             disabled
@@ -431,7 +447,7 @@ export const Pos = () => {
           <S.FiatAmountDropdownIcon icon={faAngleDown} color={colors.grey} />
           <S.FiatUnitPicker
             value={unit}
-            items={currencies}
+            items={availableCurrencies}
             placeholder={{}}
             onValueChange={(value: string | null) => {
               if (value) {

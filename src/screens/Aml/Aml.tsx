@@ -11,6 +11,7 @@ import {
 } from "@components";
 import {
   faAt,
+  faArrowLeft,
   faBuilding,
   faClock,
   faDollarSign,
@@ -37,6 +38,13 @@ import { PayerKyc } from "./components/PayerKyc";
 import { AmlDocumentation } from "./components/AmlDocumentation";
 import { AmlStatus } from "./components/AmlStatus";
 import { AmlInfoStatus } from "./components/AmlStatus/AmlStatus";
+import {
+  AmlLoadError,
+  getAmlLoadError,
+  isValidAmlInvoiceId
+} from "./amlLoadError";
+
+const AML_LOAD_TIMEOUT_MS = 10_000;
 
 export const sourceOfFundsRequirements = {
   [SourceOfFunds.Income]: {
@@ -311,11 +319,12 @@ type SourceOfFundsForm = {
   }[];
 };
 
+// Réponse de GET /v1/aml-info — clés snake_case (convention /v1 du backend).
 type AmlInfo = {
-  invoiceId: string;
+  invoice_id: string;
   status: AmlInfoStatus;
-  kycId?: string;
-  payerName?: string;
+  kyc_id?: string | null;
+  payer_name?: string | null;
 };
 
 export const Aml = () => {
@@ -327,9 +336,13 @@ export const Aml = () => {
   const [invoiceData, setInvoiceData] = useState<InvoiceType>();
   const [isSubmitting, setIsSubmiting] = useState(false);
   const params = useParams<{ id: string }>();
-  const invoiceId = params.id;
+  const invoiceId = params.id || "";
+  const isInvoiceIdValid = isValidAmlInvoiceId(invoiceId);
 
   const [amlInfo, setAmlInfo] = useState<AmlInfo>();
+  const [amlInfoLoadError, setAmlInfoLoadError] = useState<AmlLoadError>();
+  const [invoiceDataTimedOut, setInvoiceDataTimedOut] = useState(false);
+  const [pollingGeneration, setPollingGeneration] = useState(0);
 
   const {
     control,
@@ -344,34 +357,48 @@ export const Aml = () => {
     }
   });
 
-  const refreshAmlInfo = useCallback(async () => {
-    try {
-      const { data } = await axios.get<AmlInfo>(`${apiRootUrl}/aml-info`, {
-        params: { invoiceId }
-      });
-
-      if (data.status === "kycDone") {
-        setValue("payerName", data.payerName);
-      } else if (data.status === "accepted") {
-        navigate(`/invoice/${invoiceId}`);
+  const refreshAmlInfo = useCallback(
+    async (signal?: AbortSignal) => {
+      if (!isInvoiceIdValid) {
+        setAmlInfoLoadError("notFound");
+        return;
       }
-      setAmlInfo(data);
-      return data;
-    } catch (e) {}
-  }, [invoiceId, navigate, setValue]);
+
+      try {
+        const { data } = await axios.get<AmlInfo>(`${apiRootUrl}/v1/aml-info`, {
+          params: { invoiceId },
+          signal,
+          timeout: AML_LOAD_TIMEOUT_MS
+        });
+
+        if (data.status === "kycDone") {
+          setValue("payerName", data.payer_name ?? "");
+        } else if (data.status === "accepted") {
+          navigate(`/invoice/${invoiceId}`);
+        }
+        setAmlInfoLoadError(undefined);
+        setAmlInfo(data);
+        return data;
+      } catch (error) {
+        if (axios.isCancel(error)) return;
+        setAmlInfoLoadError(getAmlLoadError(error));
+      }
+    },
+    [invoiceId, isInvoiceIdValid, navigate, setValue]
+  );
 
   const onSubmit = useCallback<SubmitHandler<AMLForm>>(
     async (values) => {
       const { payerName: _, payerEmail, ...otherValues } = values;
       setIsSubmiting(true);
       try {
-        await axios.post(`${apiRootUrl}/aml-info`, {
+        await axios.post(`${apiRootUrl}/v1/aml-info`, {
           invoiceId,
           payerEmail,
           amlData: otherValues
         });
         refreshAmlInfo();
-      } catch (e) {
+      } catch (_e) {
         toast.show(tRoot("common.errors.unknown"), {
           type: "error"
         });
@@ -382,50 +409,126 @@ export const Aml = () => {
     [invoiceId, refreshAmlInfo, tRoot, toast]
   );
 
-  const onKycSuccess = useCallback(() => {
-    const interval = setInterval(async () => {
-      if ((await refreshAmlInfo())?.status !== "draft") {
-        clearInterval(interval);
-      }
-    }, 1000);
-  }, [refreshAmlInfo]);
+  const restartAmlInfoPolling = useCallback(() => {
+    setAmlInfoLoadError(undefined);
+    setInvoiceDataTimedOut(false);
+    setPollingGeneration((generation) => generation + 1);
+  }, []);
 
   const { sendJsonMessage, lastJsonMessage, readyState } =
-    useWebSocket<InvoiceType>(`wss://${apiRootDomain}/invoice`, {
-      shouldReconnect: getTrue
-    });
+    useWebSocket<InvoiceType>(
+      isInvoiceIdValid ? `wss://${apiRootDomain}/invoice` : null,
+      { shouldReconnect: getTrue }
+    );
 
   useEffect(() => {
-    void onKycSuccess();
-  }, [refreshAmlInfo]);
+    setInvoiceData(undefined);
+    setAmlInfo(undefined);
+    setAmlInfoLoadError(undefined);
+    setInvoiceDataTimedOut(false);
+  }, [invoiceId]);
 
   useEffect(() => {
-    if (readyState === ReadyState.CONNECTING) {
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    let isCancelled = false;
+    const abortController = new AbortController();
+
+    const poll = async () => {
+      const data = await refreshAmlInfo(abortController.signal);
+
+      if (!isCancelled && data?.status === "draft") {
+        timeout = setTimeout(() => {
+          void poll();
+        }, 1000);
+      }
+    };
+
+    void poll();
+
+    return () => {
+      isCancelled = true;
+      abortController.abort();
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [pollingGeneration, refreshAmlInfo]);
+
+  useEffect(() => {
+    if (isInvoiceIdValid && readyState === ReadyState.OPEN) {
       sendJsonMessage({ id: invoiceId });
     }
-  }, [readyState]);
+  }, [invoiceId, isInvoiceIdValid, readyState, sendJsonMessage]);
 
   useEffect(() => {
     if (lastJsonMessage) {
       setInvoiceData(lastJsonMessage);
+      setInvoiceDataTimedOut(false);
     }
   }, [lastJsonMessage]);
 
+  useEffect(() => {
+    if (!amlInfo || invoiceData || amlInfoLoadError || invoiceDataTimedOut)
+      return;
+
+    const timeout = setTimeout(
+      () => setInvoiceDataTimedOut(true),
+      AML_LOAD_TIMEOUT_MS
+    );
+
+    return () => clearTimeout(timeout);
+  }, [amlInfo, amlInfoLoadError, invoiceData, invoiceDataTimedOut]);
+
+  const displayedLoadError = isInvoiceIdValid
+    ? amlInfoLoadError || (invoiceDataTimedOut ? "unavailable" : undefined)
+    : "notFound";
+
   return (
     <PageContainer
-      header={{ title: t("title") }}
-      {...(amlInfo?.status === "kycDone"
+      header={{
+        title: t("title"),
+        ...(displayedLoadError
+          ? { left: { icon: faArrowLeft, onPress: -1 } }
+          : {})
+      }}
+      {...(displayedLoadError
         ? {
             footerButton: {
-              title: tRoot("common.submit"),
-              disabled: !isValid,
-              onPress: handleSubmit(onSubmit),
-              isLoading: isSubmitting
+              title:
+                displayedLoadError === "unavailable" ? t("retry") : t("goBack"),
+              onPress:
+                displayedLoadError === "unavailable"
+                  ? restartAmlInfoPolling
+                  : () => navigate(-1)
             }
           }
-        : {})}
+        : amlInfo?.status === "kycDone"
+          ? {
+              footerButton: {
+                title: tRoot("common.submit"),
+                disabled: !isValid,
+                onPress: handleSubmit(onSubmit),
+                isLoading: isSubmitting
+              }
+            }
+          : {})}
     >
-      {!invoiceData || !invoiceId || !amlInfo ? (
+      {displayedLoadError ? (
+        <S.LoadErrorContainer>
+          <Text h3 weight={700} color={colors.white} centered>
+            {t(
+              displayedLoadError === "notFound"
+                ? "invalidLink"
+                : "loadingFailed"
+            )}
+          </Text>
+          <Text h4 color={colors.greyLight} centered>
+            {t(
+              displayedLoadError === "notFound"
+                ? "invalidLinkDescription"
+                : "loadingFailedDescription"
+            )}
+          </Text>
+        </S.LoadErrorContainer>
+      ) : !invoiceData || !amlInfo ? (
         <Loader />
       ) : (
         <S.StyledComponentStack>
@@ -466,9 +569,9 @@ export const Aml = () => {
           <></>
           {amlInfo.status === "draft" ? (
             <PayerKyc
-              kycId={amlInfo?.kycId}
+              kycId={amlInfo?.kyc_id ?? undefined}
               invoiceId={invoiceId}
-              onSuccess={onKycSuccess}
+              onSuccess={restartAmlInfoPolling}
             />
           ) : amlInfo.status === "kycDone" ? (
             <S.StyledComponentStack>
@@ -486,14 +589,14 @@ export const Aml = () => {
                       onChangeText={field.onChange}
                       onBlur={field.onBlur}
                       error={error?.message}
-                      disabled={!!amlInfo?.payerName}
+                      disabled={!!amlInfo?.payer_name}
                     />
                   </FieldContainer>
                 )}
               />
               <Controller
                 control={control}
-                name="payerOccupation"
+                name="occupation"
                 rules={{ required: true, maxLength: 200 }}
                 render={({ field, fieldState: { error } }) => (
                   <FieldContainer icon={faSuitcase} title={t(field.name)}>
