@@ -11,11 +11,9 @@ import {
 } from "react-hook-form";
 import { Step1, Step2, Step3, Step4, Step5 } from "./components";
 import { useToast } from "react-native-toast-notifications";
-import axios from "axios";
 import { AsyncStorage, sleep } from "@utils";
 import { keyStoreUserType } from "@config/settingsKeys";
-import { UserType } from "@types";
-import { apiRootUrl } from "@config";
+import { UserType, api } from "@types";
 import { SignatureData } from "@components/PayoutConfig/components/BitcoinSettings/BitcoinSettings";
 
 type CreateWalletForm = {
@@ -95,10 +93,7 @@ export const CreateWalletModal = ({
         const data = watch();
 
         try {
-          const { data: verifyData } = await axios.post<{
-            message: string;
-            signAddress?: string;
-          }>(`${apiRootUrl}/verify-address`, {
+          const verifyData = await api.accounts.verifyAddress({
             depositAddress: data.zPub
           });
 
@@ -108,9 +103,9 @@ export const CreateWalletModal = ({
             data.firstAddressPrivateKey,
             data.firstAddress,
             message
-          ) as string;
+          );
 
-          await axios.post(`${apiRootUrl}/verify-signature`, {
+          await api.accounts.verifySignature({
             message,
             signature
           });

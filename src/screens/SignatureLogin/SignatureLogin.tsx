@@ -16,7 +16,7 @@ import { Signer } from "bip322-js";
 import { AsyncStorage, generateBtcAddress, isApiError } from "@utils";
 import axios from "axios";
 import { useToast } from "react-native-toast-notifications";
-import { Bip84Account, UserType } from "@types";
+import { Bip84Account, client, UserType } from "@types";
 import { TextInput } from "react-native";
 import { useTheme } from "styled-components";
 import { useAccountConfig, useIsBiometrySupported } from "@hooks";
@@ -62,7 +62,9 @@ export const SignatureLogin = () => {
   const toast = useToast();
   const { colors } = useTheme();
   const { setUserType, clearContext } = useContext(SBPContext);
-  const { onAuthLogin } = useAccountConfig({ refresh: false });
+  const { onAuthLogin, onSignatureLogin } = useAccountConfig({
+    refresh: false
+  });
   const { control, handleSubmit, formState, setError, trigger } =
     useForm<SignatureLoginForm>({
       mode: "onTouched",
@@ -74,19 +76,15 @@ export const SignatureLogin = () => {
   const [isSubmitting, setIsSubmiting] = useState(false);
 
   const loginWithSignature = useCallback(
-    async ({ message, signature, zPub, words, walletType }: SignatureData) => {
-      const signatureLoginData = {
-        messageToSign: message,
-        signature,
-        zPub,
-        words
-      };
-
+    async ({ message, signature, zPub, words }: SignatureData) => {
       const requireEncryptionPassword = !!words && !isBiometrySupported;
 
-      const _accountConfig = await onAuthLogin(
-        signatureLoginData,
-        false,
+      // La preuve de signature est échangée contre une session par le flux OIDC
+      // (`onSignatureLogin`). L'ancien appel envoyait `{messageToSign, zPub,
+      // words}` à la connexion par mot de passe, qui attend `{email, password}` :
+      // le login par signature ne pouvait pas fonctionner.
+      const _accountConfig = await onSignatureLogin(
+        { message, signature },
         !requireEncryptionPassword
       );
 
@@ -113,9 +111,11 @@ export const SignatureLogin = () => {
       if (requireEncryptionPassword && _accountConfig && _accountConfig.mail) {
         const password = await askPassword?.(_accountConfig);
         if (password) {
+          // `{email, password}` : `{UserId, Password}` était la shape du stack
+          // Node-RED, que la connexion actuelle n'accepte pas.
           const emailLoginData = {
-            UserId: _accountConfig.mail,
-            Password: password
+            email: _accountConfig.mail,
+            password
           };
 
           try {
@@ -134,11 +134,11 @@ export const SignatureLogin = () => {
             return;
           }
         } else {
-          // Force logout
+          // Force logout. `POST /auth` était la route du stack Node-RED : elle
+          // n'existe plus, la déconnexion passe par le SDK (qui supprime aussi
+          // les cookies de session posés par le flux OIDC).
           try {
-            await axios.post(`${apiRootUrl}/auth`, null, {
-              withCredentials: true
-            });
+            await client.logout();
           } catch (e) {}
 
           await AsyncStorage.clear();
@@ -151,7 +151,15 @@ export const SignatureLogin = () => {
 
       setUserType(UserType.Wallet);
     },
-    [isBiometrySupported, clearContext]
+    [
+      isBiometrySupported,
+      clearContext,
+      askPassword,
+      onAuthLogin,
+      setUserType,
+      t,
+      toast
+    ]
   );
 
   const onSubmit = useCallback<SubmitHandler<SignatureLoginForm>>(
@@ -195,21 +203,19 @@ export const SignatureLogin = () => {
         const { firstAddress, firstAddressPrivateKey, zPub, words } =
           await generateBtcAddress(Object.values(values).join(" "));
 
-        const signatureAuthData = {
-          signAddress: firstAddress
-        };
-
         const signatureAuthResponse = await axios.get<{
-          messageToSign: string;
-        }>(`${apiRootUrl}/signature-auth`, { params: signatureAuthData });
+          message: string;
+        }>(`${apiRootUrl}/v1/signature-auth/challenge`, {
+          params: { signAddress: firstAddress }
+        });
 
-        const messageToSign = signatureAuthResponse.data.messageToSign;
+        const messageToSign = signatureAuthResponse.data.message;
 
         const signature = Signer.sign(
           firstAddressPrivateKey,
           firstAddress,
           messageToSign
-        ) as string;
+        );
 
         await loginWithSignature({
           message: messageToSign,
@@ -243,16 +249,7 @@ export const SignatureLogin = () => {
       }
       setIsSubmiting(false);
     },
-    [
-      onAuthLogin,
-      setError,
-      setUserType,
-      t,
-      tRoot,
-      toast,
-      trigger,
-      isBiometrySupported
-    ]
+    [setError, t, tRoot, toast, trigger, loginWithSignature]
   );
 
   const validateWord = useCallback(
@@ -300,7 +297,7 @@ export const SignatureLogin = () => {
         });
       }
     },
-    [onAuthLogin, setUserType, isBiometrySupported]
+    [loginWithSignature]
   );
 
   const loginWithWallet = useCallback(async () => {
@@ -316,14 +313,14 @@ export const SignatureLogin = () => {
             const firstAddress = bipPublicAccount.getAddress(0);
 
             const { data: signatureAuthData } = await axios.get<{
-              messageToSign: string;
-            }>(`${apiRootUrl}/signature-auth`, {
+              message: string;
+            }>(`${apiRootUrl}/v1/signature-auth/challenge`, {
               params: {
                 signAddress: firstAddress
               }
             });
             resolver();
-            return { messageToSign: signatureAuthData.messageToSign };
+            return { messageToSign: signatureAuthData.message };
           } catch (e) {
             if (isApiError(e)) {
               toast.show(

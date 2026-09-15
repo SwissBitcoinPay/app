@@ -2,12 +2,10 @@ import { useCallback } from "react";
 import { ScriptType } from "@utils/Bitbox/api/account";
 // @ts-ignore
 import BIP84 from "bip84";
-import axios from "axios";
-import { Bip84Account } from "@types";
+import { Bip84Account, api } from "@types";
 // @ts-ignore
 import xpubConverter from "xpub-converter";
 import TrezorConnect from "@trezor/connect-web";
-import { WalletTransaction } from "@screens/Wallet/Wallet";
 
 const ROOT_PATH = `m/84'/0'`;
 
@@ -70,9 +68,7 @@ export const useSignature = ({
 
       const firstAddress = bip84Account.getAddress(0);
 
-      const { data: addressTxs } = await axios.get<{
-        txs: WalletTransaction[];
-      }>(`https://stats.swiss-bitcoin-pay.ch/txs/${firstAddress}`);
+      const addressTxs = await api.transactions.byAddress(firstAddress);
 
       if (addressTxs.txs.length === 0) {
         return accounts;
@@ -80,7 +76,7 @@ export const useSignature = ({
 
       index += 1;
     }
-  }, [error]);
+  }, [getPublicKeyFn]);
 
   const signMessage = useCallback(
     async (format: ScriptType, message: string, account: string) => {
@@ -103,7 +99,7 @@ export const useSignature = ({
         return { success: false };
       }
     },
-    []
+    [signMessageFn]
   );
 
   return {

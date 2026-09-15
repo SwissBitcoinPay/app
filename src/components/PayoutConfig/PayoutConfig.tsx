@@ -18,12 +18,12 @@ import {
   useWatch
 } from "react-hook-form";
 import { isSEPACountry } from "ibantools";
-import { AccountConfigType } from "@types";
 import { Vibration } from "react-native";
 import { useRates } from "@hooks";
 import { RatesType } from "@hooks/useRates";
 import {
   bankCurrencyMap,
+  currencies,
   fiatCurrencies,
   HardwareType,
   platform
@@ -102,7 +102,7 @@ export type BitcoinFiatFormSettings = {
   setError: UseFormSetError<PayoutConfigForm>;
 
   rates?: RatesType;
-  currency: AccountConfigType["currency"];
+  currency: (typeof currencies)[number]["value"];
   setIsValid: (value: boolean) => void;
   isDiscountFees: boolean;
 };
@@ -246,9 +246,11 @@ export const PayoutConfig = ({
     onSliderValueChange(100);
   }, [onSliderValueChange]);
 
-  const bankCurrency = useMemo<AccountConfigType["currency"]>(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    () => bankCurrencyMap[currency] || currency,
+  const bankCurrency = useMemo<(typeof currencies)[number]["value"]>(
+    () =>
+      currency in bankCurrencyMap
+        ? bankCurrencyMap[currency as keyof typeof bankCurrencyMap]
+        : currency,
     [currency]
   );
 

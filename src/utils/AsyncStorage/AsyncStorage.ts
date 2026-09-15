@@ -12,7 +12,6 @@ const arrayBufferToBase64 = (buffer) =>
 const base64ToArrayBuffer = (base64) =>
   Uint8Array.from(atob(base64), (c) => c.charCodeAt(0)).buffer;
 
-// eslint-disable-next-line @typescript-eslint/require-await
 const getItem = async (
   key: string,
   _prompt?: AuthenticationPrompt,
@@ -41,7 +40,7 @@ const getItem = async (
       throw new Error("Cannot decrypt data");
     }
   } else {
-    return value;
+    return value ?? null;
   }
 };
 

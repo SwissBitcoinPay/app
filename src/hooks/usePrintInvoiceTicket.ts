@@ -9,7 +9,6 @@ import {
   getImageSize,
   scaleDimensions,
   base64ToBitmapArray,
-  base64ToHex,
   getFormattedUnit,
   Printer,
   FS
@@ -73,8 +72,8 @@ export const usePrintInvoiceTicket = () => {
         accountConfig = JSON.parse(
           await AsyncStorage.getItem(keyStoreAccountConfig)
         );
-        if (accountConfig.logoUrl) {
-          const response = await axios.get<ArrayBuffer>(accountConfig.logoUrl, {
+        if (accountConfig.logo_url) {
+          const response = await axios.get<ArrayBuffer>(accountConfig.logo_url, {
             responseType: "arraybuffer"
           });
 
@@ -131,7 +130,7 @@ export const usePrintInvoiceTicket = () => {
 
       await Printer.printLabelValue(
         t("amount"),
-        `${(amount / 100000000 / 1000).toLocaleString(undefined, {
+        `${(amount / 100000000).toLocaleString(undefined, {
           minimumFractionDigits: 8,
           maximumFractionDigits: 8
         })} BTC`
@@ -189,10 +188,7 @@ export const usePrintInvoiceTicket = () => {
 
       if (payment?.hash) {
         await Printer.printText("Lightning hash", FOOTER_LABEL_TEXT_STYLE);
-        await Printer.printText(
-          base64ToHex(payment.hash),
-          FOOTER_VALUE_TEXT_STYLE
-        );
+        await Printer.printText(payment.hash, FOOTER_VALUE_TEXT_STYLE);
         await Printer.printText("");
       } else if (payment?.txId) {
         await Printer.printText("Onchain TXID", FOOTER_LABEL_TEXT_STYLE);

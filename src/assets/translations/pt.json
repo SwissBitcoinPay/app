@@ -264,6 +264,12 @@
         },
         "kyc": {
             "title": "Verificação da identidade",
+            "invalidLink": "Ligação de verificação inválida",
+            "invalidLinkDescription": "Não foi possível encontrar este processo de verificação. A ligação pode ser inválida ou ter expirado.",
+            "loadingFailed": "Não foi possível carregar a verificação",
+            "loadingFailedDescription": "Verifique a sua ligação à internet e tente novamente.",
+            "retry": "Tentar novamente",
+            "goBack": "Voltar",
             "description": "Devido aos regulamentos, temos de verificar algumas informações sobre si. Por favor, siga os passos abaixo antes de pagar a fatura.",
             "relatedInvoice": "Faturação relacionada",
             "invoiceSeller": "Vendedor",

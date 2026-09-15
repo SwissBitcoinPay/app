@@ -1,13 +1,10 @@
-import axios from "axios";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import {
   AsyncStorage,
   getFormattedUnit,
-  isApiError,
   isMinUserType,
   numberWithSpaces
 } from "@utils";
-import { bech32 } from "bech32";
 import { startOfDay } from "date-fns";
 import {
   Loader,
@@ -28,13 +25,12 @@ import {
   faPen,
   faCashRegister
 } from "@fortawesome/free-solid-svg-icons";
-import { SBPContext, apiRootUrl, settingsKeys } from "@config";
+import { SBPContext, settingsKeys } from "@config";
 import { useTheme } from "styled-components";
 import { Switch } from "react-native";
 import { useAccountConfig, useRates } from "@hooks";
 import { ListItemValueText } from "@components/ItemsList/components/ListItem/ListItem";
-import { UserType } from "@types";
-import { InvoiceType } from "@screens/Invoice/Invoice";
+import { UserType, api, type ApipaymentsSelect } from "@types";
 import * as S from "./styled";
 
 const SPECIAL_TAG_GAP = 4;
@@ -44,9 +40,28 @@ const timeFormatter = new Intl.DateTimeFormat(undefined, {
   timeStyle: "short"
 });
 
-type InvoiceWithLnurlUrl = InvoiceType & {
+type LocalInvoice = {
+  id: string;
+  status: string;
+  created_at: number;
+  amount_sat: number;
+  input?: { amount: number; unit: string };
+  description?: string | null;
+  device?: { name?: string; type?: string; appVersion?: string };
+  tag?: string | null;
+  title?: string | null;
   lnurl?: string;
 };
+
+type HistoryItem = ApipaymentsSelect | LocalInvoice;
+
+const getDevice = (item: HistoryItem) =>
+  (item as { device?: { name?: string; type?: string } }).device;
+
+const getCreatedAt = (item: HistoryItem) =>
+  (item as { created_at?: number; createdAt?: number }).created_at ??
+  (item as { createdAt?: number }).createdAt ??
+  0;
 
 export const History = () => {
   const { t: tRoot } = useTranslation();
@@ -61,139 +76,37 @@ export const History = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLocal, setIsLocal] = useState(true);
   const [localIds, setLocalIds] = useState<string[]>([]);
-  const [transactions, setTransactions] = useState<InvoiceWithLnurlUrl[]>([]);
+  const [transactions, setTransactions] = useState<HistoryItem[]>([]);
 
   const getTransactions = useCallback(async () => {
-    let transactionsDetails: InvoiceWithLnurlUrl[] = [];
-
-    const localTransactionsHistory: InvoiceWithLnurlUrl[] = JSON.parse(
-      (await AsyncStorage.getItem(settingsKeys.keyStoreTransactionsHistory)) ||
+    const localTransactionsIds: string[] = JSON.parse(
+      (await AsyncStorage.getItem(settingsKeys.keyStoreLocalTransactionsIds)) ||
         "[]"
     );
 
-    setLocalIds(localTransactionsHistory.map((item) => item.id));
+    setLocalIds(localTransactionsIds);
 
-    if (!accountConfig?.isAtm) {
-      transactionsDetails = await Promise.all(
-        localTransactionsHistory.map((transaction) => {
-          return !["settled", "expired", "canceled"].includes(
-            transaction.status
-          )
-            ? axios
-                .get<InvoiceType>(`${apiRootUrl}/checkout/${transaction.id}`)
-                .then((response) => {
-                  if (response.data.status) {
-                    return response.data;
-                  } else {
-                    // Legacy
-                    return transaction;
-                  }
-                })
-                .catch((response) => {
-                  return {
-                    ...transaction,
-                    ...(response.status === 404 ? { status: "expired" } : {})
-                  };
-                })
-            : transaction;
-        })
-      );
-    } else {
-      const lnurlList = localTransactionsHistory.map((v) => {
-        if (v.status !== "settled") {
-          const { words: dataPart } = bech32.decode(v.lnurl || "", 2000);
-          const requestByteArray = bech32.fromWords(dataPart);
-          return Buffer.from(requestByteArray).toString();
-        } else {
-          return { data: v };
-        }
+    try {
+      const { records } = await api.apipayments.list({
+        pagination: { limit: 100 }
       });
 
-      transactionsDetails = (
-        await Promise.all(
-          lnurlList.map((lnurl, index) =>
-            typeof lnurl === "string"
-              ? axios.get(lnurl).catch((e) => {
-                  if (isApiError(e)) {
-                    return {
-                      data: {
-                        status: "expired",
-                        defaultDescription: t("expired"),
-                        minWithdrawable:
-                          localTransactionsHistory[index]?.amount || 0
-                      }
-                    };
-                  } else {
-                    return {};
-                  }
-                })
-              : lnurl
-          )
-        )
-      ).map(({ data = {} }, index) => {
-        return {
-          ...data,
-          ...(localTransactionsHistory[index] || {}),
-          title: data.defaultDescription,
-          status: data.status || "open",
-          tag: "withdraw",
-          createdAt:
-            localTransactionsHistory[index].createdAt ||
-            localTransactionsHistory[index].time ||
-            0,
-          amount:
-            localTransactionsHistory[index]?.amount || data.minWithdrawable
-        } as InvoiceWithLnurlUrl;
-      });
-    }
-    AsyncStorage.setItem(
-      settingsKeys.keyStoreTransactionsHistory,
-      JSON.stringify(transactionsDetails)
-    );
-
-    if (isMinUserType({ userType, minUserType: UserType.Admin })) {
-      if (localTransactionsHistory.length === 0) {
+      if (
+        isMinUserType({ userType, minUserType: UserType.Admin }) &&
+        localTransactionsIds.length === 0
+      ) {
         setIsLocal(false);
       }
-      let allAccountPayments: InvoiceType[] = [];
 
-      try {
-        const { data: accountPayments } = await axios.get<InvoiceType[]>(
-          `${apiRootUrl}/payments`,
-          {
-            withCredentials: true,
-            headers: {
-              "api-key": accountConfig?.apiKey
-            }
-          }
-        );
-        allAccountPayments = accountPayments;
-      } catch (e) {}
-
-      transactionsDetails = [
-        ...allAccountPayments
-          .filter(
-            ({ tag, amount }) =>
-              tag === "invoice-tpos" || (accountConfig?.isAtm && amount < 0)
-          )
-          .map((transaction) => {
-            const id = transaction.id || "";
-            const localTx = transactionsDetails.find((tx) => tx.id === id);
-
-            return localTx || transaction;
-          }),
-        ...transactionsDetails
-          .filter(
-            (transaction) =>
-              !allAccountPayments.find((p) => p.id === transaction.id)
-          )
-          .reverse()
-      ].reverse();
-    }
-
-    setTransactions([...transactionsDetails].reverse());
+      setTransactions(
+        records.filter(
+          ({ tag, amount_sat }) =>
+            tag === "invoice-tpos" || (accountConfig?.is_atm && amount_sat < 0)
+        )
+      );
+    } catch (e) {}
     setIsLoading(false);
-  }, [accountConfig?.apiKey, accountConfig?.isAtm, t, userType]);
+  }, [accountConfig?.is_atm, userType]);
 
   useEffect(() => {
     getTransactions();
@@ -206,17 +119,16 @@ export const History = () => {
   const todayReceive = useMemo(() => {
     if (rates && accountConfig?.currency) {
       const startOfToday = startOfDay(new Date()).getTime() / 1000;
-      const satsTotal =
-        transactions.reduce((result, transaction) => {
-          if (
-            (transaction.createdAt || 0) < startOfToday ||
-            transaction.amount <= 0 ||
-            transaction.status !== "settled"
-          ) {
-            return result;
-          }
-          return result + (transaction.grossAmount || 0);
-        }, 0) / 1000;
+      const satsTotal = transactions.reduce((result, transaction) => {
+        if (
+          getCreatedAt(transaction) < startOfToday ||
+          transaction.amount_sat <= 0 ||
+          transaction.status !== "settled"
+        ) {
+          return result;
+        }
+        return result + transaction.amount_sat;
+      }, 0);
 
       return {
         fiat: getFormattedUnit(
@@ -227,6 +139,8 @@ export const History = () => {
       };
     }
   }, [accountConfig?.currency, rates, transactions]);
+
+  console.log({ localIds, transactions });
 
   return (
     <PageContainer
@@ -280,8 +194,10 @@ export const History = () => {
                   transaction.input?.unit
                 );
 
-                const deviceType = transaction.device?.type;
-                const deviceName = transaction.device?.name;
+                const device = getDevice(transaction);
+                const deviceType = device?.type;
+                const deviceName = device?.name;
+                const lnurl = (transaction as LocalInvoice).lnurl;
 
                 const lastTags = [
                   ...(isMinUserType({
@@ -342,13 +258,13 @@ export const History = () => {
                 ];
 
                 return {
-                  title: `${timeFormatter.format((transaction.createdAt || 0) * 1000)}`,
+                  title: `${timeFormatter.format(getCreatedAt(transaction) * 1000)}`,
                   disabled:
                     (isPaid && transaction.tag === "withdraw") ||
                     isExpired ||
-                    (accountConfig?.isAtm && !isLocal),
+                    (accountConfig?.is_atm && !isLocal),
                   onPress: [
-                    `/invoice/${transaction.lnurl || transaction.id}`,
+                    `/invoice/${lnurl || transaction.id}`,
                     {
                       state: {
                         isLocalInvoice: !isPaid && !isExpired,

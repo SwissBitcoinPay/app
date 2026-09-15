@@ -1,9 +1,10 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import {
   SBPContext,
-  apiRootUrl,
   appRootUrl,
-  currencies,
+  dashboardUrl,
+  getEnabledCurrencies,
+  getRuntimeCurrencies,
   platform
 } from "@config";
 import {
@@ -46,9 +47,14 @@ import {
   useVersionTag
 } from "@hooks";
 import { useTranslation } from "react-i18next";
-import { AccountConfigType, UserType } from "@types";
+import {
+  UserType,
+  api,
+  client,
+  type AccountsUpdate,
+  type AccountConfigType
+} from "@types";
 import { useTheme } from "styled-components";
-import axios from "axios";
 import { AsyncStorage, isMinUserType } from "@utils";
 import { useToast } from "react-native-toast-notifications";
 import { ModalInputDescription } from "@hooks/useModalInput/useModalInput";
@@ -73,27 +79,34 @@ export const Settings = () => {
   const isLarge = useIsScreenSizeMin("large");
   const { accountConfig, setAccountConfig } = useAccountConfig();
   const { clearContext, userType } = useContext(SBPContext);
+  const currencies = getRuntimeCurrencies();
+  const availableCurrencies = useMemo(
+    () =>
+      getEnabledCurrencies().filter(
+        ({ value }) => !["sat", "BTC"].includes(value)
+      ),
+    []
+  );
 
   const settingsValues = useMemo(() => {
     return {
       currency: currencies.find((c) => c.value === accountConfig?.currency)
     };
-  }, [accountConfig?.currency]);
+  }, [accountConfig?.currency, currencies]);
 
   const onPatchSetting = useCallback(
-    (setting: keyof AccountConfigType) =>
-      async (value: string | number | boolean) => {
+    <K extends keyof AccountsUpdate>(setting: K) =>
+      async (value: AccountsUpdate[K]) => {
+        if (!accountConfig?.id) return false;
         try {
-          const patchData = { [setting]: value };
+          const patchData = { [setting]: value } as Partial<AccountsUpdate>;
 
-          await axios.patch(`${apiRootUrl}/account`, patchData, {
-            withCredentials: true
-          });
+          await api.accounts.update(accountConfig.id, patchData);
 
           toast.show(t("patchSettingSuccessful"), {
             type: "success"
           });
-          setAccountConfig(patchData);
+          setAccountConfig(patchData as Partial<AccountConfigType>);
 
           return true;
         } catch (e) {
@@ -103,7 +116,7 @@ export const Settings = () => {
           return false;
         }
       },
-    [setAccountConfig, t, toast]
+    [accountConfig?.id, setAccountConfig, t, toast]
   );
 
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -116,7 +129,7 @@ export const Settings = () => {
     try {
       setIsLogoutLoading(true);
       try {
-        await axios.post(`${apiRootUrl}/auth`, null, { withCredentials: true });
+        await client.logout();
       } catch (e) {}
       await AsyncStorage.clear();
       clearContext();
@@ -143,39 +156,40 @@ export const Settings = () => {
     useModalInput({
       element: (
         <SelectField
-          items={currencies.filter((c) => !["sat", "BTC"].includes(c.value))}
+          items={availableCurrencies}
           right={{ icon: faDollarSign }}
           onValueChange={() => {}}
           placeholder={{}}
         />
       ),
-      defaultValue: accountConfig?.currency,
+      defaultValue: accountConfig?.currency ?? undefined,
       label: t("currency"),
       description: (
         <ComponentStack gapSize={10}>
           <ModalInputDescription>
             {t("currencyDescription")}
           </ModalInputDescription>
-          {(accountConfig?.btcPercent || 0) < 100 && (
+          {(accountConfig?.btc_percent || 0) < 100 && (
             <Callout>
               {t("currencyChangeWarning", {
-                fiatPercent: 100 - (accountConfig?.btcPercent || 0),
+                fiatPercent: 100 - (accountConfig?.btc_percent || 0),
                 currency: accountConfig?.currency
               })}
             </Callout>
           )}
         </ComponentStack>
       ),
-      onChange: onPatchSetting("currency")
+      onChange: (value: string | number | boolean) =>
+        onPatchSetting("currency")(value as string)
     });
 
   const { modal: onchainModal, onPressElement: onPressOnChain } = useModalInput(
     {
       element: <CheckboxField />,
-      defaultValue: accountConfig?.isOnchainAvailable || false,
+      defaultValue: accountConfig?.is_onchain_available || false,
       label: t("onchainAvailable"),
       description: t("onchainAvailableDescription"),
-      onChange: onPatchSetting("isOnchainAvailable")
+      onChange: onPatchSetting("is_onchain_available")
     }
   );
 
@@ -202,17 +216,17 @@ export const Settings = () => {
   );
 
   const formattedBtcPayout = useMemo(() => {
-    const { btcPercent, currency } = accountConfig || {};
+    const { btc_percent, currency } = accountConfig || {};
 
-    if (btcPercent !== undefined) {
-      if (btcPercent === 100) {
+    if (btc_percent !== undefined && btc_percent !== null) {
+      if (btc_percent === 100) {
         return t("allInBtc");
-      } else if (btcPercent === 0) {
+      } else if (btc_percent === 0) {
         return t("allInFiat", { currency });
       } else {
         return t("percentInBtcAndFiat", {
-          btcPercent,
-          fiatPercent: 100 - btcPercent,
+          btcPercent: btc_percent,
+          fiatPercent: 100 - btc_percent,
           currency
         });
       }
@@ -223,8 +237,8 @@ export const Settings = () => {
     () =>
       `${
         window?.location?.origin || appRootUrl
-      }/connect/${accountConfig?.apiKey}`,
-    [accountConfig?.apiKey]
+      }/connect/${accountConfig?.invoice_key}`,
+    [accountConfig?.invoice_key]
   );
 
   useEffect(() => {
@@ -274,8 +288,8 @@ export const Settings = () => {
     >
       <S.FlexComponentStack>
         {accountConfig ? (
-          !accountConfig.isAtm &&
-          !accountConfig.isCheckoutSecure &&
+          !accountConfig.is_atm &&
+          !accountConfig.is_checkout_secure &&
           !isGuestMode && (
             <S.FlexComponentStack>
               <Text centered h3 weight={700} color={colors.white}>
@@ -353,7 +367,9 @@ export const Settings = () => {
                           {
                             icon: faChain,
                             title: t("onchainAvailable"),
-                            tags: [{ value: accountConfig.isOnchainAvailable }],
+                            tags: [
+                              { value: accountConfig.is_onchain_available }
+                            ],
                             onPress: onPressOnChain
                           },
                           {
@@ -437,7 +453,7 @@ export const Settings = () => {
         <Button
           title={t("dashboard")}
           icon={faTableColumns}
-          onPress="https://dashboard.swiss-bitcoin-pay.ch"
+          onPress={dashboardUrl}
         />
         <ComponentStack direction={isLarge ? "horizontal" : "vertical"}>
           <Button

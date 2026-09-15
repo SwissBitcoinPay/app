@@ -15,7 +15,7 @@ import axios from "axios";
 import { HardwareReadyFunctionParams } from "@components/ConnectWalletModal/ConnectWalletModal";
 import { Wallet } from "./types";
 import { Bip84Account } from "@types";
-import { DEFAULT_NETWORK } from "@config";
+import { getBitcoinNetwork, getMempoolBaseUrl } from "@config";
 import { AsyncStorage } from "@utils/AsyncStorage";
 import { keyStoreWalletPath } from "@config/settingsKeys";
 import { AskWordsPassword } from "@config/SBPAskPasswordModalContext/SBPAskPasswordModalContext";
@@ -115,7 +115,7 @@ export const prepareTransaction = async ({
   askWordsPassword
 }: PrepareTransactionParams) => {
   let wallet: Wallet;
-  let pathPrefix = "";
+  const pathPrefix = "";
   switch (walletType) {
     case "local":
       wallet = local;
@@ -134,10 +134,16 @@ export const prepareTransaction = async ({
   let inputs: InputsTypes = {};
   let outputs: OutputsTypes = {};
 
-  const psbt = new Psbt({ network: DEFAULT_NETWORK });
+  const { lib: networkLib, isTestnet } = getBitcoinNetwork();
+  const mempoolBaseUrl = getMempoolBaseUrl();
+  const psbt = new Psbt({ network: networkLib });
 
+  // Coin_type BIP44 : 0 = mainnet, 1 = testnet/signet/regtest. Sert de
+  // label dans `bip32Derivation.path` du PSBT — un hardware wallet sur
+  // signet refuse un path mainnet, et inversement.
   const rootPath =
-    (await AsyncStorage.getItem(keyStoreWalletPath)) || "m/84'/0'/0'";
+    (await AsyncStorage.getItem(keyStoreWalletPath)) ||
+    `m/84'/${isTestnet ? 1 : 0}'/0'`;
 
   psbt.setVersion(1);
   psbt.setLocktime(0);
@@ -178,7 +184,7 @@ export const prepareTransaction = async ({
     };
 
     const { data: rawTx } = await axios.get<string>(
-      `https://mempool.space/api/tx/${utxo.txid}/hex`
+      `${mempoolBaseUrl}/api/tx/${utxo.txid}/hex`
     );
 
     const path = `${pathPrefix}${rootPath}/${utxo.change ? "1" : "0"}/${utxo.addressIndex}`;

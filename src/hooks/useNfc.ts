@@ -169,7 +169,7 @@ export const useNfc = () => {
               throw getError("Invalid tag. maxSendable undefined or too low");
 
             const { data: callbackRequest } = await axios.get<{ pr?: string }>(
-              `${finalUrlRequest.callback}?amount=${(amount || 0) / 1000}${
+              `${finalUrlRequest.callback}?amount=${amount || 0}${
                 (finalUrlRequest.commentAllowed || 0) >= title.length
                   ? `&comment=${title}`
                   : ""

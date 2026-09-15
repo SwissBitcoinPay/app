@@ -9,12 +9,42 @@ import {
 import { AsyncStorage } from "@utils";
 import { useNavigate } from "@components/Router";
 import { useToast } from "react-native-toast-notifications";
-import axios from "axios";
 import { AccountConfigType, UserType } from "@types";
 import { useTranslation } from "react-i18next";
 import { apiRootUrl, appRootUrl, SBPContext } from "@config";
+import { api, client } from "@types";
+import axios from "axios";
+import {
+  getAccountApiAuth,
+  getAccountRefreshApiKey
+} from "./getAccountApiAuth";
 
 const oldAppRootUrl = "https://checkout.swiss-bitcoin-pay.ch";
+
+const parseActivationLink = (scannedValue: string) => {
+  try {
+    const activationUrl = new URL(scannedValue);
+    const isSupportedOrigin = [appRootUrl, oldAppRootUrl].some(
+      (rootUrl) => activationUrl.origin === new URL(rootUrl).origin
+    );
+    const activationPath = activationUrl.pathname.match(
+      /^\/connect\/([^/]+)$/
+    );
+
+    if (!isSupportedOrigin || !activationPath) {
+      return;
+    }
+
+    return {
+      activationKey: decodeURIComponent(activationPath[1]),
+      deviceName: activationUrl.searchParams.get("deviceName") ?? undefined,
+      hmac: activationUrl.searchParams.get("hmac") ?? undefined,
+      isGuest: activationUrl.searchParams.has("isGuest")
+    };
+  } catch {
+    return;
+  }
+};
 
 type UseAccountConfigParams = {
   refresh?: boolean;
@@ -35,29 +65,24 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
     async (testApiKey?: string) => {
       let _accountConfig: AccountConfigType;
       try {
-        const { data } = await axios.get<AccountConfigType>(
-          `${apiRootUrl}/account`,
-          {
-            withCredentials: true,
-            headers: {
-              "Api-Key": testApiKey,
-              appBuild: process.env.APP_BUILD_NUMBER
-            }
-          }
-        );
+        const data = await api.accounts.me(getAccountApiAuth(testApiKey));
 
-        _accountConfig = { ...data, apiKey: testApiKey || data.apiKey };
+        _accountConfig = {
+          ...data,
+          invoice_key: testApiKey || data.invoice_key
+        };
 
         await AsyncStorage.setItem(
           keyStoreAccountConfig,
           JSON.stringify(_accountConfig)
         );
 
+        const hmacSecret = (data as { hmac_secret?: unknown }).hmac_secret;
         if (
-          typeof data.hmacSecret === "string" &&
-          (data.isCheckoutSecure || data.isAtm)
+          typeof hmacSecret === "string" &&
+          (data.is_checkout_secure || data.is_atm)
         ) {
-          await AsyncStorage.setItem(keyStoreHmac, data.hmacSecret);
+          await AsyncStorage.setItem(keyStoreHmac, hmacSecret);
         }
 
         setAccountConfig(_accountConfig);
@@ -71,10 +96,20 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
     [setAccountConfig]
   );
 
+  // Les comptes admin possèdent aussi une invoice_key. Ne pas l'envoyer lors
+  // d'un refresh JWT, sinon le backend retourne la vue API-key partielle.
+  const refreshAccountConfig = useCallback(
+    (apiKey?: string) =>
+      validateApiKey(
+        getAccountRefreshApiKey(apiKey, client.tokens() !== undefined)
+      ),
+    [validateApiKey]
+  );
+
   const appState = useRef(AppState.currentState);
 
   useEffect(() => {
-    if (listenAppState && accountConfig?.apiKey && AppState.isAvailable) {
+    if (listenAppState && accountConfig?.invoice_key && AppState.isAvailable) {
       const subscription = AppState.addEventListener(
         "change",
         (nextAppState) => {
@@ -82,7 +117,7 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
             appState.current.match(/inactive|background/) &&
             nextAppState === "active"
           ) {
-            void validateApiKey(accountConfig.apiKey);
+            void refreshAccountConfig(accountConfig.invoice_key);
           }
 
           appState.current = nextAppState;
@@ -91,39 +126,34 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
 
       return () => subscription.remove();
     }
-  }, [listenAppState, accountConfig?.apiKey]);
+  }, [listenAppState, accountConfig?.invoice_key, refreshAccountConfig]);
 
   const onScan = useCallback(
     async (scannedValue: string) => {
       setIsLoading(true);
-      if (
-        scannedValue?.startsWith(`${appRootUrl}/connect/`) ||
-        scannedValue?.startsWith(`${oldAppRootUrl}/connect/`)
-      ) {
-        const arr = scannedValue.split("/");
-        const activationPart = arr.pop();
-        const path = arr.pop();
+      const activationLink = parseActivationLink(scannedValue);
 
-        if (path === "connect") {
-          const activationPartArr = activationPart?.split("?") || [];
-
-          if (activationPartArr?.length > 1) {
-            const extraValuesArr = activationPartArr?.pop()?.split("&");
-
-            while (extraValuesArr?.length) {
-              const [key, value] = (extraValuesArr.pop() as string).split("=");
-              if (key === "deviceName") {
-                await AsyncStorage.setItem(keyStoreDeviceName, value);
-              } else if (key === "hmac") {
-                await AsyncStorage.setItem(keyStoreHmac, value);
-              } else if (key === "isGuest") {
-                await AsyncStorage.setItem(keyStoreIsGuest, "true");
-              }
-            }
+      if (activationLink) {
+        const validatedAccountConfig = await validateApiKey(
+          activationLink.activationKey
+        );
+        if (validatedAccountConfig) {
+          if (activationLink.deviceName !== undefined) {
+            await AsyncStorage.setItem(
+              keyStoreDeviceName,
+              activationLink.deviceName
+            );
           }
-          scannedValue = activationPartArr?.pop() || "";
-        }
-        if (await validateApiKey(scannedValue)) {
+          const hasServerHmac =
+            typeof validatedAccountConfig.hmac_secret === "string" &&
+            (validatedAccountConfig.is_checkout_secure ||
+              validatedAccountConfig.is_atm);
+          if (activationLink.hmac !== undefined && !hasServerHmac) {
+            await AsyncStorage.setItem(keyStoreHmac, activationLink.hmac);
+          }
+          if (activationLink.isGuest) {
+            await AsyncStorage.setItem(keyStoreIsGuest, "true");
+          }
           setIsLoading(false);
           return true;
         }
@@ -148,19 +178,25 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
     if (storeAccountconfig) {
       const parsedConfig = JSON.parse(storeAccountconfig) as AccountConfigType;
       setAccountConfig(parsedConfig);
-      apiKey = parsedConfig.apiKey;
+      apiKey = parsedConfig.invoice_key;
     }
 
-    if (refresh && !(await validateApiKey(apiKey))) {
+    if (refresh && !(await refreshAccountConfig(apiKey))) {
       toast.show(t("checkInternet"), {
         type: "error"
       });
     }
-  }, [setAccountConfig, refresh, validateApiKey, toast, t]);
+  }, [setAccountConfig, refresh, refreshAccountConfig, toast, t]);
 
   const onQrLogin = useCallback(
     async (qrValue: string) => {
       if (await onScan(qrValue)) {
+        // Une activation Employé peut être scannée depuis une session Admin.
+        // Supprimer alors le JWT pour que les prochains refresh continuent
+        // d'utiliser la clé d'encaissement qui vient d'être validée.
+        if (client.tokens() !== undefined) {
+          await client.logout();
+        }
         setUserType(UserType.Employee);
         toast.show(t("setupComplete"), { type: "success" });
         return true;
@@ -172,13 +208,11 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
 
   const onAuthLogin = useCallback(
     async (
-      loginData: unknown,
+      loginData: { email: string; password: string },
       withSuccessToast = false,
       withNavigate = true
     ) => {
-      await axios.post(`${apiRootUrl}/auth`, loginData, {
-        withCredentials: true
-      });
+      await client.login(loginData.email, loginData.password);
       const _accountConfig = await validateApiKey();
 
       if (withSuccessToast) {
@@ -190,6 +224,41 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
       return _accountConfig;
     },
     [navigate, t, toast, validateApiKey]
+  );
+
+  // Connexion par signature Bitcoin. Le back-end est un fournisseur d'identité
+  // OIDC : il n'émet pas la session lui-même, il atteste seulement « cette
+  // personne possède la clé privée de cette adresse », et c'est le serveur d'API qui
+  // ouvre la session (cf. l'endpoint `signature_auth` côté serveur).
+  //
+  // Trois étapes, dans cet ordre :
+  //   1. `/v1/signature-auth/verify` échange la preuve de signature contre un
+  //      ticket à usage unique, posé en cookie HttpOnly (120 s) — il ne peut pas
+  //      être lu en JS, d'où `withCredentials` sur les deux appels suivants ;
+  //   2. le flux OAuth natif consomme ce ticket et pose les cookies de session ;
+  //   3. le SDK adopte la session en interrogeant `/api/auth/v1/status`
+  //      (`checkCookies`) — un appel serveur, donc valable aussi en natif où il
+  //      n'existe pas de `document.cookie`.
+  const onSignatureLogin = useCallback(
+    async (
+      proof: { message: string; signature: string },
+      withNavigate = true
+    ) => {
+      await axios.post(`${apiRootUrl}/v1/signature-auth/verify`, proof, {
+        withCredentials: true
+      });
+      await axios.get(`${apiRootUrl}/api/auth/v1/oauth/oidc0/login`, {
+        withCredentials: true
+      });
+      await client.checkCookies();
+
+      const _accountConfig = await validateApiKey();
+      if (withNavigate) {
+        navigate("/");
+      }
+      return _accountConfig;
+    },
+    [navigate, validateApiKey]
   );
 
   useEffect(() => {
@@ -204,6 +273,7 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
     accountConfig,
     setAccountConfig,
     onAuthLogin,
+    onSignatureLogin,
     // @ts-ignore
     // eslint-disable-next-line no-extra-boolean-cast
     ...(!!toast.show ? { onQrLogin } : {})

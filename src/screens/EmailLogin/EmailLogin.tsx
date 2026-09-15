@@ -1,15 +1,15 @@
 import { useCallback, useContext, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { SBPContext } from "@config";
+import { SBPContext, dashboardUrl } from "@config";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { TextField, Url, LoginView } from "@components";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { validate as isEmail } from "email-validator";
-import { isApiError } from "@utils";
 import { useToast } from "react-native-toast-notifications";
 import { UserType } from "@types";
 import { TextInput } from "react-native";
 import { useAccountConfig } from "@hooks";
+import { isInvalidCredentialsError } from "./isInvalidCredentialsError";
 import * as S from "./styled";
 
 type EmailLoginForm = {
@@ -23,10 +23,9 @@ export const EmailLogin = () => {
   const toast = useToast();
   const { setUserType } = useContext(SBPContext);
   const { onAuthLogin } = useAccountConfig({ refresh: false });
-  const { control, handleSubmit, formState, setError } =
-    useForm<EmailLoginForm>({
-      mode: "onTouched"
-    });
+  const { control, handleSubmit, formState } = useForm<EmailLoginForm>({
+    mode: "onTouched"
+  });
 
   const [isSubmitting, setIsSubmiting] = useState(false);
 
@@ -39,39 +38,21 @@ export const EmailLogin = () => {
       setIsSubmiting(true);
 
       try {
-        const emailLoginData = {
-          UserId: email,
-          Password: password
-        };
-
-        await onAuthLogin(emailLoginData);
+        await onAuthLogin({ email, password });
 
         setUserType(UserType.Admin);
       } catch (e) {
-        if (isApiError(e)) {
-          let errorMessage;
-          if (e.response.status === 401) {
-            errorMessage = t("error.invalidCredentials");
-          } else {
-            const errorField = e.response.data.field as keyof EmailLoginForm;
-            const errorKey = e.response.data.detail;
+        const errorMessage = isInvalidCredentialsError(e)
+          ? t("error.invalidCredentials")
+          : tRoot("common.errors.unknown");
 
-            errorMessage = t(`error.${errorField}.${errorKey}`);
-            setError(errorField, { message: errorMessage });
-          }
-
-          toast.show(errorMessage, {
-            type: "error"
-          });
-        } else {
-          toast.show(tRoot("common.errors.unknown"), {
-            type: "error"
-          });
-        }
+        toast.show(errorMessage, {
+          type: "error"
+        });
       }
       setIsSubmiting(false);
     },
-    [onAuthLogin, setError, setUserType, t, tRoot, toast]
+    [onAuthLogin, setUserType, t, tRoot, toast]
   );
 
   const validateEmail = useCallback(
@@ -172,7 +153,7 @@ export const EmailLogin = () => {
         />
         <Url
           as={S.ForgotPasswordText}
-          href="https://dashboard.swiss-bitcoin-pay.ch/reset-password"
+          href={`${dashboardUrl}/reset-password`}
           title={t("forgotPassword")}
         />
       </LoginView>

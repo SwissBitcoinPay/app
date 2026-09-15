@@ -76,8 +76,8 @@ export const FiatSettings = ({
   );
 
   const isNewAccount = useMemo(
-    () => _isNewAccount(accountConfig?.createdAt),
-    [accountConfig?.createdAt]
+    () => _isNewAccount(accountConfig?.created_at),
+    [accountConfig?.created_at]
   );
 
   const isInstant = useMemo(

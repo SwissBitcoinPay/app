@@ -57,6 +57,8 @@ import {
   apiRootUrl,
   appRootUrl,
   currencies,
+  getCurrencyDecimals,
+  getMempoolBaseUrl,
   rateUpdateDelay
 } from "@config";
 import LottieView from "lottie-react-native";
@@ -137,6 +139,7 @@ export type InvoiceType = {
   description: string;
   expiry: number;
   delay: number;
+  next_rate_refresh_at?: number | null;
   amount: number;
   grossAmount?: number;
   status: Status;
@@ -232,6 +235,7 @@ export const Invoice = () => {
   const [isInitialPaid, setIsInitialPaid] = useState(false);
   const [isTimerPaused, setIsTimerPaused] = useState(false);
 
+  const [nextRateRefreshAt, setNextRateRefreshAt] = useState<number>();
   const [progress, setProgress] = useState<number>(1);
   const [updateRateTime, setUpdateRateTime] = useState<number>(rateUpdateDelay);
 
@@ -241,9 +245,10 @@ export const Invoice = () => {
     const newProgress = timeElapsed / (delay || 1);
     setProgress(1 - newProgress);
 
-    const remainder = timeElapsed % rateUpdateDelay;
-    setUpdateRateTime(remainder === 0 ? 0 : rateUpdateDelay - remainder);
-  }, [createdAt, delay]);
+    setUpdateRateTime(
+      nextRateRefreshAt ? Math.max(0, nextRateRefreshAt - now) : 0
+    );
+  }, [createdAt, delay, nextRateRefreshAt]);
 
   useEffect(() => {
     if (isInit && !isTimerPaused) {
@@ -306,15 +311,12 @@ export const Invoice = () => {
   }, [readyState]);
 
   const unitDecimals = useMemo(() => {
-    return (
-      currencies.find((c) => c.value === invoiceCurrency)?.decimals ??
-      DEFAULT_DECIMALS
-    );
+    return getCurrencyDecimals(invoiceCurrency || "") ?? DEFAULT_DECIMALS;
   }, [invoiceCurrency]);
 
   const getFiatSatAmountComponent = useCallback(
     (isSuccessScreen = false) => {
-      const elements = formatDecimalComponents((amount || 0) / 1000).reduce(
+      const elements = formatDecimalComponents(amount || 0).reduce(
         (result, v) => {
           const currentIsEnabled =
             result[result.length - 1]?.isEnabled ||
@@ -374,7 +376,7 @@ export const Invoice = () => {
             createdAt &&
             delay &&
             isAlive &&
-            delay > rateUpdateDelay && (
+            nextRateRefreshAt && (
               <ComponentStack
                 direction="horizontal"
                 gapSize={4}
@@ -406,8 +408,11 @@ export const Invoice = () => {
       createdAt,
       delay,
       isAlive,
+      nextRateRefreshAt,
       colors.grey,
       colors.primaryLight,
+      colors.successLight,
+      colors.white,
       t,
       updateRateTime
     ]
@@ -521,7 +526,7 @@ export const Invoice = () => {
             title: `${lnurlData.defaultDescription || ""}${
               customNote ? `- ${customNote}` : ""
             }`,
-            amount: withdrawAmount * 1000
+            amount: withdrawAmount
           };
           setReadingNfcData(readData);
           if (!isNfcNeedsTap) {
@@ -555,7 +560,7 @@ export const Invoice = () => {
     };
   }, [isNfcAvailable, readingNfcLoop, invoiceId]);
 
-  const btcAmount = useMemo(() => (amount || 0) / 1000 / 100000000, [amount]);
+  const btcAmount = useMemo(() => (amount || 0) / 100000000, [amount]);
 
   const updateInvoice = useCallback(
     (getInvoiceData: InvoiceType, isInitialData?: boolean) => {
@@ -600,9 +605,7 @@ export const Invoice = () => {
           setDescription(getInvoiceData.description);
         }
 
-        const amountInSats = Math.round(getInvoiceData.amount * 1000);
-
-        setAmount(amountInSats);
+        setAmount(getInvoiceData.amount);
         setPaidAt(getInvoiceData.paidAt);
         setInvoiceCurrency(getInvoiceData.input.unit || "CHF");
         setInvoiceFiatAmount(getInvoiceData.input.amount);
@@ -614,33 +617,14 @@ export const Invoice = () => {
           status !== "settled" &&
           !isExternalInvoice
         ) {
-          onFullScreenPaid({ ...getInvoiceData, amount: amountInSats });
-          AsyncStorage.getItem(keyStoreTransactionsHistory).then(
-            (transactionsHistory = "[]") => {
-              let localTransactionsHistory: InvoiceType[] =
-                JSON.parse(transactionsHistory);
-
-              const invoiceIndex = localTransactionsHistory.findIndex(
-                (i) => i.id === getInvoiceData.id
-              );
-
-              if (~invoiceIndex) {
-                localTransactionsHistory[invoiceIndex] = getInvoiceData;
-              }
-
-              AsyncStorage.setItem(
-                keyStoreTransactionsHistory,
-                JSON.stringify(localTransactionsHistory)
-              );
-            }
-          );
-
+          onFullScreenPaid(getInvoiceData);
           return;
         }
 
         setTitle(getInvoiceData.title);
         setCreatedAt(getInvoiceData.createdAt);
         setDelay(getInvoiceData.delay);
+        setNextRateRefreshAt(getInvoiceData.next_rate_refresh_at ?? undefined);
         setPr(_pr);
         setReadingNfcData(_pr);
         setOnChainAddr(unpaidOnchain?.address);
@@ -800,7 +784,7 @@ export const Invoice = () => {
 
   const downloadPdfLink = useMemo(
     () =>
-      `${apiRootUrl}/pdf/${invoiceId}?tz=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+      `${apiRootUrl}/v1/invoices/${invoiceId}/pdf?tz=${encodeURIComponent(Intl.DateTimeFormat().resolvedOptions().timeZone)}`,
     [invoiceId]
   );
 
@@ -1251,9 +1235,7 @@ export const Invoice = () => {
                       style={{ marginTop: 6 }}
                     >
                       {t("payTheRest", {
-                        sats: numberWithSpaces(
-                          amount / 1000 - alreadyPaidAmount
-                        )
+                        sats: numberWithSpaces(amount - alreadyPaidAmount)
                       })}
                     </S.BitcoinSlotText>
                   </>
@@ -1420,7 +1402,7 @@ export const Invoice = () => {
                                 color: color,
                                 prefixComponent: <Loader size={22} />
                               })}
-                          url={`https://mempool.space/tx/${tx.txId}${
+                          url={`${getMempoolBaseUrl()}/tx/${tx.txId}${
                             tx.vout_index !== undefined
                               ? `#vout=${tx.vout_index}`
                               : ""

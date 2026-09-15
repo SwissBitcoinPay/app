@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useToast } from "react-native-toast-notifications";
 import { useTranslation } from "react-i18next";
-import { apiRootUrl, currencies } from "@config";
+import { api } from "@types";
+import { currencies } from "@config";
 
 export type RatesType = { [k in (typeof currencies)[number]["value"]]: number };
 
@@ -14,11 +14,10 @@ export const useRates = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data: getRatesData } = await axios.get<RatesType>(
-          `${apiRootUrl}/rates`
-        );
-        setRates(getRatesData);
+        const data = await api.rates.current();
+        setRates(data.rates as RatesType);
       } catch (e) {
+        console.log(e)
         toast.show(t("unableGetRates"), { type: "error" });
       }
     })();

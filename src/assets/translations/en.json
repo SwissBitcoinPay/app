@@ -264,6 +264,12 @@
         },
         "kyc": {
             "title": "Identity verification",
+            "invalidLink": "Invalid verification link",
+            "invalidLinkDescription": "This identity verification file could not be found. The link may be invalid or expired.",
+            "loadingFailed": "Unable to load the verification",
+            "loadingFailedDescription": "Check your internet connection and try again.",
+            "retry": "Try again",
+            "goBack": "Go back",
             "description": "Due to regulations, we have to verify some informations about you. Please follow the steps below before paying the invoice.",
             "relatedInvoice": "Related invoice",
             "invoiceSeller": "Seller",
@@ -471,11 +477,13 @@
             "firstThreeMonths": "First 3 months",
             "error": {
                 "depositAddress": {
-                    "depositAddressAlreadyUsed": "Deposit address already used"
+                    "depositAddressAlreadyUsed": "Deposit address already used",
+                    "alreadyExists": "Deposit address already used"
                 },
                 "iban": {
                     "ibanAlreadyUsed": "IBAN already used",
-                    "wiseBankNotSupported": "Wise bank not supported"
+                    "wiseBankNotSupported": "Wise bank not supported",
+                    "alreadyExists": "IBAN already used"
                 }
             }
         },

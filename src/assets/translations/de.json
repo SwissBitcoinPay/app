@@ -264,6 +264,12 @@
         },
         "kyc": {
             "title": "Identitätsprüfung",
+            "invalidLink": "Ungültiger Verifizierungslink",
+            "invalidLinkDescription": "Dieser Verifizierungsvorgang wurde nicht gefunden. Der Link ist möglicherweise ungültig oder abgelaufen.",
+            "loadingFailed": "Verifizierung kann nicht geladen werden",
+            "loadingFailedDescription": "Überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.",
+            "retry": "Erneut versuchen",
+            "goBack": "Zurück",
             "description": "Aufgrund regulatorischer Vorschriften müssen wir einige persönliche Informationen einholen. Bitte befolgen Sie die folgenden Schritte, bevor Sie die Rechnung bezahlen.",
             "relatedInvoice": "Zugehörige Rechnung",
             "invoiceSeller": "Verkäufer",

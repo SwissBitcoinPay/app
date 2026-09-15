@@ -49,7 +49,7 @@ export const PayerKyc = ({ kycId, invoiceId, onSuccess }: PayerKycProps) => {
       (async () => {
         try {
           const { data } = await axios.get<{ authToken: string }>(
-            `${apiRootUrl}/kyc-aml-link`,
+            `${apiRootUrl}/v1/aml-info/kyc-link`,
             {
               params: { invoiceId }
             }

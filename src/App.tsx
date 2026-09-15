@@ -56,7 +56,7 @@ const App = () => {
   });
   const navigate = useNavigate();
 
-  const getIsToastLoaded = () => Object.entries(toast).length === 0;
+  const getIsToastLoaded = () => Object.entries(toast).length > 0;
 
   useEffect(() => {
     if (getIsToastLoaded()) {
@@ -86,7 +86,7 @@ const App = () => {
           {
             <Route
               path="/"
-              element={accountConfig?.apiKey ? <Pos /> : <Welcome />}
+              element={accountConfig?.invoice_key ? <Pos /> : <Welcome />}
             />
           }
           <Route path="qr-scanner" element={<QRScanner />} />

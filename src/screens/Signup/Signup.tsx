@@ -10,13 +10,19 @@ import {
   faUserFriends
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
-import { AsyncStorage, Linking, isApiError } from "@utils";
+import {
+  AsyncStorage,
+  Linking,
+  isApiError,
+  isNativeSegwitExtendedPublicKey
+} from "@utils";
 import {
   SBPContext,
-  apiRootUrl,
   bankCurrencyMap,
   currencies,
+  dashboardUrl,
   fiatCurrencies,
+  getEnabledCurrencies,
   platform
 } from "@config";
 import LocaleCurrency from "locale-currency";
@@ -32,7 +38,6 @@ import {
   TextField,
   Url
 } from "@components";
-import axios from "axios";
 import { validate as isEmail } from "email-validator";
 import { useSearchParams } from "../../components/Router";
 import {
@@ -49,7 +54,7 @@ import {
 import { PayoutConfigForm } from "@components/PayoutConfig/PayoutConfig";
 import { useToast } from "react-native-toast-notifications";
 import { useTheme } from "styled-components";
-import { AccountConfigType, UserType } from "@types";
+import { UserType, api, type CreateAccountBody } from "@types";
 import {
   useAccountConfig,
   useIsBiometrySupported,
@@ -70,7 +75,7 @@ type SignupForm = {
   name?: string;
   email?: string;
   password?: string;
-  currency?: AccountConfigType["currency"];
+  currency?: string;
   referralCode?: string;
 } & PayoutConfigForm;
 
@@ -85,6 +90,19 @@ export const Signup = () => {
   const { setUserType } = useContext(SBPContext);
   const { colors } = useTheme();
   const [searchParams] = useSearchParams();
+
+  const availableCurrencies = useMemo(
+    () =>
+      getEnabledCurrencies().filter(
+        ({ value }) => !["sat", "BTC"].includes(value)
+      ),
+    []
+  );
+  const localeCurrency = LocaleCurrency.getCurrency(deviceLocale);
+  const defaultCurrency =
+    availableCurrencies.find(({ value }) => value === localeCurrency)?.value ??
+    availableCurrencies.find(({ value }) => value === "CHF")?.value ??
+    availableCurrencies[0]?.value;
 
   const isAtm = useMemo(() => false, []);
 
@@ -103,9 +121,7 @@ export const Signup = () => {
   } = useForm<SignupForm>({
     mode: "onTouched",
     defaultValues: {
-      currency: LocaleCurrency.getCurrency(
-        deviceLocale
-      ) as AccountConfigType["currency"],
+      currency: defaultCurrency,
       btcPercent: 100,
       ownerCountry: deviceLocale?.split("-")?.[1],
       btcAddressTypes: {
@@ -129,10 +145,15 @@ export const Signup = () => {
 
       if (_referralCode) {
         try {
-          await axios.get(`${apiRootUrl}/check-referral-code`, {
-            params: { refCode: _referralCode }
-          });
-          setIsRefCodeValid(true);
+          const { valid } = await api.accounts.checkReferralCode(_referralCode);
+          setIsRefCodeValid(valid);
+
+          if (!valid) {
+            const errorMessage = t("error.referralCode.doesntExists");
+
+            setError("referralCode", { message: errorMessage });
+            toast.show(errorMessage, { type: "error" });
+          }
         } catch (e) {
           if (isApiError(e)) {
             const errorField = e.response.data.field as keyof SignupForm;
@@ -206,49 +227,50 @@ export const Signup = () => {
       const isReceiveBitcoin = btcPercent >= 1;
       const isReceiveFiat = btcPercent <= 99;
 
-      const bankCurrency: (typeof fiatCurrencies)[number] =
-        bankCurrencyMap[currency];
+      const bankCurrency: (typeof fiatCurrencies)[number] | undefined =
+        currency in bankCurrencyMap
+          ? bankCurrencyMap[currency as keyof typeof bankCurrencyMap]
+          : undefined;
 
       try {
-        const signupData = {
+        const signupData: CreateAccountBody = {
           name,
           email,
           currency,
           password,
-          isAtm,
+          is_atm: isAtm,
           language: i18n.language,
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          btcPercent,
-          referredBy: referralCode?.toUpperCase(),
+          btc_percent: btcPercent,
+          referred_by: referralCode?.toUpperCase(),
           ...(isReceiveBitcoin
             ? {
                 address: depositAddress,
                 message: messageToSign,
                 signature,
-                walletConfig
+                wallet_config: walletConfig
               }
             : {}),
           ...(isReceiveFiat
             ? {
                 iban,
-                reference,
-                ownerName,
-                ownerAddress,
-                ownerComplement,
-                ownerZip,
-                ownerCity,
-                ownerCountry
+                bank_reference: reference,
+                owner_name: ownerName,
+                owner_address: ownerAddress,
+                owner_complement: ownerComplement,
+                owner_zip: ownerZip,
+                owner_city: ownerCity,
+                owner_country: ownerCountry
               }
             : {}),
-          ...(isReceiveFiat && bankCurrency ? { bankCurrency } : {})
+          ...(isReceiveFiat && bankCurrency
+            ? { bank_currency: bankCurrency }
+            : {})
         };
 
-        const signupResponse = await axios.post<{
-          invoiceKey?: string;
-          errorCode?: string;
-        }>(`${apiRootUrl}/signup`, signupData);
+        const signupResponse = await api.accounts.create(signupData);
 
-        const invoiceKey = signupResponse.data.invoiceKey;
+        const invoiceKey = signupResponse.invoice_key;
 
         await AsyncStorage.removeItem(keyStoreRefCode);
 
@@ -263,7 +285,7 @@ export const Signup = () => {
           );
         }
 
-        if (depositAddress?.startsWith("zpub")) {
+        if (depositAddress && isNativeSegwitExtendedPublicKey(depositAddress)) {
           await AsyncStorage.setItem(
             keyStoreZpub,
             depositAddress,
@@ -273,17 +295,13 @@ export const Signup = () => {
           );
         }
 
-        const emailLoginData = {
-          UserId: email,
-          Password: password
-        };
+        const goToPos =
+          (!isAtm && !isDesktop) || process.env.NODE_ENV === "development";
 
-        const goToPos = !isAtm && !isDesktop;
-
-        await onAuthLogin(emailLoginData, goToPos, goToPos);
+        await onAuthLogin({ email, password }, goToPos, goToPos);
 
         if (!goToPos) {
-          await Linking.openURL("https://dashboard.swiss-bitcoin-pay.ch");
+          await Linking.openURL(dashboardUrl);
         } else if (invoiceKey) {
           setUserType(walletType ? UserType.Wallet : UserType.Admin);
         } else {
@@ -430,14 +448,14 @@ export const Signup = () => {
           value={value}
           key={value} // key is important to avoid a re-render bug on Android : https://github.com/lawnstarter/react-native-picker-select/issues/112#issuecomment-640180303
           label={t("currency")}
-          items={currencies.filter((c) => !["sat", "BTC"].includes(c.value))}
+          items={availableCurrencies}
           onValueChange={onChange}
           error={error?.message}
           placeholder={{}}
         />
       );
     },
-    [t]
+    [availableCurrencies, t]
   );
 
   const ReferralCodeField = useCallback<
@@ -471,7 +489,7 @@ export const Signup = () => {
         />
       );
     },
-    [isRefCodePrefilled, tRoot, isRefCodeValid]
+    [isRefCodePrefilled, tRoot, isRefCodeValid, checkRefCode, colors.bitcoin]
   );
 
   const passwordChecksComponent = useMemo(
@@ -605,7 +623,7 @@ export const Signup = () => {
             resetField={resetField}
             trigger={trigger}
             getFieldState={getFieldState}
-            currency={watch("currency") as AccountConfigType["currency"]}
+            currency={watch("currency") as (typeof currencies)[number]["value"]}
             isDiscountFees={isRefCodeValid}
           />
         )}

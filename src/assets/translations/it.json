@@ -264,6 +264,12 @@
         },
         "kyc": {
             "title": "Verifica dell'identità",
+            "invalidLink": "Link di verifica non valido",
+            "invalidLinkDescription": "Questa pratica di verifica non è stata trovata. Il link potrebbe non essere valido o essere scaduto.",
+            "loadingFailed": "Impossibile caricare la verifica",
+            "loadingFailedDescription": "Controllare la connessione internet e riprovare.",
+            "retry": "Riprova",
+            "goBack": "Indietro",
             "description": "In base alle normative vigenti, dobbiamo verificare alcune informazioni su di voi. Prima di pagare la fattura, seguite i passaggi indicati di seguito.",
             "relatedInvoice": "Fattura correlata",
             "invoiceSeller": "Venditore",

@@ -39,6 +39,7 @@ import {
 } from "react";
 import {
   validateBitcoinAddress,
+  isExtendedPublicKey,
   isNewAccount as _isNewAccount,
   hardwareNames
 } from "@utils";
@@ -47,6 +48,7 @@ import { ScrollView } from "react-native";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { SBPContext, apiRootUrl, platform } from "@config";
+import { api } from "@types";
 import { DescriptionLine } from "../DescriptionLine";
 import {
   BitcoinFiatFormSettings,
@@ -106,8 +108,9 @@ export const BitcoinSettings = ({
 
   const alreadyVerifiedAddresses = useMemo(
     () =>
-      accountConfig?.verifiedAddresses?.map((address) => address.address) || [],
-    [accountConfig?.verifiedAddresses]
+      accountConfig?.verified_addresses?.map((address) => address.address) ||
+      [],
+    [accountConfig?.verified_addresses]
   );
 
   const isAddressAlreadyVerified = useMemo(
@@ -116,30 +119,26 @@ export const BitcoinSettings = ({
   );
 
   const isNewAccount = useMemo(
-    () => _isNewAccount(accountConfig?.createdAt),
-    [accountConfig?.createdAt]
+    () => _isNewAccount(accountConfig?.created_at),
+    [accountConfig?.created_at]
   );
 
   useEffect(() => {
     if (finalDepositAddress && !messageToSign && !isAddressAlreadyVerified) {
       (async () => {
-        const { data } = await axios.post<{
-          message: string;
-          displayAddress?: string;
-          signAddress?: string;
-          pr?: string;
-          hash?: string;
-        }>(`${apiRootUrl}/verify-address`, {
+        const data = await api.accounts.verifyAddress({
           depositAddress: finalDepositAddress
         });
 
-        if (btcAddressTypes.xpub) {
-          setValue("signWithAddress", data.signAddress, {
+        if (btcAddressTypes.xpub && data.kind === "xpub") {
+          setValue("signWithAddress", data.sign_address, {
             shouldValidate: false
           });
         }
-        setValue("prToPay", data.pr, { shouldValidate: false });
-        setValue("hash", data.hash, { shouldValidate: false });
+        if (data.kind === "lightning") {
+          setValue("prToPay", data.pr, { shouldValidate: false });
+          setValue("hash", data.hash, { shouldValidate: false });
+        }
         setValue("messageToSign", data.message, { shouldValidate: false });
 
         setValue(
@@ -204,11 +203,7 @@ export const BitcoinSettings = ({
         });
         setValue("finalDepositAddress", value);
         return true;
-      } else if (
-        value.startsWith("xpub") ||
-        value.startsWith("ypub") ||
-        value.startsWith("zpub")
-      ) {
+      } else if (isExtendedPublicKey(value)) {
         setValue(
           "btcAddressTypes",
           {
@@ -219,15 +214,11 @@ export const BitcoinSettings = ({
           { shouldValidate: false }
         );
         try {
-          const { data } = await axios.get<{ address: string }[]>(
-            `${apiRootUrl}/valid-xpub?xpub=${value}`
-          );
-          if (data) {
-            setValue(
-              "nextAddresses",
-              data.slice(0, 3).map((d) => d.address),
-              { shouldValidate: false }
-            );
+          const { valid, addresses } = await api.accounts.validateXpub(value);
+          if (valid && addresses) {
+            setValue("nextAddresses", addresses.slice(0, 3), {
+              shouldValidate: false
+            });
             setValue(
               "btcAddressTypes",
               {
@@ -310,7 +301,28 @@ export const BitcoinSettings = ({
 
   const validateSignature = useCallback(
     async (value?: string | { message: string; signature: string }) => {
-      if (signature === "paid") return true;
+      // Preuve par paiement Lightning. L'ancien back-end Node-RED marquait le
+      // challenge `verified` depuis son propre WebSocket, si bien qu'un simple
+      // `signature = "paid"` posé côté client suffisait. Le nouveau back-end ne
+      // fait plus cet effet de bord (relay se contente de relayer l'événement) :
+      // c'est `POST /v1/accounts/verify-signature` qui consomme le challenge,
+      // vérifie auprès de LND que la facture est bien SETTLED et passe
+      // `sign_messages.verified` à 1. Sans cet appel, l'adresse de payout n'est
+      // jamais reconnue comme prouvée et le changement d'adresse échoue.
+      // La valeur `signature` est ignorée côté serveur pour un challenge LN —
+      // la preuve, c'est le paiement.
+      if (signature === "paid") {
+        if (!messageToSign) return t("invalidSignature");
+        try {
+          await api.accounts.verifySignature({
+            message: messageToSign,
+            signature: "paid"
+          });
+          return true;
+        } catch (e) {
+          return t("invalidSignature");
+        }
+      }
       if (value) {
         try {
           let message: string;
@@ -324,7 +336,7 @@ export const BitcoinSettings = ({
             _signature = value;
           }
 
-          await axios.post(`${apiRootUrl}/verify-signature`, {
+          await api.accounts.verifySignature({
             message,
             signature: _signature
           });
@@ -436,7 +448,7 @@ export const BitcoinSettings = ({
         onWalletModalsClose(signatureData);
       }
     },
-    [onWalletModalsClose, t, toast, validateSignature]
+    [onWalletModalsClose, t, toast, validateSignature, setValue]
   );
 
   const validateDepositAddressField = useCallback<
@@ -562,8 +574,9 @@ export const BitcoinSettings = ({
               autoCorrect={false}
               error={error?.type === "validate" ? error?.message : undefined}
               disabled={!!walletType}
-              qrScannable
-              pastable
+              qrScannable={!walletType}
+              deletable
+              pastable={!walletType}
             />
             {alreadyVerifiedAddresses.filter((address) => address !== value)
               .length > 0 && (
@@ -678,6 +691,7 @@ export const BitcoinSettings = ({
       t,
       tRoot,
       theme.colors.white,
+      walletConfig?.path,
       walletType,
       walletTypeInfoComponent,
       watch

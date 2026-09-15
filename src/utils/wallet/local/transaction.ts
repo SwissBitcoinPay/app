@@ -4,7 +4,7 @@ import ECPairFactory from "ecpair";
 import ecc from "@bitcoinerlab/secp256k1";
 import { FormattedUtxo, WalletTransaction } from "@screens/Wallet/Wallet";
 import { Bip84PrivateAccount } from "@types";
-import { DEFAULT_NETWORK } from "@config";
+import { getBitcoinNetwork } from "@config";
 
 const ECPair = ECPairFactory(ecc);
 
@@ -24,7 +24,10 @@ export const createTransaction = ({
       utxo.addressIndex,
       utxo.change
     );
-    psbt.signInput(index, ECPair.fromWIF(privateKeyWIF, DEFAULT_NETWORK));
+    psbt.signInput(
+      index,
+      ECPair.fromWIF(privateKeyWIF, getBitcoinNetwork().lib)
+    );
   });
 
   psbt.finalizeAllInputs();

@@ -9,5 +9,5 @@ type SBPRoutes = {
 };
 
 declare module "react-router" {
-  interface RouteProps extends SBPRoutes {}
+  type RouteProps = SBPRoutes;
 }

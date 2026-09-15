@@ -6,6 +6,7 @@ import { XOR } from "ts-essentials";
 import { Bip84PrivateAccount } from "@types";
 import { PairedBitBox } from "bitbox-api";
 import { AskWordsPassword } from "@config/SBPAskPasswordModalContext/SBPAskPasswordModalContext";
+import { getBitcoinNetwork } from "@config";
 
 export type PrepareTransactionParams = XOR<
   {
@@ -37,10 +38,18 @@ export const prepareTransaction = async (
     encryptionKey
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  const root = new BIP84.fromMnemonic(mnemonic);
+  const { isTestnet } = getBitcoinNetwork();
 
-  const masterFingerprint = root.pubTypes.mainnet.zpub;
+  // `isTestnet=true` aligne :
+  //   - le coin_type BIP44 (1 au lieu de 0) → dérivation à m/84'/1'/0'
+  //   - le préfixe WIF des private keys (`0xef` au lieu de `0x80`)
+  // sinon `ECPair.fromWIF(wif, networks.testnet)` throw "Invalid network version".
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  const root = new BIP84.fromMnemonic(mnemonic, undefined, isTestnet);
+
+  const masterFingerprint = isTestnet
+    ? root.pubTypes.testnet.vpub
+    : root.pubTypes.mainnet.zpub;
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const child0 = root.deriveAccount(0);

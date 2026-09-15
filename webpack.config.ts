@@ -91,6 +91,7 @@ const defineEnvVariablesPlugin = new webpack.DefinePlugin({
   "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development"),
   "process.env.COMMIT_REF": JSON.stringify(process.env.COMMIT_REF),
   "process.env.SENTRY_DSN": JSON.stringify(process.env.SENTRY_DSN),
+  "process.env.DASHBOARD_URL": JSON.stringify(process.env.DASHBOARD_URL),
   __DEV__: process.env.NODE_ENV !== "production"
 });
 
@@ -175,6 +176,10 @@ module.exports = {
       ".ts",
       ".js"
     ],
+    extensionAlias: {
+      ".js": [".ts", ".tsx", ".js"],
+      ".jsx": [".tsx", ".jsx"]
+    },
     alias: {
       "styled-components": "styled-components/native",
       "react-native$": "react-native-web",
