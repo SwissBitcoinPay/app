@@ -31,6 +31,7 @@ import {
 import { getMempoolBaseUrl, SATS_PER_BTC } from "@config";
 import { CreateTransactionReturn } from "@utils/wallet/types";
 import axios from "axios";
+import { api } from "@types";
 import { useTheme } from "styled-components";
 import { XOR } from "ts-essentials";
 import * as S from "./styled";
@@ -222,20 +223,13 @@ export const SendModal = ({
 
         if (tx.txHex) {
           try {
-            await axios.post(`${mempoolBaseUrl}/api/tx`, tx.txHex);
+            await api.transactions.broadcast(tx.txHex);
             toast.show(t("transactionSent"), { type: "success" });
             onClose(true);
             await sleep(500);
             reset();
           } catch (e) {
-            let errorMessage = e.response.data;
-            try {
-              errorMessage = JSON.parse(
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
-                errorMessage.replace("sendrawtransaction RPC error:", "")
-              ).message;
-            } catch (_e) {}
-            toast.show(`${t("errorBroadcast")}: ${errorMessage}`, {
+            toast.show(`${t("errorBroadcast")}: ${(e as Error).message}`, {
               type: "error"
             });
           }
@@ -248,7 +242,6 @@ export const SendModal = ({
     [
       awaitWalletTransaction,
       feesOptions,
-      mempoolBaseUrl,
       nextChangeAddress,
       onClose,
       reset,
