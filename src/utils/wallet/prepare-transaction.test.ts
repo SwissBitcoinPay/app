@@ -3,14 +3,14 @@ import { Psbt, Transaction, address, networks } from "bitcoinjs-lib";
 import { prepareTransaction } from "./prepare-transaction";
 import type { FormattedUtxo } from "@screens/Wallet/Wallet";
 
-// Vecteurs BIP84 (mnemonic « abandon … about »), compte 0 mainnet.
+// BIP84 test vectors ("abandon … about" mnemonic), mainnet account 0.
 const ZPUB =
   "zpub6rFR7y4Q2AijBEqTUquhVz398htDFrtymD9xYYfG1m4wAcvPhXNfE3EfH1r1ADqtfSdVCToUG868RvUUkgDKf31mGDtKsAYz2oz2AGutZYs";
 const RECEIVE_0 = "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu";
 const RECEIVE_1 = "bc1qnjg0jd8228aq7egyzacy8cys3knf9xvrerkf9g";
 
-// Paquet ESM-only (non chargeable sous jest) : toutes les adresses du test
-// sont des P2WPKH mainnet.
+// ESM-only package (cannot be loaded under jest): every address in this test
+// is a mainnet P2WPKH.
 jest.mock("bitcoin-address-validation", () => ({
   AddressType: { p2wpkh: "p2wpkh" },
   validate: () => true,
@@ -30,11 +30,11 @@ jest.mock("./bitbox02", () => ({}));
 jest.mock("./ledger", () => ({}));
 jest.mock("./local", () => ({
   prepareTransaction: () => Promise.resolve({ masterFingerprint: "73c5da0a" }),
-  // Renvoie le PSBT construit, pour inspecter les inputs.
+  // Returns the built PSBT so the test can inspect its inputs.
   createTransaction: ({ psbt }: { psbt: Psbt }) => Promise.resolve(psbt)
 }));
 
-// Tx parente qui paie 100 000 sats sur la première adresse de réception.
+// Parent tx paying 100,000 sats to the first receive address.
 const buildParentTx = () => {
   const tx = new Transaction();
   tx.version = 2;

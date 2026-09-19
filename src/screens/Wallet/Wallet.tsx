@@ -67,8 +67,8 @@ export type WalletTransaction = {
 
 export type FormattedUtxo = {
   txid: string;
-  // Tx parente sérialisée (`hex` de `api.transactions.byAddress`) : sert de
-  // `nonWitnessUtxo` à la signature, sans aller la rechercher ailleurs.
+  // Serialized parent tx (`hex` from `api.transactions.byAddress`), used as
+  // the input's `nonWitnessUtxo` when signing, without fetching it again.
   rawTx: string;
   address: string;
   scriptPubKeyHex: string;
