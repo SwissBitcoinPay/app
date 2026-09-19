@@ -11,11 +11,10 @@ import {
   getAddressInfo,
   validate
 } from "bitcoin-address-validation";
-import axios from "axios";
 import { HardwareReadyFunctionParams } from "@components/ConnectWalletModal/ConnectWalletModal";
 import { Wallet } from "./types";
 import { Bip84Account } from "@types";
-import { getBitcoinNetwork, getMempoolBaseUrl } from "@config";
+import { getBitcoinNetwork } from "@config";
 import { AsyncStorage } from "@utils/AsyncStorage";
 import { keyStoreWalletPath } from "@config/settingsKeys";
 import { AskWordsPassword } from "@config/SBPAskPasswordModalContext/SBPAskPasswordModalContext";
@@ -135,7 +134,6 @@ export const prepareTransaction = async ({
   let outputs: OutputsTypes = {};
 
   const { lib: networkLib, isTestnet } = getBitcoinNetwork();
-  const mempoolBaseUrl = getMempoolBaseUrl();
   const psbt = new Psbt({ network: networkLib });
 
   // Coin_type BIP44 : 0 = mainnet, 1 = testnet/signet/regtest. Sert de
@@ -183,10 +181,6 @@ export const prepareTransaction = async ({
       [addressType]: (inputs[addressType] || 0) + 1
     };
 
-    const { data: rawTx } = await axios.get<string>(
-      `${mempoolBaseUrl}/api/tx/${utxo.txid}/hex`
-    );
-
     const path = `${pathPrefix}${rootPath}/${utxo.change ? "1" : "0"}/${utxo.addressIndex}`;
 
     try {
@@ -197,7 +191,7 @@ export const prepareTransaction = async ({
           script: Buffer.from(utxo.scriptPubKeyHex, "hex"),
           value: BigInt(utxo.value)
         },
-        nonWitnessUtxo: Buffer.from(rawTx, "hex"),
+        nonWitnessUtxo: Buffer.from(utxo.rawTx, "hex"),
         bip32Derivation: [
           {
             masterFingerprint: Buffer.from(masterFingerprint, "hex"),
