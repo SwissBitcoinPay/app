@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 cd $(dirname $0)
 cd ..
 
@@ -10,7 +12,7 @@ npm remove react-native-vision-camera
 ANDROID_BUILD_ASSETS=android/app/src/main/assets
 
 DEV=$DEV npm run bundle:android
-# Sourcemaps uploading
+# Hermes source maps (no upload: GlitchTip, SENTRY_DSN only)
 
 node_modules/react-native/sdks/hermesc/osx-bin/hermesc \
   -O -emit-binary \
@@ -34,10 +36,6 @@ node \
   $ANDROID_BUILD_ASSETS/index.android.bundle.packager.map $ANDROID_BUILD_ASSETS/index.android.bundle.map
 
 rm -f $ANDROID_BUILD_ASSETS/index.android.bundle.packager.map
-
-node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload \
-  --debug-id-reference \
-  $ANDROID_BUILD_ASSETS/index.android.bundle $ANDROID_BUILD_ASSETS/index.android.bundle.map
 
 ###
 
