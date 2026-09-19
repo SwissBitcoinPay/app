@@ -194,8 +194,6 @@ public class BitBoxBridgeModule extends ReactContextBaseJavaModule implements Li
         vw.clearCache(true);
         vw.clearHistory();
         vw.getSettings().setJavaScriptEnabled(true);
-        vw.getSettings().setAllowUniversalAccessFromFileURLs(true);
-        vw.getSettings().setAllowFileAccess(true);
 
         var url = vw.getUrl();
 
