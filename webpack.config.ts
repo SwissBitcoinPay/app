@@ -1,5 +1,3 @@
-const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
-
 const webpack = require("webpack");
 const path = require("path");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
@@ -141,12 +139,7 @@ module.exports = {
     defineEnvVariablesPlugin,
     providePlugin,
     ignorePlugin,
-    isDevelopment && new ReactRefreshWebpackPlugin(),
-    sentryWebpackPlugin({
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-      org: "swiss-bitcoin-pay",
-      project: "react-native"
-    })
+    isDevelopment && new ReactRefreshWebpackPlugin()
   ].filter(Boolean),
 
   module: {

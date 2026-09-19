@@ -344,7 +344,7 @@
 			outputPaths = (
 			);
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh ../node_modules/@sentry/react-native/scripts/sentry-xcode-debug-files.sh";
+			shellScript = "# GlitchTip with SENTRY_DSN only: skip the dSYM upload via sentry-cli.\nexport SENTRY_DISABLE_AUTO_UPLOAD=true\n/bin/sh ../node_modules/@sentry/react-native/scripts/sentry-xcode-debug-files.sh\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

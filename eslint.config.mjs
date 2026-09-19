@@ -21,6 +21,7 @@ export default [
       "**/webpack.config.ts",
       "**/react-native.config.js",
       "**/metro.config.js",
+      "**/metro.config.test.js",
       "**/jest.config.js",
       "**/index.js",
       "**/babel.config.js",
