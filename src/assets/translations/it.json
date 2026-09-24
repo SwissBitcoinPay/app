@@ -43,7 +43,8 @@
         "errors": {
             "invalidBitcoinAddress": "Indirizzo bitcoin non valido",
             "unableGetRates": "Impossibile ottenere i tassi di cambio",
-            "unknown": "Errore sconosciuto"
+            "unknown": "Errore sconosciuto",
+            "serverUnreachable": "Impossibile raggiungere il server. Nuovo tentativo…"
         }
     },
     "connectWalletModal": {

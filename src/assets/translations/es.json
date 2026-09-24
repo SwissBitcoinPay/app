@@ -43,7 +43,8 @@
         "errors": {
             "invalidBitcoinAddress": "Dirección bitcoin no válida",
             "unableGetRates": "Imposible obtener tarifas",
-            "unknown": "Error desconocido"
+            "unknown": "Error desconocido",
+            "serverUnreachable": "No se puede conectar con el servidor. Reintentando…"
         }
     },
     "connectWalletModal": {
