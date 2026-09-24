@@ -1,6 +1,7 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Router } from "@components/Router";
-import { KeyboardAvoidingView, Loader } from "@components";
+import { KeyboardAvoidingView, Loader, SplashScreen } from "@components";
 import {
   SBPContextProvider,
   SBPThemeContextProvider,
@@ -21,10 +22,23 @@ import "./config/i18n";
 
 const { isIos } = platform;
 
-const Root = () => {
+// The native splash is only hidden once <App /> mounts. If the bootstrap
+// fails (offline, API unreachable), hide it anyway so the user isn't stuck on
+// it while retries are in progress.
+const BootstrapLoader = ({ hasFailed }: { hasFailed: boolean }) => {
+  const { t } = useTranslation(undefined, { keyPrefix: "common.errors" });
 
+  useEffect(() => {
+    if (hasFailed) SplashScreen.hide({ fade: true });
+  }, [hasFailed]);
+
+  return <Loader reason={hasFailed ? t("serverUnreachable") : undefined} />;
+};
+
+const Root = () => {
   const isApiReady = useApiReady({ storage: AsyncStorage });
-  const isConfigReady = useRuntimeConfigReady(isApiReady);
+  const { isReady: isConfigReady, hasFailed: hasConfigFailed } =
+    useRuntimeConfigReady(isApiReady);
   const isBootstrapped = isApiReady && isConfigReady;
 
   return (
@@ -42,7 +56,11 @@ const Root = () => {
                       <SBPLedgerContextProvider>
                         <SBPBitboxContextProvider>
                           <SBPHardwareWalletContextProvider>
-                            {isBootstrapped ? <App /> : <Loader />}
+                            {isBootstrapped ? (
+                              <App />
+                            ) : (
+                              <BootstrapLoader hasFailed={hasConfigFailed} />
+                            )}
                           </SBPHardwareWalletContextProvider>
                         </SBPBitboxContextProvider>
                       </SBPLedgerContextProvider>

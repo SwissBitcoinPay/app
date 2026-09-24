@@ -43,7 +43,8 @@
         "errors": {
             "invalidBitcoinAddress": "Invalid bitcoin address",
             "unableGetRates": "Unable to get rates",
-            "unknown": "Unknown error"
+            "unknown": "Unknown error",
+            "serverUnreachable": "Unable to reach the server. Retrying…"
         }
     },
     "connectWalletModal": {

@@ -43,7 +43,8 @@
         "errors": {
             "invalidBitcoinAddress": "Endereço de bitcoin inválido",
             "unableGetRates": "Não foi possível obter tarifas",
-            "unknown": "Erro desconhecido"
+            "unknown": "Erro desconhecido",
+            "serverUnreachable": "Não foi possível contactar o servidor. A tentar novamente…"
         }
     },
     "connectWalletModal": {

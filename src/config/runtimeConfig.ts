@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { networks, type Network as BitcoinJsNetwork } from "bitcoinjs-lib";
 import { api, type AppConfig } from "@types";
+import { sleep } from "@utils/sleep";
 import {
   buildCurrencyOptions,
   filterEnabledCurrencies,
@@ -12,23 +13,51 @@ let _currencies: CurrencyOption[] | undefined;
 let _enabledCurrencies: CurrencyOption[] | undefined;
 let _ready: Promise<void> | undefined;
 
+// RN requests have no timeout by default (unlimited on Android): without a
+// bound, a request that never responds would block the bootstrap.
+const BOOTSTRAP_TIMEOUT_MS = 10000;
+
+const withTimeout = async <T>(promise: Promise<T>, ms: number): Promise<T> => {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<never>((_, reject) => {
+        timeout = setTimeout(
+          () => reject(new Error(`timed out after ${ms}ms`)),
+          ms
+        );
+      })
+    ]);
+  } finally {
+    clearTimeout(timeout);
+  }
+};
+
 // Singleton bootstrap : fetch la config et les métadonnées de devises une
 // seule fois via les wrappers typés. Pré-requis : `initApi()` doit avoir
 // résolu (le proxy `api` throw `notReady` sinon). Idempotent.
-export const initRuntimeConfig = (): Promise<void> => {
+export const initRuntimeConfig = (
+  timeoutMs = BOOTSTRAP_TIMEOUT_MS
+): Promise<void> => {
   if (_config && _currencies && _enabledCurrencies) return Promise.resolve();
   if (_ready) return _ready;
   _ready = (async () => {
-    const [config, currenciesResponse] = await Promise.all([
-      api.config.get(),
-      api.currencies.list()
-    ]);
+    const [config, currenciesResponse] = await withTimeout(
+      Promise.all([api.config.get(), api.currencies.list()]),
+      timeoutMs
+    );
     const currencies = buildCurrencyOptions(currenciesResponse.currencies);
 
     _config = config;
     _currencies = currencies;
     _enabledCurrencies = filterEnabledCurrencies(currencies);
-  })();
+  })().catch((err: unknown) => {
+    // Drop the rejected promise so the next call fetches again (otherwise the
+    // failure stays cached until the app restarts).
+    _ready = undefined;
+    throw err;
+  });
   return _ready;
 };
 
@@ -109,24 +138,45 @@ export const getCdnEndpoint = () => get().cdn_endpoint;
 export const getBackendVersion = () => get().version;
 export const getMinClientVersion = () => get().min_client_version;
 
-// Hook React opt-in. Déclenche `initRuntimeConfig()` une fois `isApiReady`
-// passé à true. Retourne `true` quand la config est résolue.
-export const useRuntimeConfigReady = (isApiReady: boolean): boolean => {
-  const [ready, setReady] = useState(false);
+const RETRY_DELAYS_MS = [1000, 2000, 5000, 10000];
+// The timeout grows with each attempt (10 s, 20 s, then 30 s) so a slow
+// connection eventually gets through instead of always failing at the same
+// threshold.
+const MAX_TIMEOUT_FACTOR = 3;
+
+// Opt-in React hook. Triggers `initRuntimeConfig()` once `isApiReady` turns
+// true, and retries indefinitely (capped backoff) on failure (offline, API
+// unreachable) instead of blocking the app forever. `hasFailed` turns true on
+// the first failure.
+export const useRuntimeConfigReady = (
+  isApiReady: boolean
+): { isReady: boolean; hasFailed: boolean } => {
+  const [isReady, setIsReady] = useState(false);
+  const [hasFailed, setHasFailed] = useState(false);
   useEffect(() => {
     if (!isApiReady) return;
     let cancelled = false;
-    initRuntimeConfig().then(
-      () => {
-        if (!cancelled) setReady(true);
-      },
-      (err) => {
-        console.error("initRuntimeConfig failed", err);
+    void (async () => {
+      for (let retryCount = 0; !cancelled; retryCount++) {
+        try {
+          await initRuntimeConfig(
+            BOOTSTRAP_TIMEOUT_MS * Math.min(retryCount + 1, MAX_TIMEOUT_FACTOR)
+          );
+          if (!cancelled) setIsReady(true);
+          return;
+        } catch (err) {
+          console.error("initRuntimeConfig failed", err);
+          if (cancelled) return;
+          setHasFailed(true);
+          await sleep(
+            RETRY_DELAYS_MS[Math.min(retryCount, RETRY_DELAYS_MS.length - 1)]
+          );
+        }
       }
-    );
+    })();
     return () => {
       cancelled = true;
     };
   }, [isApiReady]);
-  return ready;
+  return { isReady, hasFailed };
 };

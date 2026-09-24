@@ -43,7 +43,8 @@
         "errors": {
             "invalidBitcoinAddress": "Virheellinen Bitcoin-osoite",
             "unableGetRates": "Vaihtokursseja ei saada haettua",
-            "unknown": "Tuntematon virhe"
+            "unknown": "Tuntematon virhe",
+            "serverUnreachable": "Palvelimeen ei saada yhteyttä. Yritetään uudelleen…"
         }
     },
     "connectWalletModal": {
