@@ -11,40 +11,14 @@ import { useNavigate } from "@components/Router";
 import { useToast } from "react-native-toast-notifications";
 import { AccountConfigType, UserType } from "@types";
 import { useTranslation } from "react-i18next";
-import { apiRootUrl, appRootUrl, SBPContext } from "@config";
+import { apiRootUrl, SBPContext } from "@config";
 import { api, client } from "@types";
 import axios from "axios";
 import {
   getAccountApiAuth,
   getAccountRefreshApiKey
 } from "./getAccountApiAuth";
-
-const oldAppRootUrl = "https://checkout.swiss-bitcoin-pay.ch";
-
-const parseActivationLink = (scannedValue: string) => {
-  try {
-    const activationUrl = new URL(scannedValue);
-    const isSupportedOrigin = [appRootUrl, oldAppRootUrl].some(
-      (rootUrl) => activationUrl.origin === new URL(rootUrl).origin
-    );
-    const activationPath = activationUrl.pathname.match(
-      /^\/connect\/([^/]+)$/
-    );
-
-    if (!isSupportedOrigin || !activationPath) {
-      return;
-    }
-
-    return {
-      activationKey: decodeURIComponent(activationPath[1]),
-      deviceName: activationUrl.searchParams.get("deviceName") ?? undefined,
-      hmac: activationUrl.searchParams.get("hmac") ?? undefined,
-      isGuest: activationUrl.searchParams.has("isGuest")
-    };
-  } catch {
-    return;
-  }
-};
+import { parseActivationLink } from "./parseActivationLink";
 
 type UseAccountConfigParams = {
   refresh?: boolean;
