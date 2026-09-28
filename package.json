@@ -121,7 +121,6 @@
     "react-use-websocket": "4.13.0",
     "stream-browserify": "3.0.0",
     "styled-components": "6.1.19",
-    "text-encoding-polyfill": "^0.6.7",
     "trailbase": "^0.12.1",
     "use-previous": "1.2.0",
     "uuid": "13.0.0",
