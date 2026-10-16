@@ -1,11 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { showQrReader } from "@utils/showQrReader";
 import { QRScannerProps } from "./QRCamera";
-// @ts-ignore
-import BarcodeZxingScan from "react-native-barcode-zxing-scan";
 
-export const QRCamera = ({ onScan }: QRScannerProps) => {
+export const QRCamera = ({ onScan, onCancel }: QRScannerProps) => {
+  // The native scanner reports back long after it was opened on mount: call
+  // the handlers of the latest render, not the ones captured on mount.
+  const handlers = useRef({ onScan, onCancel });
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    BarcodeZxingScan.showQrReader(onScan);
+    handlers.current = { onScan, onCancel };
+  });
+
+  useEffect(() => {
+    showQrReader(
+      (value) => handlers.current.onScan(value),
+      () => handlers.current.onCancel?.()
+    );
   }, []);
 };

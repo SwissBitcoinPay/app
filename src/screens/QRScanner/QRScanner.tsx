@@ -82,6 +82,7 @@ export const QRScanner = () => {
           isTorchOn={isTorchOn}
           setConfig={_setConfig}
           onScan={qrLoginScan}
+          onCancel={onBack}
           videoHeight={isLarge ? windowHeight - 260 : "100%"}
         />
       )}

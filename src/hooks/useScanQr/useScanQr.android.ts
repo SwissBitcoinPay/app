@@ -1,10 +1,9 @@
-// @ts-ignore
-import BarcodeZxingScan from "react-native-barcode-zxing-scan";
+import { showQrReader } from "@utils/showQrReader";
 import { UseScanQrProps } from "./useScanQr";
 
 export const useScanQr = ({ onScan }: UseScanQrProps) => {
   return () => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    BarcodeZxingScan.showQrReader(onScan);
+    // A cancelled scan needs no handling: the user is back on this screen.
+    showQrReader((value) => onScan?.(value));
   };
 };
