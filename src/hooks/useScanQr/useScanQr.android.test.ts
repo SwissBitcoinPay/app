@@ -1,11 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-
-// Signature of the callback the native ZXing scanner invokes (see
-// patches/react-native-barcode-zxing-scan+1.0.2.patch).
-type NativeScanCallback = (
-  value: string | null,
-  barcodeImagePath: string | null
-) => void;
+import type { NativeScanCallback } from "@utils/showQrReader";
 
 const mockShowQrReader = jest.fn<(callback: NativeScanCallback) => void>();
 

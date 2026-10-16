@@ -35,8 +35,12 @@ describe("native entry point", () => {
   // exist".
   it("installs the TextDecoder polyfill before loading the app", () => {
     // Required here rather than imported: the mock factories above run when
-    // index.js loads, and they need `mockLoadOrder` to be initialized.
-    require("./index");
+    // index.js loads, and they need `mockLoadOrder` to be initialized. Loaded
+    // in an isolated registry so that every test records a fresh load order.
+    mockLoadOrder.length = 0;
+    jest.isolateModules(() => {
+      require("./index");
+    });
 
     expect(mockLoadOrder).toContain("TextDecoder polyfill");
     expect(mockLoadOrder).toContain("app");
