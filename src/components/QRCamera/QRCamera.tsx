@@ -11,6 +11,9 @@ import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 export type QRScannerProps = {
   setConfig: (newConfig: Partial<CamerasConfig>) => void;
   onScan: (value: string) => void;
+  /** Called when the scanner is closed without a result. Only the Android
+   * scanner (a separate native screen) reports it. */
+  onCancel?: () => void;
   placeholderPreset?: PlaceholderPresetsTypes;
   isActive?: boolean;
 

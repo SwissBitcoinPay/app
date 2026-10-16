@@ -62,6 +62,7 @@ export const QrScanWindow = ({
           style={{}}
           setConfig={_setConfig}
           onScan={_onScan}
+          onCancel={_onClose}
           videoHeight={300}
           resizeMode="contain"
         />
