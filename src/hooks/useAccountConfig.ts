@@ -4,7 +4,8 @@ import {
   keyStoreAccountConfig,
   keyStoreDeviceName,
   keyStoreHmac,
-  keyStoreIsGuest
+  keyStoreIsGuest,
+  keyStoreUserType
 } from "@config/settingsKeys";
 import { AsyncStorage } from "@utils";
 import { useNavigate } from "@components/Router";
@@ -18,6 +19,7 @@ import {
   getAccountApiAuth,
   getAccountRefreshApiKey
 } from "./getAccountApiAuth";
+import { getLegacyActivationKey } from "./getLegacyActivationKey";
 import { parseActivationLink } from "./parseActivationLink";
 
 type UseAccountConfigParams = {
@@ -150,7 +152,25 @@ export const useAccountConfig = (props?: UseAccountConfigParams) => {
 
     let apiKey;
     if (storeAccountconfig) {
-      const parsedConfig = JSON.parse(storeAccountconfig) as AccountConfigType;
+      let parsedConfig = JSON.parse(storeAccountconfig) as AccountConfigType;
+
+      // Un terminal activé par QR avant la 2.7 garde son activation à la mise
+      // à jour : son ancienne clé tient lieu d'`invoice_key`, et le
+      // rafraîchissement habituel de la caisse réécrit l'enregistrement au
+      // nouveau format. Rien n'est écrit ni demandé au serveur ici : aucune
+      // écriture de plus ne peut courir contre une activation lancée en même
+      // temps. Un compte Admin ou Wallet tenait à une session de l'ancien
+      // back-end, que rien ne reconduit : il se reconnecte.
+      const legacyActivationKey = getLegacyActivationKey(parsedConfig);
+      if (legacyActivationKey !== undefined) {
+        const userType =
+          ((await AsyncStorage.getItem(keyStoreUserType)) as UserType | null) ||
+          UserType.Employee;
+        if (userType === UserType.Employee) {
+          parsedConfig = { ...parsedConfig, invoice_key: legacyActivationKey };
+        }
+      }
+
       setAccountConfig(parsedConfig);
       apiKey = parsedConfig.invoice_key;
     }

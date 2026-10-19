@@ -35,7 +35,8 @@ jest.mock("@config/settingsKeys", () => ({
   keyStoreAccountConfig: "accountConfig",
   keyStoreDeviceName: "deviceName",
   keyStoreHmac: "hmac",
-  keyStoreIsGuest: "isGuest"
+  keyStoreIsGuest: "isGuest",
+  keyStoreUserType: "userType"
 }));
 
 jest.mock("@config", () => ({
@@ -283,5 +284,157 @@ describe("useAccountConfig activation", () => {
     expect(mockAccountsMe).toHaveBeenCalledWith({
       apiKey: "stored-invoice-key"
     });
+  });
+});
+
+// Enregistrement laissé par une version antérieure à la 2.7, au format de
+// l'ancien back-end.
+const legacyAccountConfig = JSON.stringify({
+  apiKey: "legacy-key",
+  isAtm: false,
+  name: "Caisse"
+});
+
+const mockStorage = (values: Record<string, string | null>) =>
+  mockStorageGetItem.mockImplementation(((key: string) =>
+    Promise.resolve(values[key] ?? null)) as never);
+
+const runLoadEffect = async () => {
+  const loadEffect = mockUseEffect.mock.calls[
+    mockUseEffect.mock.calls.length - 1
+  ]?.[0] as () => void;
+  loadEffect();
+  await new Promise<void>((resolve) => setImmediate(resolve));
+};
+
+describe("useAccountConfig reprise d'une activation antérieure à la 2.7", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockClientTokens.mockReturnValue(undefined as never);
+  });
+
+  it.each([
+    ["Employé", "employee"],
+    ["sans type enregistré", null]
+  ])(
+    "affiche la caisse d'un terminal %s sans nouveau scan, sans rien écrire",
+    async (_label, userType) => {
+      mockStorage({ accountConfig: legacyAccountConfig, userType });
+
+      // Comme l'instance d'`App`, qui ne rafraîchit pas au chargement.
+      useAccountConfig({ refresh: false });
+      await runLoadEffect();
+
+      expect(mockSetAccountConfig).toHaveBeenCalledWith({
+        ...JSON.parse(legacyAccountConfig),
+        invoice_key: "legacy-key"
+      });
+      expect(mockAccountsMe).not.toHaveBeenCalled();
+      expect(mockStorageSetItem).not.toHaveBeenCalled();
+    }
+  );
+
+  it("réenregistre au nouveau format au rafraîchissement de la caisse", async () => {
+    const account = {
+      invoice_key: "legacy-key",
+      is_atm: false,
+      is_checkout_secure: false,
+      name: "Caisse"
+    };
+    mockStorage({ accountConfig: legacyAccountConfig, userType: "employee" });
+    mockAccountsMe.mockResolvedValue(account as never);
+
+    useAccountConfig();
+    await runLoadEffect();
+
+    expect(mockAccountsMe).toHaveBeenCalledTimes(1);
+    expect(mockAccountsMe).toHaveBeenCalledWith({ apiKey: "legacy-key" });
+    expect(mockStorageSetItem).toHaveBeenCalledWith(
+      "accountConfig",
+      JSON.stringify(account)
+    );
+    expect(mockSetAccountConfig).toHaveBeenLastCalledWith(account);
+    expect(mockToastShow).not.toHaveBeenCalled();
+  });
+
+  it("garde l'ancien enregistrement si le serveur refuse la clé", async () => {
+    mockStorage({ accountConfig: legacyAccountConfig, userType: "employee" });
+    mockAccountsMe.mockRejectedValue(new Error("invalid_api_key") as never);
+
+    useAccountConfig();
+    await runLoadEffect();
+
+    expect(mockAccountsMe).toHaveBeenCalledWith({ apiKey: "legacy-key" });
+    expect(mockStorageSetItem).not.toHaveBeenCalled();
+    expect(mockToastShow).toHaveBeenCalledWith("checkInternet", {
+      type: "error"
+    });
+  });
+
+  it.each(["admin", "wallet"])(
+    "ne reprend pas l'ancienne clé d'un compte %s",
+    async (userType) => {
+      mockStorage({ accountConfig: legacyAccountConfig, userType });
+
+      useAccountConfig({ refresh: false });
+      await runLoadEffect();
+
+      expect(mockSetAccountConfig).toHaveBeenCalledWith(
+        JSON.parse(legacyAccountConfig)
+      );
+      expect(mockAccountsMe).not.toHaveBeenCalled();
+      expect(mockStorageSetItem).not.toHaveBeenCalled();
+    }
+  );
+
+  it("la reprise au chargement n'écrit rien et n'appelle pas le serveur, même pendant une activation par QR", async () => {
+    const newAccount = {
+      invoice_key: "new-key",
+      is_atm: false,
+      is_checkout_secure: false
+    };
+    mockStorage({ accountConfig: legacyAccountConfig, userType: "employee" });
+    mockAccountsMe.mockResolvedValue(newAccount as never);
+
+    // Lien d'activation ouvert au lancement : `App` et `Connect` se montent
+    // ensemble, et `Connect` active aussitôt un autre compte.
+    useAccountConfig({ refresh: false });
+    const appLoadEffect = mockUseEffect.mock.calls[
+      mockUseEffect.mock.calls.length - 1
+    ]?.[0] as () => void;
+    const { onQrLogin } = useAccountConfig({ refresh: false });
+    const connectLoadEffect = mockUseEffect.mock.calls[
+      mockUseEffect.mock.calls.length - 1
+    ]?.[0] as () => void;
+    appLoadEffect();
+    connectLoadEffect();
+    const result = await onQrLogin?.(
+      "https://app.swiss-bitcoin-pay.ch/connect/new-key"
+    );
+    await new Promise<void>((resolve) => setImmediate(resolve));
+
+    expect(result).toBe(true);
+
+    expect(mockAccountsMe).not.toHaveBeenCalledWith({ apiKey: "legacy-key" });
+    const accountConfigWrites = mockStorageSetItem.mock.calls.filter(
+      ([key]) => key === "accountConfig"
+    );
+    expect(accountConfigWrites).toEqual([
+      ["accountConfig", JSON.stringify(newAccount)]
+    ]);
+  });
+
+  it("ne touche pas à un enregistrement au nouveau format qui porte l'alias", async () => {
+    const stored = { invoice_key: "invoice-key", apiKey: "invoice-key" };
+    mockStorage({
+      accountConfig: JSON.stringify(stored),
+      userType: "employee"
+    });
+
+    useAccountConfig({ refresh: false });
+    await runLoadEffect();
+
+    expect(mockSetAccountConfig).toHaveBeenCalledWith(stored);
+    expect(mockAccountsMe).not.toHaveBeenCalled();
   });
 });
