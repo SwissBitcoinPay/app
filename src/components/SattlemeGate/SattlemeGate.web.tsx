@@ -10,7 +10,6 @@ import { useLocation } from "@components/Router";
 import { apiRootUrl } from "@config/apiRootUrl";
 import { sattlemeUrl } from "@config/sattlemeUrl";
 import {
-  ACTIVATION_KEY,
   answerUrl,
   destinationOf,
   readV2BrowserState,
@@ -19,22 +18,6 @@ import {
 } from "@utils/sattleme/handoff";
 import { freshToken } from "@utils/sattleme/freshToken";
 import { WalletWordsNotice } from "./WalletWordsNotice";
-
-const readActivation = () => {
-  try {
-    return window.sessionStorage.getItem(ACTIVATION_KEY) === "1";
-  } catch {
-    return false;
-  }
-};
-
-const keepActivation = () => {
-  try {
-    window.sessionStorage.setItem(ACTIVATION_KEY, "1");
-  } catch {
-    // Sans le stockage de l'onglet : la caisse arrive sur l'accueil.
-  }
-};
 
 // Dès le 26.11.2026, l'app web v2 envoie ses utilisateurs sur l'app web de
 // sattle.me (demande du 05.11.2026, SwissBitcoinPay/new-app,
@@ -52,7 +35,7 @@ export const SattlemeGate = ({ children }: PropsWithChildren) => {
   const left = useRef(false);
 
   const state = readV2BrowserState(window.localStorage);
-  const destination = destinationOf(pathname, hash, state, readActivation());
+  const destination = destinationOf(pathname, hash, state);
 
   const leave = useCallback(async () => {
     if (left.current) return;
@@ -60,7 +43,6 @@ export const SattlemeGate = ({ children }: PropsWithChildren) => {
     setIsLeaving(true);
     let url: string;
     if (destination.kind === "request") {
-      if (destination.activation) keepActivation();
       url = requestUrl(sattlemeUrl);
     } else if (destination.kind === "answer") {
       const token =

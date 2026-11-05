@@ -178,8 +178,8 @@ describe("où mène chaque page", () => {
       "/aml",
       "/aml/abc"
     ]) {
-      expect(destinationOf(path, "", owner, false)).toEqual({ kind: "stay" });
-      expect(destinationOf(path, "", nothing, true)).toEqual({ kind: "stay" });
+      expect(destinationOf(path, "", owner)).toEqual({ kind: "stay" });
+      expect(destinationOf(path, "", nothing)).toEqual({ kind: "stay" });
     }
   });
 
@@ -194,34 +194,33 @@ describe("où mène chaque page", () => {
       "/invoices",
       "/amlx"
     ]) {
-      expect(destinationOf(path, "", owner, false)).toEqual({
-        kind: "request",
-        activation: false
+      expect(destinationOf(path, "", owner)).toEqual({
+        kind: "request"
       });
-      expect(destinationOf(path, "", nothing, false)).toEqual({
+      expect(destinationOf(path, "", nothing)).toEqual({
         kind: "welcome"
       });
     }
   });
 
   it("répond à sattle.me sur sa page, avec son nonce, après les mots du propriétaire", () => {
-    expect(destinationOf("/sattleme", `#n=${NONCE}`, owner, false)).toEqual({
+    expect(destinationOf("/sattleme", `#n=${NONCE}`, owner)).toEqual({
       kind: "answer",
       nonce: NONCE,
       role: "owner",
       askWords: true
     });
-    expect(destinationOf("/sattleme", `#n=${NONCE}`, till, false)).toEqual({
+    expect(destinationOf("/sattleme", `#n=${NONCE}`, till)).toEqual({
       kind: "answer",
       nonce: NONCE,
       role: "employee",
       askWords: false
     });
     // Sans nonce, ou sans rien de l'app v2 : l'accueil.
-    expect(destinationOf("/sattleme", "", owner, false)).toEqual({
+    expect(destinationOf("/sattleme", "", owner)).toEqual({
       kind: "welcome"
     });
-    expect(destinationOf("/sattleme", `#n=${NONCE}`, nothing, false)).toEqual({
+    expect(destinationOf("/sattleme", `#n=${NONCE}`, nothing)).toEqual({
       kind: "welcome"
     });
     // Une caisse n'a jamais de mots à noter.
@@ -235,21 +234,17 @@ describe("où mène chaque page", () => {
     ).toBe(false);
   });
 
-  it("mène un lien d'activation de caisse à l'écran des employés", () => {
-    expect(destinationOf("/connect/abc", "", nothing, false)).toEqual({
-      kind: "request",
-      activation: true
+  it("ne prend pas un lien d'activation pour une caisse sans rien de l'app v2", () => {
+    // N'importe qui peut en faire ouvrir un : il ne prouve aucune caisse.
+    expect(destinationOf("/connect/abc", "", nothing)).toEqual({
+      kind: "welcome"
     });
-    expect(destinationOf("/sattleme", `#n=${NONCE}`, nothing, true)).toEqual({
-      kind: "answer",
-      nonce: NONCE,
-      role: "employee",
-      askWords: false
+    // Ce que ce navigateur garde, lui, est relayé.
+    expect(destinationOf("/connect/abc", "", owner)).toEqual({
+      kind: "request"
     });
-    // Ce que ce navigateur garde passe avant.
-    expect(destinationOf("/connect/abc", "", owner, false)).toEqual({
-      kind: "request",
-      activation: false
+    expect(destinationOf("/connect/abc", "", till)).toEqual({
+      kind: "request"
     });
   });
 

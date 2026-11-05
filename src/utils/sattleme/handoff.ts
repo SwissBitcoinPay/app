@@ -45,11 +45,6 @@ export const nonceOf = (hash: string): string | undefined => {
   return NONCE.test(nonce) ? nonce : undefined;
 };
 
-// Ce navigateur a ouvert un lien d'activation de caisse sans rien garder de
-// l'app v2 (temps 1) : la réponse (temps 3) le dit à sattle.me. Le stockage de
-// l'onglet, effacé avec lui.
-export const ACTIVATION_KEY = "sattleme.activation";
-
 // Le nom des jetons de TrailBase dans ce navigateur (`src/types/client.ts`).
 export const TOKENS_KEY = "tb_tokens";
 
@@ -156,39 +151,39 @@ export const readV2BrowserState = (storage: ReadStorage): V2BrowserState => {
 // facture (boutiques en ligne, factures PDF, jusqu'au 31.12.2026) et les
 // formulaires des payeurs. Le routeur compare sans la casse.
 const PAYER_PAGES = /^\/(invoice|aml)(\/|$)/i;
-// Un lien d'activation d'une caisse v2 (`/connect/<clé>`).
-const ACTIVATION_PAGE = /^\/connect(\/|$)/i;
 
 export type Destination =
   // Une page de payeur : l'app v2 la sert.
   | { kind: "stay" }
   // Temps 1 : la demande à sattle.me (ce navigateur a un rôle), ou son accueil.
-  | { kind: "request"; activation: boolean }
+  | { kind: "request" }
   | { kind: "welcome" }
   // Temps 3 : la réponse, après l'écran des 12 mots pour un propriétaire dont
   // ce navigateur les garde ; sans rôle, l'accueil de sattle.me.
   | { kind: "answer"; nonce: string; role: HandoffRole; askWords: boolean };
 
-// Où mène une page de cette app : `pathname` et `hash` de son adresse,
-// `activation` quand l'onglet a ouvert un lien d'activation (ACTIVATION_KEY).
+// Où mène une page de cette app : `pathname` et `hash` de son adresse. Un
+// navigateur qui ne garde rien de l'app v2 n'a rien à relayer, quelle que soit
+// la page (un lien d'activation `/connect/…` compris : n'importe qui peut en
+// faire ouvrir un, il ne prouve aucune caisse) : l'accueil de sattle.me.
 export const destinationOf = (
   pathname: string,
   hash: string,
-  state: V2BrowserState,
-  activation: boolean
+  state: V2BrowserState
 ): Destination => {
   if (PAYER_PAGES.test(pathname)) return { kind: "stay" };
   if (pathname === HANDOFF_PATH) {
     const nonce = nonceOf(hash);
-    const role = state.role ?? (activation ? "employee" : null);
-    return nonce && role
-      ? { kind: "answer", nonce, role, askWords: state.hasWalletWords }
+    return nonce && state.role
+      ? {
+          kind: "answer",
+          nonce,
+          role: state.role,
+          askWords: state.hasWalletWords
+        }
       : { kind: "welcome" };
   }
-  if (state.role) return { kind: "request", activation: false };
-  return ACTIVATION_PAGE.test(pathname)
-    ? { kind: "request", activation: true }
-    : { kind: "welcome" };
+  return state.role ? { kind: "request" } : { kind: "welcome" };
 };
 
 const toBase64Url = (bytes: Uint8Array): string => {

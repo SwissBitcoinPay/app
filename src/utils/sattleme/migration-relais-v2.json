@@ -80,7 +80,7 @@
       }
     },
     {
-      "name": "till opened by an activation link, nothing kept (/connect)",
+      "name": "till without a copy of the account",
       "payload": {
         "v": 1,
         "nonce": "AAECAwQFBgcICQoLDA0ODw",
