@@ -645,5 +645,17 @@
         "instructions1": "Não depende do Swiss Bitcoin Pay para aceder aos seus bitcoins, o seu {{backup}} pode ser utilizado em qualquer carteira de bitcoins.",
         "instructions2": "Nunca faça uma cópia numa nuvem, no seu telemóvel ou computador. Qualquer dispositivo ligado à Internet é vulnerável!",
         "instructions3": "Nunca partilhe o seu {{backup}} com ninguém. Qualquer pessoa que aceda ao seu {{backup}} poderá roubar todos os seus fundos."
+    },
+    "sattlemeMigration": {
+        "title": "A Swiss Bitcoin Pay passa a ser sattle.me",
+        "walletInBrowser": "A carteira bitcoin criada com a Swiss Bitcoin Pay está guardada neste navegador. Anote as suas 12 palavras antes de continuar: a sattle.me vai pedi-las para transferir o que ela contém.",
+        "password": "Palavra-passe",
+        "passwordHint": "A da sua conta Swiss Bitcoin Pay no momento em que criou esta carteira.",
+        "showWords": "Mostrar as minhas 12 palavras",
+        "writeDown": "Escreva estas palavras em papel, pela ordem, e guarde-as num local seguro. Não as mostre a ninguém.",
+        "continueAfterWords": "Anotei as minhas palavras, continuar para a sattle.me",
+        "alreadyWritten": "Já as anotei, continuar",
+        "wrongPassword": "Esta palavra-passe não abre esta carteira. Experimente a que tinha quando a criou.",
+        "unreadable": "As palavras desta carteira não podem ser lidas neste navegador. Contacte o suporte."
     }
 }

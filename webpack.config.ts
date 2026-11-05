@@ -90,6 +90,7 @@ const defineEnvVariablesPlugin = new webpack.DefinePlugin({
   "process.env.COMMIT_REF": JSON.stringify(process.env.COMMIT_REF),
   "process.env.SENTRY_DSN": JSON.stringify(process.env.SENTRY_DSN),
   "process.env.DASHBOARD_URL": JSON.stringify(process.env.DASHBOARD_URL),
+  "process.env.SATTLEME_URL": JSON.stringify(process.env.SATTLEME_URL),
   __DEV__: process.env.NODE_ENV !== "production"
 });
 

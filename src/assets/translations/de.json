@@ -645,5 +645,17 @@
         "instructions1": "Sie sind nicht auf Swiss Bitcoin Pay angewiesen, um auf Ihre Bitcoins zuzugreifen, Ihre {{backup}} kann auf jeder Bitcoin-Wallet verwendet werden.",
         "instructions2": "Erstellen Sie niemals eine Kopie in einer Cloud, auf Ihrem Telefon oder Computer. Jedes Gerät, das mit dem Internet verbunden ist, ist angreifbar!",
         "instructions3": "Geben Sie Ihre {{backup}} niemals an Dritte weiter. Jede Person, die Zugriff auf Ihre {{backup}} hat, kann Ihr gesamtes Geld stehlen."
+    },
+    "sattlemeMigration": {
+        "title": "Swiss Bitcoin Pay wird zu sattle.me",
+        "walletInBrowser": "Das mit Swiss Bitcoin Pay erstellte Bitcoin-Wallet ist in diesem Browser gespeichert. Notieren Sie seine 12 Wörter, bevor Sie fortfahren: sattle.me wird Sie danach fragen, um sein Guthaben zu übertragen.",
+        "password": "Passwort",
+        "passwordHint": "Das Passwort Ihres Swiss Bitcoin Pay-Kontos zum Zeitpunkt, als Sie dieses Wallet erstellt haben.",
+        "showWords": "Meine 12 Wörter anzeigen",
+        "writeDown": "Schreiben Sie diese Wörter der Reihe nach auf Papier und bewahren Sie sie sicher auf. Zeigen Sie sie niemandem.",
+        "continueAfterWords": "Ich habe meine Wörter notiert, weiter zu sattle.me",
+        "alreadyWritten": "Ich habe sie bereits notiert, weiter",
+        "wrongPassword": "Dieses Passwort öffnet dieses Wallet nicht. Versuchen Sie das Passwort, das Sie bei seiner Erstellung hatten.",
+        "unreadable": "Die Wörter dieses Wallets können in diesem Browser nicht gelesen werden. Kontaktieren Sie den Support."
     }
 }

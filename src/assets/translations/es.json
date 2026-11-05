@@ -645,5 +645,17 @@
         "instructions1": "Usted no depende de Swiss Bitcoin Pay para acceder a sus bitcoins, su {{backup}} puede utilizarse en cualquier monedero bitcoin.",
         "instructions2": "Nunca hagas una copia en la nube, en tu teléfono o en tu ordenador. Cualquier dispositivo conectado a Internet es vulnerable.",
         "instructions3": "Nunca compartas tu {{backup}} con nadie. Cualquier persona que acceda a tu {{backup}} podrá robarte todos tus fondos."
+    },
+    "sattlemeMigration": {
+        "title": "Swiss Bitcoin Pay se convierte en sattle.me",
+        "walletInBrowser": "El monedero bitcoin creado con Swiss Bitcoin Pay está guardado en este navegador. Anota sus 12 palabras antes de continuar: sattle.me te las pedirá para transferir lo que contiene.",
+        "password": "Contraseña",
+        "passwordHint": "La de tu cuenta Swiss Bitcoin Pay en el momento en que creaste este monedero.",
+        "showWords": "Mostrar mis 12 palabras",
+        "writeDown": "Escribe estas palabras en papel, en orden, y guárdalas en un lugar seguro. No se las muestres a nadie.",
+        "continueAfterWords": "He anotado mis palabras, continuar a sattle.me",
+        "alreadyWritten": "Ya las he anotado, continuar",
+        "wrongPassword": "Esta contraseña no abre este monedero. Prueba la que tenías cuando lo creaste.",
+        "unreadable": "Las palabras de este monedero no se pueden leer en este navegador. Contacta con el soporte."
     }
 }

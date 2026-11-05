@@ -645,5 +645,17 @@
         "instructions1": "Bitcoinien käyttämiseksi et ole riippuvainen tästä sovelluksesta. Voit käyttää sinun {{backup}} lähes missä tahansa bitcoin-lompakossa.",
         "instructions2": "Älä ikinä tee siemenlauseesta kopiota pilvipalveluun, puhelimellesi, tietokoneellesi äläkä myöskään ota siitä valokuvia. Mikä tahansa internettiin kytketty laite on riski!",
         "instructions3": "Älä ikinä jaa sinun {{backup}} nkenellekkään. Mikäli joku pääsee käsiksi sinun {{backup}}, on hänen mahdollista varastaa varasi."
+    },
+    "sattlemeMigration": {
+        "title": "Swiss Bitcoin Paysta tulee sattle.me",
+        "walletInBrowser": "Swiss Bitcoin Paylla luotu bitcoin-lompakko on tallessa tässä selaimessa. Kirjoita sen 12 sanaa muistiin ennen kuin jatkat: sattle.me kysyy niitä siirtääkseen lompakon sisällön.",
+        "password": "Salasana",
+        "passwordHint": "Swiss Bitcoin Pay -tilisi salasana silloin, kun loit tämän lompakon.",
+        "showWords": "Näytä 12 sanaani",
+        "writeDown": "Kirjoita nämä sanat paperille järjestyksessä ja säilytä ne turvallisessa paikassa. Älä näytä niitä kenellekään.",
+        "continueAfterWords": "Kirjoitin sanat muistiin, jatka sattle.me-palveluun",
+        "alreadyWritten": "Olen jo kirjoittanut ne muistiin, jatka",
+        "wrongPassword": "Tämä salasana ei avaa tätä lompakkoa. Kokeile salasanaa, joka sinulla oli lompakkoa luodessasi.",
+        "unreadable": "Tämän lompakon sanoja ei voi lukea tässä selaimessa. Ota yhteyttä tukeen."
     }
 }

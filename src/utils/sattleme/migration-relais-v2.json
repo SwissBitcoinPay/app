@@ -1,0 +1,84 @@
+{
+  "description": "Vecteurs du relais des apps web v2 (app. et dashboard.swiss-bitcoin-pay.ch) vers l'app web sattle.me (docs/etude-migration-v2.md, « Les apps web v2 »). `payload` : ce que la page v2 construit (clés dans cet ordre) ; `fragment` : ce qu'elle met après l'adresse de sattle.me ; `expected` : ce que sattle.me en retient. Figé : SwissBitcoinPay/app et SwissBitcoinPay/dashboard testent les mêmes.",
+  "origins": ["https://app.swiss-bitcoin-pay.ch", "https://dashboard.swiss-bitcoin-pay.ch"],
+  "vectors": [
+    {
+      "name": "owner with the v2 web app's session and copy of the account",
+      "payload": {
+        "v": 1,
+        "role": "owner",
+        "account": {
+          "id": "0192a3b4-c5d6-7e8f-9a0b-1c2d3e4f5a6b",
+          "name": "Boulangerie du Lac",
+          "currency": "CHF",
+          "is_onchain_available": true,
+          "mail": "marie@example.ch"
+        },
+        "token": "eyJhbGciOiJFZERTQSJ9.eyJzdWIiOiJ4In0.c2lnbmF0dXJlX29mX3RoZV90b2tlbg"
+      },
+      "fragment": "#sbp=eyJ2IjoxLCJyb2xlIjoib3duZXIiLCJhY2NvdW50Ijp7ImlkIjoiMDE5MmEzYjQtYzVkNi03ZThmLTlhMGItMWMyZDNlNGY1YTZiIiwibmFtZSI6IkJvdWxhbmdlcmllIGR1IExhYyIsImN1cnJlbmN5IjoiQ0hGIiwiaXNfb25jaGFpbl9hdmFpbGFibGUiOnRydWUsIm1haWwiOiJtYXJpZUBleGFtcGxlLmNoIn0sInRva2VuIjoiZXlKaGJHY2lPaUpGWkVSVFFTSjkuZXlKemRXSWlPaUo0SW4wLmMybG5ibUYwZFhKbFgyOW1YM1JvWlY5MGIydGxiZyJ9",
+      "expected": {
+        "role": "owner",
+        "account": {
+          "id": "0192a3b4-c5d6-7e8f-9a0b-1c2d3e4f5a6b",
+          "name": "Boulangerie du Lac",
+          "currency": "CHF",
+          "onchain": true,
+          "email": "marie@example.ch"
+        },
+        "token": "eyJhbGciOiJFZERTQSJ9.eyJzdWIiOiJ4In0.c2lnbmF0dXJlX29mX3RoZV90b2tlbg"
+      }
+    },
+    {
+      "name": "owner whose browser kept nothing (dashboard without a session)",
+      "payload": {
+        "v": 1,
+        "role": "owner"
+      },
+      "fragment": "#sbp=eyJ2IjoxLCJyb2xlIjoib3duZXIifQ",
+      "expected": {
+        "role": "owner",
+        "account": null,
+        "token": null
+      }
+    },
+    {
+      "name": "till with its copy of the account, a name out of ASCII",
+      "payload": {
+        "v": 1,
+        "role": "employee",
+        "account": {
+          "id": "0192a3b4-c5d6-7e8f-9a0b-1c2d3e4f5a6b",
+          "name": "Café Zürich – Bahnhof",
+          "currency": "EUR",
+          "is_onchain_available": false
+        }
+      },
+      "fragment": "#sbp=eyJ2IjoxLCJyb2xlIjoiZW1wbG95ZWUiLCJhY2NvdW50Ijp7ImlkIjoiMDE5MmEzYjQtYzVkNi03ZThmLTlhMGItMWMyZDNlNGY1YTZiIiwibmFtZSI6IkNhZsOpIFrDvHJpY2gg4oCTIEJhaG5ob2YiLCJjdXJyZW5jeSI6IkVVUiIsImlzX29uY2hhaW5fYXZhaWxhYmxlIjpmYWxzZX19",
+      "expected": {
+        "role": "employee",
+        "account": {
+          "id": "0192a3b4-c5d6-7e8f-9a0b-1c2d3e4f5a6b",
+          "name": "Café Zürich – Bahnhof",
+          "currency": "EUR",
+          "onchain": false,
+          "email": null
+        },
+        "token": null
+      }
+    },
+    {
+      "name": "till opened by an activation link, nothing kept (/connect)",
+      "payload": {
+        "v": 1,
+        "role": "employee"
+      },
+      "fragment": "#sbp=eyJ2IjoxLCJyb2xlIjoiZW1wbG95ZWUifQ",
+      "expected": {
+        "role": "employee",
+        "account": null,
+        "token": null
+      }
+    }
+  ]
+}

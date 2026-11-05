@@ -2,6 +2,7 @@ import { Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Router } from "@components/Router";
 import { KeyboardAvoidingView, Loader, SplashScreen } from "@components";
+import { SattlemeGate } from "@components/SattlemeGate";
 import {
   SBPContextProvider,
   SBPThemeContextProvider,
@@ -56,11 +57,13 @@ const Root = () => {
                       <SBPLedgerContextProvider>
                         <SBPBitboxContextProvider>
                           <SBPHardwareWalletContextProvider>
-                            {isBootstrapped ? (
-                              <App />
-                            ) : (
-                              <BootstrapLoader hasFailed={hasConfigFailed} />
-                            )}
+                            <SattlemeGate>
+                              {isBootstrapped ? (
+                                <App />
+                              ) : (
+                                <BootstrapLoader hasFailed={hasConfigFailed} />
+                              )}
+                            </SattlemeGate>
                           </SBPHardwareWalletContextProvider>
                         </SBPBitboxContextProvider>
                       </SBPLedgerContextProvider>
