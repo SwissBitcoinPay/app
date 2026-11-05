@@ -1,18 +1,23 @@
 // Le relais vers sattle.me (migration du 26.11.2026, SwissBitcoinPay/new-app :
 // `src/lib/legacy-v2/handoff.ts` et docs/etude-migration-v2.md, « Les apps web
 // v2 »). L'app web v2 envoie ses utilisateurs sur l'app web de sattle.me avec ce
-// que ce navigateur gardait, comme la v3 le relit du trousseau sur un téléphone :
+// que ce navigateur gardait, comme la v3 le relit du trousseau sur un
+// téléphone. Toujours dans le FRAGMENT de l'adresse (jamais envoyé à un
+// serveur, absent de tout journal), en trois temps :
 //
-//   https://app.sattle.me/#sbp=<base64url sans remplissage du JSON UTF-8>
-//   { "v": 1, "role": "owner" | "employee",
+//   1. cette app demande, sans rien de ses données :  https://app.sattle.me/#sbp-from=app
+//   2. sattle.me garde un nonce dans son onglet et renvoie ici :  /sattleme#n=<nonce>
+//   3. cette app répond, avec ce nonce :  https://app.sattle.me/#sbp=<base64url sans
+//      remplissage du JSON UTF-8>
+//   { "v": 1, "nonce": "<celui du 2>", "role": "owner" | "employee",
 //     "account"?: { "id", "name"?, "currency"?, "is_onchain_available"?, "mail"? },
 //     "token"?: "<jeton court du serveur v2, une heure ; propriétaire seulement>" }
 //
-// Dans le FRAGMENT : le navigateur ne l'envoie à aucun serveur, il n'apparaît
-// dans aucun journal. Jamais le jeton de renouvellement (30 jours), la clé
-// d'API, l'IBAN ni les 12 mots : une adresse reste dans l'historique du
-// navigateur. sattle.me ne prend un relais que d'une page de ce site
-// (`document.referrer`).
+// sattle.me ne prend une réponse qu'avec le nonce que son onglet attend : une
+// adresse fabriquée ailleurs (celle où la page d'une facture renvoie son payeur,
+// au choix du marchand, comprise) ne peut pas le connaître. Jamais le jeton de
+// renouvellement (30 jours), la clé d'API, l'IBAN ni les 12 mots : une adresse
+// reste dans l'historique du navigateur.
 //
 // IRRÉVERSIBLE : le format est lu par sattle.me tel que publié ; les vecteurs
 // communs aux trois dépôts sont dans `migration-relais-v2.json` (copie de
@@ -25,7 +30,25 @@ import {
 } from "@config/settingsKeys";
 
 export const HANDOFF_PREFIX = "#sbp=";
+export const HANDOFF_REQUEST = "#sbp-from=app";
 export const HANDOFF_VERSION = 1;
+
+// La page qui répond (temps 3) : le chemin que sattle.me vise.
+export const HANDOFF_PATH = "/sattleme";
+
+// Un nonce de sattle.me : 16 octets aléatoires, base64url.
+const NONCE = /^[A-Za-z0-9_-]{22}$/;
+
+// Le nonce d'une page qui répond (`#n=<nonce>`) ; undefined sinon.
+export const nonceOf = (hash: string): string | undefined => {
+  const nonce = hash.startsWith("#n=") ? hash.slice(3) : "";
+  return NONCE.test(nonce) ? nonce : undefined;
+};
+
+// Ce navigateur a ouvert un lien d'activation de caisse sans rien garder de
+// l'app v2 (temps 1) : la réponse (temps 3) le dit à sattle.me. Le stockage de
+// l'onglet, effacé avec lui.
+export const ACTIVATION_KEY = "sattleme.activation";
 
 // Le nom des jetons de TrailBase dans ce navigateur (`src/types/client.ts`).
 export const TOKENS_KEY = "tb_tokens";
@@ -42,6 +65,7 @@ export type HandoffAccount = {
 
 export type HandoffPayload = {
   v: typeof HANDOFF_VERSION;
+  nonce: string;
   role: HandoffRole;
   account?: HandoffAccount;
   token?: string;
@@ -136,20 +160,35 @@ const PAYER_PAGES = /^\/(invoice|aml)(\/|$)/i;
 const ACTIVATION_PAGE = /^\/connect(\/|$)/i;
 
 export type Destination =
+  // Une page de payeur : l'app v2 la sert.
   | { kind: "stay" }
-  | { kind: "leave"; role: HandoffRole | null; askWords: boolean };
+  // Temps 1 : la demande à sattle.me (ce navigateur a un rôle), ou son accueil.
+  | { kind: "request"; activation: boolean }
+  | { kind: "welcome" }
+  // Temps 3 : la réponse, après l'écran des 12 mots pour un propriétaire dont
+  // ce navigateur les garde ; sans rôle, l'accueil de sattle.me.
+  | { kind: "answer"; nonce: string; role: HandoffRole; askWords: boolean };
 
-// Où mène cette page : rester (une page de payeur), ou partir sur sattle.me
-// avec le rôle de ce navigateur (aucun : l'accueil de sattle.me), après
-// l'écran des 12 mots pour un propriétaire dont le navigateur les garde.
+// Où mène une page de cette app : `pathname` et `hash` de son adresse,
+// `activation` quand l'onglet a ouvert un lien d'activation (ACTIVATION_KEY).
 export const destinationOf = (
   pathname: string,
-  state: V2BrowserState
+  hash: string,
+  state: V2BrowserState,
+  activation: boolean
 ): Destination => {
   if (PAYER_PAGES.test(pathname)) return { kind: "stay" };
-  const role =
-    state.role ?? (ACTIVATION_PAGE.test(pathname) ? "employee" : null);
-  return { kind: "leave", role, askWords: state.hasWalletWords };
+  if (pathname === HANDOFF_PATH) {
+    const nonce = nonceOf(hash);
+    const role = state.role ?? (activation ? "employee" : null);
+    return nonce && role
+      ? { kind: "answer", nonce, role, askWords: state.hasWalletWords }
+      : { kind: "welcome" };
+  }
+  if (state.role) return { kind: "request", activation: false };
+  return ACTIVATION_PAGE.test(pathname)
+    ? { kind: "request", activation: true }
+    : { kind: "welcome" };
 };
 
 const toBase64Url = (bytes: Uint8Array): string => {
@@ -165,17 +204,23 @@ export const handoffFragment = (payload: HandoffPayload): string =>
   HANDOFF_PREFIX +
   toBase64Url(new TextEncoder().encode(JSON.stringify(payload)));
 
-// L'adresse de sattle.me à ouvrir : son accueil sans relais quand ce
-// navigateur ne garde rien de l'app v2.
-export const handoffUrl = (
+// Les adresses de sattle.me : sa demande (temps 1), son accueil, et la réponse
+// (temps 3) avec ce que ce navigateur garde.
+export const requestUrl = (origin: string): string =>
+  `${origin}/${HANDOFF_REQUEST}`;
+
+export const welcomeUrl = (origin: string): string => `${origin}/`;
+
+export const answerUrl = (
   origin: string,
-  role: HandoffRole | null,
+  nonce: string,
+  role: HandoffRole,
   account: HandoffAccount | undefined,
   token: string | undefined
 ): string => {
-  if (!role) return `${origin}/`;
   const payload: HandoffPayload = {
     v: HANDOFF_VERSION,
+    nonce,
     role,
     account,
     token: role === "owner" && isToken(token) ? token : undefined

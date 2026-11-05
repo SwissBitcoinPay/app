@@ -1,11 +1,14 @@
 import { afterAll, beforeAll, describe, expect, it, jest } from "@jest/globals";
 import vectors from "./migration-relais-v2.json";
 import {
+  answerUrl,
   destinationOf,
   handoffAccountOf,
   handoffFragment,
-  handoffUrl,
+  nonceOf,
   readV2BrowserState,
+  requestUrl,
+  welcomeUrl,
   type HandoffPayload
 } from "./handoff";
 import { freshToken } from "./freshToken";
@@ -39,8 +42,13 @@ const accountConfig = (fields: Record<string, unknown> = {}) =>
     ...fields
   });
 
+const NONCE = vectors.nonce;
+const ORIGIN = "https://app.sattle.me";
+
 describe("le relais vers sattle.me", () => {
-  it("est celui des vecteurs communs aux trois dépôts", () => {
+  it("est celui des vecteurs communs aux trois dépôts, à chacun de ses temps", () => {
+    expect(requestUrl(ORIGIN)).toBe(`${ORIGIN}/${vectors.requests.app}`);
+    expect(vectors.fetchPath).toBe("/sattleme");
     expect(vectors.vectors.length).toBeGreaterThanOrEqual(4);
     for (const vector of vectors.vectors) {
       expect(handoffFragment(vector.payload as HandoffPayload)).toBe(
@@ -49,7 +57,7 @@ describe("le relais vers sattle.me", () => {
     }
   });
 
-  it("emmène le propriétaire avec sa copie du compte et un jeton court, rien d'autre", () => {
+  it("répond au propriétaire avec sa copie du compte et un jeton court, rien d'autre", () => {
     const state = readV2BrowserState(
       storageOf({
         "settings.userType": "admin",
@@ -73,13 +81,8 @@ describe("le relais vers sattle.me", () => {
       refreshToken: REFRESH,
       hasWalletWords: false
     });
-    const url = handoffUrl(
-      "https://app.sattle.me",
-      "owner",
-      state.account,
-      TOKEN
-    );
-    expect(url).toBe(`https://app.sattle.me/${vectors.vectors[0].fragment}`);
+    const url = answerUrl(ORIGIN, NONCE, "owner", state.account, TOKEN);
+    expect(url).toBe(`${ORIGIN}/${vectors.vectors[0].fragment}`);
     // Ni le jeton de renouvellement, ni la clé d'API, ni l'IBAN.
     const decoded = Buffer.from(url.split("#sbp=")[1], "base64url").toString();
     expect(decoded).not.toContain(REFRESH);
@@ -87,7 +90,7 @@ describe("le relais vers sattle.me", () => {
     expect(decoded).not.toContain("CH93");
   });
 
-  it("emmène une caisse avec sa copie du compte, sans e-mail ni jeton", () => {
+  it("répond pour une caisse avec sa copie du compte, sans e-mail ni jeton", () => {
     const state = readV2BrowserState(
       storageOf({
         "settings.userType": "employee",
@@ -101,9 +104,9 @@ describe("le relais vers sattle.me", () => {
     );
     expect(state.role).toBe("employee");
     expect(state.refreshToken).toBeUndefined();
-    expect(
-      handoffUrl("https://app.sattle.me", "employee", state.account, TOKEN)
-    ).toBe(`https://app.sattle.me/${vectors.vectors[2].fragment}`);
+    expect(answerUrl(ORIGIN, NONCE, "employee", state.account, TOKEN)).toBe(
+      `${ORIGIN}/${vectors.vectors[2].fragment}`
+    );
   });
 
   it("prend une copie du compte sans rôle rangé pour une caisse, comme l'app v2", () => {
@@ -143,29 +146,28 @@ describe("le relais vers sattle.me", () => {
 
   it("n'emmène pas un jeton qui ne pourrait pas aller dans un en-tête", () => {
     expect(
-      handoffUrl(
-        "https://app.sattle.me",
-        "owner",
-        undefined,
-        `${TOKEN}\r\nX: y`
-      )
-    ).toBe(`https://app.sattle.me/${vectors.vectors[1].fragment}`);
+      answerUrl(ORIGIN, NONCE, "owner", undefined, `${TOKEN}\r\nX: y`)
+    ).toBe(`${ORIGIN}/${vectors.vectors[1].fragment}`);
   });
 
-  it("mène un navigateur sans rien de l'app v2 sur l'accueil de sattle.me", () => {
-    expect(handoffUrl("https://app.sattle.me", null, undefined, TOKEN)).toBe(
-      "https://app.sattle.me/"
-    );
+  it("ne prend pour nonce que celui de sattle.me", () => {
+    expect(nonceOf(`#n=${NONCE}`)).toBe(NONCE);
+    for (const hash of ["", "#n=", "#n=short", `#x=${NONCE}`, `#n=${NONCE}x`]) {
+      expect(nonceOf(hash)).toBeUndefined();
+    }
   });
 });
 
-describe("les pages qui restent", () => {
+describe("où mène chaque page", () => {
   const nothing = readV2BrowserState(storageOf({}));
   const owner = readV2BrowserState(
     storageOf({
       "settings.userType": "admin",
       "settings.wallet.mnemonicWords": "c2FsdA=="
     })
+  );
+  const till = readV2BrowserState(
+    storageOf({ "settings.userType": "employee" })
   );
 
   it("garde les pages des payeurs, quoi que ce navigateur garde", () => {
@@ -176,12 +178,12 @@ describe("les pages qui restent", () => {
       "/aml",
       "/aml/abc"
     ]) {
-      expect(destinationOf(path, owner)).toEqual({ kind: "stay" });
-      expect(destinationOf(path, nothing)).toEqual({ kind: "stay" });
+      expect(destinationOf(path, "", owner, false)).toEqual({ kind: "stay" });
+      expect(destinationOf(path, "", nothing, true)).toEqual({ kind: "stay" });
     }
   });
 
-  it("envoie tout le reste sur sattle.me", () => {
+  it("demande le relais pour un navigateur qui a un rôle, l'accueil sinon", () => {
     for (const path of [
       "/",
       "/settings",
@@ -192,21 +194,37 @@ describe("les pages qui restent", () => {
       "/invoices",
       "/amlx"
     ]) {
-      expect(destinationOf(path, nothing)).toEqual({
-        kind: "leave",
-        role: null,
-        askWords: false
+      expect(destinationOf(path, "", owner, false)).toEqual({
+        kind: "request",
+        activation: false
+      });
+      expect(destinationOf(path, "", nothing, false)).toEqual({
+        kind: "welcome"
       });
     }
   });
 
-  it("demande de noter les mots au propriétaire dont le navigateur les garde", () => {
-    expect(destinationOf("/", owner)).toEqual({
-      kind: "leave",
+  it("répond à sattle.me sur sa page, avec son nonce, après les mots du propriétaire", () => {
+    expect(destinationOf("/sattleme", `#n=${NONCE}`, owner, false)).toEqual({
+      kind: "answer",
+      nonce: NONCE,
       role: "owner",
       askWords: true
     });
-    // Une caisse n'en a jamais.
+    expect(destinationOf("/sattleme", `#n=${NONCE}`, till, false)).toEqual({
+      kind: "answer",
+      nonce: NONCE,
+      role: "employee",
+      askWords: false
+    });
+    // Sans nonce, ou sans rien de l'app v2 : l'accueil.
+    expect(destinationOf("/sattleme", "", owner, false)).toEqual({
+      kind: "welcome"
+    });
+    expect(destinationOf("/sattleme", `#n=${NONCE}`, nothing, false)).toEqual({
+      kind: "welcome"
+    });
+    // Une caisse n'a jamais de mots à noter.
     expect(
       readV2BrowserState(
         storageOf({
@@ -218,15 +236,25 @@ describe("les pages qui restent", () => {
   });
 
   it("mène un lien d'activation de caisse à l'écran des employés", () => {
-    expect(destinationOf("/connect/abc", nothing)).toEqual({
-      kind: "leave",
+    expect(destinationOf("/connect/abc", "", nothing, false)).toEqual({
+      kind: "request",
+      activation: true
+    });
+    expect(destinationOf("/sattleme", `#n=${NONCE}`, nothing, true)).toEqual({
+      kind: "answer",
+      nonce: NONCE,
       role: "employee",
       askWords: false
     });
     // Ce que ce navigateur garde passe avant.
-    expect(destinationOf("/connect/abc", owner)).toMatchObject({
-      role: "owner"
+    expect(destinationOf("/connect/abc", "", owner, false)).toEqual({
+      kind: "request",
+      activation: false
     });
+  });
+
+  it("mène sattle.me à son accueil sans rien d'autre", () => {
+    expect(welcomeUrl(ORIGIN)).toBe(`${ORIGIN}/`);
   });
 });
 
