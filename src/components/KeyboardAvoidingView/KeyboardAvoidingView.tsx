@@ -1,8 +1,7 @@
 import { PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
 import { Animated, Easing, useWindowDimensions } from "react-native";
 import { platform } from "@config";
-import { useSafeAreaInsets } from "@hooks";
-import { useKeyboard } from "react-native-use-keyboard";
+import { useKeyboard, useSafeAreaInsets } from "@hooks";
 
 const { isAndroid } = platform;
 

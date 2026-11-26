@@ -18,3 +18,4 @@ export { usePrintInvoiceTicket } from "./usePrintInvoiceTicket";
 export { useSymbolApi } from "./useSymbolApi";
 export { useAskPassword } from "./useAskPassword";
 export { useIsBiometrySupported } from "./useIsBiometrySupported";
+export { useKeyboard } from "./useKeyboard";
