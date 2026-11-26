@@ -1,1 +1,0 @@
-- Support de l'impression du ticket sur Bitcoinize v2.1

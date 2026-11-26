@@ -1,0 +1,151 @@
+{
+  "source": "Made by the sattle.me app (src/__tests__/export-epoch-vectors.test.ts): the export epochs. `seeds`: from `sharedSecret`, each epoch's from the next one's (a grant gives the seed of its epoch only). `recordKeys`: a record's key at an epoch, from its seed and the record's own key (`base`). `readers`: the registry's reading keys of the epochs. `envelope`: a record sealed at an epoch, opened with `base` then with its epoch's key. `declaration`: a declaration of the registry sealed at an epoch inside, opened as the owner does. `epochRecord`: the account's epoch, sealed with keys of `sharedSecret`. `grantPart0`: the part 0 of a grant's keys of format 2.",
+  "sharedSecret": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20",
+  "maxEpoch": 10000,
+  "seeds": [
+    {
+      "epoch": 1,
+      "seed": "8fa244ab4a5516b55bc2a07ec864d42671d8db8746ea84bbd3d7add596f06264"
+    },
+    {
+      "epoch": 2,
+      "seed": "4262d81d43c0c9b9e9fdcc0dbe5f10a509a7f685e2af1ce768e575096b1639a4"
+    },
+    {
+      "epoch": 3,
+      "seed": "31e7180fc3105fcbb769cfd22e94012c41ae98896fa8b3110973e03136530011"
+    },
+    {
+      "epoch": 10000,
+      "seed": "e66cba73e3b70e31c491f6f0c28a2d451651fc5777807d2081619b9762960b30"
+    }
+  ],
+  "recordKeys": [
+    {
+      "base": "abababababababababababababababababababababababababababababababab",
+      "epoch": 1,
+      "key": "246c789fc771975af1eb26115dfb265ac7e5ad61c33d8db2aef9383cd4d28472"
+    },
+    {
+      "base": "abababababababababababababababababababababababababababababababab",
+      "epoch": 2,
+      "key": "104c0c095b2d639fa4f5b2786483174591fc6bc1e4ff2d3baf276759b2205a0c"
+    }
+  ],
+  "readers": [
+    {
+      "epoch": 1,
+      "secretKey": "55084af1bf6cac04fbde25823f55fbd58c1815d2de494c27567120a6a0d5961e",
+      "publicKey": "b1e65369e39b73b424dad4aad7b3ed15a926c603300f7b31757c6c0322891f22"
+    },
+    {
+      "epoch": 2,
+      "secretKey": "b64c8eae59310d2abecb5bc6e2c3f81306fa21876266879d66dc47012311562c",
+      "publicKey": "8d0e7616d7c96a2da133b8e13774f80ebf00dda55d2d7dfab50dab184bda6731"
+    }
+  ],
+  "envelope": {
+    "version": 1000000,
+    "base": "abababababababababababababababababababababababababababababababab",
+    "epoch": 2,
+    "type": "note",
+    "value": {
+      "version": 1,
+      "text": "sealed at epoch 2"
+    },
+    "event": {
+      "kind": 30078,
+      "created_at": 1790000000,
+      "tags": [["d", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"]],
+      "content": "AsGz4oaNzB2iElqZebKV0+Iq7TbrTjCYv8HEc/ejEXSRKt+cBFA9eEp40ByTDgJYuGoHXUiSlO3nojOK/vwS7VOOKVE1Q96A33Q0XxKCQy9Rm6Yl2V04Bp/GvfXgzDEQxjlFFQ/dxO8NF+i0hN8/VqiRjet/NIt2QkA6zYoY5vAO61oRG0qoETQ9JFjcc57sLljY2Dso5CwWUpZ0ZxPCrJKlDaUz8xBfSQj3+2YsChHEuMLnGKwpwBLvzDXFouL8zbRzgCrwCaxm1UHbm/GxT0rHGcLTNrUPFEb51Y2/qUBM8cG7xRHLm05gVYTu5KkG0Bh6QpHkOJSLcnK0Lxj+kXHckERzDiXxBrOCp0B+LOTKe8MSRKnGM/gXOftfLd1Dp3L/+A4tMVUQi74jAXKhWZ/eRcbbB3+PF56c5JuCdCTc7yEchcfTz44iO9Cw5NlVOJ/OoXJJGCyeLndPCcdnvJQ10T13MLmF7uqRjOL/ELhsOFiQc5Ow1kgcHQ9CBpANVLm5Y0T7oIfuLYn9/IOZ8coo1xudKOwAzHwYNiQsx4iTskL5I4jgDuz3mNTwxrFgKigxf9hs75mH1fMjcJpaNE1lm16o55uv7f/tT5fPDipYTbO+mXC2F4Uv6VXXye611oiPZ8j02toaNDJceFMUPbLPxY2t/SVZUY9ohQ4zJSzB9smUmYDl2dRB7gqV/HkpKuajsm6xtPjL+LzU4uxLP/xyBh4aVeugCoHSS+4S25v0UEZKHsoSyTL5Ch7RFprwnFN2",
+      "id": "92344f3798bee9ceca7e36b03a1a9ab05fb37568ef66c27075facff0d4305f08",
+      "pubkey": "8d7500dd4c12685d1f568b4c2b5048e8534b873319f3a8daa612b469132ec7f7",
+      "sig": "a4fd6f0a9a539ef9106abaea6c8b07108b68a0c8b58687070687eee132c8a21bbebf76bf10102b416df80c5490f360cb5d7daeb094b9c208e4b5784661995d62"
+    }
+  },
+  "declaration": {
+    "registryKey": "0707070707070707070707070707070707070707070707070707070707070707",
+    "readerBefore": {
+      "secretKey": "0909090909090909090909090909090909090909090909090909090909090909",
+      "publicKey": "56b328b30c8bf5839e24058747879408bdb36241dc9c2e7c619faa12b2920967"
+    },
+    "epoch": 1,
+    "inside": {
+      "version": 1,
+      "invoice": "lnbc100u1p4tzwuqpp5wtxkappzcsrlkmgfs6g0zyct0hkhashh7hsaxz7e65slq9fkx7fshp566lzpp0l9fqua8kenz5q2tkgztmt7gmpdqfjyjnqkyly3mf05wdsxqzjcqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqmdtywk",
+      "verifyUrl": "https://breez.tips/verify/72cd6e8422c407fb6d098690f1130b7ded7ec2f7f5e1d30bd9d521f015363793",
+      "sale": {
+        "key": "0101010101010101010101010101010101010101010101010101010101010101",
+        "fiat": {
+          "minor": 500,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Table 12"
+      }
+    },
+    "event": {
+      "kind": 30078,
+      "created_at": 1790000000,
+      "tags": [["d", "c60cfefea8420ac40385b2279da877d02ccd8f9269e45a5e48f88846caff0db2"]],
+      "content": "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",
+      "id": "21863566d72461ed4c8330225c7764b23318b349c4fda5a64af6c5251b256e87",
+      "pubkey": "82db8e4b549cad6e6a8c6923e427433370ba77645a54cb8e042d249b41d43fb4",
+      "sig": "1d183d45633a0b42350f1433f6672fce875bdf4a72619855de5044d507fc047e2cf41ef05f8c84487a9299f3c54380c84d87a2a4478c6a94bce97c7bb10ed9fe"
+    }
+  },
+  "epochRecord": {
+    "epoch": 2,
+    "updatedAt": 1790000000,
+    "event": {
+      "kind": 30078,
+      "created_at": 1790000000,
+      "tags": [["d", "bdc83e0f1360f7d51901bd3e3b6e1bc1bdbebaff82d21540f83a529c7054f1bd"]],
+      "content": "AmtEGZZ6ExKuMSCn0QFfVjbS7Efb+GBUg7dMhOj6hEoib/J9P5nYRR8bwihPFwpjwy4g8QDNDH0oKYDdE1WCkQ3Ff+/4PjTqUrSn9k4U8WwbeZWHpWmkNDRCdbJlJSeRUcqrdCftLK4wWjMLmsMYx27D5A/l1xHn2LDm9Qu/blnl7L5csdEwo7wx4xuknNLOqwccm8M+DP81NNfjdPG755BG63RvMa4gwEAAwwA3M5e0sOX8hiH3Xu1r1UAZOqjkaSOXwB//8hgqi+VrjARPlmqZFrAAUMrftKn7kcH/eAI6yy6IeaWM1T3o6zsHBV3/DWWLrj1jLMhr/qWtg9448+IrzI0RNsG136+wJh2jxRk9iHXpbk5GjgK9SfGJ2VxWxJaRucRsRZB7KMCvBmbrNod05ZVJ4I4brcMeYPnndRqiKZM=",
+      "id": "1fd94a43c8eeca794e4f8c14f123a1c437f9fc8751b3aaa3f1f8cfec2ab7b6af",
+      "pubkey": "5e43e9971221cc015d314b2a373ab0d373fbad27b283a4e3b769520ae6ccbe96",
+      "sig": "007979002810bbf43a52d9abcbb594d91f6006d813317ad092333cafed0c9dc71534238c2fad369edc1a9637889ebef6717c4dfd16a7c48cf18753e29f8efc64"
+    }
+  },
+  "grantPart0": {
+    "version": 2,
+    "grantedAt": 1790000000,
+    "part": 0,
+    "parts": 1,
+    "account": {
+      "registryReader": "0909090909090909090909090909090909090909090909090909090909090909",
+      "invoices": {
+        "author": "2222222222222222222222222222222222222222222222222222222222222222",
+        "encryptionKey": "3333333333333333333333333333333333333333333333333333333333333333",
+        "addressKey": "4444444444444444444444444444444444444444444444444444444444444444"
+      },
+      "paymentRates": {
+        "author": "2222222222222222222222222222222222222222222222222222222222222222",
+        "encryptionKey": "3535353535353535353535353535353535353535353535353535353535353535",
+        "addressKey": "4444444444444444444444444444444444444444444444444444444444444444"
+      },
+      "walletSends": {
+        "author": "2222222222222222222222222222222222222222222222222222222222222222",
+        "encryptionKey": "3636363636363636363636363636363636363636363636363636363636363636",
+        "addressKey": "4444444444444444444444444444444444444444444444444444444444444444"
+      },
+      "archive": {
+        "author": "2222222222222222222222222222222222222222222222222222222222222222",
+        "encryptionKey": "3737373737373737373737373737373737373737373737373737373737373737",
+        "addressKey": "4444444444444444444444444444444444444444444444444444444444444444"
+      },
+      "legacyHistory": {
+        "author": "2222222222222222222222222222222222222222222222222222222222222222",
+        "encryptionKey": "3838383838383838383838383838383838383838383838383838383838383838",
+        "addressKey": "4444444444444444444444444444444444444444444444444444444444444444"
+      },
+      "epoch": {
+        "epoch": 2,
+        "seed": "4262d81d43c0c9b9e9fdcc0dbe5f10a509a7f685e2af1ce768e575096b1639a4"
+      }
+    },
+    "format": null,
+    "omitted": 0,
+    "seats": []
+  }
+}

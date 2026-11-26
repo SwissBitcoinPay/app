@@ -1,0 +1,515 @@
+{
+  "source": "Made by the sattle.me app for the team and the integration of vectors/app/onchain-lot.json (the BIP-39 test mnemonic \"abandon … about\", never a real wallet): the merchant's acceptances of invoices of its orders (SPEC.md §31, The merchant's acceptance). `invoices`: each invoice's order (`ref`, its sale key and sale author, SPEC.md §10), address, `expiresAt` and `sats`, and its merchant's acceptance address. `records`: events a relay may send at an invoice's merchant's acceptance address, made with the app's code (signed by the team unless said otherwise), and how a check reads each for that invoice (`invoice`: its index): `expected` the acceptance it counts (`received`, `createdAt`), null when it ignores it or sets it aside (one of a newer format dated after the lease's end included: logged all the same), \"newer\" for one of a newer format dated at the latest at the lease's end (logged; it takes part in the choice of the newest and leaves the order without one when it is the newest, SPEC.md §31, Counting it).",
+  "secretKey": "sattleme_ck_qEVejHuCZpF4XMmBSw5p7iZYxCtm20XxzT1fnJ9VB8o.uPTAz1d8bbQaw2Jx22Wwrga2vI2F8allY5NrPC3Aogk.cmVsYXkuZXhhbXBsZQ",
+  "team": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+  "channelEncryptionKey": "5b8ba276158c4cac4b34cae5314fde0568d3dc7cb2e5dd004e10d1b1f45c9d02",
+  "invoices": [
+    {
+      "ref": "order-1042",
+      "saleKey": "0704c5046333a9a69823bf45450c114160ae978bb9b9db92a8d8acf2a4c97240",
+      "sale": "8798af5dd216c084257bf47843c2ffadaf6e70b9e16d824e98c667db6b6aacdf",
+      "onchainAddress": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+      "expiresAt": 1791379180,
+      "sats": "49000",
+      "acceptanceAddress": "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"
+    },
+    {
+      "ref": "order-1042",
+      "saleKey": "0704c5046333a9a69823bf45450c114160ae978bb9b9db92a8d8acf2a4c97240",
+      "sale": "8798af5dd216c084257bf47843c2ffadaf6e70b9e16d824e98c667db6b6aacdf",
+      "onchainAddress": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+      "expiresAt": 1791382780,
+      "sats": "49000",
+      "acceptanceAddress": "34ed860e2f4235962abee132e33d7c0c880e590064d7df919f61475b52641493"
+    },
+    {
+      "ref": "order-1043",
+      "saleKey": "50a3acaf4f568cbf13bd59cee0245e251d5b975fa8555da9f618c75c208812ec",
+      "sale": "4f1da73091d3752f6e7dc7bb4c61da85074d41fc587099fd239cbfb91f54d6a9",
+      "onchainAddress": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+      "expiresAt": 1791379180,
+      "sats": "120000",
+      "acceptanceAddress": "d830e4e2634c945f0cac8865f502291520ae74f351de98bc47b24fb0ca83ccd7"
+    }
+  ],
+  "records": [
+    {
+      "name": "accepted at 30 000 sats, before the invoice's end",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+        "content": "Ai8egckBmHL96bfbzRYNqc50c4NQcpgqn6FBM9cwfa5bcJ4sWcDWBJZ99oOHdXLMXzl0z+Av0yyjp8Tx67WOH12Krji30pwfgEY1WSgz0LxigF5vq9fdYXFGgvmxG7GRYulSRbZbyka9e9DjHrCvjCljVzvdo0No6q1PsjHHNxt1j9d4cxV0Q9bgPJz6YpWSVTYlQzK6k/9jDlJt68HuaFSXsg/BOzQ/sYc0O8xO9uLKiGDoA4hKMJ+5YvNaDtflIraYe++U3wzKuttBKEd1V19oZaYE4JtBM/tn+VXDUgmmIF312lRK2fbSd46ndXZ9luQuiCwCI3jy8NPqiIPgRi2vmOO56w/EhVbbQvl5uijFOQNqwfMd6l2kngjdRQybcjc+pmAirfAAPLvkJbfXpj9R6hjWsekFvzyUDMulcm1yj30=",
+        "id": "11753ea9b4e5e2ae4e2fcedac9eb3c79496a6d41ba1d5d5cbb05f925ef7d08ef",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "84554824683fe9a16f5caba531d4b37a2391238b164a4abd7179921fc29b655f898d284645ae8df225a6ca33eabf24cc2670f08a3a09d93b4a89e04c85cec755"
+      },
+      "expected": {
+        "received": 30000,
+        "createdAt": 1791378400
+      }
+    },
+    {
+      "name": "accepted at the lease's end (expiresAt + 120): counted",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791379300,
+        "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+        "content": "AvZsPQDMBi7NF9Q1L5Gnz3w8+TjVtOT1wmPq/BehI3hVp2uKvbCnEXKcm1CdQY2SUU4JYQpEJC+Wdd+GKpVMJ4mG/LQiMmmaOSw/FbxRqFyTQ9VRw1nZPar9dZKR2ltvU0cgtfPG3ypjvM7cwZITtfIqcfRqzsjDEpeva3U+dZVvnl/GN3t3Wjg9tQtMjAVw3dzZJUPITG2PD0T4umO2GaPHP41gBlEXlr5Co19fSMMtcPVFWy5ozgBdGVGjsyKUv4gf9fEYvfKubKAlwkJjPiaR0y6qM5SsybuzETceBkI8LBYMgPul8wrhhYfu77cxIZ9xFtNFYNFwctL8g5Arhy5jISxAf0J7SiRvz2sGqp2k/cnGBmMEH/ts5YtwHnv+TkmzfhGhOpFfhTqQLWKfwB/hTWp5jFaSLAVZk73PsDzpyZc=",
+        "id": "32094ba3c618b5ee2b74d30fbaf2dfbaa7a7a95257ebb88b9b5ef1861b84548a",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "eac0281169be292e4482b974fea963f9238204f6834db28e541395b15a39dfb41e896acd0cf866a54f581a8055f33ac9f3aded2b08761428c316070d94978668"
+      },
+      "expected": {
+        "received": 30000,
+        "createdAt": 1791379300
+      }
+    },
+    {
+      "name": "accepted a second after the lease's end: not counted",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791379301,
+        "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+        "content": "AkYOCf0jI4g3l3JJ1tpfqPynq8fDbV9ddbLO4rah61sEWUQ1lOIfPoR+iuX1URQlYmRY6eAiVRzpDdXBFY6fHPfwgWNjzqTVmEO/3HBQZW2HY1lxb+cutd3MP4g3JwgBis6isZU/trKBoprxAQn01rrDiki9EUqZQyaH+sdUWg55cSKcsuPXC9J6pyFeg0uO5xlp+WMSDrw/k8XNjGofeIhQ73tRCeS682hbsMy3TOcOJRfNrWDSK3ci5k71gMz5sg5coOgTcumGJkEfZzgMN8+R6gdyKiufXrtoOl0YeVQkWV7TVu66UQdfw/5BXSGSDUQYZOSQgLlhqoYcS4yGJq1MqarkmNeLkrivi9/0SuiXQ4F8wcLhtZY2ghjMZSBC/9BcRuTCffU7hDtC1bzFBEi05Mh2tnnNfVuzTv3coQCqgXA=",
+        "id": "f71956cb869d57a68e1368c1545aaf4707a3070ebc22a346c5cec959c72256ae",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "38992d2418b9ea7b4c581345d804aeba5ecc831d4d4cee001c4a8b5882226e1e9702d3cb7588861cf1efc763fbeff282c382dbca19c48400291e4c21fdbd4b10"
+      },
+      "expected": null
+    },
+    {
+      "name": "1 sat: counted",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+        "content": "Al/O5jNKX1GFdQj1xKsS883jwsTIq2BSomSCQpiXfmfcj5YO3gK1PHkaKXYey3SyZwZBU59/t9p6+Iv22IUktP9lFVwFmG9W9QQmo2i4LCvFJXoGZA+ECxBvZPC/0iOS6GSAFr5CmTBQLlxmDL3lg8SjUL8S/Met1rxoDpl15wFR06I+pQDcLaST3AGyLPPYyOawoaYgPRC9qfwfelJeNxdkp5MR6b4hPC8qk/ulvQYzzrkAA2Y0mrCEj4/KkqTDaMyjBiFa7nk+XyiH0KL91pdooU0bFagPG2txfVDE0cLDIB0wL5cOlEBJjyk/G8ITwGjlN6hTBpZG/lMCFlCRwIBg1W0pn/7qIfod98mujQ3Z+zeWXZc/VtIZRbTLp7l7mU3P5cOyvDrNzoD/Gq4VOoKKf7H8YbZbK0VfPcT4YisslV0=",
+        "id": "5d954baec048db9bec1a30faaec467bc1676f079d9b1e93f6ebd124e30606e7b",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "d59d4366ff60d9a26e65ba28433c0f3353c0a0f92c3ff52105aed13d201f37f70202120375765ee8fcc7b53ddc212f1ce6416a6bfe0afee6f814b58730fbe580"
+      },
+      "expected": {
+        "received": 1,
+        "createdAt": 1791378400
+      }
+    },
+    {
+      "name": "a sat below the amount: counted",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+        "content": "Avg+YQqMYVotgb8e6+zStjXXJ+B5Tmk1FLFfWL2M2SAK3HzAuOM76Cvm7agwb5tudeBO1BU6vWfpOP0wDi8uB3VX0xR21DvyyzXlqNwbZwntnX4lF8RB930kFGr5gQpwCsVs4VXWGu9xvPwi3W2cmSAsJEUaffCJBpHfQpgVj7gIhxQLok+FHzsGJZDL9uwB3s6psRHWR224fi5FfPM4KxypjYY1ZNh+LTgHUyOpIyn2y5faTgDxmPkb2S5pqybfn311C08wFNjSAXG0swly476WUJI3mjJ1pnINoeFwjR9j27tlk4CPkFTEw4D2vpJVaGoMW9o0ZJihxDT2WNh4qr7e6vsBzAj0+8XS8YspdIsVFKwJCS5zYEm9uHuZfDYzeSmEG5tnpuzq/GIQFNvnZp/Cxof0W4sYg9dUGhRSCHRMM4o=",
+        "id": "2e2891a57d26ab8092ee254ef7ab1afe612400faae2ee26ee01947522a39b066",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "1d1286d2c7403f9e22a965bcdec0155c8082399cb5a11d55a4f850f8c11c16abe9fdbe5893c106b39aa393c8b124cf1ff9fcc9f230f6dd3493bcd46ea8dcc2ff"
+      },
+      "expected": {
+        "received": 48999,
+        "createdAt": 1791378400
+      }
+    },
+    {
+      "name": "the whole amount: not counted",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+        "content": "Aoj0wCgf+jW/TpWDP7uRs2nF3SxDIDHklGj7cSkt0Fhr96ZAlQDwdyIQZHxqha+dbiTALJht3Bdl6FE8FkxkfMXf3nuP6cMhX2O/7cbxzeN5SE0TB4ruIKt7MyD3r2xGM396L2TglpNJnflYRyj5lD6lg6yO2t1KNTJ0SxoAKwNI49B57jMr92AJu8oiliCCIzgpvHGaJk2sZikEQR/aAfl1aafCqkHaKwxf72PqMTJ+9lscIJBmNDTnK+b6inM/4k6D56pvgxR98HMDTIqINGg0FpPlCFvu4voZF0TohD7Gnorm8qsgoz6eghVWstTN5vy7ORiy3RMBNmSsRI2/ZKQkADky68aCA5jTayN48jsK9fMeFFul8Huc6xo1sPlk3DTUfo5+vwHDWPaeHqoUlSkUYUXuOCw8obfE5dB8tZmJLls=",
+        "id": "fe9c3ed1ab7bb52fa699045ac88eee5b36d7a2b5633fd142cca405f4d3b7da77",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "1d43a5470fa87a97dd74c8032cd1c6decc94e74f6faa44b3451f4afffafa656c9f0f8912024a9800fa82ea9919e1caec821806e8fa19ec71abfa8cbe01d1d3ac"
+      },
+      "expected": null
+    },
+    {
+      "name": "0 sats: not counted",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+        "content": "AgTo2dh5F2vpJ/OhIE+QomG6JOJCqgEV3+v5qb1Ee9OR0yVSmxmsBRrhgA7wwSVPHCRCJNPmmqo6J1XsabUrpyej5jdGOrqz5H5wYNa3CcfgqSUdYsaA+P47iS6UuJRomKS1Ou95GeLkzHQt5cBx9Drfuj1sqyjGKO5rZIiWY1WPDShOOSW9ACjZxbmB3WQ8T/83UJAGoPewSG2WGIgSUxP0J1cyzjdQMytAdrTD+9ZGjJ2QeazSFBYeETvquVyidBgPU81WobZxOvvyaw2IBWYhvUAYqfqO6Pv3kLjxVWYIOl7sSOnkxldg8nJatNuULuvuqHAXZMfzdHctE9VrqIpJchJNuj4r0laV4z//xdIJCGcnxpPZC+F9do7crACvYP2FPOvIV8u3RwnlvjBbwzcU1knr/ZUd/qZZU2LO7dVBkOE=",
+        "id": "544571ee36755a238d5183fc0143799d38388f27d4e22e5a042a11f2fd4cb23f",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "30fac3b9d871ea75e9e6eb69ea0aff10c2e5e6e1dbc7b3da8010a179ffbaa145acde94d3fdd44d6fb4e9cce355bc663735ce99ead57475f1b64499613e3eb2f4"
+      },
+      "expected": null
+    },
+    {
+      "name": "received as a string: not counted",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+        "content": "AonNfkD9RwEUEOXV09wKJJRBFdqRnZkbV147csOnHNQFJrBVDeOFS5bJTfAFPKMOWvfW42CUl0JWxMFSzBi5VgKwB9JW4JKMnArPBXBlrfYXzHeGatZUI8Uv57V6Ov3oDY2+kF45gv6vu3RcJvukQOtjxCaQtta9pivUUHlcLrZzmiR/eqiDI8L8Dsrorc/Lp3TXXqd4PAzkA/S9EHJSsY0fRQACOpZA3/sCdPWsKN7ZLHPyxYxbQZ/dubLmDjonVSVZNU5YfZU99rUe0lekTuxMnefqnmeSer6OI9/OYD0ER11wQf8tgSbADjCRT5A8/3im/4TPn7nq+3MlfaBGT+Z7TjBxgOpTms5WuhYGsN7hiCDdrHgLq9wDyasZSQ+Y//JOeW+THiJ2jaQfMbtRKtKmP3TkopJD2i291Zqh95swBQk=",
+        "id": "4149d5d761b3d1e5fffa5033be27d11d4a2508bb62007073975e8cc29565d90a",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "f43680c82fa9858f2342e174baffb310b6dfa301d7f872f0ed27f9d39b20d3f9e1033b8008f275fbcfcdd2f0f4d63dff5cdef623f1cf379322a994121dd8d09b"
+      },
+      "expected": null
+    },
+    {
+      "name": "received not an integer: not counted",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+        "content": "AuezStTD9Ma9O3px2MnmgIHfxT7YS4PD81zZTlrSFT2PDXKtMqvYdqBikMGoYM1HaxWV/qaSbLBqgbcl3cAEIOyyBZstgbEOevqsOwtFXc1YelzBrX43vwc0/SVIF8wzGSgCmePI+eXT+ahYItESGQfYKlOcxwCkXF7WOuDJFCwRaGOKLCUAPUTwv8EgZZemQ+uRxw4riYreOD1FUHh0VuzXAqlK8IdtwM0/nunDJny2o98DypPAX8u7djyc0x1+MZFhKhMVAD0AL3xzV0TxPJqOXHH/OiPvS0C6PjG1FWbjZapf66Ek1ED9icsjYH1XzdDkxKaqlCq52tR8cykLrl+ctS2aWTk/5VNZj+6OrS29xm39hNpsp7iC6sh20xlsHFOzNUYSOeUSrQ16ZBJeggGBYo8oeNCjZGGzDJM/lgP5D/I=",
+        "id": "2fcf22974b9550bfc29a3075c6d6e72e0a7ec82abe0f4c0462f00c646bdd4fd8",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "b816b09c7ec5c2e88dcfa1b9f7873bd19aedaf8ebca100230669ab494e42dca9397b3fc629bc2a60775e457c127a8102e4ba1ef4f879b7105b82c16db0ab2350"
+      },
+      "expected": null
+    },
+    {
+      "name": "no received: not counted",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+        "content": "AnOL10Vz1Lyziz5Keo1EdOMbOJfBFAbmhalxfBQSjFMuY4hvrS6sugeftJUva+/Ax21UFR6G4aEI6+PYd6CzeoC9chYSCwnKJFJ3wF+eRC3m7gI/qogle4w7Xr7TuDemewUPuU8IkTqqm0hkwwU2y1AklHU8Ja+65/zBbdlvFxq34thYykgAa4nj887vzUiA3IlJ4fYMPE5Ux2OqxAp3GnNqF9/3WIC640Ptwn9lQ/dT/71K+yba8oNx8PsWa/r0KNuT6SDtBsFJlSXj38TbA3QAdOBbRduKnqYiWONPstchk42jum9mARxc0VeMBYz/Ca+Cxnny20tXWZuzWtDqwwgHPL+O2pSzn2TaTzuXxCV6b/8GRcEXx7PNOB0VArD5XW3ZXFGiLGDlYpQ3+8Xmpbw40yK+WAhonN7YJjIXobBAtx0=",
+        "id": "ae8cda83dc5ba93b1b2b10290914fa0cd62ecdfa1b4168cf205cc59b944d385b",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "677e22036508a8fe60b326724ba506f4a0d3cc7fffe9614cf904f30b1db3a27b07e459a126b15dafe8c4b77d7f029a4d30a7af2599371b2be3f6d3c1ec836783"
+      },
+      "expected": null
+    },
+    {
+      "name": "version absent: not counted",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+        "content": "AoDCDHpYcJ7sI385k8jrTI2sRrdCPUEMPRZ4DpIlLqTEtmPny4Rr/6ZJSMuFtocoDyO/lZmR7L5baqZ6q1rSaf6NvEnk8tPZdDPqqTKULmtj9hwI7/Rx77WUFkQHi5kX0CwNpLPWLvpIm9WXcbBsc9Vd9KOqzdeXWXy+D9zTHkD4lL4Ry5uJMCA5sxiyBq4z0wspH8A01ytpb4uv78ENLoaTZyQZqSQNe6ELWeWn3LZAmpu1PvbELtRS+K4fEx5Egl+sJ126YB8k/zY5j4vEqh8H0BJhJamanHeggSMYLYOiQ9R+XxbLvWzJtl6hcY7UCez0VG22vcpzuR7u+pLXKUgmLS3TASRUHir91vuo7h9UnoVJZBELXA1HpapobQ8Odg+CBDTgDsjaNGS2oBSsY337oy2jqaL6VwqHmLF/+O5F7O8=",
+        "id": "ab64c6804f2476f6aacf3ce92f9689f253c35c0a19bd4d855c2e4de32e3509ae",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "977f82b901f3614528e2dec1b8c52f4540e98608f77db7680f6081fb84e723f99cec24fb67c14bba29cbce69514a7061b442c0b811051c55926f1cb7745b26f8"
+      },
+      "expected": null
+    },
+    {
+      "name": "more fields: ignored, counted",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+        "content": "ApzR+EbYeXIuaB5e0we1TdywHE9OhYYqeLN0gykNZXuaOvs0l03193o7ycziuhY+M42DOKTzY2uaPSTtFB+1ggBF/eOeM1+/rK+VkxX2xCNCwLZMCARVDpL5AD5xQ/Xoil4AoCejkyzYZQLyf5HwPhkWLN6wul3DCQMO0VaUM61LGDIcuXfFFi+PLtq2lH6q+ean6GVHIkY4SgmNsGkB1bXMsVMfOaDAfhs8MOJu5cpIMtzrWd8k0D0rAaO2I89C+TJ4cByyH4MKOg1uH0WpB1T5J7INq/AGKtZjfTGhoMvIt8dFJXmOS5wab2ohsy4B3XK/CgplH99TGTrq2lcLSffk+WLFvvrTiJOAa7KwfE6TDFq1g9hTT2bG8P6epxiPyC+tTW3k4YEgS/Lyyw/wiiqjmgbANQsqdQfrVKfOuMyO7Mo=",
+        "id": "e0be6a6aa10c7cee7131c063d85772111cbc624a0fd7d45de39d4ea97c303751",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "ce201dcfa3bad9c2dd5c2ea97851385f4001fba5be12dec810a2e45c0ca725b466274688e9de71cbb6bfbf59fcd37f5b3c79048727dde0ae75115204c6cde8f3"
+      },
+      "expected": {
+        "received": 30000,
+        "createdAt": 1791378400
+      }
+    },
+    {
+      "name": "version 2: a newer format, not counted",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+        "content": "AumnD1+pRhdQ61u6r2zTfzegvanu0BOVC5Nm/lzfB8Uuh8y2Ed0hCp8jHhHQpb305jhIi5FqhGL5lz6ggPXh1pSQNCQTSqvtHAdG0mTJo6OcmCfgzC8jbAvcxWTOcegE7SW+vQsbj2pA1OHVb+sCgfijPj9sZYTC0XUk4d48vfiLIx0D1EuXF6MKZqzyto7x1buDlUsaxmkKYffE9uk8YnyPtStVdQ0n8qlunDBFhNkuHNtdrffbw7W8qYqRNaSWR23S8CNNtyHVDZtKJ68839FWs1GZPuQygRMnS4jZYt13O2ymyDA/HPz6kKAFnSjRecfOrSV7ZZx/X7DmjhIb79l7oCUfUNPI5utrBOgeToJCjYAKqc1u5qHsle6YOEs1WNjWSnVcncSapILfQWT4QbdTAHjb9qu12a7rhlo6QtIE+oE=",
+        "id": "b516afed6e1c03ba1f4d3aacc2cb8e23d2d98f0c24579bd502da7dd4596015eb",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "0966ae8cceaffca1bd861939ca1ff0274a0097b0e327de8413340af49c9f333d2e8f97c132184af747aded004d7d1394fbb4d58fa72d678cd5eda36c94b09696"
+      },
+      "expected": "newer"
+    },
+    {
+      "name": "signed by another key than the team's: ignored",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+        "content": "AjE3S6Ao6IfscRI7oBhvepblAcJcJ4SZdpnXKHGlZMiW+ndcyg7ULT+luioa18Gq8cVX2k69fWfHMclU8NanvqTMJuVNBqb3niUbxSPF6iAa+xwFtkesi4wtJMgRGqo9hw3wUWozQh1MJMqxYrOMxqlZBni4QBhP10EPtNd2Ujdx8mzp72mg4nPOT7Vn2ofhhyKWBhwGFIaASwsQng9PztJxznDHah0Rf56/y0Z4uN2OVjZTwg5fagv6I+LXrcxPilNUiehaFvbQPMo+dhF/k3b4IgHdLs7bEWUZe5v/fKbJ/37zk01qwbU2r2b1fMdEGPg0xHQ/xZ5pH0PfJt9isakivJpF23EL2eSlGYIkGbcX5JV9okkfmyWoX+hZvn7VLezRhU3WXVXMhJenZE90ks60dWzPbL1yCICegLyoOjOeWso=",
+        "id": "6023c7b5912ad3022478d2050792dac07e54b7e7d7975de66962a02fc0686a8a",
+        "pubkey": "4f355bdcb7cc0af728ef3cceb9615d90684bb5b2ca5f859ab0f0b704075871aa",
+        "sig": "52e26000b1918d22f38e51e45c6d3111a15c2f20ab9a354136a5a0a7c463c70524c1135a57f4c575370e3e5eb177fcaef7391c897b4585b81e0216ec8f4d78bf"
+      },
+      "expected": null
+    },
+    {
+      "name": "of another record type: ignored",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+        "content": "AkUs5o1hgk7puGLKK5Jm5nk7AcKAnOLDR7kopj2e8sx3NbiMRCh+Un9hCQPnSCvmts9NJcN9UXarmlljsDymjvJP5TMjs1JKaViVkmcIyay1ssVj+pYlZCEAW5RS4QJZ7o2TeHv7t4zAPfKgZs4YzlgYsmKjlmYLKOVU3Zg4qK9EG0k7qKN3p1LZpoZr9vl2gvVgS+AMsHwqBNsMqh35uWZ6+6JhBhtNptibwEkBAS/IIfsOQNBM1SgKeejJ5W+pjOPUb846diozlvhL1bC4/x61K0rHIUgeI85GGjGqSGiquMN9Z9hgO8wJ0oRtSBEFPwC2wDuYycRxWMRGlMgekmW3AUhCEqqY3CZvTy1TwAzp0kqz5FxK84Dgtc3hTYTZx8xaE3w8CTcAlnJYA2jy4uagqMQ+OJB6Bz0RTAq6dlnEM3I=",
+        "id": "f43dacf0a1df537b234cece59c176a426a3aa63a3ae1dc9ac4186762e1329fee",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "4d83e4822b694415dd6c451030221c282c0b8b79b593a4988486ec148618946df9f8b4c25803b393986dc5ecb94224783b895b5e71f818857b547b38c3b6dedd"
+      },
+      "expected": null
+    },
+    {
+      "name": "the acceptance of another invoice of the order (another expiresAt): not this one's",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "34ed860e2f4235962abee132e33d7c0c880e590064d7df919f61475b52641493"]],
+        "content": "As4xWdQsFbAlvKfDoOeriKwAk63c08KQxzpeaVCLDKpve9fpya3LdPSTPp8B5/3eyi1mAYOsnE9w5iv9DS6stQEnUXqnq6qGN6V6zdVPYbb29CL0rfRzaBz96P5UuBwpNJV/5vhES5I9TWyEMPYrB2fmo2LKD07nKTDpgUTIEfRHcO4H9LYJSJJD7Bashu6lgQYd7tTtHrSGveuDLiHr3Gm9adaH1VnEsx2T9QglNxQFkNmq4IVQdXvll5C3K1trIC6JCjw6otzmwRUn9rNnpI7kdEpjSh7XXTj+3UjksBl/2Y7dVu7zYEaY6LgpkpzAE/oofCkSRm5TqpYMUABpQrM2AAjZ/594S3cCCPWt0YHZSnJEVHBOgNrHvELMZ5OkXL392dtD/xPZQb2o89W8oxCkYs1BUxVXzTCWMgXprepaVfs=",
+        "id": "34b23c9712a46d64ede545dd76d94a3d276ee4aca5e842c8875371c91813dcbe",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "a3456eceaad911b3792e134875bd10844b06cbd6765692b001039aced6111740b6c4fb2514c3421baf4773fa6901aaef19d5f125e83bffec4a545261adcb907a"
+      },
+      "expected": null
+    },
+    {
+      "name": "the acceptance of the order's other invoice, read as its own",
+      "invoice": 1,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "34ed860e2f4235962abee132e33d7c0c880e590064d7df919f61475b52641493"]],
+        "content": "Aqn7QVpVHNZXve+Kd5lxIidF3PgTs2gppPg22RuNDRhkk8ULLu8Z2NO/pT+xj5cEyq8HuWYSCeswGYRXwXHRzDWcqZTkNHUtvX4S+Gy1tA/iVP4jvE5rvox9LNYH8zqerJ505NkhhPdNwW2QZDKw2yDVdUkaHN/kd0L7DLuacAFaInA8PzTyg8BjgCUMGypVCuBJrrBq3XScTsjJvr2kuK6xlq7oFBn6AYLM3vXQVAt7qq6kUPPfG3jU9YhMFKFuqq4BEdO3bs5bmf6IfWdBlm23HoLJzzGsX6vzVpXNPccfagbV9us9LCxgX0MwwzAdfbeeJKnBLmz1vtum3zxrKXjLWDlzT9WaA0HufXXIrWGMFckAgYyP2n4n1zzcjN5KRLsJ6j2Lb3K0kZutzhUT4qZqfA3un160qxrJgxz8PPGc6IA=",
+        "id": "d649a01c89b335f540bd4a24cc2b8f32f87d270e6667c31d50aeccf97428a1d1",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "57d680d3218f6f6a90dab55728cfb01bd636eeb00316036163aa301bebe88564ece10144d5a5b9c9db1cc60a954c140cb67c7d299c66d76ade17830c7bd9b83d"
+      },
+      "expected": {
+        "received": 30000,
+        "createdAt": 1791378400
+      }
+    },
+    {
+      "name": "the acceptance of another order: not this one's",
+      "invoice": 0,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "d830e4e2634c945f0cac8865f502291520ae74f351de98bc47b24fb0ca83ccd7"]],
+        "content": "AsZDJy2kjTejO4dc0n4mXTmVqAxSM0AR2T588wXn2aAi2RMJW8huF9E3COrT7L2zJFw9y8DrjQKAuZuxebi+pgExQL/WTUql7eAdifuu20CaVxTdox3UV03dQ7Dg3zM6qfTe63Yslm+fB2pcrdDMvoAZ3RUc9H9RXuDlGg/kOren0YAfBH8W3sRLtfON2bNbtkPrCGtjjaSYL+Z0BiJJ4m3SmD2BymVi5EANcZaW4FhelyBy/VuOeQ9vhW3nql1J+qPmv/agItEaeMhpqTttDtzKe7vWBGj6S9CJqgkEwSkV6HV7rEIDNPww5aiE0M4rgWlCNi3YAejnaLDJjzkoJ0eMFn/nAXfaLLRdBIqLOupZn3YIwnC+uobpiTjfEfSQxFljwWm7IqPSflTr2b3wnwJDo5LDX6yBOkRQvWM5qA+8Ghc=",
+        "id": "ba67046f7356bf56f1b39b7a5a06a123322222b3b3c1130bb0bced7ad47261c1",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "208778d1162be23248c9fcf60f2dfa9863180b81cdd90cc0e1b968cda9e09d7aeed31789ff8d427aa818a6912b25b136e24d1b639c089ee91f41be5da6eb7249"
+      },
+      "expected": null
+    },
+    {
+      "name": "another order's, read as its own",
+      "invoice": 2,
+      "event": {
+        "kind": 30078,
+        "created_at": 1791378400,
+        "tags": [["d", "d830e4e2634c945f0cac8865f502291520ae74f351de98bc47b24fb0ca83ccd7"]],
+        "content": "AkkXfg0OtzW8zIGUe35dgWCQ5KwpN81qr+piVXWIThxNy5fikSny6es21kPT2NAy2LcXMAEDRyEPLrEdN+JHPDui7G+sSlCXsTumf+f4wS4yL6l1IVSi2eNfQ5vgiij5Ic2Q2Kau+XMZ9KC3Tu0Jfk2Z7fE19cCj0M3B2S0oduzbBE3iSbZTRCSM1rkuDBtav3kuVJ4Wz8VQvVXMwKKOPYXV8wVXClEu3N26tmkPk0831snWW9M+sFKoArVRjxrUrlkT7NM2AXcX0zdpZfJcyv4ea8uc/2cvuSAoCBTi5FFTTEePoGWp5a3nZw8wWKDAWlDKDY4V3oXrD7t/WWA3+OZCEac3LFbkSk49vNTBji+Zoyp0h0Ry5yauar9H8lo28O8znillo3RU1QoLo3QCE1vSExFwYYYYL1st9gJcT/b2occ=",
+        "id": "c9469d42975b64daec3687d7db510d5513437005f2bcdc77b8d8cbbc81b13186",
+        "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+        "sig": "fe109139bf7b1423120cf3e224ded1fa7e62f851ca1b540bc742918a1d532a096c6d94112a722efc984f6168da42409939dd57806ff3b3857f7c1322b462a2fd"
+      },
+      "expected": {
+        "received": 100000,
+        "createdAt": 1791378400
+      }
+    }
+  ],
+  "made": {
+    "source": "Made by scripts/recompute.mjs's own code (its `recipes`), not by the sattle.me app: records the app is not asked to make, for the invoices above, signed by a team of this repository's own (`teamSecret`, never the app's: its public key `team`), whose key `secretKey` is the key above with that team (the same integration key, so the same channel encryption key and the same addresses). The NIP-44 nonce and the BIP-340 auxiliary data of each are SHA-256 of `nonce/<n>` and `aux/<n>`, `<n>` the short name its recipe gives (a damaged copy keeps the bytes of the record it copies). `otherIntegrationKey`: another integration of that team, whose channel encryption key seals one of them. `records`: as above; an implementation reads them with this `secretKey`.",
+    "teamSecret": "12f3589856ec4753b34094d70250b549d7535f77a9c84f505bb2e6673181faf4",
+    "team": "05043d7e0db2ffb962bf5e089cda2b3b45548866129392198673ad1921ca5c87",
+    "secretKey": "sattleme_ck_BQQ9fg2y_7liv14InNorO0VUiGYSk5IZhnOtGSHKXIc.uPTAz1d8bbQaw2Jx22Wwrga2vI2F8allY5NrPC3Aogk.cmVsYXkuZXhhbXBsZQ",
+    "otherIntegrationKey": "c6c5e9e262297a4aab82ff1c476278309c10fa07d2157c16055fb9ab13c2825e",
+    "records": [
+      {
+        "name": "made here: accepted at 30 000 sats",
+        "invoice": 0,
+        "event": {
+          "kind": 30078,
+          "created_at": 1791378300,
+          "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+          "content": "AtNBOatqHHLbcdfq+fd+x5cWtcitcBn8WWANeJTmToRQkFHJvhHv2DwYIvs+UFWR4Y1MDNJ/j1wLV/t0BXNY8ndhzQoawV2UMtS8z+tSUFoGJzylcOy8M60eXZX7DR73WfGUid4+6ufLSvu9c+NXpi7mccp1Yhz1jnTq5o+++QRhhvBsZUC5+RZ58YWOee7PDMu4iLdWgmMazrXGX0WkC1tJcQWrUOy5YSSNasNd4KmLZ5TDla1EK+JyM4vOAZBueO2Q/+jXMnhjNqMfRNmfaT9i90iYYqOxuw//i4kLtrhWiEenpP5wkvqm4AienFFDA1Rr8AbgnunsX21v6ZPGxI8QwNXSzSBLOyLzxeoGUvcRRjUFhyp2FONDyu42w+XzsEA05NFfEOEE/Lu1CWqnB77yRti1dkZyTN7GREm/fPpLFus=",
+          "id": "cc370e1338987ca964e3c3a86915164ac4f38dc49f21269ed37f267453803920",
+          "pubkey": "05043d7e0db2ffb962bf5e089cda2b3b45548866129392198673ad1921ca5c87",
+          "sig": "5f7ccf31a911049cbe4ab90f4b0e899a3d6b9870b16b17fa6f9bc5af831b0598e4751f3e9c9613c173a7b9d3f4bd81be7c282edd9622fcc7758d3b14d2d8a90d"
+        },
+        "expected": { "received": 30000, "createdAt": 1791378300 }
+      },
+      {
+        "name": "made here: `received` spelled 3e4: 30000, counted",
+        "invoice": 0,
+        "event": {
+          "kind": 30078,
+          "created_at": 1791378300,
+          "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+          "content": "AuKLTKvJ3NTcQP5ejtTPcMo74g4cQzQ2ZfQX5baPISYg2JI2f2Q4gpDF1ViIhUzAuw8HtJA1XhUV1hWQZngLlQ3Gr5P3bWwT+C0YTPlVDrvW+1LE6p8h6VVCoGkoo4dgEfrAj3Zoa1TJjvmIk7XDhBiZpJv1nicS9P03Z/10o3ccTQnFd7s1GIYLOHzjVMXhII2riyrUCv5zedIH8l6ma8VP3U3Mo+UE2YAA0PXwSlud/Ej+fMmA/03lA8H/SxfUBgBU1P60xZDI5OiUBenHvvwMme+trNCj3zHBRK1a9eEknPp9ZJFu7bmO0leWuozGDREirKxqElycyL3mN4e9DKVWCqyTmGZ2XLkq/wTUElgIjgazHxSgqcV8C3fSfO1jv/O8n/OtkKTiwNQ5YQ7nzZX5d0R4Z/t2VXS2WdM51ruFQQM=",
+          "id": "922991c0f1e285a57b9cc86b7548ddba60f3b4ecfe63d67a297519798092f4fe",
+          "pubkey": "05043d7e0db2ffb962bf5e089cda2b3b45548866129392198673ad1921ca5c87",
+          "sig": "02aef1b3d720eaec59f65ac25a8cf5a5786f67e5a2401749e6833031ccbaa393d72481218dfd30e2a4bc07d7dee34055605739ff0190b85e43b80093cdfe638f"
+        },
+        "expected": { "received": 30000, "createdAt": 1791378300 }
+      },
+      {
+        "name": "made here: `received` spelled 30000.0: 30000, counted",
+        "invoice": 0,
+        "event": {
+          "kind": 30078,
+          "created_at": 1791378300,
+          "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+          "content": "Aq+JwQaCIus/y2EAEA4nKWxlH0BnSiGCQi0cwXtwNg/g1XDaP400DkdzIP5vqGNAI6AUbSVbELAfW/TM+4ltud7syAao2cBSfePzvuyRc+xX6JGibDjIt+iYMfC30R/qpmeYW4iy2lFV31SLTE/rDE09K5kQOYKzHetQiIJDeTQGaXypP0dWHYOBnHP5mKmy9dSqKLQJpt4BUZ6LwDHeHrHOyJoKJoGU0LopXpmi3eq5GpHvUUw/Ir4ZjJ7N85f548T8iWtX+KlXMeZwpomtQvbg/fkP1aSeBjiR0uXsA1sciYy3VK6Nboc1RgttxA8BXG9IAM8N165d0D4LZkD+SeYVZgCN01TZm5Fl6Kci16fwt0/RthLVlxtzGpm+CtZmu4EgJUZF4NNHmZ/rmv97vFNM7vOwGnN6Jxgy+FZ5EY87A0M=",
+          "id": "c574620927c093d24c8a94758f84fa3f7b877864e369735ea65d0ba96d157b3a",
+          "pubkey": "05043d7e0db2ffb962bf5e089cda2b3b45548866129392198673ad1921ca5c87",
+          "sig": "809ab7bb200c8352b72d065effd279dc88925ac1b10e56c0f5a9cec1a8fed75f04be1e1813eed1a56d6b0c0823b0c8c4546e3eb93a215d58ffe32dcf75040416"
+        },
+        "expected": { "received": 30000, "createdAt": 1791378300 }
+      },
+      {
+        "name": "made here: a damaged signature: ignored",
+        "invoice": 0,
+        "event": {
+          "kind": 30078,
+          "created_at": 1791378300,
+          "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+          "content": "AtNBOatqHHLbcdfq+fd+x5cWtcitcBn8WWANeJTmToRQkFHJvhHv2DwYIvs+UFWR4Y1MDNJ/j1wLV/t0BXNY8ndhzQoawV2UMtS8z+tSUFoGJzylcOy8M60eXZX7DR73WfGUid4+6ufLSvu9c+NXpi7mccp1Yhz1jnTq5o+++QRhhvBsZUC5+RZ58YWOee7PDMu4iLdWgmMazrXGX0WkC1tJcQWrUOy5YSSNasNd4KmLZ5TDla1EK+JyM4vOAZBueO2Q/+jXMnhjNqMfRNmfaT9i90iYYqOxuw//i4kLtrhWiEenpP5wkvqm4AienFFDA1Rr8AbgnunsX21v6ZPGxI8QwNXSzSBLOyLzxeoGUvcRRjUFhyp2FONDyu42w+XzsEA05NFfEOEE/Lu1CWqnB77yRti1dkZyTN7GREm/fPpLFus=",
+          "id": "cc370e1338987ca964e3c3a86915164ac4f38dc49f21269ed37f267453803920",
+          "pubkey": "05043d7e0db2ffb962bf5e089cda2b3b45548866129392198673ad1921ca5c87",
+          "sig": "5f7ccf31a911049cbe4ab90f4b0e899a3d6b9870b16b17fa6f9bc5af831b0598e4751f3e9c9613c173a7b9d3f4bd81be7c282edd9622fcc7758d3b14d2d8a900"
+        },
+        "expected": null
+      },
+      {
+        "name": "made here: an id that is not its hash: ignored",
+        "invoice": 0,
+        "event": {
+          "kind": 30078,
+          "created_at": 1791378300,
+          "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+          "content": "AtNBOatqHHLbcdfq+fd+x5cWtcitcBn8WWANeJTmToRQkFHJvhHv2DwYIvs+UFWR4Y1MDNJ/j1wLV/t0BXNY8ndhzQoawV2UMtS8z+tSUFoGJzylcOy8M60eXZX7DR73WfGUid4+6ufLSvu9c+NXpi7mccp1Yhz1jnTq5o+++QRhhvBsZUC5+RZ58YWOee7PDMu4iLdWgmMazrXGX0WkC1tJcQWrUOy5YSSNasNd4KmLZ5TDla1EK+JyM4vOAZBueO2Q/+jXMnhjNqMfRNmfaT9i90iYYqOxuw//i4kLtrhWiEenpP5wkvqm4AienFFDA1Rr8AbgnunsX21v6ZPGxI8QwNXSzSBLOyLzxeoGUvcRRjUFhyp2FONDyu42w+XzsEA05NFfEOEE/Lu1CWqnB77yRti1dkZyTN7GREm/fPpLFus=",
+          "id": "cc370e1338987ca964e3c3a86915164ac4f38dc49f21269ed37f267453803921",
+          "pubkey": "05043d7e0db2ffb962bf5e089cda2b3b45548866129392198673ad1921ca5c87",
+          "sig": "5f7ccf31a911049cbe4ab90f4b0e899a3d6b9870b16b17fa6f9bc5af831b0598e4751f3e9c9613c173a7b9d3f4bd81be7c282edd9622fcc7758d3b14d2d8a90d"
+        },
+        "expected": null
+      },
+      {
+        "name": "made here: a content of a newer NIP-44 version (`#`): a newer format",
+        "invoice": 0,
+        "event": {
+          "kind": 30078,
+          "created_at": 1791378300,
+          "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+          "content": "#",
+          "id": "68b02e82891875e8609788850c98195e19314b718427fe88a18c17e1b237a9b8",
+          "pubkey": "05043d7e0db2ffb962bf5e089cda2b3b45548866129392198673ad1921ca5c87",
+          "sig": "b853ed950c8fda7ed16ecd6bceddf06cd20ec041ccc0ce48bfb54f4b4cdfa87c248bba01fd19abcd8b4366d4941f217b62f11e7176659768c3c986774961f02d"
+        },
+        "expected": "newer"
+      },
+      {
+        "name": "made here: a content of NIP-44 version 3: a newer format",
+        "invoice": 0,
+        "event": {
+          "kind": 30078,
+          "created_at": 1791378300,
+          "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+          "content": "A5aSHcPlhQgSTLgbtd1mZmNiXQlTaYhflnQWlu54jeerWy2H51xHxxoDv+nBqLes1WmGt44ggHzyNRRKE9/w1NFtY/awFYVs30/jRoEh9f+RvJHKXvYnCV6yUg/rjvch1MChRhWMtyAHBfad9N7CupKhfxGt4hbibihJjIXEiLUt6KL7e11RSV6vDId3xkniGcBXjnEEaN0D5tNLdxhlUFNf0u4tFmVT1I8pVitzkvHQ8qha5JhO7dYfjzO3TzJIGYL1pTaSe/UnjgdkIe/hmTY/kf9pRzGHH5D5DSKQWVpuhV2ydPLZJjASwTlTdEacOfU2KXHm+S7MkLd5elccyAfq/nEZPtBW4XRb6ij92LJOnttG2qHjlybSZN72ZpR82angN+DzNLFW+CMYtwWXITE3czFR1NRafkBQrV/l9g5+eDc=",
+          "id": "35fcf39ba4f15c2b75fe83ef8a8071542f02ab4cb822ec1170af3ba540f160f9",
+          "pubkey": "05043d7e0db2ffb962bf5e089cda2b3b45548866129392198673ad1921ca5c87",
+          "sig": "639d3effa98a7ce7e70e3abf71f70e8d6320f2fde81dd8b07337fbac1034ff980ebbaa9fbc40a53970d01ae5c4a873fea348cffe526e9deafc9d951d908a7984"
+        },
+        "expected": "newer"
+      },
+      {
+        "name": "made here: of kind 1: ignored",
+        "invoice": 0,
+        "event": {
+          "kind": 1,
+          "created_at": 1791378300,
+          "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+          "content": "AtHCstHQ09P0ErjAlzvX5FT7JPjzVadqf+8XvQxQrajuRUXS2Sa93eCyLexIIjteU0AJEwptnal3kKs+NYpe+7DyOiFg3jls8zEHbOdbyegqNeuMZoBXghtdiPfx3gJr7KfdfQh3YpGh194ZaaPR086oDmZNIOBldx+WDLEtnV7qLUl0j0O2x/tme/Pt+hGfoSOpUMhgc7prrYJ84AB0nsSmXnSty9sMaoGXQzGFmxuqSqZMpNQVQa4hgLY22O2ZcjyTwuMEQPM7WT1s8dKWKQHLbv8ajF2G3XI4ssh6wUPJNRtEkPBgWJOI6F7i70FA7ivslDD0XKvtDTJyFSOBE6hLIuOU2/IS/uJZSZi4OTJa220oLxjQ3jKw5jr8AoN/BVCeK/x9rAW3RmdBfJFmU77glJVnDk5dWar+BnobtYR2E8g=",
+          "id": "981938b2950c95abb68cd6dbe175598e6a1a3ce150398175e9553a34230b93b8",
+          "pubkey": "05043d7e0db2ffb962bf5e089cda2b3b45548866129392198673ad1921ca5c87",
+          "sig": "0c1c8b912362b18a32b6df9f46fe5edcd0e45e9b722cedb6df68e6659995af1ec87c34e9e6775a183d200fc60b4c4443b504f6b6b73d09ea84ed2f88388df5a9"
+        },
+        "expected": null
+      },
+      {
+        "name": "made here: sealed with the channel key of another integration of the team: ignored",
+        "invoice": 0,
+        "event": {
+          "kind": 30078,
+          "created_at": 1791378300,
+          "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+          "content": "AmG3Ldfs5EDBfE7WS+39rfFQeVdikT79c0ntATzpvrY3Xrt9EVn0BLzYEIci0FFo2cbj7fBuGOdO31UUdkiVGsSubFXZbM0OsfFkHqAvRf2x5/V2Xc6aiQ1PITOgwydJzSJc3MGhUKFwlxHuQICmWPqC+Qwl7t2nADs1q30IIIybAxGucEssaiUoB4eHUcF1Ase6WfFSVBeiHngeVzj7GUQCHzi5yAz10sUUgHApKV0bxgSs9WvC6KnGxdQG5n7k7Wztdhsy8o9s3zst61KcaQeArQC/U8pe2IB1kzX0DisnfhurWJ/6Gih1MNaeRmesDLFf+SbAdJw3ouCS9UoTZOEbt/+NLhMEbUdqVEkI3R0V2WdLb2N44xhPjnj3fzk82F8f8seMspC3NHblhGWvjK66SXZZUV/1z2wlJbZuM4n7wuA=",
+          "id": "d155857e9e78b04c88920000bd4f7a90e707a2a73b4c8cc80c4c3c304cf85a2e",
+          "pubkey": "05043d7e0db2ffb962bf5e089cda2b3b45548866129392198673ad1921ca5c87",
+          "sig": "db223aeca9c93bfdf9ea548645054ed3f1f7f2fdc36c852c88e96bf4df1d009c6ade789c83a0aed2825fb882500d1fa1a91e9d1f8463361a544cdcbe1e4cf927"
+        },
+        "expected": null
+      },
+      {
+        "name": "made here: a content of a newer NIP-44 version (`#`), dated after the lease's end: set aside",
+        "invoice": 0,
+        "event": {
+          "kind": 30078,
+          "created_at": 1791379301,
+          "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+          "content": "#",
+          "id": "f2df3c2a6fcd9821322306dcc726f00d5f44b91e80d0443ea315992ec26fff6e",
+          "pubkey": "05043d7e0db2ffb962bf5e089cda2b3b45548866129392198673ad1921ca5c87",
+          "sig": "df3aa26d3ddd76c4ebdebb8ad5e6a8bbba3c9a1f3fb99628adbc3f53ae64122375bca0b6924bc9f61df93a85980ddd8823e88790df3e01f7a45f19942f159fca"
+        },
+        "expected": null
+      },
+      {
+        "name": "made here: version 2, dated after the lease's end: set aside",
+        "invoice": 0,
+        "event": {
+          "kind": 30078,
+          "created_at": 1791379301,
+          "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+          "content": "AsUwlrOQDVF1GZ7T4sHN5YFJ8VbKinyxfDH3EntDR0c1z2vcC5WRT4TI3ox+eJSSzthqdyoPWel6oWSLfqhdVt+gMHye1v0LM6y5uQtJyxncBgY5R/ToNwH2Bem06gqyhMQDMLbfCFzIm0hqR2N5F49M/wbH8HxgB3km2+IPGCOfELiPb87Jj5uD0z43tlG0FGxHUmxTmPIuVGcrCkvShL4AytPN7txBTVIEe01QqnmV0RlstDh+naqn7DBl3SvYX5JXQyJlk90ZUM5TxjDDrzawVUXLR/pNY4QgS2QTsGhmqgxVx7qgMryQo/YNFaflqqDbzT2edln4GnDpHWshAx/v4WevnggDiuOEVdPZLTrB2oz7SXx3dJjQ6RkIa+R7GUOiwBXCI/Xe8b4gbKIjPdz8gQwgAQmswaChycJ7OGWvEmg=",
+          "id": "347f246f73e4b1a2570b21780eba132514b52a4e5d0c82d94a08bcae0c3d3d51",
+          "pubkey": "05043d7e0db2ffb962bf5e089cda2b3b45548866129392198673ad1921ca5c87",
+          "sig": "cc7607de033df207817dd3f956d52cc32723e2da65188d73c6276f10320d76c9a01d27bd68ba0768669119925234bc78a7bce292fe3291d9464c3508c6c6bc57"
+        },
+        "expected": null
+      },
+      {
+        "name": "made here: `version` spelled 1.0: version 1, counted",
+        "invoice": 0,
+        "event": {
+          "kind": 30078,
+          "created_at": 1791378300,
+          "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+          "content": "AhW2t/0IkCEWPVMH2b7ke0i8YbD0sgGH+XNxtJcQdTANZ5of6TVO//JM+T3ariydXxZHE4iue5qa8jSL57on/r9widZ6btIkGzyoP3PMjwCHqAAs415r0WWjKrNGxIPWjeBiy4O5mdssJbciZY6StPVRNMQYWzQQ6TgPoSnjpaBf9PTq/aZX1dob8h3HeBtbUNCl2XEEiFwS86wvp8DUT5wS1Q/FPL7N1pZk0suMCDoTQQrKZZHN9KWAbfO7NuhRVVDIn+FLhLIEIFoavXPE+fNW+Zo30NGGthpNycXMRLM21Dt8NgVSL6fIgzReiA+/oDW/H6xJ9Q8/nndMmgnPls0MEgldDghRVZglF0EOfgyAl1s49Wccp9l9hNZEio4VyB1FtOupQTGGApcmYASs6f3BeQAyCft1Ba4A6rj4LFPy0cw=",
+          "id": "6455893f6f1aeb39532cd59eaddad435c7c5092e1fe5f52c622a476bf4208918",
+          "pubkey": "05043d7e0db2ffb962bf5e089cda2b3b45548866129392198673ad1921ca5c87",
+          "sig": "6e40cd421859dc7ba817e6a0f409141cbeb4a3f022bb72f8019cca129f378ed59bc6e3165a3746e83853bd13cdae8a73cf10f737c841df8b100131e2a94f9d75"
+        },
+        "expected": { "received": 30000, "createdAt": 1791378300 }
+      },
+      {
+        "name": "made here: `version` 1.5, above 1: a newer format",
+        "invoice": 0,
+        "event": {
+          "kind": 30078,
+          "created_at": 1791378300,
+          "tags": [["d", "6c5dd3305de366a835fe8c0679b2fc30ba6495a660de63a963f6ad8be637fbff"]],
+          "content": "AufqemWkSZcpyn69OGGJWumXAxCkplpVbU/PNTnjLTQJ4nQ+IgCpXEszl8msVW+4fXDKkHCcKqBb97WJD2lLd58AAoX2jYqiemS8MpUwnc7+PRlL1toECocv5wm2OZnKXDo4VCEJfCKxxJyKPLUOJpQc2x7aYgojkg6HvNg2eqXWKdvc1zhdBoM0fuM064oLC83XyEZnSgIo1PuzGwHlc3jIGPE3fEYcSx74eaq48PG6e+g83s5vYNXuZ/rprKsiUadqzdXZaNJ7SNOc+llGbEif4zm27GKxRofbiQiPakF9AajPPcqZY0GvzbIR5AGw4zjicJhsQqfG53/RRlFXYpanfmYN2aZVhbCe2bHR/dJ6Y5mqBt3aHWClLjOFFN+b8Mp2f2XCPZnXJthdiaiPMxxjP42+tz3zApxtNXoBjIf4Hss=",
+          "id": "ca142cb90b5aa848390ae70a48135ce50371673f27409ff2d90a116448cec53a",
+          "pubkey": "05043d7e0db2ffb962bf5e089cda2b3b45548866129392198673ad1921ca5c87",
+          "sig": "2492576156dad10b3a0f6068d627680765c7325fe6e44a7ff0d5bef5175ac22826dc9faff7efefff11bea502fb0ff2776e7d41d331851ed229fa673e601a173c"
+        },
+        "expected": "newer"
+      }
+    ]
+  }
+}

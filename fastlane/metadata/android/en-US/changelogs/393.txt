@@ -1,2 +1,0 @@
-- Bitcoinize PoS can now print receipts
-- Added a share button for the activation link

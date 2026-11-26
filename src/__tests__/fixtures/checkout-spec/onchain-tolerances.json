@@ -1,0 +1,185 @@
+{
+  "description": "The merchant's tolerance of on-chain underpayments (SPEC.md §31, The merchant's tolerance), in basis points. `values`: a channel's `onchainTolerance`, or a lease's `tolerance`, as written (`value`; absent: the field is absent) and the tolerance it gives (`expected`: an integer from 0 to 1000, else 0). `accepted`: the least accepted of `sats` with `tolerance`: `sats` − floor(`sats` × `tolerance` / 10000). `due`: what is due on-chain (SPEC.md §31, The on-chain payment, step 4) of an invoice of `sats` with `tolerance` whose rest invoices paid `paidByRests`: 0 when they paid `sats` or more (they pay the order), else the least accepted less what they paid, 1 at least.",
+  "values": [
+    {
+      "name": "absent",
+      "expected": 0
+    },
+    {
+      "name": "0",
+      "value": 0,
+      "expected": 0
+    },
+    {
+      "name": "1",
+      "value": 1,
+      "expected": 1
+    },
+    {
+      "name": "500 (5 %)",
+      "value": 500,
+      "expected": 500
+    },
+    {
+      "name": "1000 (10 %)",
+      "value": 1000,
+      "expected": 1000
+    },
+    {
+      "name": "1001",
+      "value": 1001,
+      "expected": 0
+    },
+    {
+      "name": "10000 (100 %)",
+      "value": 10000,
+      "expected": 0
+    },
+    {
+      "name": "-1",
+      "value": -1,
+      "expected": 0
+    },
+    {
+      "name": "a fraction",
+      "value": 2.5,
+      "expected": 0
+    },
+    {
+      "name": "a string",
+      "value": "500",
+      "expected": 0
+    },
+    {
+      "name": "null",
+      "value": null,
+      "expected": 0
+    },
+    {
+      "name": "true",
+      "value": true,
+      "expected": 0
+    },
+    {
+      "name": "an object",
+      "value": {
+        "basisPoints": 500
+      },
+      "expected": 0
+    }
+  ],
+  "accepted": [
+    {
+      "sats": "49000",
+      "tolerance": 0,
+      "expected": "49000"
+    },
+    {
+      "sats": "49000",
+      "tolerance": 1,
+      "expected": "48996"
+    },
+    {
+      "sats": "49000",
+      "tolerance": 500,
+      "expected": "46550"
+    },
+    {
+      "sats": "49000",
+      "tolerance": 1000,
+      "expected": "44100"
+    },
+    {
+      "sats": "1000",
+      "tolerance": 500,
+      "expected": "950"
+    },
+    {
+      "sats": "1001",
+      "tolerance": 500,
+      "expected": "951"
+    },
+    {
+      "sats": "999",
+      "tolerance": 1,
+      "expected": "999"
+    },
+    {
+      "sats": "10",
+      "tolerance": 1000,
+      "expected": "9"
+    },
+    {
+      "sats": "1",
+      "tolerance": 1000,
+      "expected": "1"
+    },
+    {
+      "sats": "2100000000000000",
+      "tolerance": 1000,
+      "expected": "1890000000000000"
+    }
+  ],
+  "due": [
+    {
+      "sats": "49000",
+      "tolerance": 0,
+      "paidByRests": "0",
+      "expected": "49000"
+    },
+    {
+      "sats": "49000",
+      "tolerance": 0,
+      "paidByRests": "20000",
+      "expected": "29000"
+    },
+    {
+      "sats": "49000",
+      "tolerance": 500,
+      "paidByRests": "0",
+      "expected": "46550"
+    },
+    {
+      "sats": "49000",
+      "tolerance": 500,
+      "paidByRests": "29000",
+      "expected": "17550"
+    },
+    {
+      "sats": "49000",
+      "tolerance": 500,
+      "paidByRests": "46550",
+      "expected": "1"
+    },
+    {
+      "sats": "49000",
+      "tolerance": 500,
+      "paidByRests": "48999",
+      "expected": "1"
+    },
+    {
+      "sats": "49000",
+      "tolerance": 500,
+      "paidByRests": "49000",
+      "expected": "0"
+    },
+    {
+      "sats": "49000",
+      "tolerance": 500,
+      "paidByRests": "50000",
+      "expected": "0"
+    },
+    {
+      "sats": "1000",
+      "tolerance": 1000,
+      "paidByRests": "900",
+      "expected": "1"
+    },
+    {
+      "sats": "1000",
+      "tolerance": 1000,
+      "paidByRests": "999",
+      "expected": "1"
+    }
+  ]
+}

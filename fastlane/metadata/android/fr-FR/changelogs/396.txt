@@ -1,1 +1,0 @@
-- Ajouté le support des comptes XPF (Franc pacifique) avec conversion en Euros

@@ -1,2 +1,0 @@
-- Reduced QR's compression to M. This should increase readability on small screens
-- Allow to enter amount in sats and other currencies

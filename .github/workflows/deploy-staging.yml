@@ -1,0 +1,245 @@
+name: Deploy staging
+
+# Every merge to main ships to staging (ch.swissbitcoinpay.checkout.staging):
+# - the staging web app on EAS Hosting, exported here then deployed here (jobs below);
+# - the app, through the EAS workflow .eas/workflows/deploy-staging.yml, which runs on EAS: if the
+#   native fingerprint already has a staging build on EAS, only an EAS Update (JavaScript) is
+#   published on the "staging" branch; otherwise a new staging build is made on EAS Build.
+#
+# No job runs the project's packages where the Expo token is: a package that read it could
+# deploy any web app of the account, the production one too, the host of the production passkeys. `config` reads the public values the export needs from
+# the EAS environment, with the token and EAS CLI only; `export-web` runs `npm ci` and the export
+# without any token; `deploy-web` deploys that export, with the token and EAS CLI only. Beside
+# them, `app` starts the EAS workflow, with the token and EAS CLI only: a web app that fails to
+# deploy does not hold back the app's update, nor the other way round. It does not wait for the
+# EAS run, the runner would stay busy for its whole length: follow it on expo.dev (link in the
+# job summary).
+# CI is not re-run before deploying: it runs on pull requests only.
+on:
+  push:
+    branches: [main]
+    # Files that are neither in the app nor in its native project: a push that only changes these
+    # would publish an identical update (and spend EAS Workflows minutes, billed per minute). Run
+    # the workflow by hand to deploy anyway. The other GitHub workflows are listed one by one
+    # (Dependabot bumps their actions every week): a change to this one or to
+    # .eas/workflows/deploy-staging.yml still deploys; the production release's does not. The local
+    # scripts are listed one by one too: scripts/passkey-association.js is part of the web deploy.
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**"
+      - ".claude/**"
+      - ".vscode/**"
+      - "src/__tests__/**"
+      - "jest/**"
+      - "jest.setup.ts"
+      - "jest.config.js"
+      - ".github/CODEOWNERS"
+      - ".github/dependabot.yml"
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/release-production.yml"
+      - ".github/workflows/security-txt.yml"
+      - ".eas/workflows/release-production.yml"
+      - "scripts/build-android-local.sh"
+      - "scripts/setup-android-sdk.sh"
+      - "eslint.config.js"
+      - ".prettierrc"
+      - ".prettierignore"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Per ref: a workflow_dispatch on another branch (never deploys) must not take the single pending
+# slot of the group and cancel a queued main deploy.
+concurrency:
+  group: deploy-staging-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # The token, EAS CLI and this repository's own scripts only: no `npm ci`.
+  config:
+    name: Read the staging web app's config
+    # workflow_dispatch can target any branch: only main ever ships to staging.
+    # The "staging" environment must also be restricted to main (repository settings).
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: staging
+    # EAS CLI reads the project's id with the config's plugins, the project's packages, which this
+    # job does not install: app.config.ts leaves them out here (a GitHub Actions job only).
+    env:
+      APP_CONFIG_WITHOUT_PLUGINS: "1"
+    outputs:
+      EXPO_PUBLIC_BREEZ_API_KEY: ${{ steps.values.outputs.EXPO_PUBLIC_BREEZ_API_KEY }}
+      EXPO_PUBLIC_OPEN_FOOD_FACTS_EMAIL: ${{ steps.values.outputs.EXPO_PUBLIC_OPEN_FOOD_FACTS_EMAIL }}
+      PASSKEY_RP_ID: ${{ steps.values.outputs.PASSKEY_RP_ID }}
+      PASSKEY_APPLE_TEAM_ID: ${{ steps.values.outputs.PASSKEY_APPLE_TEAM_ID }}
+      PASSKEY_ANDROID_CERT_SHA256: ${{ steps.values.outputs.PASSKEY_ANDROID_CERT_SHA256 }}
+    steps:
+      # Temporary files in RUNNER_TEMP, emptied at the start and end of each job (GitHub docs).
+      # Set here: the job's `env` cannot read the runner context.
+      - name: Use the runner's own temporary directory
+        run: echo "TMPDIR=$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      # No `npm ci`: without node_modules, EAS CLI reads app.config.ts with its own @expo/config,
+      # without plugins, which is enough to name the project.
+      - uses: expo/expo-github-action@5273c2136bd09c2a341fe3340d3e767ce5a13015 # 9.0.2
+        with:
+          eas-version: 24.14.0
+          packager: npm
+          # The inotify limit is for watchers (Metro), which no job here runs.
+          patch-watchers: false
+          token: ${{ secrets.EXPO_TOKEN }}
+      # The EAS environment of the staging builds (eas.json, profile staging: preview). The file
+      # stays in this job: only the export's public values leave it, as the job's outputs.
+      - name: Read the export's values from the EAS environment
+        id: values
+        run: |
+          eas env:pull --environment preview --path "$RUNNER_TEMP/eas.env" --non-interactive \
+            < /dev/null
+          node scripts/eas-public-env.js "$RUNNER_TEMP/eas.env"
+          rm -f "$RUNNER_TEMP/eas.env"
+
+  # The project's packages, without any token.
+  export-web:
+    name: Export the staging web app
+    needs: config
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      APP_VARIANT: staging
+      # Skips the download of the Breez SDK native binaries (~100 MB), which the web export does
+      # not use. Not read by the app, so not inlined in the bundle.
+      EXPO_PUBLIC_SKIP_POSTINSTALL: "1"
+      EXPO_PUBLIC_BREEZ_API_KEY: ${{ needs.config.outputs.EXPO_PUBLIC_BREEZ_API_KEY }}
+      EXPO_PUBLIC_OPEN_FOOD_FACTS_EMAIL: ${{ needs.config.outputs.EXPO_PUBLIC_OPEN_FOOD_FACTS_EMAIL }}
+      PASSKEY_RP_ID: ${{ needs.config.outputs.PASSKEY_RP_ID }}
+      PASSKEY_APPLE_TEAM_ID: ${{ needs.config.outputs.PASSKEY_APPLE_TEAM_ID }}
+      PASSKEY_ANDROID_CERT_SHA256: ${{ needs.config.outputs.PASSKEY_ANDROID_CERT_SHA256 }}
+    steps:
+      - name: Use the runner's own temporary directory
+        run: echo "TMPDIR=$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci
+      # The staging RP ID is this web app's host: it serves the passkey association files
+      # (scripts/passkey-association.js), written into public/.well-known/ before the export copies
+      # them. Fails, and stops the deploy, when a variable is missing. `npm run export:web` writes
+      # the web app's manifest and icon first (scripts/web-manifest.js).
+      - name: Write the passkey association files
+        run: node scripts/passkey-association.js
+      - name: Export the web app
+        run: npm run export:web
+      # dist/.well-known/ is a hidden directory: without include-hidden-files, the artifact would
+      # leave out the passkeys' association files.
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: web-staging
+          path: dist/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
+
+  # The token, EAS CLI and the export only: no `npm ci`.
+  deploy-web:
+    name: Deploy the web app (staging)
+    needs: export-web
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: staging
+    # EAS CLI reads the project's id with the config's plugins, the project's packages, which this
+    # job does not install: app.config.ts leaves them out here (a GitHub Actions job only).
+    env:
+      APP_CONFIG_WITHOUT_PLUGINS: "1"
+    steps:
+      - name: Use the runner's own temporary directory
+        run: echo "TMPDIR=$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - uses: expo/expo-github-action@5273c2136bd09c2a341fe3340d3e767ce5a13015 # 9.0.2
+        with:
+          eas-version: 24.14.0
+          packager: npm
+          # The inotify limit is for watchers (Metro), which no job here runs.
+          patch-watchers: false
+          token: ${{ secrets.EXPO_TOKEN }}
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: web-staging
+          path: dist
+      # Staging web app on EAS Hosting, alias "staging": https://<subdomain>--staging.expo.app.
+      # The production alias (https://<subdomain>.expo.app and the custom domain) is left for the
+      # production web app.
+      # The page carries its Content-Security-Policy (public/index.html, web-csp.test.ts).
+      - name: Deploy the web app
+        run: |
+          test -f dist/index.html
+          grep -q 'http-equiv="Content-Security-Policy"' dist/index.html
+          test -f dist/.well-known/apple-app-site-association
+          test -f dist/.well-known/assetlinks.json
+          eas deploy --alias staging --export-dir dist --non-interactive < /dev/null
+
+  # The token and EAS CLI only: no `npm ci`.
+  app:
+    name: Start EAS workflow (staging)
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: staging
+    steps:
+      - name: Use the runner's own temporary directory
+        run: echo "TMPDIR=$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      # No `npm ci`: without node_modules, EAS CLI reads app.config.ts with its own @expo/config,
+      # without plugins (`eas workflow:run`), and the EAS jobs install the dependencies themselves.
+      - uses: expo/expo-github-action@5273c2136bd09c2a341fe3340d3e767ce5a13015 # 9.0.2
+        with:
+          eas-version: 24.14.0
+          packager: npm
+          # The inotify limit is for watchers (Metro), which no job here runs.
+          patch-watchers: false
+          token: ${{ secrets.EXPO_TOKEN }}
+      # Uploads this commit (a clone of the checkout: eas.json has requireCommit) and starts the
+      # EAS workflow, then exits without waiting for it (--no-wait). The commit message becomes the message of the
+      # update or build, cut to 1000 characters: `eas build` rejects messages longer than 1024,
+      # which a squash merge can reach. Its hash is shown in the app (the EAS workflow's `github`
+      # context is empty when it is started with `eas workflow:run`).
+      - name: Start the EAS workflow
+        run: |
+          message="$(node -e '
+            const { execFileSync } = require("node:child_process");
+            const full = execFileSync("git", ["log", "-1", "--pretty=%B"], { encoding: "utf8" });
+            let message = "";
+            for (const char of full.trim()) {
+              if (message.length + char.length > 1000) {
+                message += "…";
+                break;
+              }
+              message += char;
+            }
+            process.stdout.write(message);
+          ')"
+          eas workflow:run .eas/workflows/deploy-staging.yml --non-interactive --no-wait --json \
+            -F "message=$message" -F "commit=$(git rev-parse HEAD)" < /dev/null \
+            > "$RUNNER_TEMP/eas-workflow-run.json"
+          url="$(node -p 'require(process.argv[1]).url' "$RUNNER_TEMP/eas-workflow-run.json")"
+          echo "EAS workflow run: $url"
+          echo "EAS workflow run (staging): $url" >> "$GITHUB_STEP_SUMMARY"

@@ -1,1 +1,0 @@
-export { PayerKyc } from "./PayerKyc";

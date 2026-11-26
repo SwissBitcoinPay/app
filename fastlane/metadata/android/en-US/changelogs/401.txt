@@ -1,2 +1,0 @@
-- Added an update rate timer for external invoices
-- Updated Finnish translations

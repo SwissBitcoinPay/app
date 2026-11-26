@@ -1,3 +1,0 @@
-- Updated German translations
-- QR scanner supports legacy's Activation QR codes format 
-- Minor internal tweaks to reduce bundle size

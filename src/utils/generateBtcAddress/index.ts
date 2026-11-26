@@ -1,1 +1,0 @@
-export { generateBtcAddress } from "./generateBtcAddress";

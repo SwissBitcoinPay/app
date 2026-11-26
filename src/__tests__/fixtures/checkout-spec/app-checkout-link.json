@@ -1,0 +1,61 @@
+{
+  "source": "Made by an implementation of this specification (createInvoice with checkout: true, end to end) with fixed random bytes, for a channel whose checkout origin is https://pay.example. The sattle.me web app reads it: the fragment of `url`, the link's keys, the record of `event` and what it shows. `payRequest`: what the merchant's Lightning address answered (its `metadata` is the invoice's description hash); `price`: a price of one bitcoin in CHF that converts the order to its `sats` (SPEC.md §25).",
+  "order": {
+    "ref": "ORD-3001",
+    "fiat": {
+      "amount": "0.02",
+      "currency": "CHF"
+    },
+    "note": "Order 3001",
+    "durationSeconds": 600,
+    "checkout": true,
+    "redirectUrl": "https://shop.example/orders/3001/thanks"
+  },
+  "payRequest": {
+    "tag": "payRequest",
+    "callback": "https://breez.tips/lnurlp/sattleme02c6047f94/invoice",
+    "minSendable": 1000,
+    "maxSendable": 1000000000,
+    "metadata": "[[\"text/identifier\",\"sattleme02c6047f94@breez.tips\"],[\"text/plain\",\"Pay to Sunrise Bakery\"]]",
+    "commentAllowed": 255
+  },
+  "price": "98000",
+  "origin": "https://pay.example",
+  "relays": ["wss://relay.example"],
+  "businessName": "Sunrise Bakery",
+  "invoice": "lnbc210n1p4vv50spp5hxc8m488wxz9g3m0qnk7hy6sy2hy7nvsjd9t0n538leqezawkwvshp5j87kq3xk0gg223zt638v8kc72l00sueaktfyzmqlcp9fd0rvgzqqxqzjcqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqh2krcz",
+  "verifyUrl": "https://breez.tips/lnurlp/verify/b9b07dd4e7718454476f04edeb935022ae4f4d90934ab7ce913ff20c8baeb399",
+  "paymentHash": "b9b07dd4e7718454476f04edeb935022ae4f4d90934ab7ce913ff20c8baeb399",
+  "sats": "21",
+  "expiresAt": 1791382600,
+  "linkKey": "12ff79781dbacf78d2e760058265f13bba0b6689d0a8b1506674d8f9e4b1b6a9",
+  "author": "d01a4c3732fb6cd24a09cc79ba018045f9285ea4f75ae58f5b9ad90170930035",
+  "address": "f4519e926b56298595fc55d0f82f000b3ff7595d49858d85aad5569232a7c581",
+  "encryptionKey": "4cef34cf68275abec817727d12605f539fe0d02188831965d99dd1639e90fc5a",
+  "value": {
+    "version": 1,
+    "businessName": "Sunrise Bakery",
+    "invoice": "lnbc210n1p4vv50spp5hxc8m488wxz9g3m0qnk7hy6sy2hy7nvsjd9t0n538leqezawkwvshp5j87kq3xk0gg223zt638v8kc72l00sueaktfyzmqlcp9fd0rvgzqqxqzjcqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqh2krcz",
+    "verifyUrl": "https://breez.tips/lnurlp/verify/b9b07dd4e7718454476f04edeb935022ae4f4d90934ab7ce913ff20c8baeb399",
+    "fiat": {
+      "minor": 2,
+      "digits": 2,
+      "currency": "CHF"
+    },
+    "note": "Order 3001",
+    "redirectUrl": "https://shop.example/orders/3001/thanks"
+  },
+  "event": {
+    "kind": 30078,
+    "created_at": 1791382000,
+    "tags": [
+      ["d", "f4519e926b56298595fc55d0f82f000b3ff7595d49858d85aad5569232a7c581"],
+      ["expiration", "1791987400"]
+    ],
+    "content": "AtcMwwUcILv0if1t8+Ll7Ijl4TOg3/pwIk/w4G6+G37SOEjLrSHo9GTyTm9OuQnot4KwJ+LzRL9EgwZT+7ywNb5Vk8EKrAuF+fLRmLJjJZ1UVQoQrVRl+9D8cB49trJfE/1Eoed6Yfl46+lZxOVLMCb9oDeXNzODVsLB8nDkF1J6KXq5Itk7nhKTgsGzi9W2ibFrEXX/ktSf/sEV+PSgQB2K4DChn9KyyMQT1IVDFlJGTcc6yksjkhbcZoEaE3/ThVsPTdTB1YRXZ1dKhAvki7PvT5SQ2553YhsiP7lSUG3sDIP0A5R1ctupfjCeV/x+lxxbEhfrm7LZ5Fy0KsNFr6aOS3EdN2rGdOZdnjxIc8YP42iWck+3xHSQcHdYRii8hUEoq8iEUzYsWq6DgFWF4oNoDsv4Y6sDQKmBp+m95EwASghcFvANBz8UAV9mGqvyjFi++aGJXw3ExBQxYsEekhc+HIlfPIteCciDxNHRPg0rwIfGJVsgPPkv0X9JW18Ipa4NbuJW36TSqKyL2CkFjBuIya7aBzeFLTlrLqYJvj+ahoBsUmxU0tVeBJQUOXPygflEV+dh7QzA1V3/UssY0BFoNJ87nYjeYeCAtLUrnorA9T/zzsTJ6sZGtN+QWVT/9knoM9ViG+YLPEKTYqe/vGAnsFwYaEHjn9OxS6c1oDe0fotUJWD1Bre/wOw4Cgi1WEDyRC25kumTIWoRzeD202OG0wQlkZah8FZXrK3DiY8yoSIcXqjOD1JufoaEAvwYFAYAM3N4vsvixvJ/yYMAIR5XF0gbW26FXH+I6umLSYeAboptkXthx5j+wH47zhsis5wWkYoi4oNT+hzlI1H3nKIhK37ZGC184HtsbPH3C1rvqZtS2qZ6zflvaTDM1e7zrpg63enZFnjQCBmjW8ozX+FZ+p5bFLIADsKYqKsV2pRaUCW2JgzKgia/oBlnZ8EcftO6zuc/+O4dhKjBR7qsfKhG7t4NJWNNYmQl7za/gZaMuqlANyWPpsDy566wfABFxUGu2SwU8IAZv4nE0RLIgUfHi/Hqg+lD6//FB9Wat5+kOJ2W0x4cNAaHr4jzbnnLazK8BS7kjwPyigoWhnGu2/1orA==",
+    "id": "155d196dd25c51d1b1c36843d628f1119ec9f101480e586006dd8fa5dc53a247",
+    "pubkey": "d01a4c3732fb6cd24a09cc79ba018045f9285ea4f75ae58f5b9ad90170930035",
+    "sig": "eefdfa19e9e7a3cf7c971fe94249dfc8a2a797ce76f27a92922fc2b18e445970bdaa9272522ac2185b43d48f699064421cbb7968285a2c51ebd11e6f6dad8261"
+  },
+  "url": "https://pay.example/pay#c.0BpMNzL7bNJKCcx5ugGARfkoXqT3WuWPW5rZAXCTADU.Ev95eB26z3jS52AFgmXxO7oLZonQqLFQZnTY-eSxtqk.cmVsYXkuZXhhbXBsZQ"
+}

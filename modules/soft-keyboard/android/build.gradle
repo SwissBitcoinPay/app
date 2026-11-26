@@ -1,0 +1,15 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+
+group = 'me.sattle.softkeyboard'
+version = '1.0.0'
+
+android {
+  namespace "me.sattle.softkeyboard"
+  defaultConfig {
+    versionCode 1
+    versionName "1.0.0"
+  }
+}

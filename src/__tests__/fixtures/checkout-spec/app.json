@@ -1,0 +1,84 @@
+{
+  "source": "Made by the sattle.me app from the BIP-39 test mnemonic \"abandon … about\" (all-zero entropy), never a real wallet, and the integration 0123456789abcdef0123456789abcdef. realInvoice is a real invoice of breez.tips, of a test wallet that no longer exists.",
+  "secretKey": "sattleme_ck_qEVejHuCZpF4XMmBSw5p7iZYxCtm20XxzT1fnJ9VB8o.uPTAz1d8bbQaw2Jx22Wwrga2vI2F8allY5NrPC3Aogk.cmVsYXkuZXhhbXBsZQ",
+  "parsed": {
+    "team": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+    "integrationKey": "b8f4c0cf577c6db41ac36271db65b0ae06b6bc8d85f1a96563936b3c2dc0a209",
+    "relays": ["wss://relay.example"]
+  },
+  "derived": {
+    "channelAddress": "964550315fc7550261dfaeaa543ad9af7feb92fa7d2a11549a4963ceb3c04851",
+    "channelEncryptionKey": "5b8ba276158c4cac4b34cae5314fde0568d3dc7cb2e5dd004e10d1b1f45c9d02",
+    "takerKey": "82a8e9144743f30a7005c5daef4a5e672f5a91944963b462ab06e3c1e1b596ee"
+  },
+  "channel": {
+    "event": {
+      "kind": 30078,
+      "created_at": 1791378000,
+      "tags": [["d", "964550315fc7550261dfaeaa543ad9af7feb92fa7d2a11549a4963ceb3c04851"]],
+      "content": "AqQSldmZYCEOpm6xSeuGXLxdsnJkZltpt4+GUnx1EUzHRMgG2qGG0yiLAUfIq4RD4tcwm+2b5msDuHg3LgHY9Too2GmzkL8wY6MXpo135iVBBvNYljtl4fQzpCVX+GFHGRekmE8cOtLOVNh/itU7j5sbnGGc5cOxAlGTfh2eWIRXUzzE7rS35Kt0WEqZNC3tpaO6tqj/sWssrgSRrpBbdwyb6f44D9MVJC8oV9GMuHtXtKAxv36VRXz5ihgJ+YTkxSpMMLJib754LaG+vzQlvfmwKQNuTtnKBvTitlSdmSt5faXSjD72DybqDrpn26xoDdJa4q03OSc+7F30q04zVsYvpe/6pzwrnWF3pPHQyNWt6GbZwzlTjwsI54z2jdD/tqmH9B8Mz7SCaZ+a+xDaI74rdG07u3Mjx2L2w+nRannp0XzEmlplyu7pWMCv+Il2LG52zgdfNGRsUwPfn2IGDabRyRQCdbx3unY2uoLV8Ka4XaLtQEZRrGIoFnIOxLhI7sEtk4Z7sHlY/wnO/q+DYr1ggnLlC1nqgRxrCChv/30Bgwugof0g2JUi3PNBH6U83h6DCIhOo0HW/wiTtCX6jKUuudoacjjuFBB7WTCF9BIB25JIhv+KuqIlC7xRmz4bbFd30WpyYok8OeGONORv4yA04S0ySzyF3BpaSMVfokEGQWI1pZok80aRWwBOGuKeuDZOgqvrQhSkAVtUK6Eb6ZCJ0Fiv3b0XRzR7fEraz2CISFM6igmIJKAO/+dCgCE1+lAo6M2+mm7LR2Ne5wkD7zHIkRMny1DOEl/kmYiSmUGnSHqoxBW0ZeVfee5hONiQ7EbiSHzQAXzQ6sBEBx5anhokj1Ij6xt0BZxncO7JN07ZeDgFiGt2FIwVOrAtNc1Av12lGTX4pAV6r77v/fQWVaw/Aw+u7EuzsY0RSDeNfgmDcnp3G0ApnrSXdgb+eO6XqOJKN5iMPZi+iDADj/oLBY15hWv0iAAdJoKESHyg7OlzkggSTcwDo4imo3OgD1g6U7hFkk+YVmn3RTKvUPhmCEf6bEXlVl6lhX77SBpvCEnsZIP+pw2V6zN3RZhkMfHJX0mnMtZJTYXxBkNCrUn8RAAF1Q==",
+      "id": "eeca631ae0416ccb5f80aeaa363dfc3f63ca9e9d0e3bc3b87e525777fec7f04a",
+      "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+      "sig": "8f44e4d69c9bbe7f768f95a706b92b70318743381777519191bae576f0c8861c8152d1a0b947deab44e77f7a7f5d38bc978d1d846196420a516942088e053558"
+    },
+    "value": {
+      "t": "team-channel",
+      "v": {
+        "version": 1,
+        "status": "active",
+        "name": "Shopify store",
+        "role": "integration",
+        "profile": {
+          "businessName": "Sunrise Bakery",
+          "lightningAddress": "sattleme02c6047f94@breez.tips",
+          "currency": "CHF",
+          "onchain": true,
+          "logo": null
+        },
+        "registryKey": "efb29c7a1120f3699f1fa155b5209b53153ed12df82804807e9a85f42ee6e0a9",
+        "registryReader": "52d64e4fbc5670d62bad80c169aac897172117ce88c4978506f0c7dd9675ff18",
+        "linkOwner": "755748c663a1eb5ab3e6810507b1bbd0bcbd2acd02dcd2eb9cf3b5acba99e426",
+        "relays": ["wss://relay.example"],
+        "updatedAt": 1791378000
+      }
+    }
+  },
+  "declaration": {
+    "ref": "ORD-1042",
+    "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+    "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+    "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+    "fiat": {
+      "minor": 2450,
+      "digits": 2,
+      "currency": "CHF"
+    },
+    "note": "Order 1042",
+    "saleKey": "b4a71410c138150449bb82d4fd01a3e6c72bd47aa87f62a4cc56b76320d59ad6",
+    "saleSecret": "179740b373bd67b97a35988d776f921eb82dce2298564049bcdb984ac82b1c77",
+    "saleAuthor": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+    "taker": "807b8049fa4e9cdd58f5cc69a20302e6",
+    "address": "38304ad9acb94e7566e78351e36c75b219964dee4ecf38d6af134b9e5f551922",
+    "outerKey": "cfe25387961ef2c193679b5118d42059b6da6477863d3ad5ab372eb3714871b1",
+    "innerConversationKey": "e6aa2e441214dca3350af3a893a6e680f7dbc2802272857041f1fb6f4205eadd",
+    "outsideBytes": 1536,
+    "event": {
+      "kind": 30078,
+      "created_at": 1791378281,
+      "tags": [["d", "38304ad9acb94e7566e78351e36c75b219964dee4ecf38d6af134b9e5f551922"]],
+      "content": "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",
+      "id": "ca6b5550b31aca3eb69da85f0715af45571fb2760d667150eb63f753f09a9f7c",
+      "pubkey": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+      "sig": "9e9ac242995da919b5be8694ca756a7bdec8a2693f98e25272ee6e180c59f83a8f2e476ccd16405b21dfa51d17a3ed2fa4a99a35c9edfe3edc5c4be495c69416"
+    }
+  },
+  "realInvoice": {
+    "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+    "amountMsat": "21000",
+    "timestamp": 1791378280,
+    "expirySeconds": 899,
+    "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+    "descriptionHash": "440ffd62de9361d280c7e288d47f402c63b9a9f5f4a9371525366d3fe63c97d6",
+    "preimage": "f71fd193f4b67ce4841f0abeb22a55e298559dc0d922e9fbb1a58128d1b44245"
+  }
+}

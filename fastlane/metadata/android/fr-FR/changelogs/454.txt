@@ -1,1 +1,0 @@
-- [Bitcoinize] Corrigé le mauvais montant lors de l'impression automatique du ticket

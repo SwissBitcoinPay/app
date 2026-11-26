@@ -1,0 +1,43 @@
+# Code owners: a pull request that changes one of these paths can be merged only once one of its
+# owners approved it, when main's ruleset has "Require review from Code Owners" on. GitHub reads
+# this file from the pull request's base branch, so a pull request cannot change who reviews it.
+# Owners need write access to the repository.
+#
+# What is listed: what runs code on a maintainer's machine, an agent's session or CI (tooling
+# config, tests' setup, scripts, hooks), what builds, signs or ships the app, what instructs coding
+# agents, and the security contacts. The last matching line wins: keep no broader line below.
+# `code-owners.test.ts` checks that each of these paths stays listed.
+
+# This file and the workflows (CI, deploys, releases, Dependabot).
+/.github/ @sattleme
+
+# Coding agents: their settings, hooks and skills, and the instructions every session loads.
+/.claude/ @sattleme
+/AGENTS.md @sattleme
+/CLAUDE.md @sattleme
+/.mcp.json @sattleme
+/.vscode/ @sattleme
+
+# Builds, releases and native code.
+/.eas/ @sattleme
+/eas.json @sattleme
+/app.config.ts @sattleme
+/plugins/ @sattleme
+/modules/ @sattleme
+/fingerprint.config.js @sattleme
+/metro.config.js @sattleme
+
+# Dependencies and the tooling that `npm install` and `npm run check` run.
+/package.json @sattleme
+/package-lock.json @sattleme
+/.nvmrc @sattleme
+/scripts/ @sattleme
+/eslint.config.js @sattleme
+/jest.config.js @sattleme
+/jest.setup.ts @sattleme
+/jest.after-env.ts @sattleme
+/jest/ @sattleme
+
+# Security contacts.
+/SECURITY.md @sattleme
+/public/.well-known/ @sattleme

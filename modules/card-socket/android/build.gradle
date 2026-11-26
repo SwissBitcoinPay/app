@@ -1,0 +1,21 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+
+group = 'me.sattle.cardsocket'
+version = '1.0.0'
+
+android {
+  namespace "me.sattle.cardsocket"
+  defaultConfig {
+    versionCode 1
+    versionName "1.0.0"
+  }
+}
+
+dependencies {
+  // React Native's own OkHttp: react-android 0.88 has it as an api dependency, at this version
+  // (node_modules/react-native/gradle/libs.versions.toml). No library the app does not ship already.
+  implementation "com.squareup.okhttp3:okhttp:4.9.2"
+}

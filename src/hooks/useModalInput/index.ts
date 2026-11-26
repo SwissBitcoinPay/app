@@ -1,1 +1,0 @@
-export { useModalInput } from "./useModalInput";

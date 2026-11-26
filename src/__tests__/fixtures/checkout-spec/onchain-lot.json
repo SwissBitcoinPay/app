@@ -1,0 +1,29 @@
+{
+  "source": "Made by the sattle.me app for the team and the integration of vectors/app/app.json (the BIP-39 test mnemonic \"abandon … about\", never a real wallet). Its addresses are the deposit addresses of vectors/onchain-addresses.json, made for the vectors: no wallet's.",
+  "secretKey": "sattleme_ck_qEVejHuCZpF4XMmBSw5p7iZYxCtm20XxzT1fnJ9VB8o.uPTAz1d8bbQaw2Jx22Wwrga2vI2F8allY5NrPC3Aogk.cmVsYXkuZXhhbXBsZQ",
+  "team": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+  "lotAddress": "5dfe4c3e60ec558eb9f33ff86646bcf59a0fcf5151f86737c84ddba4708429cb",
+  "channelEncryptionKey": "5b8ba276158c4cac4b34cae5314fde0568d3dc7cb2e5dd004e10d1b1f45c9d02",
+  "lot": {
+    "event": {
+      "kind": 30078,
+      "created_at": 1791378600,
+      "tags": [["d", "5dfe4c3e60ec558eb9f33ff86646bcf59a0fcf5151f86737c84ddba4708429cb"]],
+      "content": "AmyQjPm0hqdw6oN04Ue3J/yhkaL93SZ9mvqinaU3tNrKr5kK6PXqT2m8i3LBstRv2DNDaZBdSGwB6J+gc1qfx/213T4fcL9kKsG7izyZubJ5oI8S1sfH3/D7Idiz204MbaLcTJfeM3cf652qwYbxNfsKB3/lhinVensqFpi0MRIZjXHDh4QRo/Sh7+oDPkFtX4gEOlp9trN5w4IcCYTYpgERAmi9NSsdgoo73TCyHIlP6clttl7S/45G6Wl8ASYuNtgsfJfg11+RhLTtds6zKrsqNkbENar2Tvf+LywZGkGEmwMnHJ01lQswgIWGcDBRd748AUjyWe9kbgHVOTZdflbN+GPPcW+v+DYGJpTkUIO35YQWLYqZEyx+ovspG0p8CrWEWDrX1yvY7DcytDneSFffhevESyQKsu7EiVU9pvuHGjs=",
+      "id": "e36d53cad10fe6b9a59788890a883ac2872db3b261c46c400fc6db15faeddbaa",
+      "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+      "sig": "b7a3d4d7cf8b1ea2eadca125aa5e7e4ab548bced6ff76bdc46de5be5a8e69e700c707a65efc09218dacc3bc01e8d61548971be9e93cc177fcc327cd32a3a59b0"
+    },
+    "value": {
+      "t": "integration-onchain-lot",
+      "v": {
+        "version": 1,
+        "addresses": [
+          "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+          "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8"
+        ],
+        "updatedAt": 1791378600
+      }
+    }
+  }
+}

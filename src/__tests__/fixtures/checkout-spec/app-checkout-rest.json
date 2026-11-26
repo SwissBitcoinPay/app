@@ -1,0 +1,101 @@
+{
+  "source": "Made by an implementation of this specification (createInvoice with checkout: true, then getStatus once 20 000 of its 49 000 sats came on-chain, end to end) with fixed random bytes, for a channel whose checkout origin is https://pay.example. The sattle.me web app reads it: the link's record of `link.event` and its rest author and key, then the rest record of `rest.event`, the invoice of the rest it shows. `payRequest`: what the merchant's Lightning address answered, for the order's invoice and the invoice of its rest (its `metadata` is their description hash).",
+  "order": {
+    "ref": "ORD-3002",
+    "sats": "49000",
+    "note": "Order 3002",
+    "durationSeconds": 600,
+    "checkout": true,
+    "redirectUrl": "https://shop.example/orders/3002/thanks"
+  },
+  "payRequest": {
+    "tag": "payRequest",
+    "callback": "https://breez.tips/lnurlp/sattleme02c6047f94/invoice",
+    "minSendable": 1000,
+    "maxSendable": 1000000000,
+    "metadata": "[[\"text/identifier\",\"sattleme02c6047f94@breez.tips\"],[\"text/plain\",\"Pay to Sunrise Bakery\"]]",
+    "commentAllowed": 255
+  },
+  "integrationKey": "0202020202020202020202020202020202020202020202020202020202020202",
+  "origin": "https://pay.example",
+  "relays": ["wss://relay.example"],
+  "onchainAddress": "bc1psuq2zums6p67npqrwaypyfemwq78rkc983wttlemd4nuk6zr270quzyhg8",
+  "sats": "49000",
+  "createdAt": 1791382000,
+  "expiresAt": 1791382600,
+  "transaction": {
+    "txid": "c1fd986a735133cec08fe710cd39fc52179e99cf4135094377f8d0ef51d8f17c",
+    "sats": "20000"
+  },
+  "link": {
+    "url": "https://pay.example/pay#c.tINHB5ppFNJ5iC4xQ2rKYAi-iNJDN57B-Pe-MTsVNqI.gWm48ZX9Sj5yF5d_ypp7Qwo5-89G2yDvWrjWRFHSF0I.cmVsYXkuZXhhbXBsZQ",
+    "linkKey": "8169b8f195fd4a3e7217977fca9a7b430a39fbcf46db20ef5ab8d64451d21742",
+    "author": "b48347079a6914d279882e31436aca6008be88d243379ec1f8f7be313b1536a2",
+    "address": "b87c84ab92f9f1540b26498416b506fb235b9af42db290279b12f06da9c4bf46",
+    "encryptionKey": "ff1a46234740ae79c959f1975ad7c85975504721dbc793cf70f4b7ad5276f09a",
+    "value": {
+      "version": 2,
+      "businessName": "Sunrise Bakery",
+      "invoice": "lnbc490u1p4vv50spp5hxc8m488wxz9g3m0qnk7hy6sy2hy7nvsjd9t0n538leqezawkwvshp5j87kq3xk0gg223zt638v8kc72l00sueaktfyzmqlcp9fd0rvgzqqxqzjcqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqgn68vd",
+      "verifyUrl": "https://breez.tips/lnurlp/verify/b9b07dd4e7718454476f04edeb935022ae4f4d90934ab7ce913ff20c8baeb399",
+      "onchainAddress": "bc1psuq2zums6p67npqrwaypyfemwq78rkc983wttlemd4nuk6zr270quzyhg8",
+      "sats": 49000,
+      "createdAt": 1791382000,
+      "expiresAt": 1791382600,
+      "fiat": null,
+      "note": "Order 3002",
+      "redirectUrl": "https://shop.example/orders/3002/thanks",
+      "restAuthor": "717a31c7ec4adb85194457aab8963ff5851349c9942401a8bf9ffabbc97c22e7",
+      "restKey": "584ced6ce503f88c013b0e0fef6f66dab0e0f4e410fa0d0b44eed83311a8cd0e"
+    },
+    "event": {
+      "kind": 30078,
+      "created_at": 1791382000,
+      "tags": [
+        ["d", "b87c84ab92f9f1540b26498416b506fb235b9af42db290279b12f06da9c4bf46"],
+        ["expiration", "1791987400"]
+      ],
+      "content": "Ap+VunmlTqF+Gs3K/mUbV4zaBDW9FZspaVl7GIGvo2uB2a2cbvabhc+BUMDCbyItk8CCf5vqhedk6XmV6P6FzUBzkms4n31+n+PD8SEoTLBK42brBHWuP7GDy/sLPiNHf9YuVfFwHAbYoX1BL7O2I311cA1a6jKYT+Gd7WNuNxRD4sRDrcCyknoKm7cCbLtmdgWu2ARVMyI4366lBazEiHd05NHVohdGDzSn7uPkDVjkcBqReYs3xPEWJ+QeuYg68V0rjcJdrsBNd2o55cFsQ9qVK12+RiBAWNudUMLjbCEHTyQ2HuVx5brav1F2awBxHMX7JzhuwRq8TEATIAo3pAaW74E+ER7l9LMRNLWU6dcMNkhLhkEy6Hcz+Rtr4ijBcJSGrqO9JHiGYflK08ugIWQohDoi8/Yf+SrNwloykQRFEyIenVdztdPMfiFF21syZnQFm9KHT1FlbAY08v7vrGsxFZTE2jvws5dAS/X36jxSIHyqaJPOum2gaw8Bd4qMK/a6BsDPWF55YbHejj8XH3SSRxv5o+1SneIKZ/8Q5gFVFacAg+xwfzEE4HqDfz+H6p+X5zVmBFL7pmECxkOL72IrP5NOIpdIf5ITRWQKJo4iaIujbffYWkjqFnOUKQ/IwXjHHT8VEQrINPCZXQynWq9pIAtH+NfjAk8tmwJ+IPiMypNj6S4zKZWJHwf0Cf8KxF+mZcLKkmhb2v2HjYiCAV2lK43gBkIg9yGNM0pl+s701IZXpQ7pCNuJr/FhnHdqPf/JFXoW98QUTODDMezUkM051fPRZWDSOMMowCdbZMVTN8MkD4YckgPR7SQtPsWi/0r7VLOOGSWVL4105By8vMXDeBTPBwRL0chkpdYxCNgN1ecyl4WbjI0/x58mhU7fx7VM5KxwkPu9TLDsUoN9UUu2oVZoup2S7doboD+vQfh170WB5Wz+cLwQiKFO1uQ9mCL6oBGCWzSTcz3Rn966b2y/WthPuQqQQSR/QbXriz8wCY+jqdz/WoBxsDAEA0QRZWh9v/0RE94vDG6KA5G2Dml32mKrZ8W3HJkRmsRcFuowD7XDGRywx3ss4L6jrwhiOJcDtte+adlEeD7snJQEt3zrduryQta0y3U+k+0ssQKn0fW3ZoPFHQsbsPpZfMDcm5HnoRi+GlaLl4SK0EaD+L1BbB7Lyq6va1OIbl3Ytui5VYK0OpmWZa3J6lnxDiSZShx6YLOFFiBoe4CDXv3XUADFxKaelHp/21jrWJRcj9u9qEmgtOY6ABRPLxG3Vkw+JH86eZq9Ydwb8aH70a3h5lzFpl91zN+HerlVOgpVUALgT63Ea2nOcyuzlRP7UBCPInvj91sMzk7PxLZXP+2YYv4latxy+iSxUEQ/zaFn8TS9JvNB3rTtyAef+looqi4c2kgwQwx3IZ3tgC9yxBbah6DeXGdUp6Iodumh8LhPCZtyC7s=",
+      "id": "91d493addc658ded5a3fe011cd7135fd54c3bd5abe4332e1e2bb1a508bfb99eb",
+      "pubkey": "b48347079a6914d279882e31436aca6008be88d243379ec1f8f7be313b1536a2",
+      "sig": "60b465b9a56c441af2fff39b5e23ce77ae132a1704c25d67908999bf50dcda6bae5fda8350e280226b3ab26dd7154ba82ecad449138fc6ae017a9357d132632b"
+    }
+  },
+  "rest": {
+    "restKey": "584ced6ce503f88c013b0e0fef6f66dab0e0f4e410fa0d0b44eed83311a8cd0e",
+    "restAuthor": "717a31c7ec4adb85194457aab8963ff5851349c9942401a8bf9ffabbc97c22e7",
+    "encryptionKey": "f1d11a021b3b5403c424738c71fae206ac8fe50267b5678d7f745e8d55e43537",
+    "address": "494dc3b29ce99da7a8ae33a1a2d63551613d8f8872dbdc9721db4f1381ffb57d",
+    "invoice": "lnbc290u1p4vv53vpp57r3chqcwhk99qes4ang4gvcwcplld06sxpz8k38zjld36jm4zjkqhp5j87kq3xk0gg223zt638v8kc72l00sueaktfyzmqlcp9fd0rvgzqqxqzsuqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqjgvkv0",
+    "paymentHash": "f0e38b830ebd8a506615ecd154330ec07ff6bf5030447b44e297db1d4b7514ac",
+    "verifyUrl": "https://breez.tips/lnurlp/verify/f0e38b830ebd8a506615ecd154330ec07ff6bf5030447b44e297db1d4b7514ac",
+    "sats": "29000",
+    "value": {
+      "version": 1,
+      "invoice": "lnbc290u1p4vv53vpp57r3chqcwhk99qes4ang4gvcwcplld06sxpz8k38zjld36jm4zjkqhp5j87kq3xk0gg223zt638v8kc72l00sueaktfyzmqlcp9fd0rvgzqqxqzsuqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqjgvkv0",
+      "verifyUrl": "https://breez.tips/lnurlp/verify/f0e38b830ebd8a506615ecd154330ec07ff6bf5030447b44e297db1d4b7514ac"
+    },
+    "event": {
+      "kind": 30078,
+      "created_at": 1791382060,
+      "tags": [
+        ["d", "494dc3b29ce99da7a8ae33a1a2d63551613d8f8872dbdc9721db4f1381ffb57d"],
+        ["expiration", "1791987400"]
+      ],
+      "content": "Au16V/Iy5RdVW/lF/azXRTOv6kw+Z+3eiBX5mZ1luSWmymwrdqiJ5vB+kWqF2Lun0i7oHhvWLwMN5aRX5cLSp4FtBvJG9oMu67+NDIOxg16Okn9890YFtFH7qzYWJOqbxIMKo6u5LRInxNRYzpYpwtW5TdWLLUBTdVgOo360VH5B5IQDP93tthkV2O4bGAX2ook8zaFv/bsZqwhoH+oh+KGt5t2n7WNVCFYzVEvDDRcL85/ZL4eaNKqfZwYSgIRXzalZfYeN1M+BgXjzCS9Co3MSy3dZ3smZcEmFe8/5ggh/4hcNQHg5F7NkRCeCUIHtd3eOXM7hWsxAX9NWfChLBoaPnTUClF5cMe3hCVzwwZjpBBfR4t5cQocOYZmdC0bX40dBPI3neweN0lM/YbpbTcsugB9jq9lCCLFG63f6b6r8CmAERFzJPUQDWJgFwTi2YH7TSsMVCqXGT2CBjYO/vxdsXiVsjQVDjza34bxKvyWOG2ok/N+tujBchMWRL3jaYEJW2Rx3M3wKy77TmecQPnohE4IflSXdmATUODO+9lX97HJv1sP+d6X9RJJGQGYyzYaxGNVbI5gcP5uNRMgaSHv1bNYvqUdP5e9Oz7t1q39ce4eF1GuN8f7Tw0orwEX6TDz1H54xRzpXasxZG9hbWvsNalXZzRx/3PSLZQKdLphS7ik8JK8XxdEltV6+2kh81kc+SqDvRRlL0FtwY57suOZXvNp4PjwRcGwyp6QOiVmz7Ust5P3qGMpzprYKKD3msfeT",
+      "id": "9123a59273b1f93fa8a1cdf9cd9ca52d247c295e00d6200e305fe578af4785f2",
+      "pubkey": "717a31c7ec4adb85194457aab8963ff5851349c9942401a8bf9ffabbc97c22e7",
+      "sig": "76881c3d259069323bc5ff61b996856f91612ad932a4e4dbdbb2e4d51c4046f0e2eeefa1b0d8dfc243054794442e4a406b759860a4b73922aa3c23d3a807dd2a"
+    }
+  },
+  "status": {
+    "state": "open",
+    "expiresAt": 1791382600,
+    "received": "20000",
+    "rest": {
+      "sats": "29000",
+      "bolt11": "lnbc290u1p4vv53vpp57r3chqcwhk99qes4ang4gvcwcplld06sxpz8k38zjld36jm4zjkqhp5j87kq3xk0gg223zt638v8kc72l00sueaktfyzmqlcp9fd0rvgzqqxqzsuqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqjgvkv0",
+      "paymentUri": "bitcoin:bc1psuq2zums6p67npqrwaypyfemwq78rkc983wttlemd4nuk6zr270quzyhg8?amount=0.00029&lightning=lnbc290u1p4vv53vpp57r3chqcwhk99qes4ang4gvcwcplld06sxpz8k38zjld36jm4zjkqhp5j87kq3xk0gg223zt638v8kc72l00sueaktfyzmqlcp9fd0rvgzqqxqzsuqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqjgvkv0"
+    }
+  }
+}

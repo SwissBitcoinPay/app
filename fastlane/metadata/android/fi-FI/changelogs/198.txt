@@ -1,2 +1,0 @@
-- Improved LNURL Gift cards handling
-- Fixed minor display issues in History tab

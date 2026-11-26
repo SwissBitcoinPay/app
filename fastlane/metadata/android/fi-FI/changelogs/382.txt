@@ -1,3 +1,0 @@
-- Better support of underpaid invoices (with Onchain payments)
-- Fixed some random crashes in History tab
-- Fixed a bug where the currency of the PoS screen does not change with the account base currency
