@@ -1,0 +1,1626 @@
+{
+  "description": "Checkout links (SPEC.md §30, Checkout links). `origins`: the checkout origin a channel's `checkout` field gives (null: none). `derivations`: a link key's address and encryption key. `urls`: a link's URL. `fragments`: what a URL's fragment names: a link (`author`, `linkKey`, `relays`), \"newer\" (a newer format), \"invalid\", or \"other\" (not a checkout link). `records`: what the page shows of a record's value (its sats, the invoice's payment hash (null without one), its on-chain address (null without one), its end, what it shows of the redirect URL, and the rest author and rest key of a record of version 2 that carries them, else null), \"newer\" or \"invalid\".",
+  "origins": [
+    {
+      "checkout": {
+        "origin": "https://pay.example"
+      },
+      "expected": "https://pay.example"
+    },
+    {
+      "checkout": {
+        "origin": "https://pay.example:8443"
+      },
+      "expected": "https://pay.example:8443"
+    },
+    {
+      "checkout": {
+        "origin": "https://checkout-1.xn--bcher-kva.example"
+      },
+      "expected": "https://checkout-1.xn--bcher-kva.example"
+    },
+    {
+      "checkout": {
+        "origin": "https://pay.example",
+        "more": 1
+      },
+      "expected": "https://pay.example"
+    },
+    {
+      "checkout": {
+        "origin": "https://pay.example/"
+      },
+      "expected": null
+    },
+    {
+      "checkout": {
+        "origin": "https://pay.example/pay"
+      },
+      "expected": null
+    },
+    {
+      "checkout": {
+        "origin": "https://pay.example?x"
+      },
+      "expected": null
+    },
+    {
+      "checkout": {
+        "origin": "http://pay.example"
+      },
+      "expected": null
+    },
+    {
+      "checkout": {
+        "origin": "https://Pay.example"
+      },
+      "expected": null
+    },
+    {
+      "checkout": {
+        "origin": "https://pay.example:0"
+      },
+      "expected": null
+    },
+    {
+      "checkout": {
+        "origin": "https://localhost"
+      },
+      "expected": null
+    },
+    {
+      "checkout": {
+        "origin": "https://pay.localhost"
+      },
+      "expected": null
+    },
+    {
+      "checkout": {
+        "origin": "https://localhost.pay.example"
+      },
+      "expected": "https://localhost.pay.example"
+    },
+    {
+      "checkout": {
+        "origin": "https://user@pay.example"
+      },
+      "expected": null
+    },
+    {
+      "checkout": {
+        "origin": " https://pay.example"
+      },
+      "expected": null
+    },
+    {
+      "checkout": {
+        "origin": 42
+      },
+      "expected": null
+    },
+    {
+      "checkout": {},
+      "expected": null
+    },
+    {
+      "checkout": "https://pay.example",
+      "expected": null
+    },
+    {
+      "checkout": ["https://pay.example"],
+      "expected": null
+    },
+    {
+      "checkout": null,
+      "expected": null
+    }
+  ],
+  "derivations": [
+    {
+      "linkKey": "0000000000000000000000000000000000000000000000000000000000000000",
+      "address": "9c1642b2fc54d1152e673614b0f9eedca01fb4cdce16bf634a5049c471dce54a",
+      "encryptionKey": "5e485b7ce94f154d3ea48c5c41388a5a8d617b6dd127d54f32b6e6fc1d2e2e10"
+    },
+    {
+      "linkKey": "2222222222222222222222222222222222222222222222222222222222222222",
+      "address": "ba0d3aa56f7396e93ad566f7313a781c33417b0a18f437436420bc1b4553e80c",
+      "encryptionKey": "33247e5c1fa65c13f556f26a0b1068b8ea6db13f4c63cac641bed45f691db34c"
+    },
+    {
+      "linkKey": "b8f4c0cf577c6db41ac36271db65b0ae06b6bc8d85f1a96563936b3c2dc0a209",
+      "address": "8020863f4e1e8b00616f218715bb93f2b263295d459e85ecd402a1f6f12df195",
+      "encryptionKey": "75ba62414ccbd73102b25b88537676fff9584b50f1ee06d755e1de4d8d1b7805"
+    }
+  ],
+  "urls": [
+    {
+      "origin": "https://pay.example",
+      "author": "4f355bdcb7cc0af728ef3cceb9615d90684bb5b2ca5f859ab0f0b704075871aa",
+      "linkKey": "2222222222222222222222222222222222222222222222222222222222222222",
+      "relays": ["wss://relay.example", "wss://nos.lol:4443", "wss://relay.example.ch/nostr"],
+      "url": "https://pay.example/pay#c.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.cmVsYXkuZXhhbXBsZSxub3MubG9sOjQ0NDMscmVsYXkuZXhhbXBsZS5jaC9ub3N0cg"
+    },
+    {
+      "origin": "https://pay.example:8443",
+      "author": "4f355bdcb7cc0af728ef3cceb9615d90684bb5b2ca5f859ab0f0b704075871aa",
+      "linkKey": "2222222222222222222222222222222222222222222222222222222222222222",
+      "relays": ["wss://relay.example"],
+      "url": "https://pay.example:8443/pay#c.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.cmVsYXkuZXhhbXBsZQ"
+    }
+  ],
+  "fragments": [
+    {
+      "name": "a link, with its #",
+      "fragment": "#c.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.cmVsYXkuZXhhbXBsZSxub3MubG9sOjQ0NDMscmVsYXkuZXhhbXBsZS5jaC9ub3N0cg",
+      "expected": {
+        "author": "4f355bdcb7cc0af728ef3cceb9615d90684bb5b2ca5f859ab0f0b704075871aa",
+        "linkKey": "2222222222222222222222222222222222222222222222222222222222222222",
+        "relays": ["wss://relay.example", "wss://nos.lol:4443", "wss://relay.example.ch/nostr"]
+      }
+    },
+    {
+      "name": "a link, without #",
+      "fragment": "c.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.cmVsYXkuZXhhbXBsZSxub3MubG9sOjQ0NDMscmVsYXkuZXhhbXBsZS5jaC9ub3N0cg",
+      "expected": {
+        "author": "4f355bdcb7cc0af728ef3cceb9615d90684bb5b2ca5f859ab0f0b704075871aa",
+        "linkKey": "2222222222222222222222222222222222222222222222222222222222222222",
+        "relays": ["wss://relay.example", "wss://nos.lol:4443", "wss://relay.example.ch/nostr"]
+      }
+    },
+    {
+      "name": "a newer format",
+      "fragment": "c2.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.cmVsYXkuZXhhbXBsZSxub3MubG9sOjQ0NDMscmVsYXkuZXhhbXBsZS5jaC9ub3N0cg",
+      "expected": "newer"
+    },
+    {
+      "name": "another letter",
+      "fragment": "d.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.cmVsYXkuZXhhbXBsZSxub3MubG9sOjQ0NDMscmVsYXkuZXhhbXBsZS5jaC9ub3N0cg",
+      "expected": "newer"
+    },
+    {
+      "name": "a newer format, alone",
+      "fragment": "z9",
+      "expected": "newer"
+    },
+    {
+      "name": "eight characters",
+      "fragment": "abcdefgh.x",
+      "expected": "newer"
+    },
+    {
+      "name": "nine characters: not a checkout link",
+      "fragment": "abcdefghi.x",
+      "expected": "other"
+    },
+    {
+      "name": "an upper case marker: not a checkout link",
+      "fragment": "C.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.cmVsYXkuZXhhbXBsZSxub3MubG9sOjQ0NDMscmVsYXkuZXhhbXBsZS5jaC9ub3N0cg",
+      "expected": "other"
+    },
+    {
+      "name": "a payment link of the point of sale",
+      "fragment": "TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.cmVsYXkuZXhhbXBsZSxub3MubG9sOjQ0NDMscmVsYXkuZXhhbXBsZS5jaC9ub3N0cg",
+      "expected": "other"
+    },
+    {
+      "name": "empty",
+      "fragment": "",
+      "expected": "other"
+    },
+    {
+      "name": "c alone",
+      "fragment": "c",
+      "expected": "invalid"
+    },
+    {
+      "name": "three parts",
+      "fragment": "c.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI",
+      "expected": "invalid"
+    },
+    {
+      "name": "five parts",
+      "fragment": "c.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.cmVsYXkuZXhhbXBsZSxub3MubG9sOjQ0NDMscmVsYXkuZXhhbXBsZS5jaC9ub3N0cg.x",
+      "expected": "invalid"
+    },
+    {
+      "name": "an empty part",
+      "fragment": "c.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao..cmVsYXkuZXhhbXBsZSxub3MubG9sOjQ0NDMscmVsYXkuZXhhbXBsZS5jaC9ub3N0cg",
+      "expected": "invalid"
+    },
+    {
+      "name": "padded base64url",
+      "fragment": "c.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao=.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.cmVsYXkuZXhhbXBsZSxub3MubG9sOjQ0NDMscmVsYXkuZXhhbXBsZS5jaC9ub3N0cg",
+      "expected": "invalid"
+    },
+    {
+      "name": "a character of base64, not base64url",
+      "fragment": "c.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.+iIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.cmVsYXkuZXhhbXBsZSxub3MubG9sOjQ0NDMscmVsYXkuZXhhbXBsZS5jaC9ub3N0cg",
+      "expected": "invalid"
+    },
+    {
+      "name": "non-canonical trailing bits",
+      "fragment": "c.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiJ.cmVsYXkuZXhhbXBsZSxub3MubG9sOjQ0NDMscmVsYXkuZXhhbXBsZS5jaC9ub3N0cg",
+      "expected": "invalid"
+    },
+    {
+      "name": "a key of 31 bytes",
+      "fragment": "c.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIg.cmVsYXkuZXhhbXBsZSxub3MubG9sOjQ0NDMscmVsYXkuZXhhbXBsZS5jaC9ub3N0cg",
+      "expected": "invalid"
+    },
+    {
+      "name": "an author of 33 bytes",
+      "fragment": "c.AE81W9y3zAr3KO88zrlhXZBoS7Wyyl-FmrDwtwQHWHGq.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.cmVsYXkuZXhhbXBsZSxub3MubG9sOjQ0NDMscmVsYXkuZXhhbXBsZS5jaC9ub3N0cg",
+      "expected": "invalid"
+    },
+    {
+      "name": "an author off the curve",
+      "fragment": "c.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.cmVsYXkuZXhhbXBsZSxub3MubG9sOjQ0NDMscmVsYXkuZXhhbXBsZS5jaC9ub3N0cg",
+      "expected": "invalid"
+    },
+    {
+      "name": "a relay in upper case",
+      "fragment": "c.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.UmVsYXkuZXhhbXBsZQ",
+      "expected": "invalid"
+    },
+    {
+      "name": "a relay twice",
+      "fragment": "c.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.cmVsYXkuZXhhbXBsZSxyZWxheS5leGFtcGxl",
+      "expected": "invalid"
+    },
+    {
+      "name": "a relay with wss://",
+      "fragment": "c.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.d3NzOi8vcmVsYXkuZXhhbXBsZQ",
+      "expected": "invalid"
+    },
+    {
+      "name": "no relay",
+      "fragment": "c.TzVb3LfMCvco7zzOuWFdkGhLtbLKX4WasPC3BAdYcao.IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiI.",
+      "expected": "invalid"
+    }
+  ],
+  "records": [
+    {
+      "name": "a link of the real invoice",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": {
+        "sats": "21",
+        "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "onchainAddress": null,
+        "expiresAt": 1791379179,
+        "redirect": "shop.example",
+        "rest": null
+      }
+    },
+    {
+      "name": "an order in sats",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": null,
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": {
+        "sats": "21",
+        "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "onchainAddress": null,
+        "expiresAt": 1791379179,
+        "redirect": "shop.example",
+        "rest": null
+      }
+    },
+    {
+      "name": "without a redirect URL",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": null
+      },
+      "expected": {
+        "sats": "21",
+        "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "onchainAddress": null,
+        "expiresAt": 1791379179,
+        "redirect": null,
+        "rest": null
+      }
+    },
+    {
+      "name": "an app's link",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "myshop://orders/1042"
+      },
+      "expected": {
+        "sats": "21",
+        "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "onchainAddress": null,
+        "expiresAt": 1791379179,
+        "redirect": "myshop://",
+        "rest": null
+      }
+    },
+    {
+      "name": "the invoice in upper case",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "LNBC210N1P4VVSMGPP5MPEPFJVQFTECC5JG50T6J7PA929SPKV30ZWX04XJ9JQL8QHH9QUSSP5R7D725TW2VF7345MTMUUYPCSAV4SH2QP6663QXS2AL3Q8855QWXQXQZURNP4QVYNDEAQZMAN7H898JXM98DZKM0MLRSX36S93SMRUR7H0AZYYUXC5RZJQWGHF7ZXVFKXQ5A6SR65G0GDKV768P83MHSNT0MSSZAPAMZX2QVUXQQQQRT49LMTCQQQQQQQQQQQ86QQ9QCQZPUHP5GS8L6CK7JDSA9QX8U2YDGL6Q933MN2047J5NW9F9XEKNLE3UJLTQ9QYYSSQSJVK6T43CMGNCDN8Z783R2GYM2U80DH5XA2XMW2U0A9AYKHWW3Z9TDJ4M5KVXT6YME90C0G0GAUF008HR70LX5JDKZFZN7HWA73AXXSQY9RCWV",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": {
+        "sats": "21",
+        "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "onchainAddress": null,
+        "expiresAt": 1791379179,
+        "redirect": "shop.example",
+        "rest": null
+      }
+    },
+    {
+      "name": "more fields",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "more": true
+      },
+      "expected": {
+        "sats": "21",
+        "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "onchainAddress": null,
+        "expiresAt": 1791379179,
+        "redirect": "shop.example",
+        "rest": null
+      }
+    },
+    {
+      "name": "a price of 8 decimals",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 1,
+          "digits": 8,
+          "currency": "XAU"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": {
+        "sats": "21",
+        "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "onchainAddress": null,
+        "expiresAt": 1791379179,
+        "redirect": "shop.example",
+        "rest": null
+      }
+    },
+    {
+      "name": "version 2: an invoice and an address",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+        "sats": 21,
+        "createdAt": 1791378280,
+        "expiresAt": 1791379179
+      },
+      "expected": {
+        "sats": "21",
+        "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "onchainAddress": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+        "expiresAt": 1791379179,
+        "redirect": "shop.example",
+        "rest": null
+      }
+    },
+    {
+      "name": "version 2: an address only",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": null,
+        "verifyUrl": null,
+        "fiat": null,
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+        "sats": 150000000,
+        "createdAt": 1791381280,
+        "expiresAt": 1791382180
+      },
+      "expected": {
+        "sats": "150000000",
+        "paymentHash": null,
+        "onchainAddress": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+        "expiresAt": 1791382180,
+        "redirect": "shop.example",
+        "rest": null
+      }
+    },
+    {
+      "name": "version 2: the rest author and the rest key",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+        "sats": 21,
+        "createdAt": 1791378280,
+        "expiresAt": 1791379179,
+        "restAuthor": "cd23988f288ee8ab9a4e09ecace2f8deeed15edc6a2c8757bccc0f882d9497e4",
+        "restKey": "94e02309bfebcc676aa1bd13aa944edb837213f2cc5c643243bfb7ae24eac39b"
+      },
+      "expected": {
+        "sats": "21",
+        "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "onchainAddress": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+        "expiresAt": 1791379179,
+        "redirect": "shop.example",
+        "rest": {
+          "author": "cd23988f288ee8ab9a4e09ecace2f8deeed15edc6a2c8757bccc0f882d9497e4",
+          "key": "94e02309bfebcc676aa1bd13aa944edb837213f2cc5c643243bfb7ae24eac39b"
+        }
+      }
+    },
+    {
+      "name": "version 2: a rest key without its author",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+        "sats": 21,
+        "createdAt": 1791378280,
+        "expiresAt": 1791379179,
+        "restKey": "94e02309bfebcc676aa1bd13aa944edb837213f2cc5c643243bfb7ae24eac39b"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 2: a rest author without its key",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+        "sats": 21,
+        "createdAt": 1791378280,
+        "expiresAt": 1791379179,
+        "restAuthor": "cd23988f288ee8ab9a4e09ecace2f8deeed15edc6a2c8757bccc0f882d9497e4"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 2: a rest author that is no point of the curve",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+        "sats": 21,
+        "createdAt": 1791378280,
+        "expiresAt": 1791379179,
+        "restAuthor": "0000000000000000000000000000000000000000000000000000000000000005",
+        "restKey": "94e02309bfebcc676aa1bd13aa944edb837213f2cc5c643243bfb7ae24eac39b"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 2: a rest key in upper case",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+        "sats": 21,
+        "createdAt": 1791378280,
+        "expiresAt": 1791379179,
+        "restAuthor": "cd23988f288ee8ab9a4e09ecace2f8deeed15edc6a2c8757bccc0f882d9497e4",
+        "restKey": "94E02309BFEBCC676AA1BD13AA944EDB837213F2CC5C643243BFB7AE24EAC39B"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 2: a rest key of 31 bytes",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+        "sats": 21,
+        "createdAt": 1791378280,
+        "expiresAt": 1791379179,
+        "restAuthor": "cd23988f288ee8ab9a4e09ecace2f8deeed15edc6a2c8757bccc0f882d9497e4",
+        "restKey": "e02309bfebcc676aa1bd13aa944edb837213f2cc5c643243bfb7ae24eac39b"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "rest fields in version 1: ignored",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "restAuthor": "cd23988f288ee8ab9a4e09ecace2f8deeed15edc6a2c8757bccc0f882d9497e4",
+        "restKey": "94e02309bfebcc676aa1bd13aa944edb837213f2cc5c643243bfb7ae24eac39b"
+      },
+      "expected": {
+        "sats": "21",
+        "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "onchainAddress": null,
+        "expiresAt": 1791379179,
+        "redirect": "shop.example",
+        "rest": null
+      }
+    },
+    {
+      "name": "version 2: an amount that is not the invoice's",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+        "sats": 22,
+        "createdAt": 1791378280,
+        "expiresAt": 1791379179
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 2: a date that is not the invoice's",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+        "sats": 21,
+        "createdAt": 1791378281,
+        "expiresAt": 1791379179
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 2: an end that is not the invoice's",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+        "sats": 21,
+        "createdAt": 1791378280,
+        "expiresAt": 1791379180
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 2: no address",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": null,
+        "sats": 21,
+        "createdAt": 1791378280,
+        "expiresAt": 1791379179
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 2: an address in upper case",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "BC1PX22V5J99GDWHXQYELG2P6TDCFAJJD3NJHZN22C2GURA2DVXG2XLQW2WTE4",
+        "sats": 21,
+        "createdAt": 1791378280,
+        "expiresAt": 1791379179
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 2: an address of testnet",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "tb1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqezcyr6",
+        "sats": 21,
+        "createdAt": 1791378280,
+        "expiresAt": 1791379179
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 2: no invoice, but a verify URL",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": null,
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": null,
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+        "sats": 150000000,
+        "createdAt": 1791381280,
+        "expiresAt": 1791382180
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 2: no sats",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": null,
+        "verifyUrl": null,
+        "fiat": null,
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+        "createdAt": 1791381280,
+        "expiresAt": 1791382180
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 2: 0 sats",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": null,
+        "verifyUrl": null,
+        "fiat": null,
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+        "sats": 0,
+        "createdAt": 1791381280,
+        "expiresAt": 1791382180
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 2: sats as text",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": null,
+        "verifyUrl": null,
+        "fiat": null,
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+        "sats": "150000000",
+        "createdAt": 1791381280,
+        "expiresAt": 1791382180
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 2: above 21 000 000 BTC",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": null,
+        "verifyUrl": null,
+        "fiat": null,
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+        "sats": 2100000000000001,
+        "createdAt": 1791381280,
+        "expiresAt": 1791382180
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 2: an end before its date",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": null,
+        "verifyUrl": null,
+        "fiat": null,
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+        "sats": 150000000,
+        "createdAt": 1791381280,
+        "expiresAt": 1791381280
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 2: no date",
+      "value": {
+        "version": 2,
+        "businessName": "Sunrise Bakery",
+        "invoice": null,
+        "verifyUrl": null,
+        "fiat": null,
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks",
+        "onchainAddress": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+        "sats": 150000000,
+        "expiresAt": 1791382180
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a newer version",
+      "value": {
+        "version": 3,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "newer"
+    },
+    {
+      "name": "a newer version, otherwise empty",
+      "value": {
+        "version": 3,
+        "businessName": "Sunrise Bakery",
+        "invoice": null,
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "newer"
+    },
+    {
+      "name": "no version",
+      "value": {
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version 0",
+      "value": {
+        "version": 0,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "version as text",
+      "value": {
+        "version": "1",
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "no business name",
+      "value": {
+        "version": 1,
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a business name of spaces",
+      "value": {
+        "version": 1,
+        "businessName": " \t ",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a business name of ASCII whitespace (space, tab, line feed, carriage return)",
+      "value": {
+        "version": 1,
+        "businessName": " \t\n\r ",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a business name of a form feed: not ASCII whitespace",
+      "value": {
+        "version": 1,
+        "businessName": "\f",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": {
+        "sats": "21",
+        "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "onchainAddress": null,
+        "expiresAt": 1791379179,
+        "redirect": "shop.example",
+        "rest": null
+      }
+    },
+    {
+      "name": "a business name of 201 characters",
+      "value": {
+        "version": 1,
+        "businessName": "ééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééé",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a business name of 200 characters",
+      "value": {
+        "version": 1,
+        "businessName": "éééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééé",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": {
+        "sats": "21",
+        "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "onchainAddress": null,
+        "expiresAt": 1791379179,
+        "redirect": "shop.example",
+        "rest": null
+      }
+    },
+    {
+      "name": "no invoice",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "not an invoice",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc1nope",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "an invoice of another network",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lntb210n1p4vvsjspp5fwcxlrjw8fm3t5sp64eap2jzxa3w2hdt6cdzcq3837jke3kjjnsqxqzuyqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq5ggzxw",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "an invoice without an amount",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc1p4vvsjspp5fwcxlrjw8fm3t5sp64eap2jzxa3w2hdt6cdzcq3837jke3kjjnsqxqzuyqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq2gl5xe",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "an invoice of 0 sats",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc01p4vvsjspp5fwcxlrjw8fm3t5sp64eap2jzxa3w2hdt6cdzcq3837jke3kjjnsqxqzuyqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqffq4lx",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "an invoice of 21 000.5 sats",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210005n1p4vvsjspp5fwcxlrjw8fm3t5sp64eap2jzxa3w2hdt6cdzcq3837jke3kjjnsqxqzuyqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqquahe2v",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "another valid invoice",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsjspp5fwcxlrjw8fm3t5sp64eap2jzxa3w2hdt6cdzcq3837jke3kjjnsqxqzuyqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv5mvsh",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": {
+        "sats": "21",
+        "paymentHash": "4bb06f8e4e3a7715d201d573d0aa423762e55dabd61a2c02278fa56cc6d294e0",
+        "onchainAddress": null,
+        "expiresAt": 1791378900,
+        "redirect": "shop.example",
+        "rest": null
+      }
+    },
+    {
+      "name": "no verify URL",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a verify URL in http",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "http://breez.tips/verify",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a verify URL on an IP address",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://10.0.0.1/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a verify URL with its host in upper case",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://Breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "no price",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a price of 0",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 0,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a price as text",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": "2",
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a price of 9 decimals",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 9,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a price in SAT",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 21,
+          "digits": 0,
+          "currency": "SAT"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a currency in lower case",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "chf"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a price above 2^53 − 1",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 9007199254740992,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "no note",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "an empty note",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a note of 101 characters",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "ééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééé",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a note of 100 characters",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "éééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééé",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": {
+        "sats": "21",
+        "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "onchainAddress": null,
+        "expiresAt": 1791379179,
+        "redirect": "shop.example",
+        "rest": null
+      }
+    },
+    {
+      "name": "a note with a line feed",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order\n1042",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a note holding a lone surrogate",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order \ud800",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a note holding a pair of surrogates (an emoji)",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 😀",
+        "redirectUrl": "https://shop.example/orders/1042/thanks"
+      },
+      "expected": {
+        "sats": "21",
+        "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "onchainAddress": null,
+        "expiresAt": 1791379179,
+        "redirect": "shop.example",
+        "rest": null
+      }
+    },
+    {
+      "name": "no redirect URL field",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a refused redirect URL",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "http://shop.example/thanks"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "a redirect URL to a wallet",
+      "value": {
+        "version": 1,
+        "businessName": "Sunrise Bakery",
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "fiat": {
+          "minor": 2,
+          "digits": 2,
+          "currency": "CHF"
+        },
+        "note": "Order 1042",
+        "redirectUrl": "lightning://lnbc1x"
+      },
+      "expected": "invalid"
+    },
+    {
+      "name": "not an object",
+      "value": [
+        {
+          "version": 1,
+          "businessName": "Sunrise Bakery",
+          "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+          "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+          "fiat": {
+            "minor": 2,
+            "digits": 2,
+            "currency": "CHF"
+          },
+          "note": "Order 1042",
+          "redirectUrl": "https://shop.example/orders/1042/thanks"
+        }
+      ],
+      "expected": "invalid"
+    },
+    {
+      "name": "null",
+      "value": null,
+      "expected": "invalid"
+    }
+  ]
+}

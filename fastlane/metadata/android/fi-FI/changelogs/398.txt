@@ -1,3 +1,0 @@
-- käyttöön maa-asetusten mukainen desimaaliluvun erotin myös bitcoin summissa
-- Korjattu kuitin tulostuksessa ollut väärä maksutyyppi 
-- Päivitetty suomennokset

@@ -1,1 +1,0 @@
-- Corrigé un bug sur les devises ne supportant pas les décimales (XOF)

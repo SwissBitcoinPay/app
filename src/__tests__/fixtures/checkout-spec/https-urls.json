@@ -1,0 +1,450 @@
+{
+  "description": "https URLs (SPEC.md §15, An https URL) and the pay URLs of Lightning addresses (SPEC.md §16, A Lightning address). `urls`: each text's host and port (443 when absent) when it is an https URL, else null. `sameHost`: whether two https URLs are on the same host (their hosts and ports equal), as a callback and its verify URL must be (SPEC.md §18). `lightningAddresses`: the pay URL of a Lightning address as a channel gives it (its leading and trailing ASCII whitespace removed, its ASCII letters lowered), or null when it is not a valid Lightning address.",
+  "urls": [
+    {
+      "url": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+      "expected": {
+        "host": "breez.tips",
+        "port": 443
+      }
+    },
+    {
+      "url": "https://breez.tips/lnurlp/shop/invoice?k=1&x=y",
+      "expected": {
+        "host": "breez.tips",
+        "port": 443
+      }
+    },
+    {
+      "url": "https://breez.tips",
+      "expected": {
+        "host": "breez.tips",
+        "port": 443
+      }
+    },
+    {
+      "url": "https://breez.tips/",
+      "expected": {
+        "host": "breez.tips",
+        "port": 443
+      }
+    },
+    {
+      "url": "https://breez.tips?x=1",
+      "expected": {
+        "host": "breez.tips",
+        "port": 443
+      }
+    },
+    {
+      "url": "https://breez.tips#f",
+      "expected": {
+        "host": "breez.tips",
+        "port": 443
+      }
+    },
+    {
+      "url": "https://pay.shop.example:8443/lnurl/cb?k=v#f",
+      "expected": {
+        "host": "pay.shop.example",
+        "port": 8443
+      }
+    },
+    {
+      "url": "https://breez.tips:443/v",
+      "expected": {
+        "host": "breez.tips",
+        "port": 443
+      }
+    },
+    {
+      "url": "https://my-relay.example:1/v",
+      "expected": {
+        "host": "my-relay.example",
+        "port": 1
+      }
+    },
+    {
+      "url": "https://breez.tips:0443/v",
+      "expected": {
+        "host": "breez.tips",
+        "port": 443
+      }
+    },
+    {
+      "url": "https://breez.tips:65535/v",
+      "expected": {
+        "host": "breez.tips",
+        "port": 65535
+      }
+    },
+    {
+      "url": "https://xn--bcher-kva.example/v",
+      "expected": {
+        "host": "xn--bcher-kva.example",
+        "port": 443
+      }
+    },
+    {
+      "url": "https://breez.tips/a%20b%2F?q=%C3%A9",
+      "expected": {
+        "host": "breez.tips",
+        "port": 443
+      }
+    },
+    {
+      "url": "https://breez.tips/v?a=[1]&b=(2)!$'*+,;=:@~",
+      "expected": {
+        "host": "breez.tips",
+        "port": 443
+      }
+    },
+    {
+      "url": "https://aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.tips/v",
+      "expected": {
+        "host": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.tips",
+        "port": 443
+      }
+    },
+    {
+      "url": "https://breez.tips/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expected": {
+        "host": "breez.tips",
+        "port": 443
+      }
+    },
+    {
+      "url": "https://breez.tips/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expected": null
+    },
+    {
+      "url": "",
+      "expected": null
+    },
+    {
+      "url": "http://breez.tips/v",
+      "expected": null
+    },
+    {
+      "url": "HTTPS://breez.tips/v",
+      "expected": null
+    },
+    {
+      "url": "Https://breez.tips/v",
+      "expected": null
+    },
+    {
+      "url": "https://Breez.tips/v",
+      "expected": null
+    },
+    {
+      "url": "https://BREEZ.TIPS/v",
+      "expected": null
+    },
+    {
+      "url": "https://10.0.0.1/v",
+      "expected": null
+    },
+    {
+      "url": "https://127.0.0.1:8080/v",
+      "expected": null
+    },
+    {
+      "url": "https://169.254.169.254/latest/meta-data/",
+      "expected": null
+    },
+    {
+      "url": "https://[::1]/v",
+      "expected": null
+    },
+    {
+      "url": "https://localhost/v",
+      "expected": null
+    },
+    {
+      "url": "https://localhost:8443/v",
+      "expected": null
+    },
+    {
+      "url": "https://x.localhost/v",
+      "expected": null
+    },
+    {
+      "url": "https://a.b.localhost:8443/v",
+      "expected": null
+    },
+    {
+      "url": "https://localhost.example/v",
+      "expected": {
+        "host": "localhost.example",
+        "port": 443
+      }
+    },
+    {
+      "url": "https://my-localhost.tips/v",
+      "expected": {
+        "host": "my-localhost.tips",
+        "port": 443
+      }
+    },
+    {
+      "url": "https://breez/v",
+      "expected": null
+    },
+    {
+      "url": "https://breez.t1/v",
+      "expected": null
+    },
+    {
+      "url": "https://breez.tips./v",
+      "expected": null
+    },
+    {
+      "url": "https://.breez.tips/v",
+      "expected": null
+    },
+    {
+      "url": "https://breez..tips/v",
+      "expected": null
+    },
+    {
+      "url": "https://bre_ez.tips/v",
+      "expected": null
+    },
+    {
+      "url": "https://baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.tips/v",
+      "expected": null
+    },
+    {
+      "url": "https://user:pass@breez.tips/v",
+      "expected": null
+    },
+    {
+      "url": "https://user@breez.tips/v",
+      "expected": null
+    },
+    {
+      "url": "https://breez.tips\\@evil.example/v",
+      "expected": null
+    },
+    {
+      "url": "https://breez.tips/a b",
+      "expected": null
+    },
+    {
+      "url": " https://breez.tips/v",
+      "expected": null
+    },
+    {
+      "url": "https://breez.tips/v\n",
+      "expected": null
+    },
+    {
+      "url": "https://breez.tips/v\t",
+      "expected": null
+    },
+    {
+      "url": "https://bücher.example/v",
+      "expected": null
+    },
+    {
+      "url": "https://breez.tips/bücher",
+      "expected": null
+    },
+    {
+      "url": "https://breez.tips/<v>",
+      "expected": null
+    },
+    {
+      "url": "https://breez.tips/\"v\"",
+      "expected": null
+    },
+    {
+      "url": "https://breez.tips/%zz",
+      "expected": null
+    },
+    {
+      "url": "https://breez.tips/%2",
+      "expected": null
+    },
+    {
+      "url": "https://breez.tips:/v",
+      "expected": null
+    },
+    {
+      "url": "https://breez.tips:0/v",
+      "expected": null
+    },
+    {
+      "url": "https://breez.tips:65536/v",
+      "expected": null
+    },
+    {
+      "url": "https://breez.tips:123456/v",
+      "expected": null
+    },
+    {
+      "url": "https://breez.tips:44a/v",
+      "expected": null
+    },
+    {
+      "url": "https://breez.tips:+443/v",
+      "expected": null
+    },
+    {
+      "url": "https://",
+      "expected": null
+    },
+    {
+      "url": "https:///v",
+      "expected": null
+    },
+    {
+      "url": "https:/breez.tips/v",
+      "expected": null
+    },
+    {
+      "url": "https:breez.tips/v",
+      "expected": null
+    },
+    {
+      "url": "wss://breez.tips/v",
+      "expected": null
+    }
+  ],
+  "sameHost": [
+    {
+      "a": "https://breez.tips/lnurlp/shop/invoice",
+      "b": "https://breez.tips/lnurlp/verify/75877bb41d393b5fb8455ce60ecd8dda001d06316496b14dfa7f895656eeca4a",
+      "expected": true
+    },
+    {
+      "a": "https://breez.tips:443/cb",
+      "b": "https://breez.tips/verify",
+      "expected": true
+    },
+    {
+      "a": "https://breez.tips/cb",
+      "b": "https://breez.tips:443/verify",
+      "expected": true
+    },
+    {
+      "a": "https://breez.tips:8443/cb",
+      "b": "https://breez.tips:8443/verify",
+      "expected": true
+    },
+    {
+      "a": "https://breez.tips/cb",
+      "b": "https://breez.tips:8443/verify",
+      "expected": false
+    },
+    {
+      "a": "https://pay.breez.tips/cb",
+      "b": "https://breez.tips/verify",
+      "expected": false
+    },
+    {
+      "a": "https://breez.tips/cb",
+      "b": "https://breez.tips.evil.example/verify",
+      "expected": false
+    }
+  ],
+  "lightningAddresses": [
+    {
+      "address": "shop@breez.tips",
+      "payUrl": "https://breez.tips/.well-known/lnurlp/shop"
+    },
+    {
+      "address": "sattleme02c6047f94@breez.tips",
+      "payUrl": "https://breez.tips/.well-known/lnurlp/sattleme02c6047f94"
+    },
+    {
+      "address": " \tShop@Breez.Tips\r\n",
+      "payUrl": "https://breez.tips/.well-known/lnurlp/shop"
+    },
+    {
+      "address": "SHOP@BREEZ.TIPS",
+      "payUrl": "https://breez.tips/.well-known/lnurlp/shop"
+    },
+    {
+      "address": "a.b_c-d+e@pay.shop.example",
+      "payUrl": "https://pay.shop.example/.well-known/lnurlp/a.b_c-d+e"
+    },
+    {
+      "address": "shop@xn--bcher-kva.example",
+      "payUrl": "https://xn--bcher-kva.example/.well-known/lnurlp/shop"
+    },
+    {
+      "address": "\fshop@breez.tips",
+      "payUrl": null
+    },
+    {
+      "address": " shop@breez.tips",
+      "payUrl": null
+    },
+    {
+      "address": "shop@breez.tips　",
+      "payUrl": null
+    },
+    {
+      "address": "shop@10.0.0.1",
+      "payUrl": null
+    },
+    {
+      "address": "shop@127.0.0.1",
+      "payUrl": null
+    },
+    {
+      "address": "shop@localhost",
+      "payUrl": null
+    },
+    {
+      "address": "shop@pay.localhost",
+      "payUrl": null
+    },
+    {
+      "address": "shop@breez",
+      "payUrl": null
+    },
+    {
+      "address": "shop@breez.t1",
+      "payUrl": null
+    },
+    {
+      "address": "shop@breez.tips.",
+      "payUrl": null
+    },
+    {
+      "address": "shop@breez..tips",
+      "payUrl": null
+    },
+    {
+      "address": "shop@breez.tips:8443",
+      "payUrl": null
+    },
+    {
+      "address": "shop@@breez.tips",
+      "payUrl": null
+    },
+    {
+      "address": "@breez.tips",
+      "payUrl": null
+    },
+    {
+      "address": "shop name@breez.tips",
+      "payUrl": null
+    },
+    {
+      "address": "shop@bücher.example",
+      "payUrl": null
+    },
+    {
+      "address": "shop@Kelvin.example",
+      "payUrl": null
+    },
+    {
+      "address": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@breez.tips",
+      "payUrl": null
+    }
+  ]
+}

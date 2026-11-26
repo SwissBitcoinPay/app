@@ -1,0 +1,776 @@
+{
+  "description": "Redirect URLs (SPEC.md §30, Checkout links, Redirect URLs): what the page shows of a valid one, after \"Redirecting to\", or createInvoice's error for an order with `checkout: true` and this `redirectUrl`. The page refuses the same ones in a record.",
+  "cases": [
+    {
+      "url": "https://shop.example/orders/1042/thanks",
+      "expected": {
+        "shown": "shop.example"
+      }
+    },
+    {
+      "url": "https://shop.example",
+      "expected": {
+        "shown": "shop.example"
+      }
+    },
+    {
+      "url": "https://shop.example?order=1042",
+      "expected": {
+        "shown": "shop.example"
+      }
+    },
+    {
+      "url": "https://shop.example#paid",
+      "expected": {
+        "shown": "shop.example"
+      }
+    },
+    {
+      "url": "https://shop.example:8443/thanks",
+      "expected": {
+        "shown": "shop.example:8443"
+      }
+    },
+    {
+      "url": "https://shop.example:08443/",
+      "expected": {
+        "shown": "shop.example:08443"
+      }
+    },
+    {
+      "url": "https://www.shop-1.example.ch/thanks",
+      "expected": {
+        "shown": "www.shop-1.example.ch"
+      }
+    },
+    {
+      "url": "https://xn--bcher-kva.example/thanks",
+      "expected": {
+        "shown": "xn--bcher-kva.example"
+      }
+    },
+    {
+      "url": "https://shop.example/a%20b?x=%C3%A9&y=%c3%a9",
+      "expected": {
+        "shown": "shop.example"
+      }
+    },
+    {
+      "url": "https://shop.example/@other.example",
+      "expected": {
+        "shown": "shop.example"
+      }
+    },
+    {
+      "url": "https://shop.example/~me/;p=1?q=a,b&r=[x]&s=$!*'()#!/route",
+      "expected": {
+        "shown": "shop.example"
+      }
+    },
+    {
+      "url": "https://shop.example/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expected": {
+        "shown": "shop.example"
+      }
+    },
+    {
+      "url": "myshop://orders/42",
+      "expected": {
+        "shown": "myshop://"
+      }
+    },
+    {
+      "url": "myshop://",
+      "expected": {
+        "shown": "myshop://"
+      }
+    },
+    {
+      "url": "com.example.shop://paid?order=42",
+      "expected": {
+        "shown": "com.example.shop://"
+      }
+    },
+    {
+      "url": "my-shop+v2://x",
+      "expected": {
+        "shown": "my-shop+v2://"
+      }
+    },
+    {
+      "url": "firefoxshop://orders/42",
+      "expected": {
+        "shown": "firefoxshop://"
+      }
+    },
+    {
+      "url": "a://x",
+      "expected": {
+        "shown": "a://"
+      }
+    },
+    {
+      "url": "abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb://x",
+      "expected": {
+        "shown": "abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb://"
+      }
+    },
+    {
+      "url": "",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "http://shop.example/thanks",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "HTTPS://shop.example/",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://Shop.example/",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example /thanks",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example/th anks",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example/\tthanks",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example/thanks\n",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": " https://shop.example/",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example\\@evil.example/",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example/\\thanks",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://user:pass@shop.example/",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://user@shop.example/",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example@evil.example/",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example:8443@evil.example/",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://127.0.0.1/thanks",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://localhost/thanks",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.localhost/thanks",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://localhost.shop.example/thanks",
+      "expected": {
+        "shown": "localhost.shop.example"
+      }
+    },
+    {
+      "url": "https://[::1]/thanks",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example:0/",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example:65536/",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example:/",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example:123456/",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example./",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.e1/",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://bücher.example/",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example/bücher",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example/%zz",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example/%2",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example/\"x\"",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example/<script>",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example/{x}",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example/a|b",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example/a^b",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https://shop.example/a`b",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https:shop.example",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "https:/shop.example",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "//shop.example/thanks",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "/thanks",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "shop.example/thanks",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "myshop:orders/42",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "MyShop://x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "1shop://x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "my_shop://x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb://x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "javascript://%0Aalert(1)",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "javascript:alert(1)",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "JavaScript://x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "vbscript://x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "data://text/html,x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "data:text/html;base64,PHNjcmlwdD4=",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "file:///etc/passwd",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "blob://x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "about://blank",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "filesystem://x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "view-source://x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "chrome://settings",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "x-safari-https://phish.example/login",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "x-safari-http://phish.example/login",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "com-apple-mobilesafari-tab://phish.example/login",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "googlechromes://phish.example/login",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "googlechrome://navigate?url=https://phish.example/login",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "googlechrome-x-callback://x-callback-url/open/?url=https%3A%2F%2Fphish.example%2Flogin",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "firefox://open-url?url=https%3A%2F%2Fphish.example%2Flogin",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "firefox-focus://open-url?url=https%3A%2F%2Fphish.example%2Flogin",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "brave://open-url?url=https%3A%2F%2Fphish.example%2Flogin",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "microsoft-edge://https://phish.example/login",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "microsoft-edge-http://phish.example/login",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "microsoft-edge-https://phish.example/login",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "opera-http://phish.example/login",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "opera-https://phish.example/login",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "ddgquicklink://phish.example/login",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "ddgQuickLink://phish.example/login",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "onionbrowser://phish.example/login",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "onionbrowsers://phish.example/login",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "content://x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "intent://scan/#Intent;scheme=zxing;end",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "android-app://com.example/https/x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "ftp://shop.example/x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "ws://shop.example/x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "wss://shop.example/x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "lightning://lnbc1x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "bitcoin://bc1qx",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "lnurlw://x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "keyauth://x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "tel://+41000000000",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "sms://+41000000000",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "mailto://a@shop.example",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "facetime://x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "itms-services://?action=download-manifest&url=https://x.example/m.plist",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "ms-msdt://x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    },
+    {
+      "url": "search-ms://x",
+      "expected": {
+        "error": "invalid_order",
+        "param": "redirectUrl"
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "jobs": [
+    {
+      "functionLocation": "/sattleme-plugin.js",
+      "functionName": "sattlemeCheckoutJob",
+      "description": "sattle.me Checkout: payment checks and cleanup, hourly",
+      "executionConfig": {
+        "cronExpression": "17 * * * *"
+      }
+    }
+  ]
+}

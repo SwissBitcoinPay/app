@@ -1,1 +1,0 @@
-- Ajouté un QR code de téléchargement du reçu après paiement

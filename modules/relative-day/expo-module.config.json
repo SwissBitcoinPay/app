@@ -1,0 +1,9 @@
+{
+  "platforms": ["android", "apple"],
+  "apple": {
+    "modules": ["RelativeDayModule"]
+  },
+  "android": {
+    "modules": ["me.sattle.relativeday.RelativeDayModule"]
+  }
+}

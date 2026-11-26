@@ -1,1 +1,0 @@
-export { BackgroundEffect } from "./BackgroundEffect";

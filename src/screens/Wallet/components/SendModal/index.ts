@@ -1,1 +1,0 @@
-export { SendModal } from "./SendModal";

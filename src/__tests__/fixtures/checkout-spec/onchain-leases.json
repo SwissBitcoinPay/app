@@ -1,0 +1,1168 @@
+{
+  "description": "On-chain leases (SPEC.md §31, Leases), made with fixed random bytes (NIP-44 nonces, BIP-340 auxiliary data) for the sale of vectors/app/app.json's declaration (its sale key, secret and author, taker tag) in its business's registry (`registryKey`, `registryReader`). `derived`: the registry address of each address, and the outer key of the sale's records there. `events`: records as relays send them; `outside` is what anyone holding the registry key opens (null: it does not open), `inside` what the sale (inner key: the sale secret and the registry reader) and the merchant open (null: none, or invalid), and `tolerance` the order's tolerance it gives (SPEC.md §31, The merchant's tolerance; absent: 0). The first lease's invoice is vectors/app/app.json's real invoice (21 sats: opening a lease does not check the on-chain floor). `confirmed`: whether a lease the sale opens is confirmed (SPEC.md §31, Leases: `confirmed` true; absent from this field: true). `signature`: false when the event's signature does not check out (absent: it does); opening it at a lease's place does not check it (SPEC.md §31, Opening a lease). `leased`: whether an address is leased at time `t`, from its records at its registry address (each its `author`, `createdAt`, `outside`; `signature` false when its signature does not check out, `id` false when its id is not its hash, `eventId` its id when two of an author share a second), and `checked`: the records whose signature the walk of every author checks (indices; one that stops at the first author holding the address checks fewer). `confirmed` (the cases): whether the lease `lease` (an index; null: it is not among the records read) of the sale `sale` is confirmed (SPEC.md §31, Leasing an address, step 3.3) at `t` by a read of the address's leases, `complete` or not.",
+  "registryKey": "efb29c7a1120f3699f1fa155b5209b53153ed12df82804807e9a85f42ee6e0a9",
+  "registryReader": "52d64e4fbc5670d62bad80c169aac897172117ce88c4978506f0c7dd9675ff18",
+  "saleAuthor": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+  "saleSecret": "179740b373bd67b97a35988d776f921eb82dce2298564049bcdb984ac82b1c77",
+  "innerConversationKey": "e6aa2e441214dca3350af3a893a6e680f7dbc2802272857041f1fb6f4205eadd",
+  "derived": [
+    {
+      "address": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+      "registryAddress": "3736b1a327ab4a9d5498cd0a34be24a923c494a2960aeae44616375a91de0240",
+      "outerKey": "1b7a5754afda924dfdc830dbaf8d5ea885ab76eea6fc94bda864a024477d2337"
+    },
+    {
+      "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+      "registryAddress": "b96d1beae9acd952181902a17699b04af85f6f22a7849446ded95f221ac7b43a",
+      "outerKey": "6fde601856aa92a5d9429aff72cd428729eae2916791ccfc9914cc81c1f9ef2c"
+    },
+    {
+      "address": "bc1pfn49mrjhwa6k4l32p4qvaleqlmsdampq9w7hc5zrx3y7cqh9tp0qusrygu",
+      "registryAddress": "b60fc1bfc3c20f1123f1737f4e8f433028e678034afa46e49532d1a3bcc5ba36",
+      "outerKey": "1fa9afd5c233849716cfc3fb3f28454d35827078dc738cfe90e7c14290323e5e"
+    }
+  ],
+  "events": [
+    {
+      "name": "a lease with a Lightning invoice",
+      "address": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+      "event": {
+        "id": "a5c18b2e89a7514480af940e0a2bbdbfc98e10275d9fc0fbb0753e5e371d8bda",
+        "pubkey": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+        "created_at": 1791378281,
+        "kind": 30078,
+        "tags": [["d", "3736b1a327ab4a9d5498cd0a34be24a923c494a2960aeae44616375a91de0240"]],
+        "content": "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",
+        "sig": "ed92e8a566e18c786ea1d26b7911517801418def3cfd89840ff48eb7642ea77dd3f3866fdb97328653c3f98f9734922798065b2a2abe5a830061697b9da38c9a"
+      },
+      "outside": {
+        "version": 1,
+        "end": 1791379299,
+        "sealed": "Apty5z2RrB8QNRqDf3cagW9PWElLDRpckcjKXjwIFPs42fCr0n0rxZjRdmcCtVK5s2+xR3di3poUC3vXCgrCzxPW9wWOtRRa8cnKardzLM5mca6ZNnWGmzw+/cHMe8fLDHGu/AIIqMjRnepAqPsvP6yxwxm7tq7X8+0vV1pCEWfm44JbQErbi7f0dIQvi04jcDYoT4LOzSYwf53GbddxCsohr0EZnTzflBvLP5ksh8H34fYBUIGyZKXdj3rjHsDRJIiZne998Te6RUHoTrd0TduUS4FLSkXNDxLjNvgheVNqtKRPwZngUrRhcnmh5SyqU6+H3uxT25gJPYy5Az/IbDOIAKsmlLPcRREeIrdJB23xpW9JlUiDNMTzyqRcN0zDTbY4HRNDqE+mZuTY90QESOT/t+ocAVRYQGJvSCoS3zeD8u9eRtYh/vruHdO6CaSragRTpyBMoqoF8BESJhCHr3VCsEk9Vr0yC5k9mkB1QDOiqS0NqMMCMsbBJuX2moVgGpmbJtPPfV1mluPxZdYxgUFm0G8Q7zrox5Q+CDvCyeBgkCM/x6DU96O6RWRSDmgma0pHVKgZEbas3y4oQ2iarzHrTpE/Mjzb4gmj/tPwF5F72h0sW/RrJHYhkA6xr/yR4Act1qqy7/35M53z1VSeQvZVWHjuhD11PXadhoF9rn8vAwBdtaVlRzPrAPtl5b7FMS0v2l0sQxAZ+WvvB3+t/CyTStr2o2SPfYoEmrTyjSfbcMEO/5kJzCTGRIUJ9xfX3LiBh7GUdMg1steaueLUSfGS0U9Dmyq6uxDZTvt0IcMQgKIKtggQxT3/NTHQ9Dq5BDpSnspYyeSgMsFCieYE/oM84H441mQbDaF/F+g2ORupmEY7alRP55iK3kLONI9yQBRd2FW0PQ1/uSov49jzK7hEj7hwe2AsXbtY0D3xGhQ4Z5S8USSGnIBMjt121vM2mFtNi0MefnJ0pnqeR9XaRjX3GsKyL1mKlqlpaedKH5UlRkqnKKB2x4nn6C09nzKZArvzZLq+BTPbZdy+Z3qezJGsMfO/fFPFq1CJzw0MvX8gdrwrVjBaeh5kOtiHZbhnqnruvTn98gFzqPCU6Y8nx+oCQ09V7yYp28SWrfHmBME8DhFVCtAZtjJgeTuLMXafwhRuyvXkDo9r4yxjtR9NGLL1Gv8mJrGchZKq8eHKiLxdTXsNlRQMc9A0K9Aghv3rXgGlCxI2dJFGPYZdvnD9Vje1UpLP8OJqDpkl+1p6+PeShzX3W5ZeYzBqSjp+l+dqH2gQabMH9vfSTflAQqJl8bLYmL+Jtx6rdTY2/D1pg+LLjKD3t3y/qd4tCJeeolPKFHS6W1JBmEsKje+teg9Ir9U8XbQRf8QLYQWaSq7mI9f/W9N1WBmtvvEkKq3aDo68VoqW6vW8+DzzOmsvzCyLVBtBlSYUdfw7PS9+vO0D4hxn6s4="
+      },
+      "inside": {
+        "version": 1,
+        "address": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+        "sats": 21,
+        "invoice": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+        "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+        "createdAt": 1791378280,
+        "expiresAt": 1791379179,
+        "sale": {
+          "key": "b4a71410c138150449bb82d4fd01a3e6c72bd47aa87f62a4cc56b76320d59ad6",
+          "fiat": {
+            "minor": 2450,
+            "digits": 2,
+            "currency": "CHF"
+          },
+          "note": "Order 1042"
+        },
+        "taker": "807b8049fa4e9cdd58f5cc69a20302e6",
+        "confirmed": true
+      }
+    },
+    {
+      "name": "a lease of an order paid on-chain only",
+      "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+      "event": {
+        "id": "2e2472160580910e50f01d047da150a313b0329e3156c009da2cdf1a2abd0032",
+        "pubkey": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+        "created_at": 1791381280,
+        "kind": 30078,
+        "tags": [["d", "b96d1beae9acd952181902a17699b04af85f6f22a7849446ded95f221ac7b43a"]],
+        "content": "As1OKkrM+6YFQCvF7CoHZlugaEks0GIbAEvY20T2scpT1qCboFO6bQxwkANRh7inqkgVK4CiV6b9dDZHsfEW3OStsmtI9C5t8e/V0187Y8QypgCAYbDllvZxwAs+f872ceXx73lpT7J8UnYfuBsTDSmqtbdcaSMhAHxIAs0laYbr4jegQxCJy7N5hYP4Gsqip3k+WjIXH1M33tWwce58ORGYbYqgnmtC5UtwVhJlNJ6jgo6VVjd+9pD4UXMfOuD/p4B9T3I21pAX94RuNjsrSy8YO8seVeiO+Zhd4+1Q9S7MbQ3AOgTjSzBiz6jwH8Vbqs/uP8qeEKBGrrij8kC5nqxg23IaHse71L/uqeQrnENYK4d/xLm4DTq2kMiut3amFVrVzxHMAZ6b7HcRXfQNr1MIsShla7TnyBxUuqefENEwJMBCqG1Jg9HUCe7YXmcFSX1uzjmlAsaznU7BQ3RzK20meb4WON5gcKZi+T7UaBWHH/dNDprxIY+a11eYaBdBmaVgXEE71K/dXVlU6EqzQ2IY0B04lxqm0razpvxkmFZ7mUb80Y+LCW0uEqlhskCf6qYvqTGgo1oj+bZQsTPYSYmC5KaFtfaLd0eJmeZ9z8AXsrD2kGhM3Vkz3rX5qkOe1j04iSu7QjsswpQr9g7CmnN/ftB8kh880KOYAmZESaekB7UA0Te+LvX3ojqy4QPDjKrq290yr9Wwaed95MJrectOwy6mpGANG7Pimfzt3SdnI69bfrT7I21UfDpOd+IQrMRmlZceP/mQvZqh6zGXLyujHDrWWZ9Il2q6K67Q1ZaMH82YQYDXlqRmqzF/Ktnh0eSp+P2haBJDfl151HQd7L12KBnFlKof08NkwlC3QRl4rDB3h+TpzxYTlcgipNrgjX4ZRqKqUoqDBkXoie/fQMod/+9dr6fBc0c52xFSMrRQw3W0ydwJu6ouQlkmjDygjZIGWVpN3FUklklJ1ez914iC4NTVCc4mMkmJjrvRKrL7gmCSphhReXy/e0XKJp/P1zNJQuNL+Ur521S4CC5bZVXZA44lyuZZRNFZKdklAJSvJ+UW1wAsi79AqHcDKE4IhAi2Zt3mI+h3D7zwXePvf3hWrg==",
+        "sig": "fe22c60b2297ad6df94a3852398fed25277caff2331a0389d3e43e52079810daafee1fd0cd86d3ba7199bb2633c78e1c81c476a31bd19670e597a6b7b7fdded5"
+      },
+      "outside": {
+        "version": 1,
+        "end": 1791382300,
+        "sealed": "AoZ9dS86G6f9cSJSeliGBY6cu5Bcd6d7KYt/T/LTSpBwDianRJzxGKRuUeEDLofPF/D8lQ72MlEuZvm7g+UKOy3WHhb65uNl+O0vU076OHxAmLhi7aBQ9ijDiLMe8qsheoIFeO3wwMUdjGgmzrkbQXR2wYYWSGMSL7wnDMbBB58RAy35THrNw0iaC/lGlUYIEJGnYcj8hNNRZEzU3WnlPgACFHLPEArOm1CiiwVHWd4sKHXsbiuoO7JedBVJUzmDTsu9ZlKVX7U5eEboxtATG3WYz1D4LSGbyyE0bUEUfUhTtHLm10V+82ID4C0g47WAx6sDAYWZUxpz+3SxkY+jjnSmrQa/xxej4NWu0hU4JkpdA2BympRIfbsBDsxkmTnzkdrHHem3dxWK2Gan6m4iOEjr6CMgQYSB0SdflEgw7kAM9zbk3IvSJ7qdlI78wP5Cp1p61m5ywwQmtKlydHZTNEjCVqtAGgL59UkWgK9RpEr1TNS9u9jkRMdx4cYGP28iqNrZk7hGFJ7aL4FQ5H09pJ4u3KBI8DO2eBZ6br2Qvw6gC1LRpiOaLOaYuV3SCfZhFyaCJlOg7AuJs+EsGg36WgjzcWyWCQ1RLaBCam+k3zxxjFo86UCm41yQoXWhhuvwpP/FKwUL3tyonE+F2S5Vc8qrzluiqxkf2PXpkhfeaVeNGLM="
+      },
+      "inside": {
+        "version": 1,
+        "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+        "sats": 150000000,
+        "invoice": null,
+        "verifyUrl": null,
+        "createdAt": 1791381280,
+        "expiresAt": 1791382180,
+        "sale": {
+          "key": "b4a71410c138150449bb82d4fd01a3e6c72bd47aa87f62a4cc56b76320d59ad6",
+          "fiat": {
+            "minor": 150000000,
+            "digits": 0,
+            "currency": "SAT"
+          },
+          "note": "Order 1042"
+        },
+        "taker": "807b8049fa4e9cdd58f5cc69a20302e6",
+        "confirmed": true
+      }
+    },
+    {
+      "name": "its withdrawal, which replaces it",
+      "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+      "event": {
+        "id": "bc1e79d1239d488da42ebf9e207d718aabddb13120137d6452811f289e5bb866",
+        "pubkey": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+        "created_at": 1791381281,
+        "kind": 30078,
+        "tags": [["d", "b96d1beae9acd952181902a17699b04af85f6f22a7849446ded95f221ac7b43a"]],
+        "content": "AoTbrfsDIvo9MGUhD4gUFNRUHm39Q1rf1TvnSre8e8tIkGyVdxjGh72j74ICTHvVGkY0GEyWKw1OoxpFmXi+ICndLw4VPGRoS0lNXbpcKcu93oYYWgcJJLlJiO71eSP3OaF85MgYH2aZImgeHid9a4bCEdCoRG2tgeq/Cg4vw+N/Kln+Oxe/7PSHZQXokiH5UKqS98el8lbgjV7ZNfZDNT6GEtsGmoOpL1f+gske5RxO3dfGSskqPb/V6fXKOHh185qVuNEyFP1h4o4dhqmDmLwvuT5zyBGb3UVwU5ZGbMzUsPJWAddcvBq/SZiWoD+I6PSTQ8RDiJ6sE3KK40MfLuE1wyaeyRx/UYnwUvvSNH4OIRfRrrvJ8bAJiFpVSsEe+PHAVeuu/3SfvzitJhcJf90o7057ojHG08dwy18pRhNbulo=",
+        "sig": "45185ee6e687ba9aa4e3f753d91a3006c9ad0078cce8b75e28123e6d636e08088ea8f5b66c5dfdc0b6f4d15a068729c05bbe0016eb385142ba9ff28ec9fd6e5f"
+      },
+      "outside": {
+        "version": 1,
+        "withdrawn": true
+      },
+      "inside": null
+    },
+    {
+      "name": "an end that is not expiresAt + 120",
+      "address": "bc1pfn49mrjhwa6k4l32p4qvaleqlmsdampq9w7hc5zrx3y7cqh9tp0qusrygu",
+      "event": {
+        "id": "1a99ea0a42ff78800cc8f4ea49ff2fac33604282bbbde1c9fa010b44340736e0",
+        "pubkey": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+        "created_at": 1791378280,
+        "kind": 30078,
+        "tags": [["d", "b60fc1bfc3c20f1123f1737f4e8f433028e678034afa46e49532d1a3bcc5ba36"]],
+        "content": "AtQa6xXxZTabfk0vmVSocx29jr3tshb8yOro9urv9c3BnHRtFfa3TGHi2Y6kxdMpemNCFjarev5RoZFt33chgPDWskS+2gkpCb0fk89uFxV3yihZvO8FN6fY3ZyQdaVw4RRPk98QGZzmtBsRhHpj9hTlS1+m91+xOxoQ8vyI5YboxkQL8jfvJ/NCsSIDieNBlvtaPeUrYwYKYCeNbhFqSPTJH0uewdQ6jXQ+6DSIHO2RQsUxdgafb9xbrwLRUOxBY2t1SPNPIfCygkwOajmrX3OoblcIm50nu3QwMlUJsAcz2M2FJ4u9XuRoYn9cHHZ+3+fJvp6jKVKdkKhFw+K9QukqIB2XCaX6OGovYXi/2IAPeDNra735O6L8VlmKATf/2htrIqqcyt5a6qqxZxuXfm4qGyia2GSkddcIi8wyjxOfjiJCIhSNQ3vxc+aktIDR3p7Lf+9RBbb/Q05rrrsJO1EADWLnXiGEnVYVtP5fKjtQgYpqGMx98BFMwCKcaChNF3fhOxb86Pfnx7s99W7LxZhtLTvqey3MsyDnudwQvP7menvK3FWbhKZVruHc+vsDZs4Uz+zPIg2GJQWzyIMiVMBXYU5EamDkR+Oe2Vpu0zS26NU4W3F9Ybb+Knpxm4Qb6rdt1BGF4C5XFXpCkuKh4NdPuKE1P+x5ZiUVGggUyJ+16ktKMYvP3o8lz+GxjwHhgeQDrw2Rr3JRbvViTkD5v1Q7C4GPsDWqTLDvygkUomz8g1j7ALQdqBM55mpHDNlfgNQVPQwKf3/VCt3KJRc6oUojiQqu5cd7k86Vn5aLuuhGBBSRQ6uptdt4hkyzWfKDMfN6UWmcpzQ7dvPz8lo2r+9qVvDdQHcUQ4wqkVVUvdEzvigYiKEjXGat0G+Qa+CsY29IaRHagVorCONNQb+1zbHChXWt5dCfqV6c8yQnBmRiv5kRRdJwiXjFg8ERVVSEe28sKuzVFAOapH7CpBykp8url4wfDWHc62rCiED1qkaFK8RS5HbEVAuVu6trMtx/4RDXKAx6ixJJ4SFsdhk75nSiWB/TJ0YlpwlGkrK7VwS4IGXR0U6pKpJEw+qyGkh0qpWdjtPfeiNqGrpb3leStC0VYA==",
+        "sig": "b24a5fcc2ae13e66a6c55f79f7660a51cc0e7e08662376a5b5c80a50a755fe9bb53ff4a0c76f42c1f7f2177ddf53023e68104a4cd23b2ab00cc2580a4c1ee040"
+      },
+      "outside": {
+        "version": 1,
+        "end": 1791379180,
+        "sealed": "AggjfPzU1PnBERdOMKeH7B0hRb7GMoUyW7/2hCbpDymJcvm9rKCXurBYZ6E0g527+px2XfNsk/yUCCPA/CUWoKT2SlXyoYAWwAInvsCYamPAqqf6IVrG8IkxSjGv/Ks5X8E1nFTms+U9yLjADP/ebXLHg2vdSN3ZdqG6lS7y+GY0kcXeoJDdgbmwUJp2e3RFVSLgmDLF6VujO+31V3c4vzeH40vZOcggJD5FzLp1MrajLIYGYDEipV3/vlLvlKM1kobM3iv7yrVqXkzotOXVCko40Wg8v11Z5HPy+DuzjzYZ78/ynw+VQFaNf3w6nkHsIc5IjxZuTbeFL75HaQA0I9jvoJgAZ5Jx+t/D03PVlyGz0LdCpyMVy+luJO4lGuEgerY5QfCKlanyCQVoeUS9D/9Eqb0xm8VIC8qcjo8Q6yO5o75LHvgu6eDDwYPSpgk/v1GfSqtgCoaUW9gU0+okMWQGBeJwEefM0Grf0evlFUsZ+uVBnOkmgg3L7sT6BqZoCdJpg5qCIWJLubVTdKHElJE/gH04tO7DZEU6bokxgiZCM8kP2S1rTc/J8If+34XJnMGqCW2aT2ou7tfXDVN4EDDNqA=="
+      },
+      "inside": null
+    },
+    {
+      "name": "an invoice of another amount than sats",
+      "address": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+      "event": {
+        "id": "ba1f1bc4c2c23961db1e07e72f12f79bc07e61a34c691d227162a20fb6df2280",
+        "pubkey": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+        "created_at": 1791378282,
+        "kind": 30078,
+        "tags": [["d", "3736b1a327ab4a9d5498cd0a34be24a923c494a2960aeae44616375a91de0240"]],
+        "content": "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",
+        "sig": "4b426a767398155b685a97ad36d09c2b6903df87aaf0bf0326030e881f77334c644547f009514a21da4947239d6e863038fa14d7b9e19a6ef17020d6011638cf"
+      },
+      "outside": {
+        "version": 1,
+        "end": 1791379299,
+        "sealed": "AgiKhsQaXyrLfajn6/+xGzxf3jN1lHVb3el+SJs3cfuwYEahrDFIoJ7eKECvI95x6MW6TQ9A+c0qNOzt09R+x9YngnYOrPA8vHZIGHzDYRrL4IYZyjUfVsPhrZPD8QblGHEaD814e34CdGgKXgTNiWBlJY5y6YKJG9DmWoVYFH+vUjMgxZYyulbYyLs3LrwJ33WarmaUZqL4uhAXO4SAXV2JXWlEErB2Eozs8RCYiU1nSFWJYlULaphdvJGjoY78AWsdkROAnT84zNVPa6aJ2voWoQezRjgUKD9myZZdCecW9yk0yH/LFK1pMU9ZUwge6+ovoR4P+ncXPkXfkN+JU/5gRLQxzVASY1J4hWhzEOe6ijgk3BHmeGEK+ViLURyATN34bmocMfkZs0U0bYIWOY4AmgJxwln6+tDGr+XKJqDLsjAGAm1Mn7an7t+pRxTraSn7Ce9B/qi76FGOiiAwwljyS9CYhd6nqd9oDursTGLoXh/IHkGcX3UdHph/CfUxD1b6QcWk+tkN50kgzPztEkRWJ2SndZiNdI5bk8cJ6sdC20B3Vfx7sX/I/VSQyNAL+rbbPuFBmVRb67TPo40a9ZPlsYD8I2l0ypvOKovavZJmDpKQX52LLKwO6eBkwRzlEyqNGy3kf0THCqlDV/eZ1lMgxkFz8JXg1RqaTbHuWTrmn/Ly2ZAgRXAVLxoCxBVT8M5+Jw086ZwFgm01xbHx0R1Bv0ElFba35rTH3c4SvN4fWl/R+kRMh7O6y9lqziyGXxEZA9SpJJj1qFKGsrz/HykGNVcGHUptULyXK+to8OXkeGDeq3LRNyzIXW9hiYxCuhAWtkECzXvNNq9Dxb/j5J1WmVWqgawwODlFxbmUDESWaf9meB/VxL63JPGxSwZ/JjkSKdHdDUGuJRj2NUkry1VbBAKtnDo8/ul69eIE0Oo/qq6ppB1ZzrRqUPCNCRcq3ZtpuLxAqPP9fmsYvHNAWKKPWiOkjLDGUKHliC8kST8xyoJ9AWT9XfxuoGn6WPdgAQL8N//lYP73eH4E++w7y9fRnxwJHFrf7rCAWMWRG8aKJeGtLVzqhZbCjMuD86U1WF+5Jpjp2Hf3WCKczHqPStlWZILO97xkcpjiVabvlcF0w4eIebixK/d++4IWv2yYcNZGOoS60Y25W5eGV3XBEDOkCwOnvT95g3Zk4uu3kmq4hoN4sOb2ZKvRNGjFxZdU16m+PDIbOXCYr45iPtIMdOvzQoT3Jy7mpGfu2tXZNAvwpzxpLCscWjzb7+46RMQmY4MAYFac+y1cFlrRSb6FIL4Y0iCQXiBB0rXBrKsfd0tI+BY/eMAwtemhbv6xgcqEVGwQU1H63KYHiwo97g/tZaFi1VcD0RQLMqm2WxpJk2FAk6dikO+BV6mhG3yFA2roMC2YU7BpoIPoXIpptnC2UWGEr5aZjNU0yy9zYKzIiW/BV8Q="
+      },
+      "inside": null
+    },
+    {
+      "name": "a lease of another address than its place's",
+      "address": "bc1pfn49mrjhwa6k4l32p4qvaleqlmsdampq9w7hc5zrx3y7cqh9tp0qusrygu",
+      "event": {
+        "id": "e85d306577d4b24454dbefc901ea9ed5f1f47f41881ce7f26ff115badded6edb",
+        "pubkey": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+        "created_at": 1791378280,
+        "kind": 30078,
+        "tags": [["d", "b60fc1bfc3c20f1123f1737f4e8f433028e678034afa46e49532d1a3bcc5ba36"]],
+        "content": "Ak2CWpa5jy9QOg8Tmw1aYQMBk8s1AvV75VJRsvl6pbqGUL5QcA3XZws1XLL8JrfdUKo/gItIK1ctLPIYi8duWREYJr2KNlAgxaOQKIoVDMKZt1gzewnMDXSMYF9+wNTPSpksMJEXHICQlFjy9IlUwzNg4GTPIknkOTHFB+vZfmvI5gYwtDGJ/YmMDnDzjEdlqgDKqeLuc6t2ExWZIyUtwcboFh4xz1reZv53G6Ybd/+Fvq302jBOWyksYx5LlGAJTe1PnQmi3J0TrC8PbA+wI5/cclPfAJPjj1mcudaj/qmRZAUobICVQIcp2hVRROfNgWyVEKuF14kuBaOHHcqbIsFoQEVE1VtAW4Uky2EdC5VoijPCJ3CeBcvXK+/I9dMpt8LgK9rk4UmoPOuDlmTYgtZN2FzpMA3YdvZlPLQdICHwgbmHxu1//X5bZKwjJrxotpo5i1kKfpPjMOHcluKh+w1nkefk7Yl8UUwCH152fh60GjzOXR1XAOUEyK4Exk2Iid0e5T40dcZjEwAbld15Hz2DVUcwwRuVW0oOeX2GYqhghs5JOvqVIcur3VtHlxtEro5kxTNsPSGoj8O1qE9y5DyIBgQa8/bdN1l90yK1nUNLR5Oi9Poum8qJqeXG1a8H66XQtp7KD1ObyduAdPtVGyYwROY5DL2v1SrFTTe+aziYUgfjeGT8eaDPRb8cmODlJVylPzDmy1r6yGC3niL42Nbd3g0oMhjIMstPBizRX5KUju4e9PbDht+dRYK2Cn9jzXIYC3k4Sp2099dF/haoI0MHyyWzzcoBjohi7DSeUVFRI5H/Z5UqkrE0bZYk/DpC4R3yMRdjHO9l17gJvkdQJ8LpL97xBYpDfF0HsAp7Sgo0b4e3I9FuRwMT0gajQa+9WJstF57GxrVdf70p3N/Fjir4TPsS84pgAZ18vLq9JRJJtCbZUo2+nRdbiUXvuv9r4ZiUvtEazemitVJpI5I4y8wzd9LILg8CP25IUvQg3gJs5gSIPYd7mVdwXUhqKcbPCS0Xx80Q2WLfsevVxCjTmGkg2zH75MZnGQBzOX/913lHi/Kkf5J+WTs2n/uZxA23Iiye9pozFWZ8ftzY+q5QqpRQWQ==",
+        "sig": "84e54def353842716c91b4c399ad1267325418b415d6f73de9187db9518be59cb20da617d3b23069743f0251d614b5eaf97e2523c06b5410d992f9a4aa5db42b"
+      },
+      "outside": {
+        "version": 1,
+        "end": 1791379300,
+        "sealed": "Am8coIDCh1wMAd8Am6U8Rat/iGzAe/aFIvn1X9Z0308aFdfWSko7UvJBtnoB88qPAUqFK66QLimpsHioOd2LLX4Ow5AUenYSudueVeU7dWHC/gccpbDyX1d/0b4T4/LkjKnr2P6sf3ttIsvGmUKVTR5PivALXzzzt82QDXO+vz5fYLAur7JeYu0niZ3IPRIXbq8MDB+pUBtfO8j91sovNyBZ4uqDQVYzeJMtxO1ShSpqDlc137SMbfz/gJp7pMDdv+/UPaM8aoks7+t5Vjm0eTShn9mIySPac+TUgl+OF0+KOl8+KOsxa5BmLi5jlGvQfHF+NgYKZBprxtFKO8AIHc3ize+TgpnrjYOlE+8n6FMkSIQorl1OYcaE0DWt9FKYTPBaOdAVa+klxBSPaao9D8xmw8x+rBdHtFpxfRzdVHJeTQreYn2D4FXREmd6OssYZ5hpeAs6aRE3edHWFnmJJCYGkysOyNeLj6aCC+GkAciXt2DRoYsv59T1t/chQJPGc8Ggp2g4tmbgTcdRh3dKBL+P1W1oWWvsXc7nesPHokL/nIumFvWuyely0S3+eGC7C/CKO6qCXqGXV2cmnLAI6Ico/A=="
+      },
+      "inside": null
+    },
+    {
+      "name": "a lease of a newer format",
+      "address": "bc1pfn49mrjhwa6k4l32p4qvaleqlmsdampq9w7hc5zrx3y7cqh9tp0qusrygu",
+      "event": {
+        "id": "2da6fe4a3a23e35ba25c7544225c4589d1c2c1431909badb01bc8e4242715d7c",
+        "pubkey": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+        "created_at": 1791378285,
+        "kind": 30078,
+        "tags": [["d", "b60fc1bfc3c20f1123f1737f4e8f433028e678034afa46e49532d1a3bcc5ba36"]],
+        "content": "AqHYNEBcxdvp/rpM4SzlZrxWa8w7E0ve5Nqgl+TQoUV3j5BXcDkvDAy+59Dm1elZ+WL/8OIKUV0pAaq+taQxjmqDu9ZUvN5zhWF1oqh+LqY6Ca7xBTaCRJIVjDi0qzSH7EjKAMfpTKqMR998TSdGqQerohQecdTxHPabKZWu5sI1lIr7pKcqMqnajw6T1wbckDXlOOTmmOf5lVJeWwXewTgh8acx180KgGlTHKZa0WtaOYSfJlsIRxPeUhVhn1NIFjZhPUl84r1WCCwVutWow1XmB91mKZmAQoc0FI3ArvsUSgtXvchFzkIlbMW+CULLJuVdj4nKtUQy8xeyd3kOIuudBMsik8Ad4sVKN33QF6bB5j00xq44jvx8hQgGgQgh40vWl1FOsgt7aoxQdDBApfuIcn96j+m8MeOG/48EWFnT4Q0=",
+        "sig": "3772e334ab303e4ccc1911d1fb5ecb23bb26eb1c3235f866403336391c3afa092aa78d2e19607bf50b7ef63432400117a8d34209e72fbef13d0d0b0468b49775"
+      },
+      "outside": "newer",
+      "inside": null
+    },
+    {
+      "name": "sealed with a key that is not the registry's",
+      "address": "bc1pfn49mrjhwa6k4l32p4qvaleqlmsdampq9w7hc5zrx3y7cqh9tp0qusrygu",
+      "event": {
+        "id": "959713c6aa0beea644e082537dfa7a4dcf115751a08f9ac1ab317da669544cf8",
+        "pubkey": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+        "created_at": 1791378286,
+        "kind": 30078,
+        "tags": [["d", "b60fc1bfc3c20f1123f1737f4e8f433028e678034afa46e49532d1a3bcc5ba36"]],
+        "content": "AsGzAnkUWHppvxxI84jXP2RTrrz7Qaoq8iSqsGH5o5uefPoNzc8MNGypVJkxET4OAgQgvja2VWQ/CK29L6VJiCtelhkdS9gqYJAD+GQRL1oz9G5pPBvkQxI7fcgHe/OCj6tlXh0Kl+kunPwdOh/RxJnw3EixX+VNQBRhMEa7PSg0zIx4bOcbBV0s3+jj/iFSvGsE4vPuG+t5atOphoQzG3eXh2IuXTcuCwB9mj4QsD/3pZd/jBqC0wtpZWNYpvyuSmzG/JB8qH/yxzYUm9/hgG3OKUi6PbM/jvdtBY9kojk5arQYXQKmzVW0FAVeFWMb/nXHVZTqzcLvZ6UH7hoR1f3n+z6NBBX5I5buKmWHvqOhCH/DJ29WT1Mx9OHgKRFeZaYokpcy1J3lGhDEhRa6dfOWB25mPynTv2Nu2j0GCa2nvLTw+jufMHC81ujICq1D+n8Ra2nRBtNc/X6/mHjzym8rcadA3riXQC5FlN/W08kBRuQ8WMxh9LuZJbCEOcBVOAXSBp+s9RikoS7FGylfEIYPr+qHUspwLliAL6PpTgFBJdKnwT3qBR0zdtLgbONFOqaOF02yWBp8Nem4Elwfj+ImCVNtbF6YmqpLWgjHlK4yPqdKgxc7UGBQFzL1lAp4pf2/ydY3C8M3KSfugGDb7CFH9A0jbnMj3nPAuKc2mDUyx3bfw6r5fq48dANffgM25mwHljmv43EAhwYnM1+CQzd2rdJ1GPdA/vhVrWGZpufYI+JLcS6ThroukKfwRkb0GVwwGX1/OAw4UjHdVDswCtbrNBHsSFRIv+Td6fKC0JDoG6T8nNX4N3TzUeBqxbufB5l5WNxXmdK7372yOKcFpP4Kq1UDSq7/Cmd1Tpw1NZeOam1QS8rWbPOv+9FOEavnqBWJXOnCN5x6grm9F9la9Q/rbYv9uzR3cGV/ltFCtt7eWoz1W1Lzk8aZmBH82c29ZHjwVZOYP4S74clPdRB71ZTzRy/qjGCCeTb0ivJsMi+mRfPu5MaK+GrChP3ghd+o+QQI/5fRlwEkkIyN9s3lnVTd57jwmsFOGeCXcHm5beNnaCLn1a30Fkv8yxlmIOnPWZuqjpshGqSh4PwOyFe2S9/bkg==",
+        "sig": "ed83b992d1e4954598230aad988a789e9c4d8051c3da173964a2d85cf83acfa16a8efa95e34d6d270f0a859339d4c3d5f551910e993cfc1b19065ea2ae04b4ad"
+      },
+      "outside": null,
+      "inside": null
+    },
+    {
+      "name": "a lease with a tolerance of 5 %",
+      "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+      "event": {
+        "kind": 30078,
+        "created_at": 1791385480,
+        "tags": [["d", "b96d1beae9acd952181902a17699b04af85f6f22a7849446ded95f221ac7b43a"]],
+        "content": "AsCawwk69iGo9m2LDG03+58pdE2tpcelxFo5IBfOAsEcZXPaJ/8arDz6/mNKIX4kaEdD0jTcOZQrmwREkKor8bi8R3kg9cqsPzt2HzOgKg3gKu0MJ0kmIZRaXKFxn/6Wz7Yed7ceYKCIFx+pUTicBZQU8Zqp6txYco4JkGssGIiJurJYq7Julo0s4QWQcjE82khpzzrBEKU/WWxCjY+wyjZKb6xfEzKN0E/sCEcGYxVttGRk1gAW6aL0YfQ/xBbq77lKkE0D+I4HUDrDPwR6akFj5+HLXH3prxNsKxjm/g4dkly8LGrpvzFI4QZYWaLovDSsP/59nuKRqtn/e78CryPU+G8I7LC9kzUYTXHaVYtyxw8qjFPoJeCngOvrHMedOy+ML4Pwdm1hhG3mQA1QfmjekhfoCGeZPIM24ekEC3qaJbSFf1d2Vgo7GTIgyKnleR2RRoEpcM0Rdq2ls6mlwqwYf9hKN0qJrDKTGbm8jjOGm7j1rnxtm80pJ6qdaoYJV8sIJK9DA6HS1SEJfz77uPNvoRSotQExAijMQj8JtE2G+HVOQNpOZnRuCpcweNPhAhwgB8l4vsko2F/7Sl20aXdTNoI7sLHDCcuyFdnwQh469B1c1z6VaCFY+GgiLjzXCAwffs+n0+hpIZnkj5AXD2vjnHnZm/k+0x6/e366PvLGXgNbnL1elInGGTfe+cwj3xJ6GEtKz8YiZnfD0t/nWp+fUd39ROQ73Rrx+W2Xf6dDW/F8Wcm6Ina1u7pnTThOC/nnlt7rEzMtdHuaaCrUM9x8njZVYEBmJae6rAHpOgFdmOzEeUemKkNtdW50WtYQPk9wnsPeDHS02WdPqyHWCZwbkXphOJUh/GUBL4XajvTHn0ZHBVYGbLpJD72zohAvXHzkQYw198wk3iPsmHiqnPgDS0H4MNAEMYqsy2S4Y7HEYQG9DtA1xDJLrFltmq29Lkv5cIcQh9g9ff8GynHLh2R97rsTzcWXqElfUiv97ujbL78W43yXcVKDAyzzQOUVB6kkPVrvOH8fIOtwuPB7aSeZJ2i8dojxlZrPQSvKhWmcCW8zbe7jd9XVgoauHhOKFSi9VBGYpb+KqoqD9tbTPdozPQ==",
+        "id": "b09025d75ed7c95383fb7e84fee9e6dbda7b533c4f5a1b082491fcef8e7da087",
+        "pubkey": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+        "sig": "e2ba29bc7d5fb61942077e6f17693893476b117decfba3ec8e61a097af61d82d899b3f420e44395e2c847185fa2be7efd5ba1613d5229c25e72015ebe312a4be"
+      },
+      "outside": {
+        "version": 1,
+        "end": 1791386500,
+        "sealed": "AhMPMjyUZxk5Jxof5fUH0M7Wj6zXu7UZNGyXucPBA+d6TkYUz+wboPCzn/8Pg/Wuq6JZCMbVNEdfYRU1nrIrfLxcOLJK5p+hnBH5z85mvWBPd+PLi1DHwsXXSAebcl+l84gq6BGKbDrjBqKETr+ZOf9Jrr6bWQbwh+ExPW4hUc2e+ScVvRIl5osc2Vv0SOtCCZl1Iee9N66yrPzfFsdBG0poDKIJ90rUtcmdG444Hn7x5l8HWd3YAS8xkwaa/MAvE+8c2FIBBjgivBPZUXskmtmkdMsGc2OBHudqoThPxKCYftdXuMpUiOOj5jJI46Dxg0Yy5478hIQWUfbY9W7HIr1crO1XOzKoDUQCSSxBTaWNNwyZnmjHNlsloLALCOZ9ZDUdLmA8Vgj1L18nHTzmlrIkK1+lcR30iR8JucTy/YvZa2DHlD9OxTbQjq2VugW15OuQ7ckrUViur7+ZY3O7/QYgpaq9ErDtbZs4oUKoaqjq2wangjEW9GjkH3Z8MZzOW88chX+rJ+70lLZdJG359PgQeAKtACF6gvpfyUrqQVpoJqtf2XGfoOqH5nZRcBGIr7OfILGKdeBMWGB5CWvGprF+hhKYLC7MU8F1lXSZA1ywAN5WiDd+OVasbbC4RZeZ6n/x4/GlpZOpNF8lzRGNwsFvlCEuG6n6o8NLoET0hUKXv0k="
+      },
+      "inside": {
+        "version": 1,
+        "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+        "sats": 49000,
+        "invoice": null,
+        "verifyUrl": null,
+        "createdAt": 1791385480,
+        "expiresAt": 1791386380,
+        "sale": {
+          "key": "b4a71410c138150449bb82d4fd01a3e6c72bd47aa87f62a4cc56b76320d59ad6",
+          "fiat": {
+            "minor": 2450,
+            "digits": 2,
+            "currency": "CHF"
+          },
+          "note": "Order 1042"
+        },
+        "taker": "807b8049fa4e9cdd58f5cc69a20302e6",
+        "tolerance": 500,
+        "confirmed": true
+      },
+      "tolerance": 500
+    },
+    {
+      "name": "a lease with a tolerance above 10 %: none",
+      "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+      "event": {
+        "kind": 30078,
+        "created_at": 1791385481,
+        "tags": [["d", "b96d1beae9acd952181902a17699b04af85f6f22a7849446ded95f221ac7b43a"]],
+        "content": "Av0snFU2T7xLxRkEeTiUpI7sfXVeNa8O3dlDsGtgC5EXpJBqsLkZRVeyxmJoLJwldoeh51fD9c3DObLaFNo1lJstkac8CVQwIMseHmV5daaOQhLPd2TmBd5pubNBESrKtU/29ZxuKsjJo9OeqZkCOY1lX1u+/npOiekqj4iGnbp0X7a9Vp0y+0vDSZExRN7/r3XBjG8P/q0VaKPukkd3j++fJc3i/12sXV8ys2Mrc0PHXYql+56KR8hMQrhzxmEvr3NDryeC3tHfL0hGTqT7AHDRGKZNQKLsxqQytStH8odBpELqh7o2ZqQUmppFD5pACz1YOR7ecTD61e+Lpvmn7IohHZbftlAEkK4E4Qtyz93gtJkgOJtS+TAXPUsPytAoeRTQFXLatfKlOthP7hqeQdWSinWdco82oJXkW3zfU5+0Hhz3bR1fQuLDjRQ5zMEeqVszVarBbeazFRJhaeSQ/KiGx15HBKe+LFMP5wKvFajE2RXQlOfjp/1BlMjo0Xw6MAG6hlacrAI/FsutwJmHspbZPX9e9E/EqIF3VPy3YbtC9gUqakeGvBanGE766oHbLxNpv0rfrxw1kUdDNCcmmtrviJy4EH9CafnYMiVjjFA5qy+5MnZKimTC1FfEtkoS0not8KrneSGo1xOe9KW4fURFYl63j66rVI1OQOGfGk494DS0H3zzxH1JyMEA0SzF2UErn1xBB4HSqOhJjYDbHI/qSXGggss5J+RwAfRJ//UwZLRYns54hQSzRAiRcEkj18fyUv/9aVzusCwAQcvsg+nKYy7ZDMYnxkFY5CRLE6vFa5fK9ywZsqcmZzWYMEXU+VllRjrKbbb4JpE0HhYFPcIEV9wonZQqA7GA6KsQIWabjUWxxb/qNdh55k9TcxNhR0d0bHqZ1HbHT9nSHMvUVXbe+uddnEHigAFOblcL8UUhxrOuoPUReNoQr+KjLf89LIbQ1QLKAXpgeBoua+osv2gmfAb+PSj5jKn6ee6wBU6q1nuqLUuLtOaY3ojm2n79FTdKihkJsOvfgqxqJ5qonSVjc0MSsgpQJryXZLZMuW+1O4mM8YEAMJ97AKn7k7yrw4i03Av10M0/P/j6y3kcZylkmQ==",
+        "id": "261f64c7f976a88cf90609d7651082d2c3e54f172d34b4f9b9e92306e060c441",
+        "pubkey": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+        "sig": "274ca37722dd036962b765743201bce7dae2fe8c2fe225a9be013d868117d80c3e32b38051927d6b5ed1c9b9f68342e9294127c5c743252b17332d76232b6f0b"
+      },
+      "outside": {
+        "version": 1,
+        "end": 1791386501,
+        "sealed": "ArxNFJ6LTqUn0Kwot3TjZ0UIg7SXsAkqbDFSAkROJzYc5NIfVdrk9QdQq7cOoUxaOyZoQXMuzS3FiVAqJgxmC0CX09yunvbpKJbgiXGCbAlgh/iqO4i/fni8DOlQZic2vSAOGp9l+nEqrGOgxHR21b382NhPlS4JgxfZkMPjyWNCw+mOFrqnKXSKE4x/7oUzLvmkNKpRDbuzdxmF8N0mG9TQxVtnEswscPhFQHYvu+QY34gyZ/Pf3S2+FM7H/qBA5asmbUZZxWfg+r8CzgWVgSZVLBn5vpzW3x0QxmrermjP2HX1zSeGRt9WAPiVk9t5VvxSsf5sa3e6EyJKQTTEZJKLjdcnPyfwDDPjigcZHHFyOvunpMRogqHC646EQbO49B8tXoKYPRd9YlhHZWeIv3CB65qaKXyoSrQEKhpE8EfW3+SoPrQl3H2+M3opBpqvLNOta71pDQDYRanxi0TzCns4Fqonsj3bEoCLskIsilc6roLNb5vBQObwkv0xqNBLEFmi4dkqvWT65LAroy8SExq9Dx9m/frQdMQNl4Xy6LE5ydWq7PaQ5Sf9ZOKlDuL5RywVudCJcHULttqPDQXbrUBz5XsJ9cl7St6j1gBy8u3fCr+yIKqFP+g4YnbEBIwqPznP14dehHx3UBNaKUvTj0T7lQE+iQ0vo/R6+qJy7JODS9s="
+      },
+      "inside": {
+        "version": 1,
+        "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+        "sats": 49000,
+        "invoice": null,
+        "verifyUrl": null,
+        "createdAt": 1791385481,
+        "expiresAt": 1791386381,
+        "sale": {
+          "key": "b4a71410c138150449bb82d4fd01a3e6c72bd47aa87f62a4cc56b76320d59ad6",
+          "fiat": {
+            "minor": 2450,
+            "digits": 2,
+            "currency": "CHF"
+          },
+          "note": "Order 1042"
+        },
+        "taker": "807b8049fa4e9cdd58f5cc69a20302e6",
+        "tolerance": 1500,
+        "confirmed": true
+      },
+      "tolerance": 0
+    },
+    {
+      "name": "a lease with a tolerance in a fraction: none",
+      "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+      "event": {
+        "kind": 30078,
+        "created_at": 1791385482,
+        "tags": [["d", "b96d1beae9acd952181902a17699b04af85f6f22a7849446ded95f221ac7b43a"]],
+        "content": "AnU6CePqTcFFZVGH8/W9yKVbBQu2bxcV5vCL1RxFTHqFxv2LdO05IebO7K3k/xQwKf8NHdTKRB9KOb+4RCGc1Jh/WjGAG8cJjdh1V0Nqz7v1m0jBQF5dgumdIqUTvOqCMLEtlhmEh7UTEgrOv/9mh2OaFEOefZgUtIvS9S+jk0Eza6zRGmJzATzHh6UG+wKA2tVsuwd5hpWJWU/fJB5ydgfcHvFNqlzWyYibncn8+/VLzeDPWI6Gw+BXzNhmHomZC4vxep91CKHfCuK6dZRHacE4qE7H/5B6PlwHX7Sqml6pzlMFQkOjGdWq3BzeOx5pbx4W41qpNE5VSqDFJChaO/qIs56RUWgsrNt2/auPfEx5FPJ2CnmNcjGfk8xrmqgUd8nNnOPmzKxBu2cjoUkCEAonSI2iLrCtlijNWjXBxjF0HoVeUGzskDznPWllHGvR16K8J5UCnfWIBu2URiwlPi4wbVVsPJAj63r7i0232eoU7h/tjJTBqO2U8RjBYkulPgdaMF/7zj8r6eoT/XRgv/R9RZEFPBbt4p9v9MLfVrL0z80Sz7SE5lwkqg0tI4nVIMJ9pbTzTPX/Q9jGeazS4/4kSv+VkRq3ifYo0tJVV65FcZZ6dUjPjWMZP0FT2D4EKWJmqdlRS5f70/QKJX1SUCpVPgTbXpphSLdyGMjhwGP0zBhcX9GUGvjLPlETtamKwCK0UdKdVtqRtODC5qZgaN2AEzKjdTLKxV7V5SGAaIQUbSxjPFZxmiynV+5pdP+k1y8mweZKmz3fPXd9pmW0SyLU96P03xhY+2NWdfq3r5k+x5zrumYtqObV6hiNVkBC+4K8nMOA4znGaPIlk5Pf0hrJOxdNBmQpV6YO7Wy0ZePaxDrqB6NO2aP1Nb8sTQU+itqIliskD0bLplPL84WnHiHMKXUW2XCJK+HGwz/BCcFbQjZOwwQ9tDvRAvIHy6Oe2qTsJDvrorkax9+nBjRk00FyUJkZpw/GmXj9DOkTIawQEbtBTsLF5tbuj2kMaPwcML+ZyZ4YiZ69oQmkTaE4ArqeydsvnuO87NjKSv9ra0Czg79I3w3jpGweE1F8keyLM3zCZ5Lx4F6yqOC+pwFvHaSXNw==",
+        "id": "d1692f1ec7abe5591b428bfdf65d3e9d862807a2af971653f5979c701ece290c",
+        "pubkey": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+        "sig": "ac220768ddc055fba1099b525fece48920bfb4963931c163d573713c0a91bf86a9b46e3fc170dc7ece7d4749d9634b8e120d02813073ac0a4e3c8e78ace774e9"
+      },
+      "outside": {
+        "version": 1,
+        "end": 1791386502,
+        "sealed": "AlRe5/3BU0SF42HZ0z5YIfSkakY75cg2MGYCqpKs4JIx0vLYNOFriya5hXgpoN89Z/WowyY1fIl9cu30TewY1eDlz8hzCMG9Guw+CD53PtfSbUs0v0tLIF1pCdJEBLqG2Y2q3pGYLIq90grC6Imv43QF9eoWeJyhtNmXoTQoOvRXiJMYE/3yLpI68/PO5GWCr66T7TvOpZvdbmexJvfGbQjOgayVkO8FAq7J+49t/VJbrgBszl7Rv0I3rv08veqvja2U3zs9cU9kKm+JUAeNsH6IGGY/jA/4F+Mr+Vqm1tzeDBh/dTb/cIc5RDtzeKpnUAeRcCITjr7r5ppmRbNZVjiloVYZX3UXsC1kWdUMNWP9BXT5wKZYRjgU+4btx0XCoJplKH/Qpx41Ca2TUPlvcxmgqUTvhjksPM1GddQgnoXdFYnJ5g/CX8giKUHcUgYarZTAbgJyY0gRd+ww8cG4opndwmtmDGqhii8rT+rdWNIAQruEBra7tVBfJ0s5bBmmj2yS1cEI2lxu6M0LX0eEUYycYcEAxzw9Q5PzFklM4ouiSb8k3aXhesFCAbFGyA0qO8bgZlx+HUMPk3HaJMmBHgCOI7kjQlftiAcqNSSt/2JQ0WAC3uJ5mygMrXK7CHCqWdijZs7AI3bISX6BwAcyWZyIfhw3ig/CD5J/fOuYM3PNaVQ="
+      },
+      "inside": {
+        "version": 1,
+        "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+        "sats": 49000,
+        "invoice": null,
+        "verifyUrl": null,
+        "createdAt": 1791385482,
+        "expiresAt": 1791386382,
+        "sale": {
+          "key": "b4a71410c138150449bb82d4fd01a3e6c72bd47aa87f62a4cc56b76320d59ad6",
+          "fiat": {
+            "minor": 2450,
+            "digits": 2,
+            "currency": "CHF"
+          },
+          "note": "Order 1042"
+        },
+        "taker": "807b8049fa4e9cdd58f5cc69a20302e6",
+        "tolerance": 2.5,
+        "confirmed": true
+      },
+      "tolerance": 0
+    },
+    {
+      "name": "a content of a newer NIP-44 version (#), by any key: no record of a newer format here",
+      "address": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+      "event": {
+        "id": "4ca8617866bc0d688e63a650f166a50b1b6c7ff6d793c848d15cf90a4c75d3c3",
+        "pubkey": "30e31b811180aacd24d8f1b97e6641dbe6b85eb60dd614ef1991a0361895a4a9",
+        "created_at": 1791378290,
+        "kind": 30078,
+        "tags": [["d", "3736b1a327ab4a9d5498cd0a34be24a923c494a2960aeae44616375a91de0240"]],
+        "content": "#",
+        "sig": "6d9f53eabfe97885d4dc40cd1c20f87feefb65fa37d83a5a374098db2b7a6d6b33430be2f4a8750fe0b089a206422f5203c9f1ce25006c75f412f3a859700cbc"
+      },
+      "outside": null,
+      "inside": null
+    },
+    {
+      "name": "an empty content, by any key: no record of a newer format here",
+      "address": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+      "event": {
+        "id": "225711dbb4254e692369b048836ac408def6cb049f4d6c1e25327067fccd087a",
+        "pubkey": "30e31b811180aacd24d8f1b97e6641dbe6b85eb60dd614ef1991a0361895a4a9",
+        "created_at": 1791378290,
+        "kind": 30078,
+        "tags": [["d", "3736b1a327ab4a9d5498cd0a34be24a923c494a2960aeae44616375a91de0240"]],
+        "content": "",
+        "sig": "7bf2c844d4baea2f23c93d81a2f5285e5dd42d145c165a5c8bd32468fea310b97833d6ca819d6fbc490e5d0e0bb460f302c36c0f1514f4bf629bd185ba6d85ff"
+      },
+      "outside": null,
+      "inside": null
+    },
+    {
+      "name": "a NIP-44 version byte 3, by any key: no record of a newer format here",
+      "address": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+      "event": {
+        "id": "c91511c4737c82249e1bbc5f6f6cef4d8d3b87fdea5605ce01528af1fe7ace4e",
+        "pubkey": "30e31b811180aacd24d8f1b97e6641dbe6b85eb60dd614ef1991a0361895a4a9",
+        "created_at": 1791378290,
+        "kind": 30078,
+        "tags": [["d", "3736b1a327ab4a9d5498cd0a34be24a923c494a2960aeae44616375a91de0240"]],
+        "content": "A+orZfHw8X7pqJPGHcVcZKOYN1ZlTfMCGSDtSDzodX9YuSOK6OcnWZrwYkvV1y+FsgNXNaY2wvZCwTGU4hbiNbbwwuz0GwDQnISRTvuAviysBUtHA6UKDLLu9Jpo/xYL3AAA",
+        "sig": "8f3055863bae2d69265dfc0e777232cfb4aa8a14480bd219f714b7701a87579a81600fc29f404f32836872ad3fa3836a9938b02bc153dcff657509b2eadb3f57"
+      },
+      "outside": null,
+      "inside": null
+    },
+    {
+      "name": "a withdrawal forged by a holder of the registry key: it opens, its signature does not check out",
+      "address": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+      "event": {
+        "id": "7f9ca18c22d40b703580840456db919349ed1dd900d36fa25812646522f27872",
+        "pubkey": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+        "created_at": 1791378291,
+        "kind": 30078,
+        "tags": [["d", "3736b1a327ab4a9d5498cd0a34be24a923c494a2960aeae44616375a91de0240"]],
+        "content": "AnA2t4rUy/WCESFd4cU8wyYcfl5ZC2cEDJ5QmxVLmNYDvv/eXjy+uyBMqkAgmydgERA4VOeHP+OYH14Y2jrOj0Bvg//pv51F7S93IrcXarhY5XDZoNPNO1HjZnDAn+OEwTE/EIi+3a6zCE8NahEUmsCW62uYyPzjIRTqRqZNjKhhw8SGgF9+DVIgtMnDzZr78x3f19Tls1DFOit62JrNQAvXIAwapEO40vf4eFe81FGsHN2353JoXYEU6rX7I3qCSUvlfYGwopCvNQC33bdu9HSNhk0Q9CaCBpXWIdOZ61gzVD3nKogcJlfWhFVJb5yB/gPkpRxZqkb8nwwT6zjxfJnT+RH2uz9RX0o+DG7T0GI68CREmEmpzn7gG3UQBt4kluPV6AVUEZeNIXtyeGTmArEcnpBf6TGykejXN9dtZI72M2w=",
+        "sig": "3c1e7168b12135c83a1bd03bd152fa48c7d4c63c036e1b16fa98ca350d30605cb6ce5c706e9c0a3cc9e5b4876aa3ec82b3dfbc4ff6fef5cfd58630149719414b"
+      },
+      "outside": {
+        "version": 1,
+        "withdrawn": true
+      },
+      "inside": null,
+      "signature": false
+    },
+    {
+      "name": "an id that is not the event's hash: ignored",
+      "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+      "event": {
+        "id": "154065db6d4aef90e046ce690d6cdacb6ed4b3903d500348aab07bb9c70c997e",
+        "pubkey": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+        "created_at": 1791381280,
+        "kind": 30078,
+        "tags": [["d", "b96d1beae9acd952181902a17699b04af85f6f22a7849446ded95f221ac7b43a"]],
+        "content": "Ahvw71Sb0zSeNvPR5vbxm7URR0l+UYLgfdtUc70oDAdbZxYD4ekQzSnwy9t+fx3GvRk086ohc2GqiQZPOfUxJe4Q0FnfucsPw1aRoW/0DUDDC3pBsxbYAc5YUcfNHmfbnLjHft+XARzIY9fJMaHL1sYf7CUelJ32Lqh/c5AfZvNLX5qoIRv0olaSMjJfVPzFn99Nqr7IxdxMUHDcxsY+U8LDMQGTTjqNxU/RruZ/lfLzwsaEMthQQQdnwvqae0WaGVv22MXFurJ56pCx69z3Cy85ryyyXcwPSbgnMMeH0mkRyNyF/NIrB2ju6nQ3WMGo02jOJkozahz3l0sOjBB83kZS0c62uC3KurFUM9J4IgtqwILzbYyqx1gwFuWGfXB/1KZAPk3H4ZQdNVRMMNQ4iq6zr9t6HU4LEeuCQ+BaHWJgXzGtsYyDkCpnWGJWTSJk6aLJ/zRqYR9sycmu3ajpeU8zn8CZkTFSfGvNHS7+1rVJxtAPICV24ZbM+dOXnh4PIN8qrFPxo8fsUj8iUCAQyNd2RVf13jyasMQeQaCybLfseRlLvnE5frWxpfKSX8qx/2HCh0zHkKPUWZvdNTQ9C8CbWT0MVbrw7IpMyRBJWoLwP84nSPSSp+teukQ1Qq+Np03lGg88gzy4rfmd+6kOQn2Kb0VpLjw0+jspLHistGK4nJaDXDrGA8oGVfjd2sOy+vGj6D5kF94cWZw9LPsEvYjXAhHbzsS7fd9kJuGozRjnL55sJgxsi/1R3CXYTbc1Z/drYw3QRwct+wgoVLoAGocTT6epHVoU+Nh4d/0kuY3Ab+mLIoXLBuAfLK5fHmkEPWUL9fKSlOuvzQd5/5nU77R/wAzyQppu2u3F8ubix7P7n4+OIq+o6DUV7nwfolZzU1nkuLg7qeEY5KuhebZcNfs3e3rFuTbcyQ5JFpZlFCMng+x8fquZB+q2W4UwPPMBep7kRRis49SUiCgeLaJmGzoopajPQoAP5mKhFPP2e1Izxqb/YOlEmwIlJ08daxavZAbz+RbrxFLvXZbbuTT1Ewp7//xm0Ls/8J+YIdfbj+WXyALMWAy5n7oTk2B0fVo1zm80fFKtNS++2UOZlDBJKNhAOw==",
+        "sig": "81a93617f030ba7b5876e4af56fcbd0bcdb4f32e148de4cba945a8817872b7b44d173f54b4e0c7345ab7a80fdafab09569bfe5fc88d9d14a1bd72a64b92d4e3d"
+      },
+      "outside": null,
+      "inside": null,
+      "signature": false
+    },
+    {
+      "name": "a lease as first published: not confirmed",
+      "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+      "event": {
+        "id": "1a6227b38fac4380cf0de48aa8bc30300f1039de452854eb1724ed079674015c",
+        "pubkey": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+        "created_at": 1791381280,
+        "kind": 30078,
+        "tags": [["d", "b96d1beae9acd952181902a17699b04af85f6f22a7849446ded95f221ac7b43a"]],
+        "content": "Ag5VW5vE43Wj0RtW9VxKs0/M3J7lzj4ykz9SygBqKxta7sx1mWEMZfZ1/U9jxNU6nXnq5HoDNz9SeuXouSFXrq7/jccVXOomtM/Q0kGRl8wNW1XlsPXwU5mFj7zfN82znFd437GdHIg7TUdZFXK02sJea6k1u4YwL8CN5cIVYQ7rr5xL0n5e17iChIC8uDSNMcVgKEuf0ZClakOsjg30fOcxoq/EfjRvkmabvwoAF0QYrD4q6EyeXTmrJ0/G12807tC5JuYA2Qp6nSFSOJtXrPgHFsFWrCSprOuhMFiSL0V22GOSCqJfmPOAS0ZUx4x0E47I4p476ujKRA4c+0rFHZB6DLSIqiSVmjoCM5yqkejMyibI8iwmM08LBRPXlBc5jTuS2Up5BgODT6z26uDRyvgAvflz6X/MbkvEwFRio19iW0Ks3CwZ4ZJ89KPUrLcS0QaUc5vhvfEgTMy4xxjJ5Ks1ThM6xkHpWpfsYKORZq97+noJhRJJ/JQAdzxhjMBDfSnTDWlna0lUwr/WUvZpOKV4LOk8EtMDyE3IjjU8C9uXsor2d+cmEceW4ko8XCXI51EaEZsrgBdYvc6suxxJYbK8TXSAfH5+MkJ/wpj1ZaGOcW8pm5vQF0iPTXge+obHHibT450X9V2ZqpeHjs7jjzXKPC0DNL/mTQaCo69LgcXf0s5cvcSe36iOWWR7I7A5I9DGtjP8J8zc7i9AR6EctktgsbjMBtxuDVgDlAJ2/1PdJJsIBiCIBDFP4/B+aPsizkOsi2cwQWwYWZS64shBGwKlrOlSH6Zribna0RYQsdbw/lSNr2rCY3VnO46WAFpoTfZ/9rTUcoc6U8CFqYsRE7q6nFtZEQCUavDlK4ALWY49Mijsz4o2GTOhcjE4TEQYIDuM9SB/8gmjjRhyiUBmOreUGcF9RJOy9DYxXAyedb9Axjo1eDFLBkRyHBpDN2F6U5FhSWzEyjEvIJAahupZMOuWD3sOt85Z5KK8xa6lnVEhHkX8RKM5UIA4sl3PPZDyT2R19mwR0kZq9vEG/QEdewkS89EcsLTc2Q6Q3XWO58MFgd4ZXjTXTl+vF5A+2tWLkCreaMu+E7SML5AatxirbRmc3A==",
+        "sig": "cd91d7fa1481b7262e7cd3fc8ab38dc68eb72c4558e0094666e0d7284ef4cb4566f3c2bf07fe4e24d3d160e5cc49398a60fe44fb78a492e55797d409b5e0ad24"
+      },
+      "outside": {
+        "version": 1,
+        "end": 1791382300,
+        "sealed": "AkrXJ2HwKY57MVvgd3Is/JlDZxcHwN6qDkeuqfcGMlTgCxHfuoI9iK4bONJVz/PwBUj54lBOfQ3gu9RQtdh5GR5CVpPDNiYjUCd2fd3yKBi1YPCU2K8RC/uuRH+gUROl0jfn9rggjrhPMlkf0O600Jo7ZFFh1Z1Q8aBg1k1PAX/SMd01sqvAHCs2kngBfkj5iy9XAE5KqJXUkqXKytpLKFW+jHrBo4NlF2RFVgr7IICO+tiZofuiqkijkEz4ealOM0zsZMp6NgER59F2M+owFJk/0YsiLVIDpGBOdbIRfnmhtPaX3hfpX0limxXNCcPglnneLYyfeTKWjkpL4rq10wvVovZVCNxnBBZNa+IF+czoeijcq3BO6MXFOAoITSQtLgJXiaexuixDf/tAogbTTCMiTzDJE8Lqh8y5VYKS1ivcwFxluEaeZuGxq7GY1DzjPYj9uTd8kXMp9kmgR7OfYvJO9vI2KusJYRowJTkjXshAXEsjzBVGB1JxZnxAyWjupxYMC7mEYfUTnklKg3Bdy66pwMea3+z2I8XVjpu+J7LF8MThd0R/MWoHUrL70Gte+qk2gWvpqb0ZAUbRBylHIMav9ySSKQ0jGPQZ2FZ93Ds/FeLKqYOqqjrDeK6rqXNpbUsB6+WV/BSxaf4JLyp3gN644lVb6jxA20wSJD0Bp5LMSQg="
+      },
+      "inside": {
+        "version": 1,
+        "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+        "sats": 150000000,
+        "invoice": null,
+        "verifyUrl": null,
+        "createdAt": 1791381280,
+        "expiresAt": 1791382180,
+        "sale": {
+          "key": "b4a71410c138150449bb82d4fd01a3e6c72bd47aa87f62a4cc56b76320d59ad6",
+          "fiat": {
+            "minor": 150000000,
+            "digits": 0,
+            "currency": "SAT"
+          },
+          "note": "Order 1042"
+        },
+        "taker": "807b8049fa4e9cdd58f5cc69a20302e6",
+        "confirmed": false
+      },
+      "confirmed": false
+    },
+    {
+      "name": "the same lease marked confirmed, a second later",
+      "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+      "event": {
+        "id": "69133b3681f5dcdf0919b7cb6d6a621fe7933d53d4cb424c991efed0882bdbb6",
+        "pubkey": "8130c0cc637826509727343b843e065cdc32da9204aceda73ae23f24e523cf56",
+        "created_at": 1791381281,
+        "kind": 30078,
+        "tags": [["d", "b96d1beae9acd952181902a17699b04af85f6f22a7849446ded95f221ac7b43a"]],
+        "content": "AkL/GSwpPKp9TNqpGCutog0lFGsGDvvz45ReCaF4jdq5QEL77kkVh9wJ3zVi6KjDCBWcJ+8Dve21V6CsZ36/lV4xkXO5xqZpYWnDJHVbM1wyDhlcgSFsixN/W9nRP71qvTjNqSns9U4z6bL70yGOyLibbeaZxXW8ool0XDVOzJHBiBrlYc5DLf/mO2194tREDwh3RCm9x5vESRn5hXCLxmMPI/4n9edclR55RAhdcZLa8wHQ2ptnl8LgQnvY1teHpRfbLUh2+bYsUVyV36ijCR6dGft2/v/KdydkzOqqPPYf64pl//kJrpaG9q3GWb9jf+Xu/lqNOy5Y7wsaAMl2EfpK41zbvGiU9yfsPASXJRaR7dhqxLvk9FEyxOtdS/wyUcrqSatREA9SvFs03Lkxvew+nZei1TNaNyOn32GuW6WZ7phEj9l0wWsIfympe/jzoyJ6AHgPgInXgSmi/HJysazfG6z9T1MazoB4uwJmx5cXImaWySPhOZErzQtqmlAPFzdJxEq538QG8EWfF3ClrzHrrif+Gj+h6vr8QBEU+sGMTY3K2iZck18s8SBu1F48EDynGZhGg6xroY7J1uu37ILefTBOIMlEa6dnZXvvB9cJLHG9Sgd4wp4dMm+gVjV0AlhNtFNotmZZtfmlscMn3+sUZrdwwU+za7zzfe30o2vtHRMb9labP0Yohcrco75azwHC1ehIg7TCDQO/yETR0VKfWRi2tyBtgLHpdkUuDzeeTin2uTVd8HVCj5PklSe8CAqK+EB6KmQnvqoEXZxNaJucRvyBZZ2O3Ragbap4jiUR+z2OHI6E5DRFBC3zPlmv091cQM3b0VzAbCAOQAqAUm3KsnguK51LIQTZRT9EcldJuTXBAJ2/eAbQ0rN+rowZeMNdzHvlxk6IQ2L+xHuuXS7pPHnRhxgcopm0BnXp86LwCoB77bGeWDr3apx8GXREcc3UCL/MzX/IeyFI1O+/kpSMc11kF2JkEZUAvJ4Td4ASLN7t0LwP4nkUPwB2QnzXrGLmyXV3dEtLS2nC7pCoREcsYTD1xobOppFuW3Xw5YPuGHBZNIWp5vIT3tu8PmQf72+B0DE6FrHCcQuYW6gcjQ0SGw==",
+        "sig": "081471b3f76265153248c79c7196634a4b6c48e61394eeb80c3526d97243bc3d81bd1f5f35f341af9433e0fc15642742585e2e7eb63dd8f7b48905efbc8c849d"
+      },
+      "outside": {
+        "version": 1,
+        "end": 1791382300,
+        "sealed": "AloWL/7yNHLK9g2o4+KW2xAv2i/wZnzP8VEixj3zI/4ePiWCqMyzVsXID3MBQq118yeq+jA+HYcVdjcNuIT9T+we3aHKgLUuc5qm8EVSzJ0T3jUZJIjEX1b3gbc2X8LsqJO1LnwzfQPFIWZ0Nep7E0/3ooeuV2DbnOiezjmUQw4w5mVUvJ1siD+fyzluydisJ+sTnoSbIipe4Jcajrg7lEco8g04HBu3yZYpJVtv4htVbcrIyYlO2pE/JIcduRsgV1aNysoLyXmb6F98Lgeo4QRDw5NXdZsWWjl4ybJYWxppff1n1bDBpZMFFl0OiaePkycxAcNKTDH6ibslib+68Zs8sXapEcoyzQDMBT1k2Lp93Si4k3MQ0hTO6c+dRLYda5ybAkGNlLBP7yWltwjj+tdKE2q9+fShHdQv0eLgztNuTYN2ov+WIiltVk0S1KIklphjssLkGyGoi0XI1QoMhE+XBqxiZb9GS3TQ8sRgOvSTkuqtYGA22rDApH8I1UYCyNuBHw2dGZmQ9HLISqCsasEAuBkhDKUjTcCu+R4uwO9kvy/yifGG2GlgUbK7m14E4xnQ0TVB+Ydx+0AMigQpoTQEDe4cfSBqZzcNTUMe+cBYW+j8HWheCuNkgQVHrhT1kZGkiU0vciAgF+s5lwljcjWdoUhUd261XpOIq9lsi3EvesY="
+      },
+      "inside": {
+        "version": 1,
+        "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+        "sats": 150000000,
+        "invoice": null,
+        "verifyUrl": null,
+        "createdAt": 1791381280,
+        "expiresAt": 1791382180,
+        "sale": {
+          "key": "b4a71410c138150449bb82d4fd01a3e6c72bd47aa87f62a4cc56b76320d59ad6",
+          "fiat": {
+            "minor": 150000000,
+            "digits": 0,
+            "currency": "SAT"
+          },
+          "note": "Order 1042"
+        },
+        "taker": "807b8049fa4e9cdd58f5cc69a20302e6",
+        "confirmed": true
+      },
+      "confirmed": true
+    }
+  ],
+  "leased": [
+    {
+      "name": "no record",
+      "records": [],
+      "t": 1791378280,
+      "expected": false,
+      "checked": []
+    },
+    {
+      "name": "a lease not ended",
+      "records": [
+        {
+          "author": "a",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        }
+      ],
+      "t": 1791379300,
+      "expected": true,
+      "checked": []
+    },
+    {
+      "name": "a lease ended less than 300 s ago",
+      "records": [
+        {
+          "author": "a",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        }
+      ],
+      "t": 1791379600,
+      "expected": true,
+      "checked": []
+    },
+    {
+      "name": "a lease ended 301 s ago",
+      "records": [
+        {
+          "author": "a",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        }
+      ],
+      "t": 1791379601,
+      "expected": false,
+      "checked": []
+    },
+    {
+      "name": "a lease withdrawn",
+      "records": [
+        {
+          "author": "a",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "a",
+          "createdAt": 1791378281,
+          "outside": {
+            "version": 1,
+            "withdrawn": true
+          }
+        }
+      ],
+      "t": 1791378290,
+      "expected": false,
+      "checked": [1]
+    },
+    {
+      "name": "a withdrawal older than the lease",
+      "records": [
+        {
+          "author": "a",
+          "createdAt": 1791378281,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "a",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "withdrawn": true
+          }
+        }
+      ],
+      "t": 1791378290,
+      "expected": true,
+      "checked": []
+    },
+    {
+      "name": "another author's lease not withdrawn",
+      "records": [
+        {
+          "author": "a",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "a",
+          "createdAt": 1791378281,
+          "outside": {
+            "version": 1,
+            "withdrawn": true
+          }
+        },
+        {
+          "author": "b",
+          "createdAt": 1791378282,
+          "outside": {
+            "version": 1,
+            "end": 1791379380,
+            "sealed": "…"
+          }
+        }
+      ],
+      "t": 1791378290,
+      "expected": true,
+      "checked": [1]
+    },
+    {
+      "name": "a record of a newer format",
+      "records": [
+        {
+          "author": "a",
+          "createdAt": 1791378280,
+          "outside": "newer"
+        }
+      ],
+      "t": 1791478280,
+      "expected": true,
+      "checked": []
+    },
+    {
+      "name": "old leases only",
+      "records": [
+        {
+          "author": "a",
+          "createdAt": 1791373280,
+          "outside": {
+            "version": 1,
+            "end": 1791375280,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "b",
+          "createdAt": 1791376280,
+          "outside": {
+            "version": 1,
+            "end": 1791377880,
+            "sealed": "…"
+          }
+        }
+      ],
+      "t": 1791378280,
+      "expected": false,
+      "checked": []
+    },
+    {
+      "name": "a withdrawal whose signature does not check out: passed over",
+      "records": [
+        {
+          "author": "a",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "a",
+          "createdAt": 1791378281,
+          "outside": {
+            "version": 1,
+            "withdrawn": true
+          },
+          "signature": false
+        }
+      ],
+      "t": 1791378290,
+      "expected": true,
+      "checked": [1]
+    },
+    {
+      "name": "a lease that holds, taken without its signature checked",
+      "records": [
+        {
+          "author": "a",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          },
+          "signature": false
+        }
+      ],
+      "t": 1791378290,
+      "expected": true,
+      "checked": []
+    },
+    {
+      "name": "a newer lease that ended ends an older one's hold",
+      "records": [
+        {
+          "author": "a",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "a",
+          "createdAt": 1791378281,
+          "outside": {
+            "version": 1,
+            "end": 1791377000,
+            "sealed": "…"
+          }
+        }
+      ],
+      "t": 1791378290,
+      "expected": false,
+      "checked": [1]
+    },
+    {
+      "name": "two forged withdrawals over a lease: both checked, both passed over",
+      "records": [
+        {
+          "author": "a",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "a",
+          "createdAt": 1791378281,
+          "outside": {
+            "version": 1,
+            "withdrawn": true
+          },
+          "signature": false
+        },
+        {
+          "author": "a",
+          "createdAt": 1791378282,
+          "outside": {
+            "version": 1,
+            "withdrawn": true
+          },
+          "signature": false
+        }
+      ],
+      "t": 1791378290,
+      "expected": true,
+      "checked": [1, 2]
+    },
+    {
+      "name": "a withdrawal over a lease that ended: not checked",
+      "records": [
+        {
+          "author": "a",
+          "createdAt": 1791377000,
+          "outside": {
+            "version": 1,
+            "end": 1791377900,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "a",
+          "createdAt": 1791378281,
+          "outside": {
+            "version": 1,
+            "withdrawn": true
+          },
+          "signature": false
+        }
+      ],
+      "t": 1791378290,
+      "expected": false,
+      "checked": []
+    },
+    {
+      "name": "a lease whose id is not its hash: ignored",
+      "records": [
+        {
+          "author": "a",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          },
+          "id": false
+        }
+      ],
+      "t": 1791378290,
+      "expected": false,
+      "checked": []
+    },
+    {
+      "name": "the same second: the lowest id first",
+      "records": [
+        {
+          "author": "a",
+          "createdAt": 1791378281,
+          "outside": {
+            "version": 1,
+            "withdrawn": true
+          },
+          "eventId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        {
+          "author": "a",
+          "createdAt": 1791378281,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          },
+          "eventId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      ],
+      "t": 1791378290,
+      "expected": true,
+      "checked": []
+    }
+  ],
+  "confirmed": [
+    {
+      "name": "this lease alone",
+      "records": [
+        {
+          "author": "s",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        }
+      ],
+      "sale": "s",
+      "lease": 0,
+      "t": 1791378290,
+      "complete": true,
+      "expected": true
+    },
+    {
+      "name": "the read incomplete",
+      "records": [
+        {
+          "author": "s",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        }
+      ],
+      "sale": "s",
+      "lease": 0,
+      "t": 1791378290,
+      "complete": false,
+      "expected": false
+    },
+    {
+      "name": "another author's lease holds the address",
+      "records": [
+        {
+          "author": "s",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "b",
+          "createdAt": 1791378200,
+          "outside": {
+            "version": 1,
+            "end": 1791379200,
+            "sealed": "…"
+          }
+        }
+      ],
+      "sale": "s",
+      "lease": 0,
+      "t": 1791378290,
+      "complete": true,
+      "expected": false
+    },
+    {
+      "name": "another author's lease ended 301 s ago",
+      "records": [
+        {
+          "author": "s",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "b",
+          "createdAt": 1791377000,
+          "outside": {
+            "version": 1,
+            "end": 1791377989,
+            "sealed": "…"
+          }
+        }
+      ],
+      "sale": "s",
+      "lease": 0,
+      "t": 1791378290,
+      "complete": true,
+      "expected": true
+    },
+    {
+      "name": "another author's lease, withdrawn",
+      "records": [
+        {
+          "author": "s",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "b",
+          "createdAt": 1791378200,
+          "outside": {
+            "version": 1,
+            "end": 1791379200,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "b",
+          "createdAt": 1791378201,
+          "outside": {
+            "version": 1,
+            "withdrawn": true
+          }
+        }
+      ],
+      "sale": "s",
+      "lease": 0,
+      "t": 1791378290,
+      "complete": true,
+      "expected": true
+    },
+    {
+      "name": "another author's lease, its withdrawal forged",
+      "records": [
+        {
+          "author": "s",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "b",
+          "createdAt": 1791378200,
+          "outside": {
+            "version": 1,
+            "end": 1791379200,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "b",
+          "createdAt": 1791378201,
+          "outside": {
+            "version": 1,
+            "withdrawn": true
+          },
+          "signature": false
+        }
+      ],
+      "sale": "s",
+      "lease": 0,
+      "t": 1791378290,
+      "complete": true,
+      "expected": false
+    },
+    {
+      "name": "another author's lease forged: it holds all the same",
+      "records": [
+        {
+          "author": "s",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "b",
+          "createdAt": 1791378200,
+          "outside": {
+            "version": 1,
+            "end": 1791379200,
+            "sealed": "…"
+          },
+          "signature": false
+        }
+      ],
+      "sale": "s",
+      "lease": 0,
+      "t": 1791378290,
+      "complete": true,
+      "expected": false
+    },
+    {
+      "name": "another author's record of a newer format",
+      "records": [
+        {
+          "author": "s",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "b",
+          "createdAt": 1791378200,
+          "outside": "newer"
+        }
+      ],
+      "sale": "s",
+      "lease": 0,
+      "t": 1791378290,
+      "complete": true,
+      "expected": false
+    },
+    {
+      "name": "a withdrawal of the same sale newer than this lease",
+      "records": [
+        {
+          "author": "s",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "s",
+          "createdAt": 1791378281,
+          "outside": {
+            "version": 1,
+            "withdrawn": true
+          }
+        }
+      ],
+      "sale": "s",
+      "lease": 0,
+      "t": 1791378290,
+      "complete": true,
+      "expected": false
+    },
+    {
+      "name": "a withdrawal of the same sale older than this lease",
+      "records": [
+        {
+          "author": "s",
+          "createdAt": 1791378279,
+          "outside": {
+            "version": 1,
+            "withdrawn": true
+          }
+        },
+        {
+          "author": "s",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        }
+      ],
+      "sale": "s",
+      "lease": 1,
+      "t": 1791378290,
+      "complete": true,
+      "expected": true
+    },
+    {
+      "name": "a newer lease of the same sale (another invoice of the order)",
+      "records": [
+        {
+          "author": "s",
+          "createdAt": 1791378280,
+          "outside": {
+            "version": 1,
+            "end": 1791379300,
+            "sealed": "…"
+          }
+        },
+        {
+          "author": "s",
+          "createdAt": 1791378281,
+          "outside": {
+            "version": 1,
+            "end": 1791379400,
+            "sealed": "…"
+          }
+        }
+      ],
+      "sale": "s",
+      "lease": 0,
+      "t": 1791378290,
+      "complete": true,
+      "expected": false
+    },
+    {
+      "name": "this lease not in the read",
+      "records": [
+        {
+          "author": "b",
+          "createdAt": 1791378200,
+          "outside": {
+            "version": 1,
+            "end": 1791377000,
+            "sealed": "…"
+          }
+        }
+      ],
+      "sale": "s",
+      "lease": null,
+      "t": 1791378290,
+      "complete": true,
+      "expected": false
+    }
+  ]
+}

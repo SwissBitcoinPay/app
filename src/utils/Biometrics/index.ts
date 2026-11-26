@@ -1,1 +1,0 @@
-export { Biometrics } from "./Biometrics";

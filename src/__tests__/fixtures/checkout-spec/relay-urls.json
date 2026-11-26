@@ -1,0 +1,121 @@
+{
+  "description": "Relay addresses (SPEC.md §9, Relay lists): whether each is a relay address in its one spelling. Never repaired.",
+  "cases": [
+    {
+      "url": "wss://relay.example",
+      "valid": true
+    },
+    {
+      "url": "wss://relay.example:443",
+      "valid": true
+    },
+    {
+      "url": "wss://relay.example:1",
+      "valid": true
+    },
+    {
+      "url": "wss://relay.example/nostr",
+      "valid": true
+    },
+    {
+      "url": "wss://a-b.c.example/x/y~z",
+      "valid": true
+    },
+    {
+      "url": "wss://xn--bcher-kva.example",
+      "valid": true
+    },
+    {
+      "url": "wss://relay.example/bücher",
+      "valid": true
+    },
+    {
+      "url": "wss://relay.example/😀",
+      "valid": true
+    },
+    {
+      "url": "ws://relay.example",
+      "valid": false
+    },
+    {
+      "url": "WSS://relay.example",
+      "valid": false
+    },
+    {
+      "url": "wss://Relay.example",
+      "valid": false
+    },
+    {
+      "url": "wss://relay.example/",
+      "valid": false
+    },
+    {
+      "url": "wss://relay.example:0",
+      "valid": false
+    },
+    {
+      "url": "wss://relay.example:65536",
+      "valid": false
+    },
+    {
+      "url": "wss://relay.example?x=1",
+      "valid": false
+    },
+    {
+      "url": "wss://relay.example#x",
+      "valid": false
+    },
+    {
+      "url": "wss://relay.example/a,b",
+      "valid": false
+    },
+    {
+      "url": "wss://relay.example/a b",
+      "valid": false
+    },
+    {
+      "url": "wss://relay.example/a b",
+      "valid": false
+    },
+    {
+      "url": "wss://relay.example/a　b",
+      "valid": false
+    },
+    {
+      "url": "wss://localhost",
+      "valid": false
+    },
+    {
+      "url": "wss://relay.localhost",
+      "valid": false
+    },
+    {
+      "url": "wss://a.relay.localhost:6379",
+      "valid": false
+    },
+    {
+      "url": "wss://localhost.relay.example",
+      "valid": true
+    },
+    {
+      "url": "wss://127.0.0.1",
+      "valid": false
+    },
+    {
+      "url": "wss://relay.e",
+      "valid": false
+    },
+    {
+      "url": " wss://relay.example",
+      "valid": false
+    },
+    {
+      "url": "wss://relay.example ",
+      "valid": false
+    },
+    {
+      "url": "wss://aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.example",
+      "valid": false
+    }
+  ]
+}

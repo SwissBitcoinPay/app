@@ -1,2 +1,0 @@
-- ATM accounts implementation
-- Fixed an error where the Submit button is always grayed 

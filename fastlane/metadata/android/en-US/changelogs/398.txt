@@ -1,3 +1,0 @@
-- Use locale decimal separator for bitcoin amounts
-- Fixed wrong payment type on ticket printing
-- Updated Finnish translations

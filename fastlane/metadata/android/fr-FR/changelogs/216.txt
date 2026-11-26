@@ -1,2 +1,0 @@
-- Implémenté les comptes ATM 
-- Fixé une erreur où le bouton Envoyer est toujours grisé 

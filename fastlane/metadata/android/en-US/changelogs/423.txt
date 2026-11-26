@@ -1,2 +1,0 @@
-- Updated some parts of the UI
-- Various fixes and improvements

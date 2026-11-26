@@ -1,0 +1,20 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+
+group = 'me.sattle.themecrossfade'
+version = '1.0.0'
+
+android {
+  namespace "me.sattle.themecrossfade"
+  defaultConfig {
+    versionCode 1
+    versionName "1.0.0"
+  }
+}
+
+dependencies {
+  // ReactModalHostView: the windows of the panels shown (Crossfade.kt).
+  implementation 'com.facebook.react:react-android'
+}

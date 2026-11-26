@@ -1,0 +1,25 @@
+{
+  "source": "Made by an implementation of this specification (createInvoice, end to end) with the integration key and the registry of app.json and fixed random bytes. The sattle.me app reads it as the owner of the sale ORD-2001, and as a second sale claiming the payment of app.json's declaration.",
+  "ref": "ORD-2001",
+  "note": "Order 2001",
+  "fiat": {
+    "minor": 2,
+    "digits": 2,
+    "currency": "CHF"
+  },
+  "sats": "21",
+  "invoice": "lnbc210n1p4vvj3qpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qushp5twpdxgxj95dzmxgh755gleudk99ula8jnrf5cpv0p50l3km5vrjqxqzjcqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqfv3e0q",
+  "paymentHash": "d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+  "verifyUrl": "https://breez.tips/lnurlp/verify/d87214c9804af38c5248a3d7a9783d2a8b00d991789c67d4d22c81f382f72839",
+  "saleAuthor": "45e7f37c8fb380eea37d6152361c35a171b8afb7e4e51f9a90c2724c6c065dd2",
+  "taker": "ab72803dc89a0eae613d0254ae874007",
+  "event": {
+    "kind": 30078,
+    "created_at": 1791380000,
+    "tags": [["d", "38304ad9acb94e7566e78351e36c75b219964dee4ecf38d6af134b9e5f551922"]],
+    "content": "Ak5ztqDUFlqlYf+aFLgxUOl1gAJfYINnFNfL7FWdyDg9uuQBN/XF5jg0qdqjOcti6OoUabhrxg0sVgZEz+pqCvmyFHdQ93JkjwKTcFYLoscReEP6rMdsGhVk1MzWwuwz2MTvdRQsiSYE/3CZECMV6+2575r9seOHN3TeaBlxA+xe+iUzO7tkq6X2L84bD/I53vf091kXmqtialQNfhb89dAwPf66QF8NZan+oJYCngrcvtcy9B2kHZVVYXs6Yu0iy7Xn0YIUjWrNk28FMlb+CP6AbB5omH0QN0Uvqc7usFbotyUEMDg4pvyRofQkSEgTummWROzHgx3SH1kUl79px32QnA0lUqgieUOK6s30XAwnp6DWV4QUGSaGWwXf4oPedNRZqfC/V2CEGs0eFLez9Re2a8pmW4Bv6bW7tWqFKpfF8/17IyN/mnQZ8cct3+YCKCPaqiVO2WpM4K9anFaVYmkQKTWEWNGGLkOLa558PCYuYvWH70tddD2k1YVYuA0bo/p7X93OFW7WZbqkfVsDsnMoEYASV4XcuZVDThndritWh+Mo7T2VvGRzYqWG7qHuW8rbc8Up/1CwFx7IF8c14wcufEAsZWX2uTAnxpjGur9X+QmuM2k/SygaTpK+GJG70v1dJH6GkwB1WYLrL6u4AZgnpyZ+2cwczvKL57XIroL1GnLJDocEDfvipym6Ev3m0xuq9svD1LI9jCYItY/DCGHc7a2OofaIa/Ts/tFODnmgekUZeWsjhk5o3GWUg4poBsMRW6++KZTQUlPcs3sqq1NmvC/dqk1I+dBJRHbF8Y2AWIdEo3i99xYecQaijJoClst3LgouFDsC6xI28Cc892XEpU39S/MLDNLr+FYxJVe4U5IDhpeQd8uZ3wRYVfr6EZZMvxz8uhXhs2iS3K+0M1KaBOO/3lRwMQdTgItlkVIdspAtVybuhyZTsW+SxAvhbd1LTnpeHy0vM5mXaE7x0jtDWaDrSMYfTutZFF6RYymhI3hTSXq93SBJZhyzmY9fVWS9qlDmJfS0GJqhgnPN7xY108t49RyYn/WNn5Jl6kmopabPV/n9IBHTJDzBRJq3aKJ23L/4pdhL0gHerEzllSxpphI9iP1arIEuOMO6mTm4LmKy7/K2anNTOL4oIfCs5D2iDtkM9/gz9T+cP5QKa3KjGRhNoQFhWst8xIrabZRli7rQ71HLSAL1KL6q7JJQrAr6ZwZV+xVcVY+YHqkJ1TY7YR9oxCvFelxAfCOB5qx1ZQcwlD6U/mkkilp5KiOy8YGPYnzvk59ufZhZE8ub/ZIWyZtrYXA95Twm1r0HnKyQorkfc7ckNkkQ5I+rHV395e3HW5pvso372Jf2gQK2rFbY2rPj3AyYyxXN+ZxB6Xqe6fDINTwDHWeayn0G8U6oOthNQhScW77W+E40SQsgtMgUQFsKhazIngctlVpJiKHMC7c=",
+    "id": "98e0b2769834ac29d68c3c3cafb0241b024d0c817571e3ac797b6f914b3129b9",
+    "pubkey": "45e7f37c8fb380eea37d6152361c35a171b8afb7e4e51f9a90c2724c6c065dd2",
+    "sig": "6e3e4603e50f4cb9e0bf58a0faa4dff94c81c6179db090f43de010abbd87af567334fa287829de5d1f9b33ca8a18ef37ae1b27e6772710b53ee4482df888bab5"
+  }
+}

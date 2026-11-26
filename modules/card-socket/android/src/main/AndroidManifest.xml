@@ -1,0 +1,34 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <!-- The card socket (CardSocketService): a foreground service of type specialUse that keeps the
+       phone's connection to its cards' relay, on which their taps wake it. Google Play asks for
+       the declaration of this foreground service type before it publishes the app. -->
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+  <application>
+    <service
+      android:name=".CardSocketService"
+      android:exported="false"
+      android:foregroundServiceType="specialUse">
+      <!-- What Google Play reviews (Android 14+, foreground service type specialUse). -->
+      <property
+        android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+        android:value="Holds the connection on which the taps of the user's contactless payment card at a shop reach this phone, which pays from its own wallet within the seconds the shop's terminal waits. Started when the user pairs a card, stopped by them from the app or the notification." />
+    </service>
+
+    <!-- The system's start (after the first unlock) and the app's update: the service again, unless
+         its holder turned it off. Protected broadcasts: only the system sends them. -->
+    <receiver android:name=".CardSocketBootReceiver" android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+        <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+      </intent-filter>
+    </receiver>
+
+    <!-- The app's own intents only: its watchdog alarm, and "Stop" of the notification. -->
+    <receiver android:name=".CardSocketReceiver" android:exported="false" />
+  </application>
+</manifest>

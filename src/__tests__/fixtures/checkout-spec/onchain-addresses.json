@@ -1,0 +1,181 @@
+{
+  "description": "Deposit addresses (SPEC.md §31, Deposit addresses, Leases, Payment URIs). `addresses`: whether a text is a deposit address. `registry`: the registry address of a deposit address in vectors/app/app.json's registry (`registryKey`). `uris`: an Invoice's `paymentUri`. `amounts`: sats written as BIP-21's `amount`.",
+  "addresses": [
+    {
+      "name": "a deposit address",
+      "address": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+      "valid": true
+    },
+    {
+      "name": "another one",
+      "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+      "valid": true
+    },
+    {
+      "name": "in upper case",
+      "address": "BC1PX22V5J99GDWHXQYELG2P6TDCFAJJD3NJHZN22C2GURA2DVXG2XLQW2WTE4",
+      "valid": false
+    },
+    {
+      "name": "in mixed case",
+      "address": "Bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+      "valid": false
+    },
+    {
+      "name": "of testnet",
+      "address": "tb1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqezcyr6",
+      "valid": false
+    },
+    {
+      "name": "of regtest",
+      "address": "bcrt1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlq5mjzkq",
+      "valid": false
+    },
+    {
+      "name": "witness version 0, 32 bytes (bech32)",
+      "address": "bc1qx22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqyawzpf",
+      "valid": false
+    },
+    {
+      "name": "witness version 1 with a bech32 checksum",
+      "address": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqmk78uh",
+      "valid": false
+    },
+    {
+      "name": "witness version 1, 20 bytes",
+      "address": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3nj7228pf",
+      "valid": false
+    },
+    {
+      "name": "witness version 2",
+      "address": "bc1zx22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqxhhyh7",
+      "valid": false
+    },
+    {
+      "name": "a padding that is not zero",
+      "address": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlpnu67y8",
+      "valid": false
+    },
+    {
+      "name": "a wrong checksum",
+      "address": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wteq",
+      "valid": false
+    },
+    {
+      "name": "a space before",
+      "address": " bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+      "valid": false
+    },
+    {
+      "name": "a line feed after",
+      "address": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4\n",
+      "valid": false
+    },
+    {
+      "name": "a BIP-21 URI",
+      "address": "bitcoin:bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+      "valid": false
+    },
+    {
+      "name": "empty",
+      "address": "",
+      "valid": false
+    },
+    {
+      "name": "the prefix alone",
+      "address": "bc1p",
+      "valid": false
+    }
+  ],
+  "registry": {
+    "registryKey": "efb29c7a1120f3699f1fa155b5209b53153ed12df82804807e9a85f42ee6e0a9",
+    "cases": [
+      {
+        "address": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+        "registryAddress": "3736b1a327ab4a9d5498cd0a34be24a923c494a2960aeae44616375a91de0240"
+      },
+      {
+        "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+        "registryAddress": "b96d1beae9acd952181902a17699b04af85f6f22a7849446ded95f221ac7b43a"
+      },
+      {
+        "address": "bc1pfn49mrjhwa6k4l32p4qvaleqlmsdampq9w7hc5zrx3y7cqh9tp0qusrygu",
+        "registryAddress": "b60fc1bfc3c20f1123f1737f4e8f433028e678034afa46e49532d1a3bcc5ba36"
+      }
+    ]
+  },
+  "uris": [
+    {
+      "name": "Lightning and on-chain",
+      "address": "bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4",
+      "sats": "49000",
+      "bolt11": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+      "uri": "bitcoin:bc1px22v5j99gdwhxqyelg2p6tdcfajjd3njhzn22c2gura2dvxg2xlqw2wte4?amount=0.00049&lightning=lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv"
+    },
+    {
+      "name": "on-chain only, 1.5 BTC",
+      "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+      "sats": "150000000",
+      "bolt11": null,
+      "uri": "bitcoin:bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8?amount=1.5"
+    },
+    {
+      "name": "on-chain only, 1 BTC exactly",
+      "address": "bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8",
+      "sats": "100000000",
+      "bolt11": null,
+      "uri": "bitcoin:bc1p4gmh64rd4m5y5nn8hwfnvtz2mm6lngpmwys5a257klyg03ju0pyqu65xe8?amount=1"
+    },
+    {
+      "name": "Lightning only",
+      "address": null,
+      "sats": "21",
+      "bolt11": "lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv",
+      "uri": "lightning:lnbc210n1p4vvsmgpp5mpepfjvqftecc5jg50t6j7pa929spkv30zwx04xj9jql8qhh9qussp5r7d725tw2vf7345mtmuuypcsav4sh2qp6663qxs2al3q8855qwxqxqzurnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qcqzpuhp5gs8l6ck7jdsa9qx8u2ydgl6q933mn2047j5nw9f9xeknle3ujltq9qyyssqsjvk6t43cmgncdn8z783r2gym2u80dh5xa2xmw2u0a9aykhww3z9tdj4m5kvxt6yme90c0g0gauf008hr70lx5jdkzfzn7hwa73axxsqy9rcwv"
+    },
+    {
+      "name": "1 000 sats",
+      "address": "bc1pfn49mrjhwa6k4l32p4qvaleqlmsdampq9w7hc5zrx3y7cqh9tp0qusrygu",
+      "sats": "1000",
+      "bolt11": null,
+      "uri": "bitcoin:bc1pfn49mrjhwa6k4l32p4qvaleqlmsdampq9w7hc5zrx3y7cqh9tp0qusrygu?amount=0.00001"
+    },
+    {
+      "name": "21 000 000 BTC",
+      "address": "bc1ppdlty3exy4r26tpgjhhjneway7qllykjhjw2smxjrvl6gel3elwqpy575v",
+      "sats": "2100000000000000",
+      "bolt11": null,
+      "uri": "bitcoin:bc1ppdlty3exy4r26tpgjhhjneway7qllykjhjw2smxjrvl6gel3elwqpy575v?amount=21000000"
+    }
+  ],
+  "amounts": [
+    {
+      "sats": "1",
+      "btc": "0.00000001"
+    },
+    {
+      "sats": "1000",
+      "btc": "0.00001"
+    },
+    {
+      "sats": "46918",
+      "btc": "0.00046918"
+    },
+    {
+      "sats": "100000000",
+      "btc": "1"
+    },
+    {
+      "sats": "100000001",
+      "btc": "1.00000001"
+    },
+    {
+      "sats": "123456789000",
+      "btc": "1234.56789"
+    },
+    {
+      "sats": "2100000000000000",
+      "btc": "21000000"
+    }
+  ]
+}

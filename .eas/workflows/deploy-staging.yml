@@ -1,0 +1,143 @@
+# Staging deploy of the app, run on EAS (ch.swissbitcoinpay.checkout.staging), for Android and iOS
+# alike, each platform on its own (its own native fingerprint, build and update):
+# - a staging build exists for the platform's native fingerprint: only an EAS Update is published
+#   on the "staging" branch;
+# - otherwise a new staging build is made on EAS Build (it embeds this commit's JavaScript).
+# No job of one platform `needs` a job of the other. A failed job is run again from the run's page
+# ("Re-run from failed jobs").
+# The staging web app is not deployed here: .github/workflows/deploy-staging.yml exports it
+# without any token and deploys that export.
+#
+# Started by .github/workflows/deploy-staging.yml on pushes to main (`eas workflow:run`, which
+# uploads the pushed commit and returns at once: GitHub Actions does not wait for this run).
+# No `on: push` trigger on purpose: it only works when the EAS project is linked to the GitHub
+# repository, which this deploy does not need, and it would deploy twice.
+name: Deploy staging
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        type: string
+        required: false
+        description: Message of the update or build (the deployed commit's message)
+      commit:
+        type: string
+        required: false
+        description: Hash of the deployed commit, shown in the app next to its version
+
+# The Node of .nvmrc in every job. eas.json's `node` applies to the build jobs only: the
+# fingerprint and update jobs run on the image's own Node, which package.json's devEngines refuses
+# when it is older (`npm ci` fails with EBADDEVENGINES).
+defaults:
+  tools:
+    node: "22.23.5"
+
+jobs:
+  fingerprint:
+    name: Fingerprint (staging)
+    type: fingerprint
+    # Same EAS environment and APP_VARIANT as the "staging" build profile (eas.json), so that the
+    # fingerprint equals the runtime version of staging builds. Without `environment`, the job
+    # would use "production" (EAS default for this job type).
+    environment: preview
+    env:
+      APP_VARIANT: staging
+
+  get_build_android:
+    name: Find an Android staging build for this fingerprint
+    needs: [fingerprint]
+    type: get-build
+    params:
+      platform: android
+      profile: staging
+      # Staging builds use the fingerprint as runtime version (app.config.ts): a build with this
+      # runtime version is one that receives the update.
+      runtime_version: ${{ needs.fingerprint.outputs.android_fingerprint_hash }}
+      # A build still running for this fingerprint (started by a previous push) is waited for,
+      # then receives this update: no second build. If it fails, a new build is started.
+      wait_for_in_progress: true
+
+  build_android:
+    name: Build Android (staging)
+    needs: [get_build_android]
+    if: ${{ !needs.get_build_android.outputs.build_id }}
+    type: build
+    # Read by metro.config.js (falls back to EAS_BUILD_GIT_COMMIT_HASH, then git): not part of the
+    # native fingerprint.
+    env:
+      EXPO_PUBLIC_GIT_COMMIT: ${{ inputs.commit }}
+    params:
+      platform: android
+      profile: staging
+      message: ${{ inputs.message || 'Staging deploy' }}
+    hooks:
+      # The staging Android key is not EAS-managed (eas.json: android.credentialsSource "local"):
+      # credentials.json, from secret variables of the EAS environment preview, before EAS reads
+      # the credentials. Fails when one is missing.
+      after_install_node_modules:
+        - name: Write the staging Android credentials
+          run: node scripts/staging-android-credentials.js
+
+  update_android:
+    name: Publish Android update (staging)
+    needs: [get_build_android]
+    if: ${{ needs.get_build_android.outputs.build_id }}
+    type: update
+    # Same as the fingerprint job (default would be "production").
+    environment: preview
+    env:
+      APP_VARIANT: staging
+      # As in the build job (metro.config.js).
+      EXPO_PUBLIC_GIT_COMMIT: ${{ inputs.commit }}
+    params:
+      branch: staging
+      platform: android
+      message: ${{ inputs.message || 'Staging deploy' }}
+
+  get_build_ios:
+    name: Find an iOS staging build for this fingerprint
+    needs: [fingerprint]
+    type: get-build
+    params:
+      platform: ios
+      profile: staging
+      # As for Android: iOS has its own fingerprint, its builds their own runtime version.
+      runtime_version: ${{ needs.fingerprint.outputs.ios_fingerprint_hash }}
+      wait_for_in_progress: true
+
+  build_ios:
+    name: Build iOS (staging)
+    needs: [get_build_ios]
+    if: ${{ !needs.get_build_ios.outputs.build_id }}
+    type: build
+    env:
+      EXPO_PUBLIC_GIT_COMMIT: ${{ inputs.commit }}
+    params:
+      platform: ios
+      profile: staging
+      message: ${{ inputs.message || 'Staging deploy' }}
+    hooks:
+      # As Android's: the staging iOS credentials are not EAS-managed (eas.json:
+      # ios.credentialsSource "local"), "Protect credentials" keeping those to Release Managers.
+      # credentials.json, from secret variables of the EAS environment preview, before EAS reads
+      # the credentials. Fails when one is missing. Internal distribution on iOS is ad hoc: only
+      # the devices in that profile install the build; a new one needs the profile made again, by
+      # hand.
+      after_install_node_modules:
+        - name: Write the staging iOS credentials
+          run: node scripts/staging-ios-credentials.js
+
+  update_ios:
+    name: Publish iOS update (staging)
+    needs: [get_build_ios]
+    if: ${{ needs.get_build_ios.outputs.build_id }}
+    type: update
+    environment: preview
+    env:
+      APP_VARIANT: staging
+      EXPO_PUBLIC_GIT_COMMIT: ${{ inputs.commit }}
+    params:
+      branch: staging
+      platform: ios
+      message: ${{ inputs.message || 'Staging deploy' }}
