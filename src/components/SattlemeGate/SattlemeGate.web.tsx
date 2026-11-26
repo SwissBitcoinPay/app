@@ -2,6 +2,7 @@ import {
   PropsWithChildren,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState
 } from "react";
@@ -14,10 +15,27 @@ import {
   destinationOf,
   readV2BrowserState,
   requestUrl,
-  welcomeUrl
+  welcomeUrl,
+  type V2BrowserState
 } from "@utils/sattleme/handoff";
 import { freshToken } from "@utils/sattleme/freshToken";
 import { WalletWordsNotice } from "./WalletWordsNotice";
+
+// Un navigateur qui bloque le stockage du site fait lever l'accès même à
+// `localStorage` : rien de l'app v2 n'y est alors lisible, et une page de payeur
+// doit rester servie.
+const readBrowserState = (): V2BrowserState => {
+  try {
+    return readV2BrowserState(window.localStorage);
+  } catch {
+    return {
+      role: null,
+      account: undefined,
+      refreshToken: undefined,
+      hasWalletWords: false
+    };
+  }
+};
 
 // Dès le 26.11.2026, l'app web v2 envoie ses utilisateurs sur l'app web de
 // sattle.me (demande du 05.11.2026, SwissBitcoinPay/new-app,
@@ -34,8 +52,12 @@ export const SattlemeGate = ({ children }: PropsWithChildren) => {
   // Une seule fois, même si l'écran est rendu deux fois.
   const left = useRef(false);
 
-  const state = readV2BrowserState(window.localStorage);
-  const destination = destinationOf(pathname, hash, state);
+  // Lus à chaque page ouverte ou atteinte dans l'app, pas à chaque rendu.
+  const state = useMemo(readBrowserState, [pathname, hash]);
+  const destination = useMemo(
+    () => destinationOf(pathname, hash, state),
+    [pathname, hash, state]
+  );
 
   const leave = useCallback(async () => {
     if (left.current) return;
