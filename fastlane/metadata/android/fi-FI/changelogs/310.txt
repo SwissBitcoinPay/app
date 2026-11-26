@@ -1,3 +1,0 @@
-- Fixed back button not visible when local invoices are accessed through History
-- Fixed Android splash screen
-- Minor UI improvements

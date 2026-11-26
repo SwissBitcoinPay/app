@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "tag": "v1.0.0",
+  "files": [
+    {
+      "name": "sattleme-plugin.js",
+      "sha256": "ac2f7ee4b021fb3fc02598accd51fa0b641d9d53399e4cc119b6b413e21423f1"
+    },
+    {
+      "name": "http-functions.js",
+      "sha256": "3f47da9cd1e307e06284f79b0c4ec0622be6e56da5a5b63a04e2ca60977e6b49"
+    },
+    {
+      "name": "events.js",
+      "sha256": "302e88ccfe88d71c0e3c94fb43b7c9c93a50040ef4d28bb0562e48c7bfb6a7f0"
+    },
+    {
+      "name": "jobs.config",
+      "sha256": "f903f7095e788d90cbfa379fe293aab3b8cff3ad21c422b73824b6bbfcad849c"
+    },
+    {
+      "name": "sattlemeCheckout.js",
+      "sha256": "96c0840441ecc2d27148224e77dd607468261b20e39f1cfeef0dadf4f6d3c131"
+    },
+    {
+      "name": "sattlemeCheckout-config.js",
+      "sha256": "53fb1c811f64b4a8f9ff7b6ae2a1385ac581b5281547517604f0d606535f2b8f"
+    }
+  ]
+}

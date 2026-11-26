@@ -1,2 +1,0 @@
-- Amélioré les performances sur l'écran de Facture
-- Améliorations UI mineures

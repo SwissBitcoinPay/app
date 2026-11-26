@@ -1,0 +1,9 @@
+android/
+ios/
+dist/
+.expo/
+coverage/
+node_modules/
+package-lock.json
+# Written by scripts/release-notes.js, compared as written by its test.
+src/features/release-notes/notes.generated.ts

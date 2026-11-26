@@ -1,0 +1,103 @@
+# Production release of the app, run on EAS, for Android and iOS alike, each platform on its own (no job of one `needs` a job of
+# the other):
+# 1. build: the production app, built and signed by EAS Build: Android with the upload key EAS
+#    holds (the v2 app's), iOS with the distribution certificate and App Store provisioning profile
+#    EAS holds; its source map sent to Expo Observe (eas.json `uploadSourceMaps`);
+# 2. submit: the passkey association files checked where Apple and Android read them, on the
+#    production web app's host (the production passkeys' RP ID), then the
+#    build submitted (eas.json `submit.production`): to Google Play's internal track, to App Store
+#    Connect (TestFlight). Neither reaches the public: a human promotes the Android release
+#    and submits the iOS build for App Review, then releases both, in the consoles. The store's app
+#    never comes without the web app that serves its passkeys' files.
+# One after the other: the submission goes on only once the build succeeded.
+#
+# Started by the `release` job of .github/workflows/release-production.yml for a release tag, once
+# a reviewer approved it, right after that job deployed the production web app, which it exported
+# without any token (`eas workflow:run`, which uploads the tag's commit and returns at once: follow
+# the run on expo.dev). Never on a push: production only moves with a release.
+name: Release production
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        type: string
+        required: false
+        description: Message of the build (the release's tag)
+      commit:
+        type: string
+        required: false
+        description: Hash of the released commit, shown in the app next to its version
+
+# One release at a time, each one run: a release started while another runs (or waits for it)
+# waits its turn, in the order they were started, so that the builds reach the stores in the order
+# of their versionCode / buildNumber.
+concurrency:
+  group: release-production
+  queue: max
+
+# The Node of .nvmrc in every job. eas.json's `node` applies to the build jobs only: the submit
+# jobs run on the image's own Node, which package.json's devEngines refuses when it is older
+# (`npm ci` fails with EBADDEVENGINES).
+defaults:
+  tools:
+    node: "22.23.5"
+
+jobs:
+  build_android:
+    name: Build Android (production)
+    type: build
+    # The build profile's EAS environment (eas.json: production). Read by metro.config.js: the
+    # EAS workflow's `github` context is empty when `eas workflow:run` starts it.
+    env:
+      EXPO_PUBLIC_GIT_COMMIT: ${{ inputs.commit }}
+    params:
+      platform: android
+      profile: production
+      message: ${{ inputs.message || 'Production release' }}
+
+  submit_android:
+    name: Submit to Google Play
+    needs: [build_android]
+    type: submit
+    # Its EAS environment is the build's (production): the check reads the RP ID from the app config.
+    env:
+      APP_VARIANT: production
+      EXPO_PUBLIC_SKIP_POSTINSTALL: "1"
+    params:
+      build_id: ${{ needs.build_android.outputs.build_id }}
+      profile: production
+    hooks:
+      # Its host is the production passkeys' RP ID:
+      # without its association files, no one could create nor open an account in the app.
+      before_submit:
+        - name: Check the passkey association files the web app serves
+          run: node scripts/passkey-association.js --check
+
+  build_ios:
+    name: Build iOS (production)
+    type: build
+    env:
+      EXPO_PUBLIC_GIT_COMMIT: ${{ inputs.commit }}
+    params:
+      platform: ios
+      profile: production
+      message: ${{ inputs.message || 'Production release' }}
+
+  # Uploads the build to App Store Connect (eas.json `submit.production.ios`, with the App Store
+  # Connect API key EAS holds): it shows in TestFlight, never on the App Store by itself.
+  submit_ios:
+    name: Submit to App Store Connect
+    needs: [build_ios]
+    type: submit
+    env:
+      APP_VARIANT: production
+      EXPO_PUBLIC_SKIP_POSTINSTALL: "1"
+    params:
+      build_id: ${{ needs.build_ios.outputs.build_id }}
+      profile: production
+    hooks:
+      # As for Android: the iOS app's passkeys need the same files (its Team ID and bundle id).
+      before_submit:
+        - name: Check the passkey association files the web app serves
+          run: node scripts/passkey-association.js --check

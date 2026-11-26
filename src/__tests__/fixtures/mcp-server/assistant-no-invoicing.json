@@ -1,0 +1,32 @@
+{
+  "source": "Made by the sattle.me app from the BIP-39 test mnemonic \"abandon … about\" (all-zero entropy), never a real wallet, for the assistant 0123456789abcdef0123456789abcdef of assistant.json (its secretKey there): the channel of an assistant the owner created without invoices (version 2, without `invoicing`).",
+  "channel": {
+    "event": {
+      "kind": 30078,
+      "created_at": 1793000100,
+      "tags": [["d", "1fb60e90dc02a21b8b58d77106e2cbabba40f06759f88baccca44ac2d203e420"]],
+      "content": "Akhkvi9uwkUZMTxFhezpy5B1Sf+sTxrAXguO7EXbHM9GMQA48ym9uBWl+4dzWzZFmr1qszoyaxY1VWAfg7wP8B1swd0cEpD59K2tOxP9PwE4KmVPnzeqsjmpExwHvulQ5ey6AFm+1w8+PJHOJQbdNhEElyG2pLHM1rrapYjmwNd5mbKQDhXwuRiySsAIOUnBOCMJ+WiX6WCwS7yVeY7TTjownrsFNRv+Edplo+OQT+/RYGrklIT0HA8BD99VW/C+5eUgdbRlwWnMZC12dQmCInIQsBD4oPzuEw98QnPItdo9SGYzRdexDhlQP2DO1+MXGOdTquFSOUBDIUh7BSU+TCjvTS5tlz0vJVeYcQ8zLWa34aqkgRWB+fgB5bXsNGAiqRSV75qmcwfQU6whrB92jd1EEBxFzJxmvNYfeXgQMW3wWFUP6Cc8pM8xSAxzfIFCNns0Sm8DgFVrpbiPVFScJV5w7ag59Hg1aMyMEtes5qrvch3pcrhsmvDad2QTxYRYslXyc9JaCoExeYs8BZLQ/d8Z970OZbBX9ipj3f9Pi3ZnEYEc49Aa/8/xXhSdeCSLId5zNIjImkMjmCs6xcz+QWXr8SPa7bXOcQlEo/edI/FFHk0SSJkwyPyFqLGi5FGykVMS+5Hw1Cte19AGknTUu2VBxw3WmBsRkKNeLaNY5nD8qgbSmp65VrxJ0d6qbvSegFcQp5/zpEELilHt9fLy65qI5JFBBYODLRJ2H4ckmI3SMf1tC8Zhqy6Ct45Vx2OiFD73CcJ4/5FlHhn1wy7ZPPvPlVW6wA0d7ArrA+ChPKT7VZyOIxNHMmsAQ0jhLG4SKS4vzKZMeCe1I+khmQzqFSGkfPCK78ZIkeQ/3BUjScjwDl1pahSwgAEK29IxGNijYnGzgSOQNbGESqAQ9d2WNLyLsoga5RMOX22Bjmrj5/zZ6Mcw4DvY5SOP0VIuBSnQBk6MN8PeB8CYDtPcdsekaBGTmYL8WqaHJjGhTobv5dLOoZaR4XK96fouLeTohOaPppUQ6EeCftTMz9eFMSJH//3+As4ZQ+Jszr4N18MQFZLWZtLe6gbd2hy1Vr1isFlTqpeEvFKwcqaHHzt2wHYW9PljNQ==",
+      "id": "0de43ea33f99bf061c8837a37af2ec2c6bf9cb716dd0c7e8b23f32911f427219",
+      "pubkey": "a8455e8c7b826691785cc9814b0e69ee2658c42b66db45f1cd3d5f9c9f5507ca",
+      "sig": "7cfc07b0161321ec63796085cfccfc08748c4f08634a2bf651bb2796b04a4233d706db2d8b19b21c1514188e30707e68c8ab63897ab7bfa68c2e27b40057a967"
+    },
+    "value": {
+      "version": 2,
+      "status": "active",
+      "name": "Carol's assistant",
+      "role": "assistant",
+      "profile": {
+        "businessName": "Carol Consulting",
+        "lightningAddress": "sattleme02c6047f94@breez.tips",
+        "currency": "CHF",
+        "onchain": true,
+        "logo": null
+      },
+      "registryKey": "efb29c7a1120f3699f1fa155b5209b53153ed12df82804807e9a85f42ee6e0a9",
+      "registryReader": "52d64e4fbc5670d62bad80c169aac897172117ce88c4978506f0c7dd9675ff18",
+      "linkOwner": "755748c663a1eb5ab3e6810507b1bbd0bcbd2acd02dcd2eb9cf3b5acba99e426",
+      "relays": ["wss://relay.example"],
+      "updatedAt": 1793000100
+    }
+  }
+}

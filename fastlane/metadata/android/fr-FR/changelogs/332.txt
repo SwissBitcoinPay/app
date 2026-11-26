@@ -1,3 +1,0 @@
-- Mis à jour les traductions allemandes
-- Le scanner QR supporte le format des Codes QR d'activation legacy
-- Améliorations internes mineurs pour réduire la taille du bundle

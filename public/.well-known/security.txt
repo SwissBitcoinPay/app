@@ -1,0 +1,7 @@
+# sattle.me: where to report a security vulnerability (RFC 9116).
+# Report privately, never in public; do not test against real merchants' funds, keys or data.
+Contact: mailto:security@sattle.me
+Expires: 2027-11-01T00:00:00.000Z
+Preferred-Languages: en
+# OpenPGP key of security@sattle.me: /.well-known/pgp-key.txt on this host.
+Encryption: openpgp4fpr:578ef7be4e0214311e63c02aafc1e621faef5193

@@ -1,1 +1,0 @@
-export { AfterSetup } from "./AfterSetup";

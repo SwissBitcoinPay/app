@@ -1,0 +1,193 @@
+<!doctype html>
+<!--
+  A store screenshot's layout (capture.mjs renders it at the store's exact pixel size): the brand's
+  ink background, the caption at the top (under 20 % of the height, Google Play's limit for
+  taglines), then the app's screen as the device shows it, without a device frame (Google Play
+  advises against device imagery). The app laid itself out around the device's safe area; the
+  status bar's time and icons and the home indicator are drawn over it here (a web page has none).
+
+  One grid per format, the same for every screenshot of a set: the title at the same top, on two
+  lines (its line break written in the caption), the subtitle at the same top, on at most two
+  lines, the screen at the same top. A text that does not fit its lines fails the composition.
+-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: "Sans";
+        font-weight: 600;
+        src: url(../../assets/fonts/PlusJakartaSans-Bold.ttf);
+      }
+      @font-face {
+        font-family: "Sans";
+        font-weight: 800;
+        src: url(../../assets/fonts/PlusJakartaSans-ExtraBold.ttf);
+      }
+      /* The brand's colours (src/theme/tokens.ts: palette, and the dark theme's text). */
+      :root {
+        --ink: #0b1a33;
+        --ink-raised: #1c2e52;
+        --cream: #faf6ee;
+        --orange: #f7931a;
+        --dark-text: #f4efe6;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--ink);
+        font-family: "Sans", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      #canvas {
+        position: relative;
+        overflow: hidden;
+        background: radial-gradient(120% 70% at 50% 100%, var(--ink-raised) 0%, var(--ink) 62%);
+        color: var(--cream);
+      }
+      h1,
+      p {
+        position: absolute;
+        left: 0;
+        right: 0;
+        text-align: center;
+      }
+      h1 {
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.04;
+        white-space: pre-line;
+      }
+      h1 em {
+        font-style: normal;
+        color: var(--orange);
+      }
+      p {
+        font-weight: 600;
+        line-height: 1.3;
+        text-wrap: balance;
+        color: rgba(250, 246, 238, 0.72);
+      }
+      .screen {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        overflow: hidden;
+        transform-origin: top center;
+        box-shadow:
+          0 0 0 1.5px rgba(255, 255, 255, 0.16),
+          0 40px 120px rgba(0, 0, 0, 0.55);
+      }
+      .screen img {
+        display: block;
+      }
+      .status {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-family: -apple-system, "Sans", sans-serif;
+      }
+      .status .icons {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .home {
+        position: absolute;
+        left: 50%;
+        bottom: 8px;
+        height: 5px;
+        border-radius: 3px;
+        transform: translateX(-50%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas"></div>
+    <script>
+      const SIGNAL =
+        '<svg width="19" height="12" viewBox="0 0 19 12"><rect x="0" y="8" width="3.2" height="4" rx="1" fill="currentColor"/><rect x="5" y="5.5" width="3.2" height="6.5" rx="1" fill="currentColor"/><rect x="10" y="3" width="3.2" height="9" rx="1" fill="currentColor"/><rect x="15" y="0" width="3.2" height="12" rx="1" fill="currentColor"/></svg>';
+      const WIFI =
+        '<svg width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 2.2c2.5 0 4.8 1 6.5 2.6l1.3-1.3A11 11 0 0 0 .7 3.5L2 4.8a9.2 9.2 0 0 1 6.5-2.6Zm0 3.7c1.5 0 2.9.6 3.9 1.6l1.3-1.3a7.4 7.4 0 0 0-10.4 0l1.3 1.3c1-1 2.4-1.6 3.9-1.6Zm0 3.6c-.6 0-1.2.3-1.6.7L8.5 12l1.6-1.8c-.4-.4-1-.7-1.6-.7Z" fill="currentColor"/></svg>';
+      const BATTERY =
+        '<svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" stroke="currentColor" opacity=".4" fill="none"/><rect x="2" y="2" width="20" height="9" rx="2.2" fill="currentColor"/><rect x="24.5" y="4.3" width="1.6" height="4.4" rx=".8" fill="currentColor" opacity=".4"/></svg>';
+
+      /**
+       * Lays the screenshot out. `canvas`: { width, height } in pixels; `shot`: { src, width,
+       * height } of the captured screen in points; `device`: { top, bottom, radius, statusBar:
+       * "ios" | "android" | "ipad", time, colour }; `caption`: { title, subtitle }.
+       */
+      window.compose = ({ canvas, device, shot, caption }) => {
+        const root = document.getElementById("canvas");
+        root.style.width = `${canvas.width}px`;
+        root.style.height = `${canvas.height}px`;
+        const unit = canvas.width / 100;
+        const tablet = device.statusBar === "ipad";
+        // The grid: sizes from the width, positions from the top, in pixels.
+        const titleSize = tablet
+          ? 5 * unit
+          : canvas.width / canvas.height > 0.5
+            ? 7.2 * unit
+            : 7.8 * unit;
+        const titleLine = titleSize * 1.04;
+        const subtitleSize = titleSize * 0.42;
+        const subtitleLine = subtitleSize * 1.3;
+        const side = 7 * unit;
+        const titleTop = Math.round(canvas.height * 0.026);
+        const subtitleTop = titleTop + 2 * titleLine + 1.2 * unit;
+        const captionBottom = subtitleTop + 2 * subtitleLine;
+        const screenTop = Math.round(captionBottom + 3 * unit);
+        if (captionBottom - titleTop > canvas.height * 0.2) {
+          throw new Error("The caption takes more than 20 % of the height");
+        }
+        const icons =
+          device.statusBar === "android" ? WIFI + SIGNAL + BATTERY : SIGNAL + WIFI + BATTERY;
+        const statusStyle = {
+          ios: "padding:0 30px 0 44px;font-size:17px;font-weight:600",
+          android: "padding:0 22px;font-size:14px;font-weight:600",
+          ipad: "padding:0 30px;font-size:15px;font-weight:600"
+        }[device.statusBar];
+        const homeWidth = { ios: 140, android: 110, ipad: 300 }[device.statusBar];
+        root.innerHTML = `
+          <h1 style="top:${titleTop}px;padding:0 ${side}px;font-size:${titleSize}px">${caption.title}</h1>
+          <p style="top:${subtitleTop}px;padding:0 ${side}px;font-size:${subtitleSize}px">${caption.subtitle}</p>
+          <div class="screen" style="top:${screenTop}px;width:${shot.width}px;height:${shot.height}px;border-radius:${device.radius}px">
+            <img src="${shot.src}" style="width:${shot.width}px;height:${shot.height}px" alt="" />
+            <div class="status" style="height:${device.top}px;color:${device.colour};${statusStyle}"><span>${device.time}</span><span class="icons">${icons}</span></div>
+            <div class="home" style="width:${homeWidth}px;background:${device.colour}"></div>
+          </div>`;
+        const screen = root.querySelector(".screen");
+        const room = canvas.height - screenTop - Math.round(canvas.height * 0.045);
+        const scale = Math.min(room / shot.height, (canvas.width * 0.86) / shot.width);
+        screen.style.transform = `translateX(-50%) scale(${scale})`;
+        /** The lines `element` takes, in lines of `height`. */
+        const lines = (element, height) =>
+          Math.round(element.getBoundingClientRect().height / height);
+        return Promise.all([
+          document.fonts.ready.then(() => {
+            const title = lines(root.querySelector("h1"), titleLine);
+            const subtitle = lines(root.querySelector("p"), subtitleLine);
+            if (title !== 2)
+              throw new Error(`The title takes ${title} lines, not 2: ${caption.title}`);
+            if (subtitle > 2) {
+              throw new Error(`The subtitle takes ${subtitle} lines, over 2: ${caption.subtitle}`);
+            }
+          }),
+          new Promise((resolve, reject) => {
+            const image = root.querySelector("img");
+            if (image.complete && image.naturalWidth > 0) resolve();
+            image.onload = resolve;
+            image.onerror = () => reject(new Error(`Screenshot not loaded: ${shot.src}`));
+          })
+        ]);
+      };
+    </script>
+  </body>
+</html>

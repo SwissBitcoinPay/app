@@ -1,2 +1,0 @@
-- Added AED, AUD, CAD, CZK, GBP, HUF, MXN and PLN as fiat payout currencies via the Swift network (Swift fees apply)
-- Fixed few crashes in History tab

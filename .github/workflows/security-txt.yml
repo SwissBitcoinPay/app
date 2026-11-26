@@ -1,0 +1,93 @@
+name: security.txt
+
+# Every week, without any change to the repository: the test of public/.well-known/security.txt
+# (src/__tests__/security-txt.test.ts), which fails 30 days before its Expires. CI runs it only on
+# a pull request, so a quiet repository would let it expire unseen. When it fails, an issue is
+# opened (once: while it is open, the next failures add nothing), so that someone renews Expires a
+# year ahead (SECURITY.md) and ships it (a release). Run it by hand: Actions → security.txt
+# → Run workflow.
+#
+# GitHub disables a public repository's scheduled workflows after 60 days without activity, and
+# says so by email first: re-enable it then (Actions → security.txt → Enable workflow).
+on:
+  schedule:
+    - cron: "17 6 * * 1" # Mondays, 06:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-txt
+  cancel-in-progress: false
+
+jobs:
+  test:
+    name: Expires, contact and key
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      # The Breez SDK postinstall downloads native binaries the test does not need (ci.yml).
+      EXPO_PUBLIC_SKIP_POSTINSTALL: "1"
+    steps:
+      # Temporary files in RUNNER_TEMP, emptied at the start and end of each job (GitHub docs).
+      # Set here: the job's `env` cannot read the runner context.
+      - run: echo "TMPDIR=$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci
+      - run: npx jest --ci src/__tests__/security-txt.test.ts
+
+  # Runs no code of the repository nor of its dependencies: the only job that may write (issues).
+  alert:
+    name: Open an issue
+    needs: test
+    if: failure()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+      - name: Open the issue, unless it is open already
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          node --input-type=module -e '
+            const api = `${process.env.GITHUB_API_URL}/repos/${process.env.GITHUB_REPOSITORY}/issues`;
+            const headers = {
+              authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+              accept: "application/vnd.github+json",
+            };
+            const title = "security.txt: the weekly check fails (Expires within 30 days?)";
+            // Only the issue this workflow opened (its token is github-actions[bot]), never a pull
+            // request (the issues API lists them too) nor another issue of the same title.
+            const opened = (issue) =>
+              issue.title === title &&
+              issue.user?.login === "github-actions[bot]" &&
+              issue.pull_request === undefined;
+            for (let page = 1; ; page++) {
+              const open = await fetch(`${api}?state=open&per_page=100&page=${page}`, { headers });
+              if (!open.ok) throw new Error(`listing the issues: ${open.status}`);
+              const issues = await open.json();
+              if (!Array.isArray(issues)) throw new Error("listing the issues: not a list");
+              if (issues.some(opened)) process.exit(0);
+              if (issues.length < 100) break;
+            }
+            const body = [
+              `The weekly test of public/.well-known/security.txt failed: ${process.env.RUN_URL}`,
+              "",
+              "If Expires is less than 30 days away: set it a year ahead (SECURITY.md), check the",
+              "OpenPGP key is still the one of security@sattle.me, and ship it so that the",
+              "web app serves it (a release). Close this issue once the workflow passes again.",
+            ].join("\n");
+            const created = await fetch(api, { method: "POST", headers, body: JSON.stringify({ title, body }) });
+            if (!created.ok) throw new Error(`opening the issue: ${created.status}`);
+          '

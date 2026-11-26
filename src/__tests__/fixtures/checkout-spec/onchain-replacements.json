@@ -1,0 +1,441 @@
+{
+  "description": "The parts of transactions paying an address (SPEC.md §31, Replacements). Each case: `txs`, each with its `txid`, the sats it pays the address (a string), its coins (`inputs`, `<txid>:<vout>`), its `order` (when it was seen; null: unknown) and whether the explorer lists it (`listed`); `parts`: by txid of each transaction listed, its parts in order, each with its sats (a string) and the txid of its root (the transaction itself for a part of its own).",
+  "cases": [
+    {
+      "name": "payments of their own",
+      "txs": [
+        {
+          "txid": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8",
+          "sats": "1000",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": 10,
+          "listed": true
+        },
+        {
+          "txid": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7",
+          "sats": "500",
+          "inputs": ["ff47fe3fd088ee27614e0c56fc9099b9ba1cc0e54108c23341b725f88f2a83c1:0"],
+          "order": null,
+          "listed": true
+        },
+        {
+          "txid": "fb61124f5763a5be8e75c571ea64521d15593233a4cff241e77efdb942aefb0e",
+          "sats": "700",
+          "inputs": ["6be6c315726c7e2d22629afab754ff3e8ac0e24f82c485d44372a3187e912fee:0"],
+          "order": 5,
+          "listed": false
+        }
+      ],
+      "parts": {
+        "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8": [
+          {
+            "sats": "1000",
+            "root": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8"
+          }
+        ],
+        "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7": [
+          {
+            "sats": "500",
+            "root": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a fee bump",
+      "txs": [
+        {
+          "txid": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8",
+          "sats": "1000",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": 10,
+          "listed": false
+        },
+        {
+          "txid": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7",
+          "sats": "1000",
+          "inputs": [
+            "fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0",
+            "a60c78844cb95213619162aacc015da67ddb208f727c38e6c5cf0f5c77e1eefb:0"
+          ],
+          "order": null,
+          "listed": true
+        }
+      ],
+      "parts": {
+        "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7": [
+          {
+            "sats": "1000",
+            "root": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a replacement paying less",
+      "txs": [
+        {
+          "txid": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8",
+          "sats": "1000",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": 10,
+          "listed": false
+        },
+        {
+          "txid": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7",
+          "sats": "900",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": 20,
+          "listed": true
+        }
+      ],
+      "parts": {
+        "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7": [
+          {
+            "sats": "900",
+            "root": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a replacement paying more",
+      "txs": [
+        {
+          "txid": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8",
+          "sats": "1000",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": 10,
+          "listed": false
+        },
+        {
+          "txid": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7",
+          "sats": "1200",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": 20,
+          "listed": true
+        }
+      ],
+      "parts": {
+        "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7": [
+          {
+            "sats": "1000",
+            "root": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8"
+          },
+          {
+            "sats": "200",
+            "root": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a chain of replacements",
+      "txs": [
+        {
+          "txid": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8",
+          "sats": "1000",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": 10,
+          "listed": false
+        },
+        {
+          "txid": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7",
+          "sats": "1000",
+          "inputs": [
+            "fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0",
+            "ff47fe3fd088ee27614e0c56fc9099b9ba1cc0e54108c23341b725f88f2a83c1:0"
+          ],
+          "order": 20,
+          "listed": false
+        },
+        {
+          "txid": "fb61124f5763a5be8e75c571ea64521d15593233a4cff241e77efdb942aefb0e",
+          "sats": "1500",
+          "inputs": ["ff47fe3fd088ee27614e0c56fc9099b9ba1cc0e54108c23341b725f88f2a83c1:0"],
+          "order": 30,
+          "listed": true
+        }
+      ],
+      "parts": {
+        "fb61124f5763a5be8e75c571ea64521d15593233a4cff241e77efdb942aefb0e": [
+          {
+            "sats": "1000",
+            "root": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8"
+          },
+          {
+            "sats": "500",
+            "root": "fb61124f5763a5be8e75c571ea64521d15593233a4cff241e77efdb942aefb0e"
+          }
+        ]
+      }
+    },
+    {
+      "name": "two alternatives of one payment",
+      "txs": [
+        {
+          "txid": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8",
+          "sats": "1000",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": 10,
+          "listed": false
+        },
+        {
+          "txid": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7",
+          "sats": "1000",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": 12,
+          "listed": false
+        },
+        {
+          "txid": "fb61124f5763a5be8e75c571ea64521d15593233a4cff241e77efdb942aefb0e",
+          "sats": "2000",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": null,
+          "listed": true
+        }
+      ],
+      "parts": {
+        "fb61124f5763a5be8e75c571ea64521d15593233a4cff241e77efdb942aefb0e": [
+          {
+            "sats": "1000",
+            "root": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8"
+          },
+          {
+            "sats": "1000",
+            "root": "fb61124f5763a5be8e75c571ea64521d15593233a4cff241e77efdb942aefb0e"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a merge of two payments",
+      "txs": [
+        {
+          "txid": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8",
+          "sats": "500",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": 10,
+          "listed": false
+        },
+        {
+          "txid": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7",
+          "sats": "700",
+          "inputs": ["ff47fe3fd088ee27614e0c56fc9099b9ba1cc0e54108c23341b725f88f2a83c1:0"],
+          "order": 15,
+          "listed": false
+        },
+        {
+          "txid": "fb61124f5763a5be8e75c571ea64521d15593233a4cff241e77efdb942aefb0e",
+          "sats": "1200",
+          "inputs": [
+            "fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0",
+            "ff47fe3fd088ee27614e0c56fc9099b9ba1cc0e54108c23341b725f88f2a83c1:0"
+          ],
+          "order": null,
+          "listed": true
+        }
+      ],
+      "parts": {
+        "fb61124f5763a5be8e75c571ea64521d15593233a4cff241e77efdb942aefb0e": [
+          {
+            "sats": "500",
+            "root": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8"
+          },
+          {
+            "sats": "700",
+            "root": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7"
+          }
+        ]
+      }
+    },
+    {
+      "name": "two replacements of one payment, by txid",
+      "txs": [
+        {
+          "txid": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8",
+          "sats": "1000",
+          "inputs": [
+            "fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0",
+            "ff47fe3fd088ee27614e0c56fc9099b9ba1cc0e54108c23341b725f88f2a83c1:0"
+          ],
+          "order": 10,
+          "listed": false
+        },
+        {
+          "txid": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7",
+          "sats": "600",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": null,
+          "listed": true
+        },
+        {
+          "txid": "fb61124f5763a5be8e75c571ea64521d15593233a4cff241e77efdb942aefb0e",
+          "sats": "600",
+          "inputs": ["ff47fe3fd088ee27614e0c56fc9099b9ba1cc0e54108c23341b725f88f2a83c1:0"],
+          "order": null,
+          "listed": true
+        }
+      ],
+      "parts": {
+        "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7": [
+          {
+            "sats": "600",
+            "root": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8"
+          }
+        ],
+        "fb61124f5763a5be8e75c571ea64521d15593233a4cff241e77efdb942aefb0e": [
+          {
+            "sats": "400",
+            "root": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8"
+          },
+          {
+            "sats": "200",
+            "root": "fb61124f5763a5be8e75c571ea64521d15593233a4cff241e77efdb942aefb0e"
+          }
+        ]
+      }
+    },
+    {
+      "name": "two replacements of one payment, by order first",
+      "txs": [
+        {
+          "txid": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8",
+          "sats": "1000",
+          "inputs": [
+            "fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0",
+            "ff47fe3fd088ee27614e0c56fc9099b9ba1cc0e54108c23341b725f88f2a83c1:0"
+          ],
+          "order": 10,
+          "listed": false
+        },
+        {
+          "txid": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7",
+          "sats": "600",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": 40,
+          "listed": true
+        },
+        {
+          "txid": "fb61124f5763a5be8e75c571ea64521d15593233a4cff241e77efdb942aefb0e",
+          "sats": "600",
+          "inputs": ["ff47fe3fd088ee27614e0c56fc9099b9ba1cc0e54108c23341b725f88f2a83c1:0"],
+          "order": 30,
+          "listed": true
+        }
+      ],
+      "parts": {
+        "fb61124f5763a5be8e75c571ea64521d15593233a4cff241e77efdb942aefb0e": [
+          {
+            "sats": "600",
+            "root": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8"
+          }
+        ],
+        "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7": [
+          {
+            "sats": "400",
+            "root": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8"
+          },
+          {
+            "sats": "200",
+            "root": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7"
+          }
+        ]
+      }
+    },
+    {
+      "name": "two alternatives listed at once",
+      "txs": [
+        {
+          "txid": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8",
+          "sats": "1000",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": 10,
+          "listed": true
+        },
+        {
+          "txid": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7",
+          "sats": "1000",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": null,
+          "listed": true
+        }
+      ],
+      "parts": {
+        "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8": [
+          {
+            "sats": "1000",
+            "root": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8"
+          }
+        ],
+        "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7": [
+          {
+            "sats": "1000",
+            "root": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7"
+          }
+        ]
+      }
+    },
+    {
+      "name": "no coin in common",
+      "txs": [
+        {
+          "txid": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8",
+          "sats": "1000",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": 10,
+          "listed": false
+        },
+        {
+          "txid": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7",
+          "sats": "1000",
+          "inputs": ["ff47fe3fd088ee27614e0c56fc9099b9ba1cc0e54108c23341b725f88f2a83c1:0"],
+          "order": null,
+          "listed": true
+        }
+      ],
+      "parts": {
+        "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7": [
+          {
+            "sats": "1000",
+            "root": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a txid given twice",
+      "txs": [
+        {
+          "txid": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8",
+          "sats": "1000",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": 10,
+          "listed": false
+        },
+        {
+          "txid": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7",
+          "sats": "1000",
+          "inputs": ["fc6c533cd6cf34bfdf9fe3c2c0bfa572ed001bdb3dc5b1e545b9ce3232bc8ebb:0"],
+          "order": null,
+          "listed": true
+        },
+        {
+          "txid": "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7",
+          "sats": "5000",
+          "inputs": ["1956d67cf0d94a821697c337416570d077ca907f51a94b36bd8a4fa2aeb1a0b7:0"],
+          "order": null,
+          "listed": true
+        }
+      ],
+      "parts": {
+        "cd03d10a31665479d67be2600603a2cbfbb1d883ecfa2b0ef00eda1a859b25e7": [
+          {
+            "sats": "1000",
+            "root": "30b6893398f0a7832d1052a9e120cdf7e87d9ec180a897ae6c15edd18574e3e8"
+          }
+        ]
+      }
+    }
+  ]
+}

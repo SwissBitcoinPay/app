@@ -1,1 +1,0 @@
-export { CreateWalletModal } from "./CreateWalletModal";

@@ -1,0 +1,192 @@
+name: CI
+
+# Runs on every pull request, and is reused as the gate of the production workflow (so release
+# tags are always re-checked). The staging deploy does not re-run it (deploy-staging.yml).
+on:
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# Two jobs, each with its own time limit: the checks, then the tests. On a host short of memory,
+# one job could stall in either part and be stopped while the other still had work to do. Split, a
+# stalled part fails on its own limit, and "Re-run failed jobs" runs that part again, not the other.
+# Runners: anyone can open a pull request, and its code runs here (`npm ci` runs its dependencies'
+# install scripts too). Every job runs on GitHub's standard hosted runners, which start clean and
+# hold no deploy secret (GitHub's "Secure use reference").
+jobs:
+  checks:
+    name: Lint, typecheck, format, bundles
+    runs-on: ubuntu-24.04
+    # Its steps take 4 to 9 min with cold caches; about twice that before it is stopped: better to
+    # stop and run again than to wait.
+    timeout-minutes: 20
+    env:
+      # The Breez SDK postinstall downloads ~100 MB of native binaries that
+      # none of these checks need (Jest mocks the SDK).
+      EXPO_PUBLIC_SKIP_POSTINSTALL: "1"
+    steps:
+      # Temporary files in RUNNER_TEMP, emptied at the start and end of each job (GitHub docs).
+      # Set here: the job's `env` cannot read the runner context.
+      - name: Use the runner's own temporary directory
+        run: echo "TMPDIR=$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # No npm cache (`cache: npm`): a pull request only reads the caches of its own branch and of
+      # main, and this workflow never runs on main. Each job would miss it, then spend 50 s
+      # uploading 600 MB under the same key; `npm ci` takes 20 s without it.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci
+      # Fails on invalid peers, e.g. native modules pulled in at SDK-incompatible versions. The
+      # whole tree: a plain `npm ls` only checks the direct dependencies, and misses an invalid
+      # peer of a dev dependency.
+      - run: npm ls --all
+      # The checks' caches from this pull request's last run. ESLint's, Prettier's and tsc's: each
+      # file's result by its content (a checkout gives every file a new date), so that a fix pushed
+      # next checks again only what changed (seconds instead of minutes). The checkout's path is in
+      # the key, as in the tests' cache below. A new lockfile starts new caches, as the old ones
+      # only grow. Jest's cache is the tests job's own, under another key.
+      - name: Restore the checks' caches
+        id: checks-cache
+        if: github.event_name == 'pull_request'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/checks-cache
+          key: static-checks-${{ runner.os }}-${{ runner.arch }}-${{ github.workspace }}-${{ hashFiles('package-lock.json', '.nvmrc') }}-${{ github.sha }}
+          restore-keys: static-checks-${{ runner.os }}-${{ runner.arch }}-${{ github.workspace }}-${{ hashFiles('package-lock.json', '.nvmrc') }}-
+      # Memory: each check needs at most about 2.1 GB (peak MemTotal - MemAvailable): ESLint 2.0,
+      # tsc 1.6, Prettier 0.4, the Android bundle 2.1, the web export 1.9, Jest with 2 workers 2.0
+      # (3.9 with 4). Run together they need about 6 GB, more than a small hosted runner has, and
+      # tests short of memory slow down until they pass their timeout. So they run one after the
+      # other. Shown first, with a warning when the runner has less than that to give: then a
+      # failure may be the runner's.
+      - name: Memory
+        run: |
+          echo "Processors: $(nproc)"
+          free -m || true
+          available=$(awk '/^MemAvailable:/ { print int($2 / 1024) }' /proc/meminfo)
+          if [ "$available" -lt 2560 ]; then
+            echo "::warning::${available} MB available on the runner; the checks need about 2.1 GB."
+          fi
+      # `expo lint` caches by default, by file date: passed through to ESLint, the later options win.
+      # A file's cached result is not checked again when only a file it imports changed: the rules
+      # that read other files (import/no-unresolved, import/namespace, import/export) see what tsc
+      # rejects anyway, and tsc's incremental check, below, follows the imports.
+      - run: |
+          npm run lint -- -- --cache-strategy content \
+            --cache-location "$RUNNER_TEMP/checks-cache/eslint/"
+      - run: |
+          npm run typecheck -- --incremental \
+            --tsBuildInfoFile "$RUNNER_TEMP/checks-cache/tsconfig.tsbuildinfo"
+      - run: |
+          npm run format:check -- --cache --cache-strategy content \
+            --cache-location "$RUNNER_TEMP/checks-cache/prettier"
+      # Pinned in package.json, so that local runs and CI use the same expo-doctor. Its React
+      # Native Directory check is off (package.json `expo.doctor`): it calls a third-party API,
+      # and this job gates production releases.
+      - run: npm run doctor
+      # Metro bundle of the native JS (the web export below resolves *.web.ts files instead).
+      # Without it, a native-only bundling error would first fail `eas update` after merge.
+      # No Hermes bytecode: the bundle is resolved, transformed and minified; its compilation by
+      # hermesc is left to EAS. An error hermesc alone rejects first fails the staging deploy's
+      # `update` (or `build`) job on EAS after merge, or a release's build.
+      - name: Native JS bundle (Android)
+        run: |
+          npx expo export --platform android --no-bytecode \
+            --output-dir "$RUNNER_TEMP/android-export"
+      # Same script as local runs; APP_VARIANT=production since it defaults to staging.
+      - name: Web export
+        run: npm run export:web
+        env:
+          APP_VARIANT: production
+      # Saved whatever the checks' result: the fix pushed next reads them.
+      - name: Save the checks' caches
+        if: >-
+          ${{ !cancelled() && github.event_name == 'pull_request'
+          && steps.checks-cache.outcome == 'success'
+          && steps.checks-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/checks-cache
+          key: ${{ steps.checks-cache.outputs.cache-primary-key }}
+
+  tests:
+    name: Tests
+    # After the checks, also after a failed one, so that the run shows the tests' result too.
+    needs: checks
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-24.04
+    # Jest takes 8 to 14 min (2 workers, cold cache); about twice that before it is stopped.
+    timeout-minutes: 30
+    env:
+      EXPO_PUBLIC_SKIP_POSTINSTALL: "1"
+    steps:
+      - name: Use the runner's own temporary directory
+        run: echo "TMPDIR=$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci
+      # Jest's cache from this pull request's last run (transformed files, each file's duration):
+      # about 22 % faster than empty. Its entries are named after each file's
+      # content, options and absolute path, so an older one is never wrong; the checkout's path is
+      # in the key since none of them serves another path.
+      - name: Restore Jest's cache
+        id: jest-cache
+        if: github.event_name == 'pull_request'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/jest-cache
+          key: jest-${{ runner.os }}-${{ runner.arch }}-${{ github.workspace }}-${{ hashFiles('package-lock.json', '.nvmrc') }}-${{ github.sha }}
+          restore-keys: jest-${{ runner.os }}-${{ runner.arch }}-${{ github.workspace }}-${{ hashFiles('package-lock.json', '.nvmrc') }}-
+      # The runner's memory: Jest workers short of it are killed.
+      - name: Memory
+        run: |
+          echo "Processors: $(nproc)"
+          free -m || true
+          available=$(awk '/^MemAvailable:/ { print int($2 / 1024) }' /proc/meminfo)
+          if [ "$available" -lt 2560 ]; then
+            echo "::warning::${available} MB available on the runner; Jest needs about 2.0 GB."
+          fi
+      # Two workers: see "Memory" in the checks job.
+      - name: Tests
+        id: tests
+        run: npm test -- --ci --maxWorkers=2 --cacheDirectory "$RUNNER_TEMP/jest-cache"
+      # Saved whatever the tests' result: the fix pushed next reads them.
+      - name: Save Jest's cache
+        if: >-
+          ${{ !cancelled() && github.event_name == 'pull_request'
+          && (steps.tests.outcome == 'success' || steps.tests.outcome == 'failure')
+          && steps.jest-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/jest-cache
+          key: ${{ steps.jest-cache.outputs.cache-primary-key }}
+
+  # The check that main's protection requires, by this name. Passes only if both jobs passed; runs
+  # even when they did not, since a skipped job counts as passed for a required check.
+  result:
+    name: Lint, typecheck, format, tests, web export
+    needs: [checks, tests]
+    if: ${{ always() }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checks and tests passed
+        env:
+          CHECKS: ${{ needs.checks.result }}
+          TESTS: ${{ needs.tests.result }}
+        run: |
+          echo "Checks: $CHECKS, tests: $TESTS"
+          [ "$CHECKS" = success ] && [ "$TESTS" = success ]

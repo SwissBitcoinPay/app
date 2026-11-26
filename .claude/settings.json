@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "enabledPlugins": {
+    "expo@claude-plugins-official": true
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|fork",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/session-start.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(npm run lint)",
+      "Bash(npm run typecheck)",
+      "Bash(npm run format)",
+      "Bash(npm run format:check)",
+      "Bash(npm run check)",
+      "Bash(npm test *)",
+      "Bash(npm ls)",
+      "Bash(npm run doctor)",
+      "Bash(npm run export:web)",
+      "Bash(npm run build:android:local *)",
+      "Bash(npx expo config *)",
+      "Bash(npx jest *)",
+      "Bash(npx tsc --noEmit)",
+      "Bash(npx prettier --check *)",
+      "Bash(npx prettier --write *)"
+    ],
+    "deny": [
+      "Bash(eas *)",
+      "Bash(npx *eas-cli*)",
+      "Bash(npm exec *eas-cli*)",
+      "Bash(bunx *eas-cli*)",
+      "Bash(pnpm dlx *eas-cli*)",
+      "Bash(yarn dlx *eas-cli*)",
+      "Bash(git push *--tags*)",
+      "Bash(git push *--follow-tags*)",
+      "Bash(git push *--mirror*)",
+      "Bash(git push *refs/tags/*)",
+      "Bash(git push * v*.*.*)",
+      "Bash(gh release create *)",
+      "Bash(git push * checkout-v*)",
+      "Bash(npm publish*)",
+      "Bash(npx npm publish*)",
+      "Bash(npm --prefix * publish*)",
+      "Bash(npm stage *)",
+      "Bash(npx *npm* stage *)",
+      "Read(.env*)",
+      "Read(!.env.example)",
+      "Read(*.key)",
+      "Read(*.pem)",
+      "Read(*.p8)",
+      "Read(*.p12)",
+      "Read(*.jks)",
+      "Read(*.keystore)",
+      "Read(*.mobileprovision)",
+      "Read(credentials.json)",
+      "Read(google-service-account*.json)",
+      "Read(*firebase-adminsdk*.json)",
+      "Read(/keys/**)",
+      "Read(~/.expo/**)"
+    ]
+  }
+}

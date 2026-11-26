@@ -1,0 +1,218 @@
+name: Release production
+
+# Pushing a tag vX.Y.Z (matching package.json "version") releases the production app:
+#
+# 1. checks and verify-tag: the CI again on the tag, which must name package.json's version and a
+#    commit of main;
+# 2. config, once a reviewer approved it (environment production): the public values the web
+#    export needs, read from the EAS environment production;
+# 3. export-web: the production web app exported, without any token;
+# 4. release, once a reviewer approved it again (environment production): that export deployed on
+#    EAS Hosting's production alias (its custom domain, the production passkeys' host), then
+#    the EAS workflow .eas/workflows/release-production.yml started, which builds the Android and
+#    iOS apps on EAS Build (signed with the credentials EAS holds), checks that the web app serves
+#    the passkeys' association files, then submits each app: to Google Play's internal track, to
+#    App Store Connect (TestFlight); a human releases them in the consoles. This job does not wait
+#    for that run (follow it on expo.dev, link in the job summary). One run at a time on EAS, in
+#    the order they were started (its `concurrency`).
+#
+# No job runs the project's packages where the Expo token is: config and release run the token,
+# EAS CLI and this repository's own scripts only, export-web runs `npm ci` and the export without
+# any token. Two approvals: each job that uses the token's environment waits for one, and reading
+# the production values takes the token (protected environment variables, Release Manager).
+#
+# Production binaries have expo-updates disabled: there is no OTA path to production users (see
+# app.config.ts).
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: read
+
+# One release at a time. `queue: max` keeps every tag pushed meanwhile waiting (up to 100):
+# with the default `queue: single`, a newer tag cancels the one already pending.
+concurrency:
+  group: release-production
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  checks:
+    uses: ./.github/workflows/ci.yml
+
+  # Runs before the environment gate, so reviewers are only asked to approve
+  # tags that are valid releases.
+  verify-tag:
+    name: Verify release tag
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Tag must match package.json version
+        run: |
+          expected="v$(node -p "require('./package.json').version")"
+          if [ "$GITHUB_REF_NAME" != "$expected" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package.json version ($expected)."
+            exit 1
+          fi
+      - name: Tagged commit must be on main
+        run: |
+          if ! git merge-base --is-ancestor HEAD origin/main; then
+            echo "::error::$GITHUB_REF_NAME points to a commit that is not on main."
+            exit 1
+          fi
+
+  # The token, EAS CLI and this repository's own scripts only: no `npm ci`.
+  config:
+    name: Read the production web app's config
+    needs: [checks, verify-tag]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    # Required reviewers on this environment, restricted to the tags v*: the release's first
+    # approval.
+    environment: production
+    # EAS CLI reads the project's id with the config's plugins, the project's packages, which this
+    # job does not install: app.config.ts leaves them out here (a GitHub Actions job only).
+    env:
+      APP_CONFIG_WITHOUT_PLUGINS: "1"
+    outputs:
+      EXPO_PUBLIC_BREEZ_API_KEY: ${{ steps.values.outputs.EXPO_PUBLIC_BREEZ_API_KEY }}
+      EXPO_PUBLIC_OPEN_FOOD_FACTS_EMAIL: ${{ steps.values.outputs.EXPO_PUBLIC_OPEN_FOOD_FACTS_EMAIL }}
+      PASSKEY_RP_ID: ${{ steps.values.outputs.PASSKEY_RP_ID }}
+      PASSKEY_APPLE_TEAM_ID: ${{ steps.values.outputs.PASSKEY_APPLE_TEAM_ID }}
+      PASSKEY_ANDROID_CERT_SHA256: ${{ steps.values.outputs.PASSKEY_ANDROID_CERT_SHA256 }}
+    steps:
+      # Temporary files in RUNNER_TEMP, emptied at the start and end of each job (GitHub docs).
+      # Set here: the job's `env` cannot read the runner context.
+      - name: Use the runner's own temporary directory
+        run: echo "TMPDIR=$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      # No `npm ci`, as for staging: without node_modules, EAS CLI reads app.config.ts with its own
+      # @expo/config, without plugins, which is enough to name the project.
+      - uses: expo/expo-github-action@5273c2136bd09c2a341fe3340d3e767ce5a13015 # 9.0.2
+        with:
+          eas-version: 24.14.0
+          packager: npm
+          # The inotify limit is for watchers (Metro), which no job here runs.
+          patch-watchers: false
+          token: ${{ secrets.EXPO_TOKEN }}
+      # The EAS environment of the production builds (eas.json, profile production). The file stays
+      # in this job: only the export's public values leave it, as the job's outputs.
+      - name: Read the export's values from the EAS environment
+        id: values
+        run: |
+          eas env:pull --environment production --path "$RUNNER_TEMP/eas.env" --non-interactive \
+            < /dev/null
+          node scripts/eas-public-env.js "$RUNNER_TEMP/eas.env"
+          rm -f "$RUNNER_TEMP/eas.env"
+
+  # The project's packages, without any token.
+  export-web:
+    name: Export the production web app
+    needs: config
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      APP_VARIANT: production
+      # Skips the download of the Breez SDK native binaries (~100 MB), which the web export does
+      # not use. Not read by the app, so not inlined in the bundle.
+      EXPO_PUBLIC_SKIP_POSTINSTALL: "1"
+      EXPO_PUBLIC_BREEZ_API_KEY: ${{ needs.config.outputs.EXPO_PUBLIC_BREEZ_API_KEY }}
+      EXPO_PUBLIC_OPEN_FOOD_FACTS_EMAIL: ${{ needs.config.outputs.EXPO_PUBLIC_OPEN_FOOD_FACTS_EMAIL }}
+      PASSKEY_RP_ID: ${{ needs.config.outputs.PASSKEY_RP_ID }}
+      PASSKEY_APPLE_TEAM_ID: ${{ needs.config.outputs.PASSKEY_APPLE_TEAM_ID }}
+      PASSKEY_ANDROID_CERT_SHA256: ${{ needs.config.outputs.PASSKEY_ANDROID_CERT_SHA256 }}
+    steps:
+      - name: Use the runner's own temporary directory
+        run: echo "TMPDIR=$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci
+      # The production RP ID is this web app's host: it serves the passkey association files
+      # (scripts/passkey-association.js), written into public/.well-known/ before the export copies
+      # them. Fails, and stops the release, when a variable is missing. `npm run export:web` writes
+      # the web app's manifest and icon first (scripts/web-manifest.js).
+      - name: Write the passkey association files
+        run: node scripts/passkey-association.js
+      - name: Export the web app
+        run: npm run export:web
+      # dist/.well-known/ is a hidden directory: without include-hidden-files, the artifact would
+      # leave out the passkeys' association files.
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: web-production
+          path: dist/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
+
+  # The token, EAS CLI and the export only: no `npm ci`.
+  release:
+    name: Deploy the web app, start EAS workflow (production)
+    needs: export-web
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    # Required reviewers on this environment, restricted to the tags v*: the release's second
+    # approval.
+    environment: production
+    # EAS CLI reads the project's id with the config's plugins, the project's packages, which this
+    # job does not install: app.config.ts leaves them out here (a GitHub Actions job only).
+    env:
+      APP_CONFIG_WITHOUT_PLUGINS: "1"
+    steps:
+      - name: Use the runner's own temporary directory
+        run: echo "TMPDIR=$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      # No `npm ci`, as above: the EAS jobs install the dependencies themselves.
+      - uses: expo/expo-github-action@5273c2136bd09c2a341fe3340d3e767ce5a13015 # 9.0.2
+        with:
+          eas-version: 24.14.0
+          packager: npm
+          # The inotify limit is for watchers (Metro), which no job here runs.
+          patch-watchers: false
+          token: ${{ secrets.EXPO_TOKEN }}
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: web-production
+          path: dist
+      # The production alias, which the project's custom domain serves, before the app is built: the
+      # store's app never comes before the web app that serves its passkeys' files (checked again
+      # before the submission, on EAS).
+      # The page carries its Content-Security-Policy (public/index.html, web-csp.test.ts).
+      - name: Deploy the web app
+        run: |
+          test -f dist/index.html
+          grep -q 'http-equiv="Content-Security-Policy"' dist/index.html
+          test -f dist/.well-known/apple-app-site-association
+          test -f dist/.well-known/assetlinks.json
+          eas deploy --prod --export-dir dist --non-interactive < /dev/null
+      # Uploads the tag's commit (a clone of the checkout: eas.json has requireCommit; dist/ is in
+      # .gitignore, so neither counted as a change nor uploaded) and starts the EAS workflow, then
+      # exits without waiting for it (--no-wait). Its hash is shown in the app (the EAS workflow's
+      # `github` context is empty when it is started with `eas workflow:run`).
+      - name: Start the EAS workflow
+        run: |
+          eas workflow:run .eas/workflows/release-production.yml --non-interactive --no-wait \
+            --json -F "message=Release $GITHUB_REF_NAME" -F "commit=$(git rev-parse HEAD)" \
+            < /dev/null > "$RUNNER_TEMP/eas-workflow-run.json"
+          url="$(node -p 'require(process.argv[1]).url' "$RUNNER_TEMP/eas-workflow-run.json")"
+          echo "EAS workflow run: $url"
+          echo "EAS workflow run (production, $GITHUB_REF_NAME): $url" >> "$GITHUB_STEP_SUMMARY"

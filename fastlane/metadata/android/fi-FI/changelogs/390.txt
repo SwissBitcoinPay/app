@@ -1,1 +1,0 @@
-- Added FINMA licence mention

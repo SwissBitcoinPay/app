@@ -1,1 +1,0 @@
-- N'affiche pas la facture lightning pour les très haute factures (100'000+ CHF-équivalent)

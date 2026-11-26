@@ -1,2 +1,0 @@
-- Added "Cashed today" information to the History screen
-- Fixed a few crashes when making Onchain payments

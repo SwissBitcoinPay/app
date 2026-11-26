@@ -1,0 +1,24 @@
+// Gradle init script: resolves Maven Central through Google's public mirror.
+// Only for environments where repo.maven.apache.org answers HTTP 429 (shared
+// egress IPs, e.g. cloud agent containers). Install it per machine, never in
+// the project:  cp maven-central-mirror.gradle ~/.gradle/init.d/
+def mirror = "https://maven-central.storage-download.googleapis.com/maven2/"
+def centralPrefixes = ["https://repo.maven.apache.org/maven2", "https://repo1.maven.org/maven2"]
+
+def redirect = { RepositoryHandler repositories ->
+  repositories.withType(MavenArtifactRepository).configureEach { repo ->
+    if (centralPrefixes.any { repo.url.toString().startsWith(it) }) {
+      repo.url = mirror
+    }
+  }
+}
+
+beforeSettings { settings ->
+  redirect(settings.pluginManagement.repositories)
+  redirect(settings.dependencyResolutionManagement.repositories)
+}
+
+allprojects {
+  redirect(buildscript.repositories)
+  redirect(repositories)
+}

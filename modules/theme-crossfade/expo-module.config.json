@@ -1,0 +1,9 @@
+{
+  "platforms": ["android", "apple"],
+  "apple": {
+    "modules": ["ThemeCrossfadeModule"]
+  },
+  "android": {
+    "modules": ["me.sattle.themecrossfade.ThemeCrossfadeModule"]
+  }
+}

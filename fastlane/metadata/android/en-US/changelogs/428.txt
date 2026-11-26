@@ -1,1 +1,0 @@
-- Sometimes the custom unit currency was not correctly displayed

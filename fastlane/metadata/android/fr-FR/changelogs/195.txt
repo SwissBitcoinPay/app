@@ -1,3 +1,0 @@
-- Amélioré le support des Bolt Card en cas d'erreur
-- Changé l'affichage de la devise "XOF" en "F"
-- Amélioré certaines traductions

@@ -1,0 +1,97 @@
+{
+  "description": "Vectors of the hand-off from the v2 web apps (app. and dashboard.swiss-bitcoin-pay.ch) to the sattle.me web app. 1. The v2 page asks: `requests` (after sattle.me's address). 2. sattle.me sends back to this v2 app's `fetchPath` page, the nonce in the fragment (`#n=<nonce>`). 3. The v2 page answers: `payload` (keys in this order), as `fragment` after sattle.me's address; `expected`: what sattle.me keeps of it, with this nonce only.",
+  "origins": {
+    "app": "https://app.swiss-bitcoin-pay.ch",
+    "dashboard": "https://dashboard.swiss-bitcoin-pay.ch"
+  },
+  "requests": {
+    "app": "#sbp-from=app",
+    "dashboard": "#sbp-from=dashboard"
+  },
+  "fetchPath": "/sattleme",
+  "nonce": "AAECAwQFBgcICQoLDA0ODw",
+  "vectors": [
+    {
+      "name": "owner with the v2 web app's session and copy of the account",
+      "payload": {
+        "v": 1,
+        "nonce": "AAECAwQFBgcICQoLDA0ODw",
+        "role": "owner",
+        "account": {
+          "id": "0192a3b4-c5d6-7e8f-9a0b-1c2d3e4f5a6b",
+          "name": "Lakeside Bakery",
+          "currency": "CHF",
+          "is_onchain_available": true,
+          "mail": "carol@example.ch"
+        },
+        "token": "eyJhbGciOiJFZERTQSJ9.eyJzdWIiOiJ4In0.c2lnbmF0dXJlX29mX3RoZV90b2tlbg"
+      },
+      "fragment": "#sbp=eyJ2IjoxLCJub25jZSI6IkFBRUNBd1FGQmdjSUNRb0xEQTBPRHciLCJyb2xlIjoib3duZXIiLCJhY2NvdW50Ijp7ImlkIjoiMDE5MmEzYjQtYzVkNi03ZThmLTlhMGItMWMyZDNlNGY1YTZiIiwibmFtZSI6Ikxha2VzaWRlIEJha2VyeSIsImN1cnJlbmN5IjoiQ0hGIiwiaXNfb25jaGFpbl9hdmFpbGFibGUiOnRydWUsIm1haWwiOiJjYXJvbEBleGFtcGxlLmNoIn0sInRva2VuIjoiZXlKaGJHY2lPaUpGWkVSVFFTSjkuZXlKemRXSWlPaUo0SW4wLmMybG5ibUYwZFhKbFgyOW1YM1JvWlY5MGIydGxiZyJ9",
+      "expected": {
+        "role": "owner",
+        "account": {
+          "id": "0192a3b4-c5d6-7e8f-9a0b-1c2d3e4f5a6b",
+          "name": "Lakeside Bakery",
+          "currency": "CHF",
+          "onchain": true,
+          "email": "carol@example.ch"
+        },
+        "token": "eyJhbGciOiJFZERTQSJ9.eyJzdWIiOiJ4In0.c2lnbmF0dXJlX29mX3RoZV90b2tlbg"
+      }
+    },
+    {
+      "name": "owner whose browser kept nothing (dashboard without a session)",
+      "payload": {
+        "v": 1,
+        "nonce": "AAECAwQFBgcICQoLDA0ODw",
+        "role": "owner"
+      },
+      "fragment": "#sbp=eyJ2IjoxLCJub25jZSI6IkFBRUNBd1FGQmdjSUNRb0xEQTBPRHciLCJyb2xlIjoib3duZXIifQ",
+      "expected": {
+        "role": "owner",
+        "account": null,
+        "token": null
+      }
+    },
+    {
+      "name": "till with its copy of the account, a name out of ASCII",
+      "payload": {
+        "v": 1,
+        "nonce": "AAECAwQFBgcICQoLDA0ODw",
+        "role": "employee",
+        "account": {
+          "id": "0192a3b4-c5d6-7e8f-9a0b-1c2d3e4f5a6b",
+          "name": "Café Zürich – Bahnhof",
+          "currency": "EUR",
+          "is_onchain_available": false
+        }
+      },
+      "fragment": "#sbp=eyJ2IjoxLCJub25jZSI6IkFBRUNBd1FGQmdjSUNRb0xEQTBPRHciLCJyb2xlIjoiZW1wbG95ZWUiLCJhY2NvdW50Ijp7ImlkIjoiMDE5MmEzYjQtYzVkNi03ZThmLTlhMGItMWMyZDNlNGY1YTZiIiwibmFtZSI6IkNhZsOpIFrDvHJpY2gg4oCTIEJhaG5ob2YiLCJjdXJyZW5jeSI6IkVVUiIsImlzX29uY2hhaW5fYXZhaWxhYmxlIjpmYWxzZX19",
+      "expected": {
+        "role": "employee",
+        "account": {
+          "id": "0192a3b4-c5d6-7e8f-9a0b-1c2d3e4f5a6b",
+          "name": "Café Zürich – Bahnhof",
+          "currency": "EUR",
+          "onchain": false,
+          "email": null
+        },
+        "token": null
+      }
+    },
+    {
+      "name": "till without a copy of the account",
+      "payload": {
+        "v": 1,
+        "nonce": "AAECAwQFBgcICQoLDA0ODw",
+        "role": "employee"
+      },
+      "fragment": "#sbp=eyJ2IjoxLCJub25jZSI6IkFBRUNBd1FGQmdjSUNRb0xEQTBPRHciLCJyb2xlIjoiZW1wbG95ZWUifQ",
+      "expected": {
+        "role": "employee",
+        "account": null,
+        "token": null
+      }
+    }
+  ]
+}

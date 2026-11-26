@@ -1,0 +1,40 @@
+{
+  "cli": {
+    "version": ">= 24.8.0",
+    "appVersionSource": "local",
+    "requireCommit": true
+  },
+  "build": {
+    "base": {
+      "node": "22.23.5"
+    },
+    "staging": {
+      "extends": "base",
+      "environment": "preview",
+      "distribution": "internal",
+      "channel": "staging",
+      "env": { "APP_VARIANT": "staging" },
+      "android": { "buildType": "apk", "credentialsSource": "local" },
+      "ios": { "credentialsSource": "local" },
+      "uploadSourceMaps": true
+    },
+    "production": {
+      "extends": "base",
+      "environment": "production",
+      "env": { "APP_VARIANT": "production" },
+      "android": { "buildType": "app-bundle" },
+      "uploadSourceMaps": true
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "completed"
+      },
+      "ios": {
+        "ascAppId": "6444370155"
+      }
+    }
+  }
+}

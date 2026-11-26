@@ -1,0 +1,666 @@
+{
+  "fr": {
+    "card": {
+      "decline": {
+        "newPayee": "Nouveau commerçant : le porteur doit l'approuver dans son app sattle.me, puis représenter la carte.",
+        "unidentifiedPayee": "Commerçant non identifié : le porteur doit confirmer le paiement dans son app sattle.me.",
+        "unconfirmed": "Paiement à confirmer par le porteur dans son app sattle.me.",
+        "notConfirmed": "Paiement non confirmé sur le téléphone du porteur.",
+        "refused": "Paiement refusé par le porteur de la carte.",
+        "insufficientBalance": "Solde de la carte insuffisant.",
+        "aboveLimit": "Montant au-dessus du plafond par paiement de la carte.",
+        "dayLimit": "Plafond de la carte sur 24 heures atteint.",
+        "hourLimit": "Trop de paiements avec cette carte dans l'heure.",
+        "suspended": "Carte en pause : le porteur peut la réactiver dans son app sattle.me.",
+        "invalidInvoice": "Facture non valide pour cette carte.",
+        "expired": "Facture expirée : créez-en une nouvelle.",
+        "noAmount": "Facture sans montant : la carte ne paie qu'un montant fixé.",
+        "outOfBounds": "Montant hors des limites de la carte (1 sat à 1 BTC).",
+        "alreadyPaid": "La carte ne paie pas cette facture : elle est déjà réglée.",
+        "invalidTap": "Lecture de la carte non valide : représentez la carte.",
+        "sendFailed": "Le paiement n'est pas parti, rien n'a été payé. Représentez la carte.",
+        "uncertain": "Paiement interrompu : il peut encore arriver, attendez quelques secondes avant de réessayer.",
+        "updateApp": "Le porteur doit mettre à jour son app sattle.me.",
+        "superseded": "Une autre lecture de la carte a remplacé celle-ci.",
+        "other": "Le paiement n'a pas pu être traité."
+      },
+      "notice": {
+        "title": "Paiement par carte : {{amount}}",
+        "body": "{{amount}} pour {{name}}",
+        "askTitle": "En attente : Paiement par carte",
+        "askBody": "{{amount}} pour {{name}}. Cliquez pour confirmer, la caisse attend.",
+        "askBodyUnchecked": "{{amount}}. Cliquez pour confirmer, la caisse attend.",
+        "askBodyNoInvoice": "Cliquez pour confirmer, la caisse attend.",
+        "refusedTitle": "Refusé : Paiement par carte ({{amount}} pour {{name}})",
+        "refusedTitleUnchecked": "Refusé : Paiement par carte ({{amount}})",
+        "refusedTitleNoInvoice": "Refusé : Paiement par carte",
+        "pausedBody": "{{card}} est en pause. Rien n'a été payé."
+      },
+      "payment": {
+        "failure": {
+          "unreachable": "Le relais de la carte ne répond pas, ou ce paiement a expiré. Rien n'a été payé.",
+          "ended": "La caisse n'attend plus ce paiement. Rien n'a été payé : présentez à nouveau votre carte si besoin.",
+          "invalidInvoice": "La caisse a envoyé une facture que votre portefeuille ne peut pas payer. Rien n'a été payé.",
+          "otherNetwork": "La facture de la caisse est d'un autre réseau Bitcoin. Rien n'a été payé.",
+          "expired": "La facture de la caisse a expiré. Rien n'a été payé.",
+          "noAmount": "La facture de la caisse n'a pas de montant en sats entiers. Rien n'a été payé.",
+          "outOfBounds": "Le montant sort des limites d'un paiement par carte. Rien n'a été payé.",
+          "suspended": "Cette carte est en pause. Rien n'a été payé.",
+          "alreadyPaid": "Cette facture a déjà été payée. Rien n'a été payé de nouveau.",
+          "dayLimit": "Ce paiement dépasserait le plafond de votre carte sur 24 heures. Rien n'a été payé.",
+          "hourLimit": "Votre carte a atteint son nombre de paiements pour l'heure. Rien n'a été payé.",
+          "aboveLimit": "Le montant dépasse le plafond de votre carte. Rien n'a été payé.",
+          "notYourCard": "Ce paiement ne vient pas d'un tap de votre carte. Rien n'a été payé.",
+          "replayed": "Ce tap de votre carte a déjà servi. Rien n'a été payé.",
+          "unlock": "Le paiement n'a pas été confirmé. Rien n'a été payé.",
+          "insufficientBalance": "Le solde de votre carte ne suffit pas pour ce paiement et ses frais. Rien n'a été payé : rechargez la carte dans « Cartes ».",
+          "sendFailed": "Votre portefeuille n'a pas pu envoyer ce paiement, par exemple faute de solde. Rien n'est parti.",
+          "uncertain": "Votre portefeuille n'a pas confirmé l'envoi : le paiement est peut-être parti. Vérifiez la liste des mouvements avant de payer autrement.",
+          "otherInvoice": "Le service du commerçant ne reconnaît pas cette facture : elle a pu être remplacée en chemin. Rien n'a été payé.",
+          "settled": "Le service du commerçant indique que cette facture est déjà payée. Rien n'a été payé de nouveau.",
+          "newPayee": "Pas de confirmation {{delay}} : rien n'a été payé. La caisse a été informée que ce nouveau commerçant est à approuver dans l'app.",
+          "newPayeeHomonym": "Pas de confirmation {{delay}} : rien n'a été payé.",
+          "unidentifiedPayee": "Pas de confirmation {{delay}} : rien n'a été payé. La caisse a été informée que le commerçant n'est pas identifié.",
+          "unconfirmed": "Pas de confirmation {{delay}} : rien n'a été payé. La caisse en a été informée.",
+          "late": "Le paiement n'a pas pu partir {{delay}}. Rien n'a été payé.",
+          "newerApp": "Une version plus récente de l'application a enregistré votre carte. Mettez l'application à jour. Rien n'a été payé.",
+          "failed": "Ce paiement n'a pas pu être traité. Rien n'a été payé."
+        },
+        "delay": {
+          "minute": "dans la minute",
+          "seconds_one": "dans la seconde",
+          "seconds_other": "dans les {{count}} secondes"
+        }
+      },
+      "payee": {
+        "quoted": "« {{name}} »",
+        "unnamed": "Nom inconnu",
+        "node": "Nœud {{node}}"
+      }
+    },
+    "cards": {
+      "unnamed": "Carte {{id}}"
+    }
+  },
+  "en": {
+    "card": {
+      "decline": {
+        "newPayee": "New merchant: the cardholder must approve it in their sattle.me app, then present the card again.",
+        "unidentifiedPayee": "Merchant not identified: the cardholder must confirm the payment in their sattle.me app.",
+        "unconfirmed": "Payment to be confirmed by the cardholder in their sattle.me app.",
+        "notConfirmed": "Payment not confirmed on the cardholder's phone.",
+        "refused": "Payment declined by the cardholder.",
+        "insufficientBalance": "Insufficient card balance.",
+        "aboveLimit": "Amount above the card's limit per payment.",
+        "dayLimit": "The card's 24-hour limit has been reached.",
+        "hourLimit": "Too many payments with this card within the hour.",
+        "suspended": "Card paused: the cardholder can resume it in their sattle.me app.",
+        "invalidInvoice": "Invoice not valid for this card.",
+        "expired": "Invoice expired: create a new one.",
+        "noAmount": "Invoice without an amount: the card only pays a set amount.",
+        "outOfBounds": "Amount outside the card's limits (1 sat to 1 BTC).",
+        "alreadyPaid": "The card does not pay this invoice: it is already settled.",
+        "invalidTap": "Card reading not valid: present the card again.",
+        "sendFailed": "The payment did not go out, nothing was paid. Present the card again.",
+        "uncertain": "Payment interrupted: it may still arrive, wait a few seconds before trying again.",
+        "updateApp": "The cardholder must update their sattle.me app.",
+        "superseded": "Another reading of the card replaced this one.",
+        "other": "The payment could not be processed."
+      },
+      "notice": {
+        "title": "Card payment: {{amount}}",
+        "body": "{{amount}} to {{name}}",
+        "askTitle": "Pending: Card payment",
+        "askBody": "{{amount}} to {{name}}. Click to confirm, the till is waiting.",
+        "askBodyUnchecked": "{{amount}}. Click to confirm, the till is waiting.",
+        "askBodyNoInvoice": "Click to confirm, the till is waiting.",
+        "refusedTitle": "Refused: Card payment ({{amount}} to {{name}})",
+        "refusedTitleUnchecked": "Refused: Card payment ({{amount}})",
+        "refusedTitleNoInvoice": "Refused: Card payment",
+        "pausedBody": "{{card}} is paused. Nothing was paid."
+      },
+      "payment": {
+        "failure": {
+          "unreachable": "The card's relay is not answering, or this payment has expired. Nothing was paid.",
+          "ended": "The till is no longer waiting for this payment. Nothing was paid: present your card again if needed.",
+          "invalidInvoice": "The till sent an invoice your wallet cannot pay. Nothing was paid.",
+          "otherNetwork": "The till's invoice is for another Bitcoin network. Nothing was paid.",
+          "expired": "The till's invoice has expired. Nothing was paid.",
+          "noAmount": "The till's invoice has no amount in whole sats. Nothing was paid.",
+          "outOfBounds": "The amount is outside the limits of a card payment. Nothing was paid.",
+          "suspended": "This card is paused. Nothing was paid.",
+          "alreadyPaid": "This invoice was already paid. Nothing was paid again.",
+          "dayLimit": "This payment would exceed your card's 24-hour limit. Nothing was paid.",
+          "hourLimit": "Your card has reached its number of payments for the hour. Nothing was paid.",
+          "aboveLimit": "The amount is above your card's limit. Nothing was paid.",
+          "notYourCard": "This payment does not come from a tap of your card. Nothing was paid.",
+          "replayed": "This tap of your card was already used. Nothing was paid.",
+          "unlock": "The payment was not confirmed. Nothing was paid.",
+          "insufficientBalance": "Your card's balance does not cover this payment and its fee. Nothing was paid: top up the card in “Cards”.",
+          "sendFailed": "Your wallet could not send this payment, for example for lack of balance. Nothing left.",
+          "uncertain": "Your wallet did not confirm the sending: the payment may have left. Check the list of transactions before paying another way.",
+          "newerApp": "A newer version of the app saved your card. Update the app. Nothing was paid.",
+          "otherInvoice": "The merchant's service does not recognise this invoice: it may have been replaced on the way. Nothing was paid.",
+          "settled": "The merchant's service says this invoice is already paid. Nothing was paid again.",
+          "newPayee": "No confirmation {{delay}}: nothing was paid. The till was told that this new merchant must be approved in the app.",
+          "newPayeeHomonym": "No confirmation {{delay}}: nothing was paid.",
+          "unidentifiedPayee": "No confirmation {{delay}}: nothing was paid. The till was told that the merchant is not identified.",
+          "unconfirmed": "No confirmation {{delay}}: nothing was paid. The till was told.",
+          "late": "The payment could not leave {{delay}}. Nothing was paid.",
+          "failed": "This payment could not be processed. Nothing was paid."
+        },
+        "delay": {
+          "minute": "within a minute",
+          "seconds_one": "within {{count}} second",
+          "seconds_other": "within {{count}} seconds"
+        }
+      },
+      "payee": {
+        "quoted": "“{{name}}”",
+        "unnamed": "Unknown name",
+        "node": "Node {{node}}"
+      }
+    },
+    "cards": {
+      "unnamed": "Card {{id}}"
+    }
+  },
+  "de": {
+    "card": {
+      "decline": {
+        "newPayee": "Neuer Händler: Der Karteninhaber muss ihn in seiner sattle.me-App freigeben und die Karte erneut vorhalten.",
+        "unidentifiedPayee": "Händler nicht erkannt: Der Karteninhaber muss die Zahlung in seiner sattle.me-App bestätigen.",
+        "unconfirmed": "Die Zahlung muss vom Karteninhaber in seiner sattle.me-App bestätigt werden.",
+        "notConfirmed": "Zahlung auf dem Telefon des Karteninhabers nicht bestätigt.",
+        "refused": "Zahlung vom Karteninhaber abgelehnt.",
+        "insufficientBalance": "Guthaben der Karte nicht ausreichend.",
+        "aboveLimit": "Betrag über dem Limit pro Zahlung der Karte.",
+        "dayLimit": "24-Stunden-Limit der Karte erreicht.",
+        "hourLimit": "Zu viele Zahlungen mit dieser Karte innerhalb einer Stunde.",
+        "suspended": "Karte pausiert: Der Karteninhaber kann sie in seiner sattle.me-App wieder aktivieren.",
+        "invalidInvoice": "Rechnung für diese Karte nicht gültig.",
+        "expired": "Rechnung abgelaufen: Erstellen Sie eine neue.",
+        "noAmount": "Rechnung ohne Betrag: Die Karte zahlt nur einen festen Betrag.",
+        "outOfBounds": "Betrag außerhalb der Grenzen der Karte (1 Sat bis 1 BTC).",
+        "alreadyPaid": "Die Karte zahlt diese Rechnung nicht: Sie ist bereits beglichen.",
+        "invalidTap": "Lesen der Karte ungültig: Halten Sie die Karte erneut hin.",
+        "sendFailed": "Die Zahlung ist nicht abgegangen, es wurde nichts bezahlt. Halten Sie die Karte erneut hin.",
+        "uncertain": "Zahlung unterbrochen: Sie kann noch eintreffen. Warten Sie einige Sekunden, bevor Sie es erneut versuchen.",
+        "updateApp": "Der Karteninhaber muss seine sattle.me-App aktualisieren.",
+        "superseded": "Ein neueres Lesen der Karte hat dieses ersetzt.",
+        "other": "Die Zahlung konnte nicht verarbeitet werden."
+      },
+      "notice": {
+        "title": "Kartenzahlung: {{amount}}",
+        "body": "{{amount}} an {{name}}",
+        "askTitle": "Ausstehend: Kartenzahlung",
+        "askBody": "{{amount}} an {{name}}. Klicken Sie zum Bestätigen, die Kasse wartet.",
+        "askBodyUnchecked": "{{amount}}. Klicken Sie zum Bestätigen, die Kasse wartet.",
+        "askBodyNoInvoice": "Klicken Sie zum Bestätigen, die Kasse wartet.",
+        "refusedTitle": "Abgelehnt: Kartenzahlung ({{amount}} an {{name}})",
+        "refusedTitleUnchecked": "Abgelehnt: Kartenzahlung ({{amount}})",
+        "refusedTitleNoInvoice": "Abgelehnt: Kartenzahlung",
+        "pausedBody": "{{card}} ist pausiert. Es wurde nichts bezahlt."
+      },
+      "payment": {
+        "failure": {
+          "unreachable": "Das Relais der Karte antwortet nicht, oder diese Zahlung ist abgelaufen. Es wurde nichts bezahlt.",
+          "ended": "Die Kasse wartet nicht mehr auf diese Zahlung. Es wurde nichts bezahlt: Halten Sie Ihre Karte bei Bedarf erneut hin.",
+          "invalidInvoice": "Die Kasse hat eine Rechnung gesendet, die Ihr Wallet nicht bezahlen kann. Es wurde nichts bezahlt.",
+          "otherNetwork": "Die Rechnung der Kasse gehört zu einem anderen Bitcoin-Netzwerk. Es wurde nichts bezahlt.",
+          "expired": "Die Rechnung der Kasse ist abgelaufen. Es wurde nichts bezahlt.",
+          "noAmount": "Die Rechnung der Kasse hat keinen Betrag in ganzen Sats. Es wurde nichts bezahlt.",
+          "outOfBounds": "Der Betrag liegt außerhalb der Grenzen einer Kartenzahlung. Es wurde nichts bezahlt.",
+          "suspended": "Diese Karte ist pausiert. Es wurde nichts bezahlt.",
+          "alreadyPaid": "Diese Rechnung wurde bereits bezahlt. Es wurde nichts erneut bezahlt.",
+          "dayLimit": "Diese Zahlung würde das 24-Stunden-Limit Ihrer Karte überschreiten. Es wurde nichts bezahlt.",
+          "hourLimit": "Ihre Karte hat ihre Anzahl Zahlungen für diese Stunde erreicht. Es wurde nichts bezahlt.",
+          "aboveLimit": "Der Betrag liegt über dem Limit Ihrer Karte. Es wurde nichts bezahlt.",
+          "notYourCard": "Diese Zahlung stammt nicht von einem Tap Ihrer Karte. Es wurde nichts bezahlt.",
+          "replayed": "Dieser Tap Ihrer Karte wurde bereits verwendet. Es wurde nichts bezahlt.",
+          "unlock": "Die Zahlung wurde nicht bestätigt. Es wurde nichts bezahlt.",
+          "insufficientBalance": "Das Guthaben Ihrer Karte reicht für diese Zahlung und ihre Gebühr nicht aus. Es wurde nichts bezahlt: Laden Sie die Karte unter „Karten“ auf.",
+          "sendFailed": "Ihr Wallet konnte diese Zahlung nicht senden, zum Beispiel mangels Guthaben. Es ist nichts abgegangen.",
+          "uncertain": "Ihr Wallet hat den Versand nicht bestätigt: Die Zahlung ist vielleicht abgegangen. Prüfen Sie die Liste der Bewegungen, bevor Sie anders bezahlen.",
+          "newerApp": "Eine neuere Version der App hat Ihre Karte gespeichert. Aktualisieren Sie die App. Es wurde nichts bezahlt.",
+          "otherInvoice": "Der Dienst des Händlers erkennt diese Rechnung nicht: Sie wurde unterwegs möglicherweise ersetzt. Es wurde nichts bezahlt.",
+          "settled": "Der Dienst des Händlers meldet, dass diese Rechnung bereits bezahlt ist. Es wurde nichts erneut bezahlt.",
+          "newPayee": "Keine Bestätigung {{delay}}: Es wurde nichts bezahlt. Die Kasse wurde informiert, dass dieser neue Händler in der App zu genehmigen ist.",
+          "newPayeeHomonym": "Keine Bestätigung {{delay}}: Es wurde nichts bezahlt.",
+          "unidentifiedPayee": "Keine Bestätigung {{delay}}: Es wurde nichts bezahlt. Die Kasse wurde informiert, dass der Händler nicht identifiziert ist.",
+          "unconfirmed": "Keine Bestätigung {{delay}}: Es wurde nichts bezahlt. Die Kasse wurde informiert.",
+          "late": "Die Zahlung konnte nicht {{delay}} gesendet werden. Es wurde nichts bezahlt.",
+          "failed": "Diese Zahlung konnte nicht verarbeitet werden. Es wurde nichts bezahlt."
+        },
+        "delay": {
+          "minute": "innerhalb einer Minute",
+          "seconds_one": "innerhalb von {{count}} Sekunde",
+          "seconds_other": "innerhalb von {{count}} Sekunden"
+        }
+      },
+      "payee": {
+        "quoted": "„{{name}}“",
+        "unnamed": "Unbekannter Name",
+        "node": "Knoten {{node}}"
+      }
+    },
+    "cards": {
+      "unnamed": "Karte {{id}}"
+    }
+  },
+  "de-CH": {
+    "card": {
+      "decline": {
+        "newPayee": "Neuer Händler: Der Karteninhaber muss ihn in seiner sattle.me-App freigeben und die Karte erneut vorhalten.",
+        "unidentifiedPayee": "Händler nicht erkannt: Der Karteninhaber muss die Zahlung in seiner sattle.me-App bestätigen.",
+        "unconfirmed": "Die Zahlung muss vom Karteninhaber in seiner sattle.me-App bestätigt werden.",
+        "notConfirmed": "Zahlung auf dem Telefon des Karteninhabers nicht bestätigt.",
+        "refused": "Zahlung vom Karteninhaber abgelehnt.",
+        "insufficientBalance": "Guthaben der Karte nicht ausreichend.",
+        "aboveLimit": "Betrag über der Limite pro Zahlung der Karte.",
+        "dayLimit": "24-Stunden-Limite der Karte erreicht.",
+        "hourLimit": "Zu viele Zahlungen mit dieser Karte innert einer Stunde.",
+        "suspended": "Karte pausiert: Der Karteninhaber kann sie in seiner sattle.me-App wieder aktivieren.",
+        "invalidInvoice": "Rechnung für diese Karte nicht gültig.",
+        "expired": "Rechnung abgelaufen: Erstellen Sie eine neue.",
+        "noAmount": "Rechnung ohne Betrag: Die Karte zahlt nur einen festen Betrag.",
+        "outOfBounds": "Betrag ausserhalb der Grenzen der Karte (1 Sat bis 1 BTC).",
+        "alreadyPaid": "Die Karte zahlt diese Rechnung nicht: Sie ist bereits beglichen.",
+        "invalidTap": "Lesen der Karte ungültig: Halten Sie die Karte erneut hin.",
+        "sendFailed": "Die Zahlung ist nicht abgegangen, es wurde nichts bezahlt. Halten Sie die Karte erneut hin.",
+        "uncertain": "Zahlung unterbrochen: Sie kann noch eintreffen. Warten Sie einige Sekunden, bevor Sie es erneut versuchen.",
+        "updateApp": "Der Karteninhaber muss seine sattle.me-App aktualisieren.",
+        "superseded": "Ein neueres Lesen der Karte hat dieses ersetzt.",
+        "other": "Die Zahlung konnte nicht verarbeitet werden."
+      },
+      "notice": {
+        "title": "Kartenzahlung: {{amount}}",
+        "body": "{{amount}} an {{name}}",
+        "askTitle": "Ausstehend: Kartenzahlung",
+        "askBody": "{{amount}} an {{name}}. Klicken Sie zum Bestätigen, die Kasse wartet.",
+        "askBodyUnchecked": "{{amount}}. Klicken Sie zum Bestätigen, die Kasse wartet.",
+        "askBodyNoInvoice": "Klicken Sie zum Bestätigen, die Kasse wartet.",
+        "refusedTitle": "Abgelehnt: Kartenzahlung ({{amount}} an {{name}})",
+        "refusedTitleUnchecked": "Abgelehnt: Kartenzahlung ({{amount}})",
+        "refusedTitleNoInvoice": "Abgelehnt: Kartenzahlung",
+        "pausedBody": "{{card}} ist pausiert. Es wurde nichts bezahlt."
+      },
+      "payment": {
+        "failure": {
+          "unreachable": "Das Relais der Karte antwortet nicht, oder diese Zahlung ist abgelaufen. Es wurde nichts bezahlt.",
+          "ended": "Die Kasse wartet nicht mehr auf diese Zahlung. Es wurde nichts bezahlt: Halten Sie Ihre Karte bei Bedarf erneut hin.",
+          "invalidInvoice": "Die Kasse hat eine Rechnung gesendet, die Ihr Wallet nicht bezahlen kann. Es wurde nichts bezahlt.",
+          "otherNetwork": "Die Rechnung der Kasse gehört zu einem anderen Bitcoin-Netzwerk. Es wurde nichts bezahlt.",
+          "expired": "Die Rechnung der Kasse ist abgelaufen. Es wurde nichts bezahlt.",
+          "noAmount": "Die Rechnung der Kasse hat keinen Betrag in ganzen Sats. Es wurde nichts bezahlt.",
+          "outOfBounds": "Der Betrag liegt ausserhalb der Grenzen einer Kartenzahlung. Es wurde nichts bezahlt.",
+          "suspended": "Diese Karte ist pausiert. Es wurde nichts bezahlt.",
+          "alreadyPaid": "Diese Rechnung wurde bereits bezahlt. Es wurde nichts erneut bezahlt.",
+          "dayLimit": "Diese Zahlung würde die 24-Stunden-Limite Ihrer Karte überschreiten. Es wurde nichts bezahlt.",
+          "hourLimit": "Ihre Karte hat ihre Anzahl Zahlungen für diese Stunde erreicht. Es wurde nichts bezahlt.",
+          "aboveLimit": "Der Betrag liegt über der Limite Ihrer Karte. Es wurde nichts bezahlt.",
+          "notYourCard": "Diese Zahlung stammt nicht von einem Tap Ihrer Karte. Es wurde nichts bezahlt.",
+          "replayed": "Dieser Tap Ihrer Karte wurde bereits verwendet. Es wurde nichts bezahlt.",
+          "unlock": "Die Zahlung wurde nicht bestätigt. Es wurde nichts bezahlt.",
+          "insufficientBalance": "Das Guthaben Ihrer Karte reicht für diese Zahlung und ihre Gebühr nicht aus. Es wurde nichts bezahlt: Laden Sie die Karte unter «Karten» auf.",
+          "sendFailed": "Ihr Wallet konnte diese Zahlung nicht senden, zum Beispiel mangels Guthaben. Es ist nichts abgegangen.",
+          "uncertain": "Ihr Wallet hat den Versand nicht bestätigt: Die Zahlung ist vielleicht abgegangen. Prüfen Sie die Liste der Bewegungen, bevor Sie anders bezahlen.",
+          "newerApp": "Eine neuere Version der App hat Ihre Karte gespeichert. Aktualisieren Sie die App. Es wurde nichts bezahlt.",
+          "otherInvoice": "Der Dienst des Händlers erkennt diese Rechnung nicht: Sie wurde unterwegs möglicherweise ersetzt. Es wurde nichts bezahlt.",
+          "settled": "Der Dienst des Händlers meldet, dass diese Rechnung bereits bezahlt ist. Es wurde nichts erneut bezahlt.",
+          "newPayee": "Keine Bestätigung {{delay}}: Es wurde nichts bezahlt. Die Kasse wurde informiert, dass dieser neue Händler in der App zu genehmigen ist.",
+          "newPayeeHomonym": "Keine Bestätigung {{delay}}: Es wurde nichts bezahlt.",
+          "unidentifiedPayee": "Keine Bestätigung {{delay}}: Es wurde nichts bezahlt. Die Kasse wurde informiert, dass der Händler nicht identifiziert ist.",
+          "unconfirmed": "Keine Bestätigung {{delay}}: Es wurde nichts bezahlt. Die Kasse wurde informiert.",
+          "late": "Die Zahlung konnte nicht {{delay}} gesendet werden. Es wurde nichts bezahlt.",
+          "failed": "Diese Zahlung konnte nicht verarbeitet werden. Es wurde nichts bezahlt."
+        },
+        "delay": {
+          "minute": "innert einer Minute",
+          "seconds_one": "innert {{count}} Sekunde",
+          "seconds_other": "innert {{count}} Sekunden"
+        }
+      },
+      "payee": {
+        "quoted": "«{{name}}»",
+        "unnamed": "Unbekannter Name",
+        "node": "Knoten {{node}}"
+      }
+    },
+    "cards": {
+      "unnamed": "Karte {{id}}"
+    }
+  },
+  "it": {
+    "card": {
+      "decline": {
+        "newPayee": "Nuovo commerciante: il titolare deve approvarlo nella sua app sattle.me, poi presentare di nuovo la carta.",
+        "unidentifiedPayee": "Commerciante non identificato: il titolare deve confermare il pagamento nella sua app sattle.me.",
+        "unconfirmed": "Pagamento da confermare dal titolare nella sua app sattle.me.",
+        "notConfirmed": "Pagamento non confermato sul telefono del titolare.",
+        "refused": "Pagamento rifiutato dal titolare della carta.",
+        "insufficientBalance": "Saldo della carta insufficiente.",
+        "aboveLimit": "Importo superiore al limite per pagamento della carta.",
+        "dayLimit": "Limite della carta sulle 24 ore raggiunto.",
+        "hourLimit": "Troppi pagamenti con questa carta nell'ultima ora.",
+        "suspended": "Carta in pausa: il titolare può riattivarla nella sua app sattle.me.",
+        "invalidInvoice": "Fattura non valida per questa carta.",
+        "expired": "Fattura scaduta: creane una nuova.",
+        "noAmount": "Fattura senza importo: la carta paga solo un importo fisso.",
+        "outOfBounds": "Importo fuori dai limiti della carta (da 1 sat a 1 BTC).",
+        "alreadyPaid": "La carta non paga questa fattura: è già saldata.",
+        "invalidTap": "Lettura della carta non valida: presenta di nuovo la carta.",
+        "sendFailed": "Il pagamento non è partito, non è stato pagato nulla. Presenta di nuovo la carta.",
+        "uncertain": "Pagamento interrotto: può ancora arrivare, attendi qualche secondo prima di riprovare.",
+        "updateApp": "Il titolare deve aggiornare la sua app sattle.me.",
+        "superseded": "Una lettura più recente della carta ha sostituito questa.",
+        "other": "Non è stato possibile elaborare il pagamento."
+      },
+      "notice": {
+        "title": "Pagamento con carta: {{amount}}",
+        "body": "{{amount}} a {{name}}",
+        "askTitle": "In attesa: Pagamento con carta",
+        "askBody": "{{amount}} a {{name}}. Clicca per confermare, la cassa attende.",
+        "askBodyUnchecked": "{{amount}}. Clicca per confermare, la cassa attende.",
+        "askBodyNoInvoice": "Clicca per confermare, la cassa attende.",
+        "refusedTitle": "Rifiutato: Pagamento con carta ({{amount}} a {{name}})",
+        "refusedTitleUnchecked": "Rifiutato: Pagamento con carta ({{amount}})",
+        "refusedTitleNoInvoice": "Rifiutato: Pagamento con carta",
+        "pausedBody": "{{card}} è in pausa. Non è stato pagato nulla."
+      },
+      "payment": {
+        "failure": {
+          "unreachable": "Il relè della carta non risponde, oppure questo pagamento è scaduto. Non è stato pagato nulla.",
+          "ended": "La cassa non attende più questo pagamento. Non è stato pagato nulla: presenta di nuovo la carta se necessario.",
+          "invalidInvoice": "La cassa ha inviato una fattura che il tuo portafoglio non può pagare. Non è stato pagato nulla.",
+          "otherNetwork": "La fattura della cassa è di un'altra rete Bitcoin. Non è stato pagato nulla.",
+          "expired": "La fattura della cassa è scaduta. Non è stato pagato nulla.",
+          "noAmount": "La fattura della cassa non ha un importo in sats interi. Non è stato pagato nulla.",
+          "outOfBounds": "L'importo è fuori dai limiti di un pagamento con carta. Non è stato pagato nulla.",
+          "suspended": "Questa carta è in pausa. Non è stato pagato nulla.",
+          "alreadyPaid": "Questa fattura è già stata pagata. Non è stato pagato nulla di nuovo.",
+          "dayLimit": "Questo pagamento supererebbe il limite di 24 ore della tua carta. Non è stato pagato nulla.",
+          "hourLimit": "La tua carta ha raggiunto il numero di pagamenti per quest'ora. Non è stato pagato nulla.",
+          "aboveLimit": "L'importo supera il limite della tua carta. Non è stato pagato nulla.",
+          "notYourCard": "Questo pagamento non proviene da un tap della tua carta. Non è stato pagato nulla.",
+          "replayed": "Questo tap della tua carta è già stato usato. Non è stato pagato nulla.",
+          "unlock": "Il pagamento non è stato confermato. Non è stato pagato nulla.",
+          "insufficientBalance": "Il saldo della tua carta non basta per questo pagamento e la sua commissione. Non è stato pagato nulla: ricarica la carta in « Carte ».",
+          "sendFailed": "Il tuo portafoglio non ha potuto inviare questo pagamento, per esempio per saldo insufficiente. Non è partito nulla.",
+          "uncertain": "Il tuo portafoglio non ha confermato l'invio: il pagamento potrebbe essere partito. Controlla l'elenco dei movimenti prima di pagare in un altro modo.",
+          "newerApp": "Una versione più recente dell'app ha registrato la tua carta. Aggiorna l'app. Non è stato pagato nulla.",
+          "otherInvoice": "Il servizio del commerciante non riconosce questa fattura: potrebbe essere stata sostituita lungo il percorso. Non è stato pagato nulla.",
+          "settled": "Il servizio del commerciante indica che questa fattura è già pagata. Non è stato pagato nulla di nuovo.",
+          "newPayee": "Nessuna conferma {{delay}}: non è stato pagato nulla. La cassa è stata informata che questo nuovo commerciante va approvato nell'app.",
+          "newPayeeHomonym": "Nessuna conferma {{delay}}: non è stato pagato nulla.",
+          "unidentifiedPayee": "Nessuna conferma {{delay}}: non è stato pagato nulla. La cassa è stata informata che il commerciante non è identificato.",
+          "unconfirmed": "Nessuna conferma {{delay}}: non è stato pagato nulla. La cassa è stata informata.",
+          "late": "Il pagamento non è potuto partire {{delay}}. Non è stato pagato nulla.",
+          "failed": "Questo pagamento non ha potuto essere elaborato. Non è stato pagato nulla."
+        },
+        "delay": {
+          "minute": "entro un minuto",
+          "seconds_one": "entro {{count}} secondo",
+          "seconds_other": "entro {{count}} secondi"
+        }
+      },
+      "payee": {
+        "quoted": "«{{name}}»",
+        "unnamed": "Nome sconosciuto",
+        "node": "Nodo {{node}}"
+      }
+    },
+    "cards": {
+      "unnamed": "Carta {{id}}"
+    }
+  },
+  "es": {
+    "card": {
+      "decline": {
+        "newPayee": "Comercio nuevo: el titular debe aprobarlo en su app sattle.me y volver a presentar la tarjeta.",
+        "unidentifiedPayee": "Comercio no identificado: el titular debe confirmar el pago en su app sattle.me.",
+        "unconfirmed": "Pago pendiente de confirmación por el titular en su app sattle.me.",
+        "notConfirmed": "Pago no confirmado en el teléfono del titular.",
+        "refused": "Pago rechazado por el titular de la tarjeta.",
+        "insufficientBalance": "Saldo de la tarjeta insuficiente.",
+        "aboveLimit": "Importe superior al límite por pago de la tarjeta.",
+        "dayLimit": "Límite de 24 horas de la tarjeta alcanzado.",
+        "hourLimit": "Demasiados pagos con esta tarjeta en la última hora.",
+        "suspended": "Tarjeta en pausa: el titular puede reactivarla en su app sattle.me.",
+        "invalidInvoice": "Factura no válida para esta tarjeta.",
+        "expired": "Factura caducada: crea una nueva.",
+        "noAmount": "Factura sin importe: la tarjeta solo paga un importe fijo.",
+        "outOfBounds": "Importe fuera de los límites de la tarjeta (de 1 sat a 1 BTC).",
+        "alreadyPaid": "La tarjeta no paga esta factura: ya está liquidada.",
+        "invalidTap": "Lectura de la tarjeta no válida: vuelve a presentar la tarjeta.",
+        "sendFailed": "El pago no ha salido, no se ha pagado nada. Vuelve a presentar la tarjeta.",
+        "uncertain": "Pago interrumpido: aún puede llegar, espera unos segundos antes de volver a intentarlo.",
+        "updateApp": "El titular debe actualizar su app sattle.me.",
+        "superseded": "Una lectura más reciente de la tarjeta ha sustituido a esta.",
+        "other": "No se ha podido procesar el pago."
+      },
+      "notice": {
+        "title": "Pago con tarjeta: {{amount}}",
+        "body": "{{amount}} para {{name}}",
+        "askTitle": "Pendiente: Pago con tarjeta",
+        "askBody": "{{amount}} para {{name}}. Haz clic para confirmar, la caja está esperando.",
+        "askBodyUnchecked": "{{amount}}. Haz clic para confirmar, la caja está esperando.",
+        "askBodyNoInvoice": "Haz clic para confirmar, la caja está esperando.",
+        "refusedTitle": "Rechazado: Pago con tarjeta ({{amount}} para {{name}})",
+        "refusedTitleUnchecked": "Rechazado: Pago con tarjeta ({{amount}})",
+        "refusedTitleNoInvoice": "Rechazado: Pago con tarjeta",
+        "pausedBody": "{{card}} está en pausa. No se ha pagado nada."
+      },
+      "payment": {
+        "failure": {
+          "unreachable": "El relé de la tarjeta no responde, o este pago ha caducado. No se ha pagado nada.",
+          "ended": "La caja ya no espera este pago. No se ha pagado nada: presenta de nuevo tu tarjeta si es necesario.",
+          "invalidInvoice": "La caja ha enviado una factura que tu monedero no puede pagar. No se ha pagado nada.",
+          "otherNetwork": "La factura de la caja es de otra red Bitcoin. No se ha pagado nada.",
+          "expired": "La factura de la caja ha caducado. No se ha pagado nada.",
+          "noAmount": "La factura de la caja no tiene un importe en sats enteros. No se ha pagado nada.",
+          "outOfBounds": "El importe está fuera de los límites de un pago con tarjeta. No se ha pagado nada.",
+          "suspended": "Esta tarjeta está en pausa. No se ha pagado nada.",
+          "alreadyPaid": "Esta factura ya se pagó. No se ha pagado nada de nuevo.",
+          "dayLimit": "Este pago superaría el límite de 24 horas de tu tarjeta. No se ha pagado nada.",
+          "hourLimit": "Tu tarjeta ha alcanzado su número de pagos para esta hora. No se ha pagado nada.",
+          "aboveLimit": "El importe supera el límite de tu tarjeta. No se ha pagado nada.",
+          "notYourCard": "Este pago no viene de un toque de tu tarjeta. No se ha pagado nada.",
+          "replayed": "Este toque de tu tarjeta ya se ha usado. No se ha pagado nada.",
+          "unlock": "El pago no se ha confirmado. No se ha pagado nada.",
+          "insufficientBalance": "El saldo de tu tarjeta no alcanza para este pago y su comisión. No se ha pagado nada: recarga la tarjeta en « Tarjetas ».",
+          "sendFailed": "Tu monedero no ha podido enviar este pago, por ejemplo por falta de saldo. No ha salido nada.",
+          "uncertain": "Tu monedero no ha confirmado el envío: puede que el pago haya salido. Revisa la lista de movimientos antes de pagar de otra forma.",
+          "newerApp": "Una versión más reciente de la aplicación ha guardado tu tarjeta. Actualiza la aplicación. No se ha pagado nada.",
+          "otherInvoice": "El servicio del comercio no reconoce esta factura: puede haber sido sustituida por el camino. No se ha pagado nada.",
+          "settled": "El servicio del comercio indica que esta factura ya está pagada. No se ha pagado nada de nuevo.",
+          "newPayee": "Sin confirmación {{delay}}: no se ha pagado nada. Se ha informado a la caja de que este comercio nuevo debe aprobarse en la app.",
+          "newPayeeHomonym": "Sin confirmación {{delay}}: no se ha pagado nada.",
+          "unidentifiedPayee": "Sin confirmación {{delay}}: no se ha pagado nada. Se ha informado a la caja de que el comercio no está identificado.",
+          "unconfirmed": "Sin confirmación {{delay}}: no se ha pagado nada. Se ha informado a la caja.",
+          "late": "El pago no ha podido salir {{delay}}. No se ha pagado nada.",
+          "failed": "Este pago no se ha podido procesar. No se ha pagado nada."
+        },
+        "delay": {
+          "minute": "en un minuto",
+          "seconds_one": "en {{count}} segundo",
+          "seconds_other": "en {{count}} segundos"
+        }
+      },
+      "payee": {
+        "quoted": "«{{name}}»",
+        "unnamed": "Nombre desconocido",
+        "node": "Nodo {{node}}"
+      }
+    },
+    "cards": {
+      "unnamed": "Tarjeta {{id}}"
+    }
+  },
+  "pt": {
+    "card": {
+      "decline": {
+        "newPayee": "Novo comerciante: o titular deve aprová-lo na sua app sattle.me e voltar a apresentar o cartão.",
+        "unidentifiedPayee": "Comerciante não identificado: o titular deve confirmar o pagamento na sua app sattle.me.",
+        "unconfirmed": "Pagamento a confirmar pelo titular na sua app sattle.me.",
+        "notConfirmed": "Pagamento não confirmado no telemóvel do titular.",
+        "refused": "Pagamento recusado pelo titular do cartão.",
+        "insufficientBalance": "Saldo do cartão insuficiente.",
+        "aboveLimit": "Montante acima do limite por pagamento do cartão.",
+        "dayLimit": "Limite de 24 horas do cartão atingido.",
+        "hourLimit": "Demasiados pagamentos com este cartão na última hora.",
+        "suspended": "Cartão em pausa: o titular pode reativá-lo na sua app sattle.me.",
+        "invalidInvoice": "Fatura não válida para este cartão.",
+        "expired": "Fatura expirada: crie uma nova.",
+        "noAmount": "Fatura sem montante: o cartão só paga um montante fixo.",
+        "outOfBounds": "Montante fora dos limites do cartão (de 1 sat a 1 BTC).",
+        "alreadyPaid": "O cartão não paga esta fatura: já está liquidada.",
+        "invalidTap": "Leitura do cartão inválida: apresente o cartão novamente.",
+        "sendFailed": "O pagamento não saiu, nada foi pago. Apresente o cartão novamente.",
+        "uncertain": "Pagamento interrompido: ainda pode chegar, aguarde alguns segundos antes de tentar novamente.",
+        "updateApp": "O titular deve atualizar a sua app sattle.me.",
+        "superseded": "Uma leitura mais recente do cartão substituiu esta.",
+        "other": "Não foi possível processar o pagamento."
+      },
+      "notice": {
+        "title": "Pagamento com cartão: {{amount}}",
+        "body": "{{amount}} para {{name}}",
+        "askTitle": "Pendente: Pagamento com cartão",
+        "askBody": "{{amount}} para {{name}}. Clique para confirmar, a caixa está à espera.",
+        "askBodyUnchecked": "{{amount}}. Clique para confirmar, a caixa está à espera.",
+        "askBodyNoInvoice": "Clique para confirmar, a caixa está à espera.",
+        "refusedTitle": "Recusado: Pagamento com cartão ({{amount}} para {{name}})",
+        "refusedTitleUnchecked": "Recusado: Pagamento com cartão ({{amount}})",
+        "refusedTitleNoInvoice": "Recusado: Pagamento com cartão",
+        "pausedBody": "{{card}} está em pausa. Nada foi pago."
+      },
+      "payment": {
+        "failure": {
+          "unreachable": "O relé do cartão não responde, ou este pagamento expirou. Nada foi pago.",
+          "ended": "A caixa já não espera por este pagamento. Nada foi pago: apresente o cartão de novo se necessário.",
+          "invalidInvoice": "A caixa enviou uma fatura que a sua carteira não pode pagar. Nada foi pago.",
+          "otherNetwork": "A fatura da caixa é de outra rede Bitcoin. Nada foi pago.",
+          "expired": "A fatura da caixa expirou. Nada foi pago.",
+          "noAmount": "A fatura da caixa não tem um montante em sats inteiros. Nada foi pago.",
+          "outOfBounds": "O montante está fora dos limites de um pagamento com cartão. Nada foi pago.",
+          "suspended": "Este cartão está em pausa. Nada foi pago.",
+          "alreadyPaid": "Esta fatura já foi paga. Nada foi pago de novo.",
+          "dayLimit": "Este pagamento ultrapassaria o limite de 24 horas do seu cartão. Nada foi pago.",
+          "hourLimit": "O seu cartão atingiu o número de pagamentos desta hora. Nada foi pago.",
+          "aboveLimit": "O montante ultrapassa o limite do seu cartão. Nada foi pago.",
+          "notYourCard": "Este pagamento não vem de uma leitura do seu cartão. Nada foi pago.",
+          "replayed": "Esta leitura do seu cartão já foi usada. Nada foi pago.",
+          "unlock": "O pagamento não foi confirmado. Nada foi pago.",
+          "insufficientBalance": "O saldo do seu cartão não chega para este pagamento e a sua taxa. Nada foi pago: carregue o cartão em « Cartões ».",
+          "sendFailed": "A sua carteira não conseguiu enviar este pagamento, por exemplo por falta de saldo. Nada partiu.",
+          "uncertain": "A sua carteira não confirmou o envio: o pagamento pode ter partido. Verifique a lista de movimentos antes de pagar de outra forma.",
+          "newerApp": "Uma versão mais recente da aplicação registou o seu cartão. Atualize a aplicação. Nada foi pago.",
+          "otherInvoice": "O serviço do comerciante não reconhece esta fatura: pode ter sido substituída pelo caminho. Nada foi pago.",
+          "settled": "O serviço do comerciante indica que esta fatura já está paga. Nada foi pago de novo.",
+          "newPayee": "Sem confirmação {{delay}}: nada foi pago. A caixa foi informada de que este novo comerciante deve ser aprovado na app.",
+          "newPayeeHomonym": "Sem confirmação {{delay}}: nada foi pago.",
+          "unidentifiedPayee": "Sem confirmação {{delay}}: nada foi pago. A caixa foi informada de que o comerciante não está identificado.",
+          "unconfirmed": "Sem confirmação {{delay}}: nada foi pago. A caixa foi informada.",
+          "late": "O pagamento não pôde partir {{delay}}. Nada foi pago.",
+          "failed": "Este pagamento não pôde ser processado. Nada foi pago."
+        },
+        "delay": {
+          "minute": "num minuto",
+          "seconds_one": "em {{count}} segundo",
+          "seconds_other": "em {{count}} segundos"
+        }
+      },
+      "payee": {
+        "quoted": "«{{name}}»",
+        "unnamed": "Nome desconhecido",
+        "node": "Nó {{node}}"
+      }
+    },
+    "cards": {
+      "unnamed": "Cartão {{id}}"
+    }
+  },
+  "fi": {
+    "card": {
+      "decline": {
+        "newPayee": "Uusi kauppias: kortin haltijan on hyväksyttävä se sattle.me-sovelluksessaan ja näytettävä kortti uudelleen.",
+        "unidentifiedPayee": "Kauppiasta ei tunnistettu: kortin haltijan on vahvistettava maksu sattle.me-sovelluksessaan.",
+        "unconfirmed": "Kortin haltijan on vahvistettava maksu sattle.me-sovelluksessaan.",
+        "notConfirmed": "Maksua ei vahvistettu kortin haltijan puhelimessa.",
+        "refused": "Kortin haltija hylkäsi maksun.",
+        "insufficientBalance": "Kortin saldo ei riitä.",
+        "aboveLimit": "Summa ylittää kortin maksukohtaisen rajan.",
+        "dayLimit": "Kortin 24 tunnin raja on täynnä.",
+        "hourLimit": "Liian monta maksua tällä kortilla tunnin sisällä.",
+        "suspended": "Kortti on tauolla: kortin haltija voi ottaa sen uudelleen käyttöön sattle.me-sovelluksessaan.",
+        "invalidInvoice": "Lasku ei kelpaa tälle kortille.",
+        "expired": "Lasku on vanhentunut: luo uusi.",
+        "noAmount": "Laskussa ei ole summaa: kortti maksaa vain kiinteän summan.",
+        "outOfBounds": "Summa on kortin rajojen ulkopuolella (1 sat – 1 BTC).",
+        "alreadyPaid": "Kortti ei maksa tätä laskua: se on jo maksettu.",
+        "invalidTap": "Kortin luku ei kelpaa: näytä kortti uudelleen.",
+        "sendFailed": "Maksu ei lähtenyt, mitään ei maksettu. Näytä kortti uudelleen.",
+        "uncertain": "Maksu keskeytyi: se voi vielä saapua. Odota muutama sekunti ennen kuin yrität uudelleen.",
+        "updateApp": "Kortin haltijan on päivitettävä sattle.me-sovelluksensa.",
+        "superseded": "Kortin uudempi luku korvasi tämän.",
+        "other": "Maksua ei voitu käsitellä."
+      },
+      "notice": {
+        "title": "Korttimaksu: {{amount}}",
+        "body": "{{amount}} saajalle {{name}}",
+        "askTitle": "Odottaa: Korttimaksu",
+        "askBody": "{{amount}} saajalle {{name}}. Vahvista napsauttamalla, kassa odottaa.",
+        "askBodyUnchecked": "{{amount}}. Vahvista napsauttamalla, kassa odottaa.",
+        "askBodyNoInvoice": "Vahvista napsauttamalla, kassa odottaa.",
+        "refusedTitle": "Hylätty: Korttimaksu ({{amount}} saajalle {{name}})",
+        "refusedTitleUnchecked": "Hylätty: Korttimaksu ({{amount}})",
+        "refusedTitleNoInvoice": "Hylätty: Korttimaksu",
+        "pausedBody": "{{card}} on tauolla. Mitään ei maksettu."
+      },
+      "payment": {
+        "failure": {
+          "unreachable": "Kortin rele ei vastaa, tai tämä maksu on vanhentunut. Mitään ei maksettu.",
+          "ended": "Kassa ei enää odota tätä maksua. Mitään ei maksettu: näytä korttisi uudelleen tarvittaessa.",
+          "invalidInvoice": "Kassa lähetti laskun, jota lompakkosi ei voi maksaa. Mitään ei maksettu.",
+          "otherNetwork": "Kassan lasku on toisen Bitcoin-verkon. Mitään ei maksettu.",
+          "expired": "Kassan lasku on vanhentunut. Mitään ei maksettu.",
+          "noAmount": "Kassan laskulla ei ole summaa kokonaisina satseina. Mitään ei maksettu.",
+          "outOfBounds": "Summa on korttimaksun rajojen ulkopuolella. Mitään ei maksettu.",
+          "suspended": "Tämä kortti on tauolla. Mitään ei maksettu.",
+          "alreadyPaid": "Tämä lasku on jo maksettu. Mitään ei maksettu uudelleen.",
+          "dayLimit": "Tämä maksu ylittäisi korttisi 24 tunnin rajan. Mitään ei maksettu.",
+          "hourLimit": "Korttisi on saavuttanut tämän tunnin maksujen enimmäismäärän. Mitään ei maksettu.",
+          "aboveLimit": "Summa ylittää korttisi rajan. Mitään ei maksettu.",
+          "notYourCard": "Tämä maksu ei tule korttisi napautuksesta. Mitään ei maksettu.",
+          "replayed": "Tämä korttisi napautus on jo käytetty. Mitään ei maksettu.",
+          "unlock": "Maksua ei vahvistettu. Mitään ei maksettu.",
+          "insufficientBalance": "Korttisi saldo ei riitä tähän maksuun ja sen kuluun. Mitään ei maksettu: lataa korttia kohdassa « Kortit ».",
+          "sendFailed": "Lompakkosi ei voinut lähettää tätä maksua, esimerkiksi saldon puutteen vuoksi. Mitään ei lähtenyt.",
+          "uncertain": "Lompakkosi ei vahvistanut lähetystä: maksu on ehkä lähtenyt. Tarkista tapahtumaluettelo ennen kuin maksat muulla tavalla.",
+          "newerApp": "Sovelluksen uudempi versio tallensi korttisi. Päivitä sovellus. Mitään ei maksettu.",
+          "otherInvoice": "Kauppiaan palvelu ei tunnista tätä laskua: se on voitu vaihtaa matkalla. Mitään ei maksettu.",
+          "settled": "Kauppiaan palvelun mukaan tämä lasku on jo maksettu. Mitään ei maksettu uudelleen.",
+          "newPayee": "Ei vahvistusta {{delay}}: mitään ei maksettu. Kassalle ilmoitettiin, että tämä uusi kauppias on hyväksyttävä sovelluksessa.",
+          "newPayeeHomonym": "Ei vahvistusta {{delay}}: mitään ei maksettu.",
+          "unidentifiedPayee": "Ei vahvistusta {{delay}}: mitään ei maksettu. Kassalle ilmoitettiin, ettei kauppiasta ole tunnistettu.",
+          "unconfirmed": "Ei vahvistusta {{delay}}: mitään ei maksettu. Kassalle ilmoitettiin.",
+          "late": "Maksu ei ehtinyt lähteä {{delay}}. Mitään ei maksettu.",
+          "failed": "Tätä maksua ei voitu käsitellä. Mitään ei maksettu."
+        },
+        "delay": {
+          "minute": "minuutissa",
+          "seconds_one": "{{count}} sekunnissa",
+          "seconds_other": "{{count}} sekunnissa"
+        }
+      },
+      "payee": {
+        "quoted": "”{{name}}”",
+        "unnamed": "Tuntematon nimi",
+        "node": "Solmu {{node}}"
+      }
+    },
+    "cards": {
+      "unnamed": "Kortti {{id}}"
+    }
+  }
+}

@@ -1,1 +1,0 @@
-- Corrigé un problème sur le champ d'adresse Bitcoin dans le formulaire d'inscription

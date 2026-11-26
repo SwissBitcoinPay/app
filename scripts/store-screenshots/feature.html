@@ -1,0 +1,140 @@
+<!doctype html>
+<!--
+  Google Play's feature graphic (capture.mjs renders it at 1024 × 500): the first screenshot's
+  caption on one line, under the logo, on the screenshots' ink background. The logo as the app
+  draws it over ink (src/components/layout/Logo.tsx, `light`): "sattle" in white, ".me" in orange.
+  Google Play's guidelines: the focal point in the middle (the edges may be cut off), background
+  elements at the edges only, no fine detail, no device imagery, no branding that repeats the
+  icon, vibrant colours (the orange disc and accent over the ink). The two discs at the corners
+  are the icon's dot.
+
+  A text that does not fit (the title on more than one line, the subtitle on more than two) fails
+  the composition.
+-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: "Sans";
+        font-weight: 600;
+        src: url(../../assets/fonts/PlusJakartaSans-Bold.ttf);
+      }
+      @font-face {
+        font-family: "Sans";
+        font-weight: 800;
+        src: url(../../assets/fonts/PlusJakartaSans-ExtraBold.ttf);
+      }
+      /* The brand's colours (src/theme/tokens.ts: palette). */
+      :root {
+        --ink: #0b1a33;
+        --ink-raised: #1c2e52;
+        --cream: #faf6ee;
+        --orange: #f7931a;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      #canvas {
+        position: relative;
+        width: 1024px;
+        height: 500px;
+        overflow: hidden;
+        background: radial-gradient(120% 120% at 50% 100%, var(--ink-raised) 0%, var(--ink) 62%);
+        color: var(--cream);
+        font-family: "Sans", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .disc {
+        position: absolute;
+        border-radius: 50%;
+      }
+      /* The middle, where everything that must be read stays. */
+      .focus {
+        position: absolute;
+        left: 120px;
+        right: 120px;
+        top: 70px;
+        bottom: 70px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .logo {
+        display: flex;
+        margin-bottom: 30px;
+      }
+      .logo svg {
+        height: 34px;
+        width: auto;
+      }
+      h1 em {
+        font-style: normal;
+        color: var(--orange);
+      }
+      h1 {
+        font-weight: 800;
+        font-size: 62px;
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+        white-space: nowrap;
+      }
+      p {
+        margin-top: 18px;
+        max-width: 640px;
+        font-weight: 600;
+        font-size: 26px;
+        line-height: 1.3;
+        text-wrap: balance;
+        color: rgba(250, 246, 238, 0.72);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas">
+      <div
+        class="disc"
+        style="left: -150px; bottom: -190px; width: 380px; height: 380px; background: var(--orange)"
+      ></div>
+      <div
+        class="disc"
+        style="right: -90px; top: -120px; width: 250px; height: 250px; background: var(--cream)"
+      ></div>
+      <div class="focus">
+        <div class="logo"></div>
+        <h1></h1>
+        <p></p>
+      </div>
+    </div>
+    <script>
+      /**
+       * Lays the graphic out. `caption`: { title, subtitle }, the title with at most one word in
+       * <em> (the accent), the subtitle plain text (./captions.js); `logo`: the logo's SVG source
+       * (assets/images/logo.svg), its ink drawn in white.
+       */
+      window.compose = ({ caption, logo }) => {
+        const root = document.getElementById("canvas");
+        root.querySelector(".logo").innerHTML = logo.replace(/#0B1A33/gi, "#FFFFFF");
+        if (!root.querySelector(".logo svg")) throw new Error("The logo is not an SVG");
+        const title = root.querySelector("h1");
+        const subtitle = root.querySelector("p");
+        title.innerHTML = caption.title;
+        subtitle.textContent = caption.subtitle;
+        const focus = root.querySelector(".focus").getBoundingClientRect();
+        return document.fonts.ready.then(() => {
+          if (title.getBoundingClientRect().width > focus.width) {
+            throw new Error(`The title is wider than the middle: ${caption.title}`);
+          }
+          const lines = Math.round(subtitle.getBoundingClientRect().height / (26 * 1.3));
+          if (lines > 2) {
+            throw new Error(`The subtitle takes ${lines} lines, over 2: ${caption.subtitle}`);
+          }
+        });
+      };
+    </script>
+  </body>
+</html>
