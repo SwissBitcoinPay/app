@@ -16,7 +16,6 @@
 /AGENTS.md @sattleme
 /CLAUDE.md @sattleme
 /.mcp.json @sattleme
-/.vscode/ @sattleme
 
 # Builds, releases and native code.
 /.eas/ @sattleme

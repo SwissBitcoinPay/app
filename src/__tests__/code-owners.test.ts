@@ -48,7 +48,6 @@ const GUARDED = [
   "AGENTS.md",
   "CLAUDE.md",
   ".mcp.json",
-  ".vscode/extensions.json",
   ".eas/workflows/release-production.yml",
   "eas.json",
   "app.config.ts",
