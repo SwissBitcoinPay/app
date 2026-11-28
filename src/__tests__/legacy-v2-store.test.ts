@@ -152,9 +152,37 @@ describe("readLegacyState", () => {
     expect(keychain.prompts).toEqual([]);
   });
 
-  it("takes a device with an account but no role for a till, as the v2 app did", async () => {
+  it("takes a device with an account but no role nor session for a till, as the v2 app did", async () => {
     putLegacyValue(LEGACY_KEYS.accountConfig, accountCopy());
     await expect(readLegacyState()).resolves.toMatchObject({ role: "employee", tokens: null });
+  });
+
+  it("takes a device with an account and a session but no role for its owner's", async () => {
+    // A till's activation logs the session out: a session left is an owner's login.
+    putLegacyValue(LEGACY_KEYS.accountConfig, accountCopy());
+    putLegacyValue(LEGACY_KEYS.tokens, JSON.stringify({ auth_token: JWT, refresh_token: REFRESH }));
+    await expect(readLegacyState()).resolves.toMatchObject({
+      role: "owner",
+      tokens: { authToken: JWT, refreshToken: REFRESH }
+    });
+  });
+
+  it("keeps the role the v2 app saved, a session beside it or not", async () => {
+    putLegacyValue(LEGACY_KEYS.userType, "employee");
+    putLegacyValue(LEGACY_KEYS.accountConfig, accountCopy());
+    putLegacyValue(LEGACY_KEYS.tokens, JSON.stringify({ auth_token: JWT, refresh_token: REFRESH }));
+    await expect(readLegacyState()).resolves.toMatchObject({ role: "employee" });
+  });
+
+  it("takes a session out of shape for none: a till's, without a role", async () => {
+    putLegacyValue(LEGACY_KEYS.accountConfig, accountCopy());
+    putLegacyValue(LEGACY_KEYS.tokens, "not json");
+    await expect(readLegacyState()).resolves.toMatchObject({ role: "employee", tokens: null });
+  });
+
+  it("migrates nothing from a session alone, without an account nor a role", async () => {
+    putLegacyValue(LEGACY_KEYS.tokens, JSON.stringify({ auth_token: JWT, refresh_token: REFRESH }));
+    await expect(readLegacyState()).resolves.toBeNull();
   });
 
   it('leaves the words alone to "Wallet": no migration without a role nor an account', async () => {

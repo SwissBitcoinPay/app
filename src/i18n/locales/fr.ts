@@ -550,6 +550,7 @@ const fr = {
       leadBusiness:
         "Cet appareil encaissait pour « {{business}} ». Pour continuer, demandez au responsable de vous inviter à nouveau depuis sattle.me, puis scannez son code.",
       join: "Scanner l'invitation",
+      logIn: "J'ai déjà un compte sattle.me",
       owner: "Je suis le responsable de ce commerce"
     },
     // "Wallet": what the v2 wallet on this phone may still hold.

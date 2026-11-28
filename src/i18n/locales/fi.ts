@@ -520,6 +520,7 @@ const fi: Translations = {
       leadBusiness:
         "Tämä laite otti maksuja vastaan yritykselle « {{business}} ». Jatkaaksesi pyydä vastaavaa kutsumaan sinut uudelleen sattle.me:stä ja skannaa hänen koodinsa.",
       join: "Skannaa kutsu",
+      logIn: "Minulla on jo sattle.me-tili",
       owner: "Vastaan tästä yrityksestä"
     },
     wallet: {

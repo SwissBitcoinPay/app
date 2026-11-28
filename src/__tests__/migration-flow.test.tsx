@@ -94,6 +94,7 @@ const routes = {
   index: LaunchScreen,
   join: JoinScreen,
   pending: PendingScreen,
+  "no-account": PendingScreen,
   "pos/index": PendingScreen,
   employees: PendingScreen,
   integrations: PendingScreen,
@@ -1275,6 +1276,100 @@ describe("a till's device", () => {
     v2Till();
     const router = await renderRouter(routes, { initialUrl: "/migration" });
     await waitFor(() => expect(router.getPathname()).toBe("/migration/employee"));
+  });
+
+  it("lets an owner who already moved to sattle.me log in with their passkey", async () => {
+    v2Till();
+    const { openTestAccount } =
+      jest.requireActual<typeof import("../../jest/account")>("../../jest/account");
+    await openTestAccount({ signUp: "done", usage: "merchant", businessName: "Studio" });
+    closeAccount();
+    const router = await renderRouter(routes, { initialUrl: "/" });
+    await waitFor(() => expect(router.getPathname()).toBe("/migration/employee"));
+
+    await fireEvent.press(screen.getByTestId("migration-employee-login"));
+    await waitFor(() => expect(router.getPathname()).toBe("/pos"));
+    expect(signInWithPasskey).toHaveBeenCalledTimes(1);
+    // Nothing migrated nor created: the account opened as it is, the v2 app's session forgotten.
+    expect(legacyV2.calls).toEqual([]);
+    expect((await savedSettings())?.businessName).toBe("Studio");
+    await waitFor(() => expect(keychain.entries.size).toBe(0));
+  });
+
+  it("resumes an unfinished sign-up at its step once logged in", async () => {
+    v2Till();
+    const { openTestAccount } =
+      jest.requireActual<typeof import("../../jest/account")>("../../jest/account");
+    await openTestAccount({ signUp: "split", usage: "merchant", businessName: "Studio" });
+    closeAccount();
+    const router = await renderRouter(routes, { initialUrl: "/migration/employee" });
+    await waitFor(() => expect(screen.getByTestId("migration-employee-login")).toBeTruthy());
+    await fireEvent.press(screen.getByTestId("migration-employee-login"));
+    await waitFor(() => expect(router.getPathname()).toBe("/onboarding/split"));
+    await waitFor(() => expect(keychain.entries.size).toBe(0));
+  });
+
+  it("offers no login over the v2 wallet's words: only the owner's migration moves their money", async () => {
+    v2Till();
+    putLegacyValue(LEGACY_KEYS.mnemonic, WORDS, true);
+    await renderRouter(routes, { initialUrl: "/migration/employee" });
+    await waitFor(() => expect(screen.getByTestId("migration-employee-owner")).toBeTruthy());
+    expect(screen.queryByTestId("migration-employee-login")).toBeNull();
+    expect(screen.getByTestId("migration-employee-join")).toBeTruthy();
+  });
+
+  it("says when the passkey opens no account, and keeps the till's screen", async () => {
+    v2Till();
+    const router = await renderRouter(routes, { initialUrl: "/migration/employee" });
+    await waitFor(() => expect(screen.getByTestId("migration-employee-login")).toBeTruthy());
+    await fireEvent.press(screen.getByTestId("migration-employee-login"));
+    await waitFor(() => expect(router.getPathname()).toBe("/no-account"));
+    // Nothing of the v2 app forgotten: the migration still shows at the next start.
+    expect(keychain.entries.has(LEGACY_KEYS.userType)).toBe(true);
+    expect(keychain.entries.has(LEGACY_KEYS.accountConfig)).toBe(true);
+  });
+
+  it("shows a failed login on the till's screen, its buttons back", async () => {
+    v2Till();
+    jest.mocked(signInWithPasskey).mockRejectedValueOnce(new Error("authenticator failed"));
+    await renderRouter(routes, { initialUrl: "/migration/employee" });
+    await waitFor(() => expect(screen.getByTestId("migration-employee-login")).toBeTruthy());
+    await fireEvent.press(screen.getByTestId("migration-employee-login"));
+    await waitFor(() => expect(screen.getByTestId("migration-employee-failure")).toBeTruthy());
+    expect(screen.getByTestId("migration-employee-login")).toBeEnabled();
+    expect(screen.getByTestId("migration-employee-join")).toBeEnabled();
+    expect(screen.getByTestId("migration-employee-owner")).toBeEnabled();
+  });
+});
+
+describe("a device whose v2 app saved no role", () => {
+  function v2Copy() {
+    putLegacyValue(
+      LEGACY_KEYS.accountConfig,
+      JSON.stringify({ id: ACCOUNT_ID, name: "Lakeside Bakery", apiKey: "k".repeat(32) })
+    );
+  }
+
+  it("opens on the owner's migration when the v2 app's session is here", async () => {
+    v2Copy();
+    putLegacyValue(
+      LEGACY_KEYS.tokens,
+      JSON.stringify({ auth_token: "expired-token-of-the-v2-app", refresh_token: REFRESH })
+    );
+    const router = await renderRouter(routes, { initialUrl: "/" });
+    await waitFor(() => expect(router.getPathname()).toBe("/migration"));
+    // The session expired: the password reads the account, then says whether it moved already.
+    await passwordAsked();
+    expect(screen.getByTestId("migration-confirm-name")).toHaveTextContent("Lakeside Bakery");
+  });
+
+  it("opens on the till's screen otherwise, which offers the login", async () => {
+    v2Copy();
+    const router = await renderRouter(routes, { initialUrl: "/" });
+    await waitFor(() => expect(router.getPathname()).toBe("/migration/employee"));
+    expect(screen.getByTestId("migration-employee-login")).toHaveTextContent(
+      /I\salready\shave\sa\ssattle\.me\saccount/
+    );
   });
 });
 

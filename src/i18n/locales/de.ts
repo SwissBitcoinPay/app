@@ -537,6 +537,7 @@ const de: Translations = {
       leadBusiness:
         "Dieses Gerät hat Zahlungen für „{{business}}“ angenommen. Um weiterzumachen, bitten Sie die verantwortliche Person, Sie über sattle.me erneut einzuladen, und scannen Sie dann ihren Code.",
       join: "Einladung scannen",
+      logIn: "Ich habe bereits ein sattle.me-Konto",
       owner: "Ich bin für dieses Geschäft verantwortlich"
     },
     wallet: {

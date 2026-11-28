@@ -529,6 +529,7 @@ const it: Translations = {
       leadBusiness:
         "Questo dispositivo incassava per «{{business}}». Per continuare, chiedi al responsabile di invitarti di nuovo da sattle.me, poi scansiona il suo codice.",
       join: "Scansiona l'invito",
+      logIn: "Ho già un conto sattle.me",
       owner: "Sono il responsabile di questa attività"
     },
     wallet: {
