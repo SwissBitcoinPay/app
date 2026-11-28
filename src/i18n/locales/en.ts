@@ -517,6 +517,7 @@ const en: Translations = {
       leadBusiness:
         "This device accepted payments for “{{business}}”. To continue, ask the manager to invite you again from sattle.me, then scan their code.",
       join: "Scan the invitation",
+      logIn: "I already have a sattle.me account",
       owner: "I am the manager of this business"
     },
     wallet: {
