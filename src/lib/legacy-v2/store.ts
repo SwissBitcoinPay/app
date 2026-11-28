@@ -60,9 +60,13 @@ async function hasValue(service: string): Promise<boolean> {
 /**
  * The v2 app's state on this device, or null when it left nothing to migrate: no role, nor copy of
  * an account (forgetLegacySession forgets both once the device migrated; the wallet's words alone
- * are "Wallet"'s to transfer). Its role is the one it saved; without one, a till's when its
- * copy of an account is here (the v2 app's own default, `employee`). Asks nothing of the person:
- * the words are looked for, not read (no biometric prompt).
+ * are "Wallet"'s to transfer). Its role is the one it saved. Without one (a login the v2 app
+ * stopped between saving the account and the role, which it saves last and unawaited), the owner's
+ * when its session is here: a till never keeps one, its activation logs the session out, which
+ * erases `tb_tokens` (v2 2.7.2 to 2.7.6; no version before 2.7.0 kept one). Otherwise a till's when its copy
+ * of an account is here (the v2 app's own default, `employee`): the till's screen leads its owner
+ * on too (src/app/migration/employee.tsx). Asks nothing of the person: the words are looked for,
+ * not read (no biometric prompt).
  */
 export async function readLegacyState(): Promise<LegacyState | null> {
   const [userType, accountText, tokensText, hasWallet] = await Promise.all([
@@ -72,9 +76,10 @@ export async function readLegacyState(): Promise<LegacyState | null> {
     hasValue(LEGACY_KEYS.mnemonic)
   ]);
   const account = parseLegacyAccountCopy(accountText);
-  const role = parseLegacyRole(userType) ?? (account ? "employee" : null);
+  const tokens = parseLegacyTokens(tokensText);
+  const role = parseLegacyRole(userType) ?? (account ? (tokens ? "owner" : "employee") : null);
   if (!role) return null;
-  return { role, account, tokens: parseLegacyTokens(tokensText), hasWallet };
+  return { role, account, tokens, hasWallet };
 }
 
 /** Whether the words of a wallet created in the v2 app are on this device, without reading them. */
